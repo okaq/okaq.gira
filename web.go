@@ -1,19 +1,15 @@
-// golang web server for Google Cloud (GAE)
-// okaq gira aka nano game
+// golang web server for google cloud
+// okaq gira bibi plasma
 // AQ <aq@okaq.com>
-// 2014-05-30
+// 2014-06-03
 package main
 
 import (
     "net/http"
 )
 
-const (
-    PATH = "index.html"
-)
-
 func init() {
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        http.ServeFile(w, r, PATH)
+        http.ServeFile(w, r, "index.html")
     })
 }
