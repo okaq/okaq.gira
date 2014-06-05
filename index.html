@@ -73,7 +73,7 @@ var r = {
             var x0 = i % d.w;
             var y0 = (i / d.w) >>> 0;
             c.hsla[0] = p.data[i];
-            d.beta.con.fillStyle = c.cssh();
+            d.beta.con.fillStyle = c.cssh(); // fillStyle changes are expensive
             d.beta.con.fillRect(x0,y0,1,1);
         }
     }
@@ -83,7 +83,15 @@ var p = {
     "init": function() {
         p.data = [];
         for (var i = 0; i < (d.w * d.h); i++) {
-            p.data[i] = c.rb(255);
+            // p.data[i] = c.rb(255);
+            var y0 = (i / d.w) >>> 0;
+            var x0 = (i % d.w);
+            var t0 = (y0 / d.h) * 2 * Math.PI;
+            var t1 = (x0 / d.w) * 2 * Math.PI;
+            var t2 = Math.sin(t0) + 1.0;
+            var t3 = Math.cos(t1) + 1.0;
+            var t4 = 255.0 / 4.0;
+            p.data[i] = t2 * t4 + t3 * t4;
         }
     }
 }
