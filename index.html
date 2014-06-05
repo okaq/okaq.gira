@@ -8,6 +8,128 @@
         <meta name="author" content="AQ<aq@okaq.com>" />
         <meta name="date" content="2014-06-04" />
         <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGIJWf6fgZaAiaamj1owasGoBaMWjFowasGoBaMWjFowasGoBVQEgAAAAP//qJgCPYgbKBUAAAAASUVORK5CYII=" />
+        <style type="text/css">
+            html,body{width:1920;height:1080;background-color:rgba(0,0,0,0);}
+        </style>
+        <script type="text/javascript">
+            // ok
+        console.log("okaq gria bibi go");
+        // async load
+        (function() {
+         var a = {
+            "load": function(e) {
+                console.log(e);
+                g.init();
+            }
+         }
+         window.addEventListener("load", a.load, false);
+         })();
+// game
+var g = {
+    "init": function() {
+        c.init();
+        console.log("rgba: " + c.cssr() + " hsla: " + c.cssh());
+        d.init();
+        r.clear();
+        p.init();
+        var start = window.performance.now();
+        r.plasma();
+        var end = window.performance.now();
+        var delta = end - start;
+        console.log("total render time: " + delta + "ms.");
+    }
+}
+// dom
+var d = {
+    "init": function() {
+        d.w = 1920;
+        d.h = 1080;
+        d.alpha = document.getElementById("alpha");
+        d.beta = {};
+        d.beta.can = document.createElement("canvas");
+        d.alpha.appendChild(d.beta.can);
+        d.beta.con = d.beta.can.getContext("2d");
+        console.log(d.alpha, d.beta);
+        d.beta.can.width = d.w;
+        d.beta.can.height = d.h;
+        d.beta.can.style.position = "absolute";
+        d.beta.can.style.left = "0px";
+        d.beta.can.style.top = "0px";
+    }
+}
+// render
+var r = {
+    "clear": function() {
+        var f0 = Math.random();
+        if (f0 < 0.5) {
+            d.beta.con.fillStyle = c.cssr();
+        } else {
+            d.beta.con.fillStyle = c.cssh();
+        }
+        d.beta.con.fillRect(0,0,d.w,d.h);
+    },
+    "plasma": function() {
+        for (var i = 0; i < ((d.w * d.h) / 1); i++) {
+            var x0 = i % d.w;
+            var y0 = (i / d.w) >>> 0;
+            c.hsla[0] = p.data[i];
+            d.beta.con.fillStyle = c.cssh();
+            d.beta.con.fillRect(x0,y0,1,1);
+        }
+    }
+}
+// plasma
+var p = {
+    "init": function() {
+        p.data = [];
+        for (var i = 0; i < (d.w * d.h); i++) {
+            p.data[i] = c.rb(255);
+        }
+    }
+}
+// color
+var c = {
+    "init": function() {
+        c.rgba = []; // type'd // instanceof
+        c.hsla = [];
+        c.shuf();
+    },
+    "shuf": function() {
+        for (var i = 0; i < 4; i++) {
+            c.rgba[i] = c.rb(255);
+        }
+        c.hsla[0] = c.rb(255);
+        c.hsla[1] = c.rb(100);
+        c.hsla[2] = c.rb(100);
+        c.hsla[3] = c.rb(255);
+    },
+    "rb": function(n0) {
+        return ((Math.random() * n0) >>> 0);
+    },
+    "cssr": function() {
+        var s0 = "rgba(";
+        for (var i = 0; i < 3; i++) {
+            s0 += c.rgba[i].toString();
+            s0 += ",";
+        }
+        s0 += (c.rgba[3] / 255.0).toString();
+        s0 += ")";
+        return s0;
+    },
+    "cssh": function() {
+        var s0 = "hsla(";
+        s0 += c.hsla[0].toString();
+        s0 += ",";
+        for (var i = 1; i < 3; i++) {
+            s0 += c.hsla[i];
+            s0 += "%,";
+        }
+        s0 += (c.hsla[3] / 255.0).toString();
+        s0 += ")";
+        return s0;
+    }
+}
+        </script>
     </head>
     <body id="alpha">
     </body>
