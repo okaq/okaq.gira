@@ -37,6 +37,18 @@ var g = {
         var end = window.performance.now();
         var delta = end - start;
         console.log("total render time: " + delta + "ms.");
+        window.addEventListener("click", g.fast, false);
+    },
+    "fast": function() {
+        console.log("Starting image data.");
+        var start = window.performance.now();
+        var pix = d.beta.con.getImageData(0,0,d.w,d.h);
+        // console.log("ImageData size: " + pix.data.length);
+        // console.log("Pixels size: " + (d.w*d.h*4.0).toString());
+        for (var i = 0; i < (d.w * d.h); i++) {
+            var x0 = (i % d.w);
+            var y0 = (i / d.w) >>> 0;
+        }
     }
 }
 // dom
@@ -60,6 +72,7 @@ var d = {
 // render
 var r = {
     "clear": function() {
+        d.beta.can.width = d.beta.can.width;
         var f0 = Math.random();
         if (f0 < 0.5) {
             d.beta.con.fillStyle = c.cssr();
