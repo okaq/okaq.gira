@@ -31,8 +31,8 @@ var g = {
         console.log("rgba: " + c.cssr() + " hsla: " + c.cssh());
         d.init();
         r.clear();
-        p.init();
         var start = window.performance.now();
+        p.init();
         r.plasma();
         var end = window.performance.now();
         var delta = end - start;
@@ -48,7 +48,24 @@ var g = {
         for (var i = 0; i < (d.w * d.h); i++) {
             var x0 = (i % d.w);
             var y0 = (i / d.w) >>> 0;
+            var t0 = (x0 / d.w) * 2 * Math.PI;
+            var t1 = (y0 / d.h) * 2 * Math.PI;
+            var t2 = Math.sin(t0) + 1.0;
+            var t3 = Math.cos(t1) + 1.0;
+            var t4 = 255.0 / 4.0;
+            // c.rgba[2] = t2 * t4 + t3 * t4;
+            // d.beta.con.fillStyle = c.cssr();
+            // d.beta.con.fillRect(x0,y0,1,1);
+            var j = i * 4;
+            pix.data[j] = c.rgba[0];
+            pix.data[j+1] = c.rgba[1];
+            pix.data[j+2] = t2 * t4 + t3 * t4;
+            pix.data[j+3] = c.rgba[3];
         }
+        d.beta.con.putImageData(pix, 0, 0);
+        var end = window.performance.now();
+        var delta = end - start;
+        console.log("total fast time: " + delta + "ms.");
     }
 }
 // dom
@@ -156,6 +173,7 @@ var c = {
     </body>
 </html>
 <!--
+
     pixel mainpulation
     vs. millions of fillstyle, fillrect(1,1) calls
     hsla only available to css
@@ -164,4 +182,9 @@ var c = {
     after first is loaded, add click listener to window
     after click handled and second rendered
     write stats to console
+
+    result:
+    total render time = 33829.7ms
+    total fast time = 589.8ms
+    
 -->
