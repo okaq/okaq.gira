@@ -31,48 +31,17 @@ var g = {
         console.log("rgba: " + c.cssr() + " hsla: " + c.cssh());
         d.init();
         r.clear();
-        var start = window.performance.now();
-        p.init();
-        r.plasma();
-        var end = window.performance.now();
-        var delta = end - start;
-        console.log("total render time: " + delta + "ms.");
-        window.addEventListener("click", g.fast, false);
-    },
-    "fast": function() {
-        console.log("Starting image data.");
-        var start = window.performance.now();
-        var pix = d.beta.con.getImageData(0,0,d.w,d.h);
-        // console.log("ImageData size: " + pix.data.length);
-        // console.log("Pixels size: " + (d.w*d.h*4.0).toString());
-        for (var i = 0; i < (d.w * d.h); i++) {
-            var x0 = (i % d.w);
-            var y0 = (i / d.w) >>> 0;
-            var t0 = (x0 / d.w) * 2 * Math.PI;
-            var t1 = (y0 / d.h) * 2 * Math.PI;
-            var t2 = Math.sin(t0) + 1.0;
-            var t3 = Math.cos(t1) + 1.0;
-            var t4 = 255.0 / 4.0;
-            // c.rgba[2] = t2 * t4 + t3 * t4;
-            // d.beta.con.fillStyle = c.cssr();
-            // d.beta.con.fillRect(x0,y0,1,1);
-            var j = i * 4;
-            pix.data[j] = c.rgba[0];
-            pix.data[j+1] = c.rgba[1];
-            pix.data[j+2] = t2 * t4 + t3 * t4;
-            pix.data[j+3] = c.rgba[3];
-        }
-        d.beta.con.putImageData(pix, 0, 0);
-        var end = window.performance.now();
-        var delta = end - start;
-        console.log("total fast time: " + delta + "ms.");
     }
 }
 // dom
 var d = {
     "init": function() {
         d.w = 1920;
+        d.w2 = (d.w / 2.0) >>> 0;
+        d.w4 = (d.w / 4.0) >>> 0;
         d.h = 1080;
+        d.h2 = (d.h / 2.0) >>> 0;
+        d.h4 = (d.h / 4.0) >>> 0;
         d.alpha = document.getElementById("alpha");
         d.beta = {};
         d.beta.can = document.createElement("canvas");
@@ -96,7 +65,8 @@ var r = {
         } else {
             d.beta.con.fillStyle = c.cssh();
         }
-        d.beta.con.fillRect(0,0,d.w,d.h);
+        // d.beta.con.fillRect(0,0,d.w,d.h);
+        d.beta.con.fillRect(d.w4,d.h4,d.w2,d.h2);
     },
     "plasma": function() {
         for (var i = 0; i < ((d.w * d.h) / 1); i++) {
@@ -111,7 +81,7 @@ var r = {
 // plasma
 var p = {
     "init": function() {
-        p.data = [];
+        p.data = []; // imagedata.data
         for (var i = 0; i < (d.w * d.h); i++) {
             // p.data[i] = c.rb(255);
             var y0 = (i / d.w) >>> 0;
@@ -167,24 +137,29 @@ var c = {
         return s0;
     }
 }
+// prototype color (base class)
+// define functions (new, shuf, css)
+// subclasses (rgba, hsla)
+// * raw byte manipulation in ImageData
         </script>
     </head>
     <body id="alpha">
     </body>
 </html>
+
 <!--
-
-    pixel mainpulation
-    vs. millions of fillstyle, fillrect(1,1) calls
-    hsla only available to css
-
-    one plasma algo, two renderers
-    after first is loaded, add click listener to window
-    after click handled and second rendered
-    write stats to console
-
-    result:
-    total render time = 33829.7ms
-    total fast time = 589.8ms
     
+    key handlers:
+    <F11> - FullScreen
+    <F5>  - Refresh
+    keyhandlers for input?
+    W,A,S,D   Up,Down,Left,Right
+    Map to 8 actions
+    Combinations for 8 choose N:
+    N = 1 : 8
+    N = 2 : 28
+    N = 3 : 56
+    N = 4 : 70
+    Can the mind handle N > 4?
+
 -->
