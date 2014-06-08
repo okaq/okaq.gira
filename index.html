@@ -31,6 +31,7 @@ var g = {
         console.log("rgba: " + c.cssr() + " hsla: " + c.cssh());
         d.init();
         r.clear();
+        console.log(p.end()); // returns "little" on host schlegel
     }
 }
 // dom
@@ -82,6 +83,9 @@ var r = {
 var p = {
     "init": function() {
         p.data = []; // imagedata.data
+        // typed uint8array(4) for rgba
+        // new ArrayBuffer(image.data.length)
+
         for (var i = 0; i < (d.w * d.h); i++) {
             // p.data[i] = c.rb(255);
             var y0 = (i / d.w) >>> 0;
@@ -92,6 +96,24 @@ var p = {
             var t3 = Math.cos(t1) + 1.0;
             var t4 = 255.0 / 4.0;
             p.data[i] = t2 * t4 + t3 * t4;
+        }
+    },
+    "end": function() {
+        // check endianness
+        // x86, ARM, usually little-end
+        var a0 = new ArrayBuffer(4);
+        var b0 = new Uint8Array(a0);
+        var c0 = new Uint32Array(a0);
+        b0[0] = 0xff;
+        b0[1] = 0xee;
+        b0[2] = 0xdd;
+        b0[3] = 0xcc;
+        if (c0[0] == 0xccddeeff) {
+            return "little";
+        } else if (c0[0] == 0xffeeddcc) {
+            return "big";
+        } else {
+            throw new Error("byte order indeterminate");
         }
     }
 }
