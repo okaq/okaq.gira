@@ -32,6 +32,8 @@ var g = {
         d.init();
         r.clear();
         console.log(p.end()); // returns "little" on host schlegel
+        p.init();
+        r.plasma3();
     }
 }
 // dom
@@ -77,15 +79,39 @@ var r = {
             d.beta.con.fillStyle = c.cssh(); // fillStyle changes are expensive
             d.beta.con.fillRect(x0,y0,1,1);
         }
+    },
+    "plasma2": function() {
+        for (var i = 0; i < (d.w2*d.h2); i++) {
+            var x0 = (i % d.w2) + d.w4;
+            var y0 = ((i / d.w2) >>> 0) + d.h4;
+            c.rgba[2] = p.data[i];
+        }
+    },
+    "plasma3": function() {
+        d.beta.con.putImageData(p.image, d.w4, d.h4);
     }
 }
 // plasma
 var p = {
     "init": function() {
-        p.data = []; // imagedata.data
+        // p.data = []; // imagedata.data
         // typed uint8array(4) for rgba
         // new ArrayBuffer(image.data.length)
-
+        p.image = d.beta.con.getImageData(d.w4,d.h4,d.w2,d.h2);
+        p.data = p.image.data;
+        // p.ab = new ArrayBuffer(p.data.length);
+        // p.bb = new Uint8Array(p.ab); // rgba
+        for (var i = 0; i < (d.w2*d.h2); i++) {
+            var x0 = (i % d.w2);
+            var y0 = (i / d.w2) >>> 0;
+            var c0 = (x0 * y0) % 255; // moire pattern
+            var i0 = i * 4;
+            p.data[i0] = c0;
+            p.data[i0+1] = c.rgba[1];
+            p.data[i0+2] = c.rgba[2];
+            p.data[i0+3] = c.rgba[3];
+        }
+        /*
         for (var i = 0; i < (d.w * d.h); i++) {
             // p.data[i] = c.rb(255);
             var y0 = (i / d.w) >>> 0;
@@ -97,6 +123,7 @@ var p = {
             var t4 = 255.0 / 4.0;
             p.data[i] = t2 * t4 + t3 * t4;
         }
+        */    
     },
     "end": function() {
         // check endianness
@@ -109,8 +136,10 @@ var p = {
         b0[2] = 0xdd;
         b0[3] = 0xcc;
         if (c0[0] == 0xccddeeff) {
+            p.order = 0;
             return "little";
         } else if (c0[0] == 0xffeeddcc) {
+            p.order = 1;;
             return "big";
         } else {
             throw new Error("byte order indeterminate");
