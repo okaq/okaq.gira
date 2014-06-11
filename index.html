@@ -18,7 +18,7 @@
         (function() {
          var a = {
             "load": function(e) {
-                console.log(e);
+                // console.log(e);
                 g.init();
             }
          }
@@ -28,12 +28,16 @@
 var g = {
     "init": function() {
         c.init();
-        console.log("rgba: " + c.cssr() + " hsla: " + c.cssh());
+        // console.log("rgba: " + c.cssr() + " hsla: " + c.cssh());
         d.init();
         r.clear();
-        console.log(p.end()); // returns "little" on host schlegel
+        // console.log(p.end()); // returns "little" on host schlegel
+        var start = window.performance.now();
         p.init();
         r.plasma3();
+        var end = window.performance.now();
+        var delta = (end - start);
+        console.log("total render time: " + delta + "ms.");
     }
 }
 // dom
@@ -50,7 +54,7 @@ var d = {
         d.beta.can = document.createElement("canvas");
         d.alpha.appendChild(d.beta.can);
         d.beta.con = d.beta.can.getContext("2d");
-        console.log(d.alpha, d.beta);
+        // console.log(d.alpha, d.beta);
         d.beta.can.width = d.w;
         d.beta.can.height = d.h;
         d.beta.can.style.position = "absolute";
@@ -104,9 +108,17 @@ var p = {
         for (var i = 0; i < (d.w2*d.h2); i++) {
             var x0 = (i % d.w2);
             var y0 = (i / d.w2) >>> 0;
-            var c0 = (x0 * y0) % 255; // moire pattern
+            // var c0 = (x0 * y0) % 255; // moire pattern
+            // variables for plasma function:
+            // normalized position
+            // normalized phase
+            // cos(x) = sin(x+pi/2)
+            var c0 = (Math.sin(((x0+y0) / (d.w2+d.h2)) * 16.0 * Math.PI) + 1.0) * 31.0; // x-y plasma
+            var c1 = (Math.cos((y0 / d.h2) * 8.0 * Math.PI) + 1.0) * 31.0;
+            var c2 = (Math.sin(((x0+y0) / (d.w2+d.h2)) * 4.0 * Math.PI) + 1.0) * 31.0;
+            var c3 = (Math.cos((y0 / d.h2) * 2.0 * Math.PI) + 1.0) * 31.0;
             var i0 = i * 4;
-            p.data[i0] = c0;
+            p.data[i0] = (c0 + c1 + c2 + c3) >>> 0;
             p.data[i0+1] = c.rgba[1];
             p.data[i0+2] = c.rgba[2];
             p.data[i0+3] = c.rgba[3];
