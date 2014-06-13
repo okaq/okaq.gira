@@ -6,14 +6,14 @@
         <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
         <meta name="source" content="https://github.com/okaq/okaq.gira" />
         <meta name="author" content="AQ<aq@okaq.com>" />
-        <meta name="date" content="2014-06-04" />
+        <meta name="date" content="2014-06-14" />
         <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGIJWf6fgZaAiaamj1owasGoBaMWjFowasGoBaMWjFowasGoBVQEgAAAAP//qJgCPYgbKBUAAAAASUVORK5CYII=" />
         <style type="text/css">
             html,body{width:1920;height:1080;background-color:rgba(0,0,0,0);}
         </style>
         <script type="text/javascript">
             // ok
-        console.log("okaq gria bibi go");
+        console.log("okaq gira bibi go");
         // async load
         (function() {
          var a = {
@@ -28,16 +28,16 @@
 var g = {
     "init": function() {
         c.init();
-        // console.log("rgba: " + c.cssr() + " hsla: " + c.cssh());
         d.init();
         r.clear();
-        // console.log(p.end()); // returns "little" on host schlegel
-        var start = window.performance.now();
-        p.init();
-        r.plasma3();
-        var end = window.performance.now();
-        var delta = (end - start);
-        console.log("total render time: " + delta + "ms.");
+        g.s0 = 4; // matrix : s0 x s0
+        g.s1 = 128; // render side length
+        g.s3 = d.w2 - ((g.s0 / 2) * g.s1); // offest x
+        g.s4 = d.h2 - ((g.s0 / 2) * g.s1); // offset y
+        g.s5 = 16; // margin
+        m.init(g.s0);
+        console.log(m.data);
+        r.grid(g.s3, g.s4, g.s1, g.s5);
     }
 }
 // dom
@@ -60,6 +60,10 @@ var d = {
         d.beta.can.style.position = "absolute";
         d.beta.can.style.left = "0px";
         d.beta.can.style.top = "0px";
+        window.addEventListener("keydown", d.key, false);
+    },
+    "key": function(e) {
+        console.log(e);
     }
 }
 // render
@@ -75,86 +79,28 @@ var r = {
         // d.beta.con.fillRect(0,0,d.w,d.h);
         d.beta.con.fillRect(d.w4,d.h4,d.w2,d.h2);
     },
-    "plasma": function() {
-        for (var i = 0; i < ((d.w * d.h) / 1); i++) {
-            var x0 = i % d.w;
-            var y0 = (i / d.w) >>> 0;
-            c.hsla[0] = p.data[i];
-            d.beta.con.fillStyle = c.cssh(); // fillStyle changes are expensive
-            d.beta.con.fillRect(x0,y0,1,1);
+    "grid": function(x0, y0, s0, m0) {
+        for (var y = 0; y < m.data.length; y++) {
+            for (var x = 0; x < m.data[y].length; x++) {
+                c.shuf();
+                d.beta.con.fillStyle = c.cssr();
+                var x1 = (x0 + (x * s0)) >>> 0;
+                var y1 = (y0 + (y * s0)) >>> 0;
+                d.beta.con.fillRect(x1 + m0, y1 + m0, s0 - (2 * m0), s0 - (2 * m0));
+            }
         }
-    },
-    "plasma2": function() {
-        for (var i = 0; i < (d.w2*d.h2); i++) {
-            var x0 = (i % d.w2) + d.w4;
-            var y0 = ((i / d.w2) >>> 0) + d.h4;
-            c.rgba[2] = p.data[i];
-        }
-    },
-    "plasma3": function() {
-        d.beta.con.putImageData(p.image, d.w4, d.h4);
     }
 }
-// plasma
-var p = {
-    "init": function() {
-        // p.data = []; // imagedata.data
-        // typed uint8array(4) for rgba
-        // new ArrayBuffer(image.data.length)
-        p.image = d.beta.con.getImageData(d.w4,d.h4,d.w2,d.h2);
-        p.data = p.image.data;
-        // p.ab = new ArrayBuffer(p.data.length);
-        // p.bb = new Uint8Array(p.ab); // rgba
-        for (var i = 0; i < (d.w2*d.h2); i++) {
-            var x0 = (i % d.w2);
-            var y0 = (i / d.w2) >>> 0;
-            // var c0 = (x0 * y0) % 255; // moire pattern
-            // variables for plasma function:
-            // normalized position
-            // normalized phase
-            // cos(x) = sin(x+pi/2)
-            var c0 = (Math.sin(((x0+y0) / (d.w2+d.h2)) * 16.0 * Math.PI) + 1.0) * 31.0; // x-y plasma
-            var c1 = (Math.cos((y0 / d.h2) * 8.0 * Math.PI) + 1.0) * 31.0;
-            var c2 = (Math.sin(((x0+y0) / (d.w2+d.h2)) * 4.0 * Math.PI) + 1.0) * 31.0;
-            var c3 = (Math.cos((y0 / d.h2) * 2.0 * Math.PI) + 1.0) * 31.0;
-            var i0 = i * 4;
-            p.data[i0] = (c0 + c1 + c2 + c3) >>> 0;
-            p.data[i0+1] = c.rgba[1];
-            p.data[i0+2] = c.rgba[2];
-            p.data[i0+3] = c.rgba[3];
-        }
-        /*
-        for (var i = 0; i < (d.w * d.h); i++) {
-            // p.data[i] = c.rb(255);
-            var y0 = (i / d.w) >>> 0;
-            var x0 = (i % d.w);
-            var t0 = (y0 / d.h) * 2 * Math.PI;
-            var t1 = (x0 / d.w) * 2 * Math.PI;
-            var t2 = Math.sin(t0) + 1.0;
-            var t3 = Math.cos(t1) + 1.0;
-            var t4 = 255.0 / 4.0;
-            p.data[i] = t2 * t4 + t3 * t4;
-        }
-        */    
-    },
-    "end": function() {
-        // check endianness
-        // x86, ARM, usually little-end
-        var a0 = new ArrayBuffer(4);
-        var b0 = new Uint8Array(a0);
-        var c0 = new Uint32Array(a0);
-        b0[0] = 0xff;
-        b0[1] = 0xee;
-        b0[2] = 0xdd;
-        b0[3] = 0xcc;
-        if (c0[0] == 0xccddeeff) {
-            p.order = 0;
-            return "little";
-        } else if (c0[0] == 0xffeeddcc) {
-            p.order = 1;;
-            return "big";
-        } else {
-            throw new Error("byte order indeterminate");
+// matrix
+var m = {
+    "init": function(n0) {
+        m.data = [];
+        for (var i = 0; i < n0; i++) {
+            var a0 = [];
+            for (var j = 0; j < n0; j++) {
+                a0.push(0);
+            }
+            m.data.push(a0);
         }
     }
 }
@@ -200,29 +146,8 @@ var c = {
         return s0;
     }
 }
-// prototype color (base class)
-// define functions (new, shuf, css)
-// subclasses (rgba, hsla)
-// * raw byte manipulation in ImageData
         </script>
     </head>
     <body id="alpha">
     </body>
 </html>
-
-<!--
-    
-    key handlers:
-    <F11> - FullScreen
-    <F5>  - Refresh
-    keyhandlers for input?
-    W,A,S,D   Up,Down,Left,Right
-    Map to 8 actions
-    Combinations for 8 choose N:
-    N = 1 : 8
-    N = 2 : 28
-    N = 3 : 56
-    N = 4 : 70
-    Can the mind handle N > 4?
-
--->
