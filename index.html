@@ -71,12 +71,21 @@ var r = {
             // inv
             c.shuf();
             d.beta.con.fillStyle = c.cssr();
+            var min = (n0.r0.w0 > n0.r0.h0) ? n0.r0.h0 : n0.r0.w0;
+            var s0 = (min / n0.r0.inv.n0) >>> 0;
+            var m0 = (s0 / 16) >>> 0;
+            var s1 = (s0 - (2 * m0)) >>> 0;
+            var s2 = (s0 * n0.r0.inv.n0) >>> 0;
+            var mx = ((n0.r0.w0 - s2) / 2) >>> 0;
+            var my = ((n0.r0.h0 - s2) / 2) >>> 0;
             for (var y = 0; y < n0.r0.inv.data.length; y++) {
                 for (var x = 0; x < n0.r0.inv.data[y].length; x++) {
                     if (n0.r0.inv.data[y][x] == 0) continue;
-                    var x0 = ((x * n0.r0.inv.s0) + n0.r0.x0) >>> 0;
-                    var y0 = ((y * n0.r0.inv.s0) + n0.r0.y0) >>> 0;
-                    d.beta.con.fillRect(x0, y0, n0.r0.inv.s0, n0.r0.inv.s0);
+                    var x0 = ((x * s0) + n0.r0.x0) >>> 0;
+                    var x1 = (x0 + m0 + mx) >>> 0;
+                    var y0 = ((y * s0) + n0.r0.y0) >>> 0;
+                    var y1 = (y0 + m0 + my) >>> 0;
+                    d.beta.con.fillRect(x1, y1, s1, s1);
                 }
             }
         } else {
@@ -151,16 +160,15 @@ var rect = function(x0, y0, w0, h0) {
         r0.push(new rect(this.x0, y1, w1, h2));
         r0.push(new rect(x1, y1, w2, h2));
         return r0;
+        // balance - obtain fewer oblong shapes
     };
-    // blocks - num, size, margin, layout
-    this.inv = new inv(5, 8, 2);
+    // inv sets num only, renderer determines size, margin
+    this.inv = new inv(5);
 }
 // inv
-var inv = function(n0, s0, m0) {
+var inv = function(n0) {
     this.n0 = n0;
-    this.s0 = s0;
-    this.m0 = m0;
-    this.c0 = c.comp();
+    // this.c0 = c.comp();
     this.data = [];
     this.n1 = (n0 / 2) >>> 0;
     for (var y = 0; y < this.n0; y++) {
