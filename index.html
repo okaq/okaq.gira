@@ -98,7 +98,7 @@ var r = {
 // tree
 var t = {
     "init": function() {
-        t.min = 128; // min subdivision length
+        t.min = 32; // min subdivision length
         var r0 = new rect(0, 0, d.w, d.h);
         t.root = new node();
         t.root.r0 = r0;
@@ -141,26 +141,23 @@ var rect = function(x0, y0, w0, h0) {
     this.h0 = h0;
     this.c0 = c.comp();
     this.quad = function() {
-        if (this.w0 <= (2 * t.min) || this.h0 <= (2 * t.min)) {
-            return [];
-        }
-        // subdivide into 4 quads
         var r0 = [];
-        // overlap - calculate w,h first 
-        var dw = (this.w0 - (2 * t.min)) >>> 0;
-        var dh = (this.h0 - (2 * t.min)) >>> 0;
-        var w1 = ((Math.random() * dw) + t.min) >>> 0;
+        // midpoint displacement
+        var w1 = (this.w0 / 2.0) >>> 0;
+        // displacement bug
+        // w1 += ((1.0 * (Math.sin(Math.random() * Math.PI * 2.0))) >>> 0);
         var w2 = (this.w0 - w1) >>> 0;
-        var h1 = ((Math.random() * dh) + t.min) >>> 0;
+        var h1 = (this.h0 / 2.0) >>> 0;
         var h2 = (this.h0 - h1) >>> 0;
         var x1 = (this.x0 + w1) >>> 0;
         var y1 = (this.y0 + h1) >>> 0;
+        // subdivide into quads
         r0.push(new rect(this.x0, this.y0, w1, h1)); 
         r0.push(new rect(x1, this.y0, w2, h1));
         r0.push(new rect(this.x0, y1, w1, h2));
         r0.push(new rect(x1, y1, w2, h2));
         return r0;
-        // balance - obtain fewer oblong shapes
+        
     };
     // inv sets num only, renderer determines size, margin
     this.inv = new inv(5);
