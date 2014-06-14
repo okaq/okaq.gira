@@ -160,7 +160,7 @@ var m = {
 // tree
 var t = {
     "init": function() {
-        t.min = 256; // min subdivision length
+        t.min = 128; // min subdivision length
         // t.data = [];
         var r0 = new rect(0, 0, d.w, d.h);
         // t.data.push(r0);
@@ -211,6 +211,7 @@ var rect = function(x0, y0, w0, h0) {
         }
         // subdivide into 4 quads
         var r0 = [];
+        /*
         var x1 = ((Math.random() * this.w0) + this.x0) >>> 0;
         if ((x1 - this.x0) < t.min) x1 = t.min;
         var y1 = ((Math.random() * this.h0) + this.y0) >>> 0;
@@ -219,15 +220,19 @@ var rect = function(x0, y0, w0, h0) {
         var w2 = ((this.x0 + this.w0) - x1) >>> 0;
         var h1 = (y1 - this.y0) >>> 0;
         var h2 = ((this.y0 + this.h0) - y1) >>> 0;
-        // overlap - calculate w,h first 
-        /*
-        var dw = w0 - t.min;
-        var dh = h0 - t.min;
-        var w1 = ((Math.random() * dw) + t.min) >>> 0;
         */
-        r0.push(new rect(x0, y0, w1, h1)); 
-        r0.push(new rect(x1, y0, w2, h1));
-        r0.push(new rect(x0, y1, w1, h2));
+        // overlap - calculate w,h first 
+        var dw = (this.w0 - (2 * t.min)) >>> 0;
+        var dh = (this.h0 - (2 * t.min)) >>> 0;
+        var w1 = ((Math.random() * dw) + t.min) >>> 0;
+        var w2 = (this.w0 - w1) >>> 0;
+        var h1 = ((Math.random() * dh) + t.min) >>> 0;
+        var h2 = (this.h0 - h1) >>> 0;
+        var x1 = (this.x0 + w1) >>> 0;
+        var y1 = (this.y0 + h1) >>> 0;
+        r0.push(new rect(this.x0, this.y0, w1, h1)); 
+        r0.push(new rect(x1, this.y0, w2, h1));
+        r0.push(new rect(this.x0, y1, w1, h2));
         r0.push(new rect(x1, y1, w2, h2));
         return r0;
     }
