@@ -77,6 +77,7 @@ var r = {
             var m0 = (s0 / 16) >>> 0;
             var s1 = (s0 - (2 * m0)) >>> 0;
             var s2 = (s0 * n0.r0.inv.n0) >>> 0;
+            var s3 = (s2 / 2.0) >>> 0;
             var mx = ((n0.r0.w0 - s2) / 2) >>> 0;
             var my = ((n0.r0.h0 - s2) / 2) >>> 0;
             // rotation
@@ -114,24 +115,25 @@ var r = {
                     // var y1 = (y0 + ((n0.r0.inv.n0 * s0) / 4.0)) >>> 0;
                     var y1 = 0;
                     if (a0 == 0) {
-                        x1 = (n0.r0.w0 / -4.0) >>> 0;
-                        y1 = (n0.r0.h0 / -4.0) >>> 0;
+                        x1 = (n0.r0.w0 / 2.0) >>> 0;
+                        y1 = (n0.r0.h0 / 2.0) >>> 0;
                     }
                     if (a0 == (Math.PI / 2.0)) {
-                        x1 = (n0.r0.h0 / -4.0) >>> 0;
-                        y1 = (n0.r0.w0 / -4.0) >>> 0;
+                        x1 = (n0.r0.h0 / 2.0) >>> 0;
+                        y1 = (n0.r0.w0 / 2.0) >>> 0;
                     }
                     if (a0 == (Math.PI)) {
-                        x1 = (n0.r0.w0 / 4.0) >>> 0;
-                        y1 = (n0.r0.h0 / 4.0) >>> 0;
+                        x1 = (n0.r0.w0 / -2.0) >>> 0;
+                        y1 = (n0.r0.h0 / -2.0) >>> 0;
                     }
                     if (a0 == (3.0 * Math.PI / 2.0)) {
-                        x1 = (n0.r0.h0 / 4.0) >>> 0;
-                        y1 = (n0.r0.w0 / 4.0) >>> 0;
+                        x1 = (n0.r0.h0 / -2.0) >>> 0;
+                        y1 = (n0.r0.w0 / -2.0) >>> 0;
                     }
                     // d.beta.con.translate(x1, y1);
                     // d.beta.con.translate(n0.r0.x0, n0.r0.y0);
-                    d.beta.con.fillRect(x0, y0, s0, s0);
+
+                    d.beta.con.fillRect(x0-s3, y0-s3, s0, s0);
                 }
             }
             d.beta.con.restore();
@@ -145,7 +147,7 @@ var r = {
 // tree
 var t = {
     "init": function() {
-        t.min = 256; // min subdivision length
+        t.min = 64; // min subdivision length
         var r0 = new rect(0, 0, d.w, d.h);
         t.root = new node();
         t.root.r0 = r0;
