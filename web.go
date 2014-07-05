@@ -1,7 +1,7 @@
-// golang web server for google cloud
-// okaq gira bibi plasma
+// golang web server 
+// deployed to google cloud
 // AQ <aq@okaq.com>
-// 2014-06-03
+// 2014-06-21
 package main
 
 import (

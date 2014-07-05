@@ -1,247 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
     <head id="zeta">
-        <title>okaq</title>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
         <meta name="source" content="https://github.com/okaq/okaq.gira" />
         <meta name="author" content="AQ<aq@okaq.com>" />
-        <meta name="date" content="2014-06-14" />
-        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGIJWf6fgZaAiaamj1owasGoBaMWjFowasGoBaMWjFowasGoBVQEgAAAAP//qJgCPYgbKBUAAAAASUVORK5CYII=" />
+        <meta name="date" content="2014-06-28" />
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGJZHvKfgZaAiaamj1owasGoBaMWjFowasGoBaMWjFowasGoBVQEgAAAAP//qOsCPQjaR6IAAAAASUVORK5CYII=" />
         <style type="text/css">
             html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(0,0,0,0);}
         </style>
         <script type="text/javascript">
             // ok
-        console.log("okaq gira bibi go");
+        console.log("okaq gira cobu ok!");
         // async load
         (function() {
          var a = {
             "load": function(e) {
+                console.log(e);
                 g.init();
             }
-         }
-         window.addEventListener("load", a.load, false);
-         })();
+            }
+            window.addEventListener("load", a.load, false);
+            })();
 // game
 var g = {
     "init": function() {
-        c.init();
+        var t0 = window.performance.now();
+        console.log("g starting...");
         d.init();
-        var start = window.performance.now();
-        t.init();
-        r.quad(t.root);
-        var delta = window.performance.now() - start;
-        console.log("total render time: " + delta + "ms.");
+        c.init();
+        r.clear();
+        m.init();
+        r.maze();
+        console.log("total render time: " + (window.performance.now() - t0) + "ms.");
+    }
+}
+// maze
+// wilson's algo
+// ref: github.com/mbostock
+var m = {
+    "init": function() {
+        console.log("m init");
+        m.empty = 0;
+        m.north = 1 << 0;
+        m.south = 1 << 1;
+        m.west = 1 << 2;
+        m.east = 1 << 3;
+        m.all = m.north | m.south | m.west | m.east;
+        console.log("m.all: " + m.all);
+        m.w = 16;
+        m.h = m.w;
+        m.s = (d.w / m.w) >>> 0;
+        console.log("m.side: " + m.s);
+        m.b = (m.s / 16) >>> 0;
+        console.log("m.border: " + m.b);
+        m.gen();
+        // console.log(m.maze);
+    },
+    "gen": function() {
+        m.maze = new Array(m.w * m.h);
+        m.visit = [];
+        for (var i = 0; i < m.maze.length; i++) {
+            m.visit.push(i);
+        }
+        m.rw = new Array(m.w * m.h);
+        // console.log(m.maze, m.visit, m.rw);
+        m.start = m.popr(m.visit);
+        m.maze[m.start] = m.empty;
+        // console.log(m.maze, m.visit);
+        while (!m.walk());
+    },
+    "popr": function(a0) {
+        // random array pop (alters input)
+        var i0 = (Math.random() * a0.length) >>> 0;
+        var r0 = a0[i0];
+        a0.splice(i0, 1);
+        return r0;
+    },
+    "walk": function() {
+        var i0,i1,x0,y0;
+        do {
+            if ((i0 = m.popr(m.visit)) == null) {
+                return true;
+            }
+        } while (m.maze[i0] >= 0);
+        m.rw[i0] = i0;
+
+        while (true) {
+            x0 = i0 % m.w;
+            y0 = (i0 / m.w) >>> 0;
+
+            i1 = (Math.random() * 4) >>> 0;
+
+            if (i1 == 0) {
+                if (y0 <= 0) {
+                    continue;
+                }
+                --y0;
+                i1 = i0 - m.w;
+            } else if (i1 == 1) {
+                if (y0 >= (m.h - 1)) {
+                    continue;
+                }
+                ++y0;
+                i1 = i0 + m.w;
+            } else if (i1 == 2) {
+                if (x0 <= 0) {
+                    continue;
+                }
+                --x0;
+                i1 = i0 - 1;
+            } else {
+                if (x0 >= (m.w - 1)) {
+                    continue;
+                }
+                ++x0;
+                i1 = i0 + 1;
+            }
+
+            if (m.rw[i1] >= 0) {
+                m.erase(i0, i1);
+            } else {
+                m.rw[i1] = i0;
+            }
+
+            if (m.maze[i1] >= 0) {
+                while ((i0 = m.rw[i1]) != i1) {
+                    if (i1 == (i0 + 1)) {
+                        m.maze[i0] |= m.east;
+                        m.maze[i1] |= m.west;
+                    } else if (i1 == (i0 - 1)) {
+                        m.maze[i0] |= m.west;
+                        m.maze[i1] |= m.east;
+                    } else if (i1 == (m.w + i0)) {
+                        m.maze[i0] |= m.south;
+                        m.maze[i1] |= m.north;
+                    } else {
+                        m.maze[i0] |= m.north;
+                        m.maze[i1] |= m.south;
+                    }
+                    m.rw[i1] = NaN;
+                    i1 = i0;
+                }
+                m.rw[i1] = NaN;
+                return;
+            }
+            i0 = i1;
+        }
+        // return true;
+    },
+    "erase": function(i0, i2) {
+        var i1;
+        do {
+            i1 = m.rw[i0];
+            m.rw[i0] = NaN;
+            i0 = i1;
+        } while (i1 !== i2);
     }
 }
 // dom
 var d = {
     "init": function() {
-        d.w = 1920;
-        d.w2 = (d.w / 2.0) >>> 0;
-        d.w4 = (d.w / 4.0) >>> 0;
-        d.h = 1080;
-        d.h2 = (d.h / 2.0) >>> 0;
-        d.h4 = (d.h / 4.0) >>> 0;
+        console.log("d init");
+        d.w = 1024;
+        d.h = 1024;
+        d.mw = ((1920 - d.w) / 2) >>> 0;
+        d.mh = ((1080 - d.h) / 2) >>> 0;
         d.alpha = document.getElementById("alpha");
         d.beta = {};
         d.beta.can = document.createElement("canvas");
-        d.alpha.appendChild(d.beta.can);
         d.beta.con = d.beta.can.getContext("2d");
         d.beta.can.width = d.w;
         d.beta.can.height = d.h;
         d.beta.can.style.position = "absolute";
-        d.beta.can.style.left = "0px";
-        d.beta.can.style.top = "0px";
-        window.addEventListener("keydown", d.key, false);
-        // d.gamma - 1024x1024 centered canvas
-    },
-    "key": function(e) {
-        // console.log(e);
+        d.beta.can.style.top = d.mh + "px";
+        d.beta.can.style.left = d.mw + "px";
+        d.alpha.appendChild(d.beta.can);
     }
 }
 // render
 var r = {
-    "quad": function(n0) {
-        if (n0.c0.length == 0) {
-            // rect
-            c.shuf();
-            d.beta.con.fillStyle = c.cssr();
-            d.beta.con.fillRect(n0.r0.x0, n0.r0.y0, n0.r0.w0, n0.r0.h0);
-            // inv
-            c.shuf();
-            d.beta.con.fillStyle = c.cssr();
-            var min = (n0.r0.w0 > n0.r0.h0) ? n0.r0.h0 : n0.r0.w0;
-            var s0 = (min / n0.r0.inv.n0) >>> 0;
-            var m0 = (s0 / 16) >>> 0;
-            var s1 = (s0 - (2 * m0)) >>> 0;
-            var s2 = (s0 * n0.r0.inv.n0) >>> 0;
-            var s3 = (s2 / 2.0) >>> 0;
-            var mx = ((n0.r0.w0 - s2) / 2) >>> 0;
-            var my = ((n0.r0.h0 - s2) / 2) >>> 0;
-            // rotation
-            d.beta.con.save();
-            var x2 = (n0.r0.x0 + (n0.r0.w0 / 2.0)) >>> 0;
-            var y2 = (n0.r0.y0 + (n0.r0.h0 / 2.0)) >>> 0;
-            var f0 = Math.random();
-            var a0 = 0;
-            if (f0 >= 0.25 && f0 < 0.5) {
-                a0 = Math.PI / 2.0;
-            }
-            if (f0 >= 0.5 && f0 < 0.75) {
-                a0 = Math.PI;
-            }
-            if (f0 >= 0.75) {
-                a0 = 3.0 * Math.PI / 2.0;
-            }
-            d.beta.con.translate(x2, y2);
-            d.beta.con.rotate(a0);
-            // draw inv
-            for (var y = 0; y < n0.r0.inv.data.length; y++) {
-                for (var x = 0; x < n0.r0.inv.data[y].length; x++) {
-                    if (n0.r0.inv.data[y][x] == 0) continue;
-                    // var x0 = ((x * s0) + n0.r0.x0) >>> 0;
-                    // var x1 = (x0 + m0 + mx) >>> 0;
-                    // var y0 = ((y * s0) + n0.r0.y0) >>> 0;
-                    // var y1 = (y0 + m0 + my) >>> 0;
-                    // d.beta.con.fillRect(x1, y1, s1, s1);
-                    var x0 = (x * s0) >>> 0;
-                    // var x1 = (x0 + m0 + mx) >>> 0;
-                    // var x1 = (x0 + ((n0.r0.inv.n0 * s0) / 4.0)) >>> 0;
-                    var x1 = 0;
-                    var y0 = (y * s0) >>> 0;
-                    // var y1 = (y0 + m0 + my) >>> 0;
-                    // var y1 = (y0 + ((n0.r0.inv.n0 * s0) / 4.0)) >>> 0;
-                    var y1 = 0;
-                    if (a0 == 0) {
-                        x1 = (n0.r0.w0 / 2.0) >>> 0;
-                        y1 = (n0.r0.h0 / 2.0) >>> 0;
-                    }
-                    if (a0 == (Math.PI / 2.0)) {
-                        x1 = (n0.r0.h0 / 2.0) >>> 0;
-                        y1 = (n0.r0.w0 / 2.0) >>> 0;
-                    }
-                    if (a0 == (Math.PI)) {
-                        x1 = (n0.r0.w0 / -2.0) >>> 0;
-                        y1 = (n0.r0.h0 / -2.0) >>> 0;
-                    }
-                    if (a0 == (3.0 * Math.PI / 2.0)) {
-                        x1 = (n0.r0.h0 / -2.0) >>> 0;
-                        y1 = (n0.r0.w0 / -2.0) >>> 0;
-                    }
-                    // d.beta.con.translate(x1, y1);
-                    // d.beta.con.translate(n0.r0.x0, n0.r0.y0);
-
-                    d.beta.con.fillRect(x0-s3, y0-s3, s0, s0);
-                }
-            }
-            d.beta.con.restore();
-        } else {
-            for (var i = 0; i < n0.c0.length; i++) {
-                r.quad(n0.c0[i]);
-            }
-        }
-    }
-}
-// tree
-var t = {
-    "init": function() {
-        t.min = 64; // min subdivision length
-        var r0 = new rect(0, 0, d.w, d.h);
-        t.root = new node();
-        t.root.r0 = r0;
-        t.exp(t.root);
+    "clear": function() {
+        d.beta.con.fillStyle = c.cssr();
+        d.beta.con.fillRect(0,0,d.w,d.h);
     },
-    "exp": function(n0) {
-        // expand input node
-        // check min
-        if (n0.r0.w0 <= t.min || n0.r0.h0 <= t.min) {
-            return;
-        }
-        // stochastic factor
-        var f0 = Math.random();
-        if (f0 <= 0.25) {
-            return;
-        }
-        // var i0 = 0;
-        // subdivide quads
-        var r1 = n0.r0.quad();
-        for (var i = 0; i < r1.length; i++) {
-            n0.c0[i] = new node();
-            n0.c0[i].r0 = r1[i];
-        }
-        // expand child nodes
-        for (var i = 0; i < n0.c0.length; i++) {
-            t.exp(n0.c0[i]);
-        }
-    }
-}
-// node 
-var node = function() {
-    this.r0 = null; // rect
-    this.c0 = []; // child
-}
-// rect
-var rect = function(x0, y0, w0, h0) {
-    this.x0 = x0;
-    this.y0 = y0;
-    this.w0 = w0;
-    this.h0 = h0;
-    this.c0 = c.comp();
-    this.quad = function() {
-        var r0 = [];
-        // midpoint displacement
-        var w1 = (this.w0 / 2.0) >>> 0;
-        // displacement bug - 32-bit uint
-        // w1 += ((1.0 * (Math.sin(Math.random() * Math.PI * 2.0))) >>> 0);
-        w1 += ((Math.random() * 4.0) - 8.0);
-        w1 = w1 >>> 0;
-        var w2 = (this.w0 - w1) >>> 0;
-        var h1 = (this.h0 / 2.0) >>> 0;
-        h1 += ((Math.random() * 4.0) - 8.0);
-        h1 = h1 >>> 0;
-        var h2 = (this.h0 - h1) >>> 0;
-        var x1 = (this.x0 + w1) >>> 0;
-        var y1 = (this.y0 + h1) >>> 0;
-        // subdivide into quads
-        r0.push(new rect(this.x0, this.y0, w1, h1)); 
-        r0.push(new rect(x1, this.y0, w2, h1));
-        r0.push(new rect(this.x0, y1, w1, h2));
-        r0.push(new rect(x1, y1, w2, h2));
-        return r0;
-        
-    };
-    // inv sets num only, renderer determines size, margin
-    this.inv = new inv(5);
-    var f0 = Math.random();
-    if (f0 >= 0.9) {
-        this.inv = new inv(9);
-    }
-    if (f0 <= 0.2) {
-        this.inv = new inv(7);
-    }
-}
-// inv
-var inv = function(n0) {
-    this.n0 = n0;
-    // this.c0 = c.comp();
-    this.data = [];
-    this.n1 = (n0 / 2) >>> 0;
-    for (var y = 0; y < this.n0; y++) {
-        var a0 = [];
-        for (var x = 0; x <= this.n1; x++) {
-            var f0 = Math.random();
-            if (f0 <= 0.5) {
-                a0.push(1);
-            } else {
-                a0.push(0);
+    "maze": function() {
+        c.shuf();
+        d.beta.con.fillStyle = c.cssr();
+        for (var i = 0; i < m.maze.length; i++) {
+            var m0 = m.maze[i];
+            var x0 = i % m.w;
+            var y0 = (i / m.w) >>> 0;
+            var x1 = (x0 * m.s) >>> 0;
+            var y1 = (y0 * m.s) >>> 0;
+            var w0 = m.s;
+            var h0 = m.s;
+            var w1 = (w0 - (2 * m.b)) >>> 0;
+            var h1 = (h0 - (2 * m.b)) >>> 0;
+            if ((m0 & m.south) == m.south) {   
+                var x2 = x1 + m.b;
+                var y2 = y1 + m.b;
+                var w2 = w1;
+                var h2 = h1 + m.b;
+                d.beta.con.fillRect(x2, y2, w2, h2);
             }
+            if ((m0 & m.north) == m.north) {   
+                var x2 = x1 + m.b;
+                var y2 = y1;
+                var w2 = w1;
+                var h2 = h1 + m.b;
+                d.beta.con.fillRect(x2, y2, w2, h2);
+            }
+            if ((m0 & m.east) == m.east) {   
+                var x2 = x1 + m.b;
+                var y2 = y1 + m.b;
+                var w2 = w1 + m.b;
+                var h2 = h1;
+                d.beta.con.fillRect(x2, y2, w2, h2);
+            }
+            if ((m0 & m.west) == m.west) {   
+                var x2 = x1;
+                var y2 = y1 + m.b;
+                var w2 = w1 + m.b;
+                var h2 = h1;
+                d.beta.con.fillRect(x2, y2, w2, h2);
+            }
+
+
         }
-        for (var x = (this.n1 + 1); x < this.n0; x++) {
-            a0.push(a0[this.n0 - x -1]);
-        }
-        this.data.push(a0);
     }
 }
 // color
@@ -254,7 +241,7 @@ var c = {
         return c0;
     },
     "init": function() {
-        c.rgba = []; // type'd // instanceof
+        c.rgba = [];
         c.hsla = [];
         c.shuf();
     },
@@ -298,12 +285,3 @@ var c = {
     <body id="alpha">
     </body>
 </html>
-<!--
-    
-    tree subdivison of rects
-    stochastically, down to min size
-    each node contains, x0, y0, w0, h0, c0, inv0
-    inv = n0, a0, m0, c0
-    render - translate to center of rect, rotate (news), restore
-
--->
