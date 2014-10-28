@@ -27,6 +27,10 @@
                 deck.init();
                 table.init();
                 // yaku.init();
+                g.players = [p0,p1,y0,y1];
+                for (var i = 0; i < g.players.length; i++) {
+                    g.players[i].init();
+                }
                 r.render();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
@@ -105,6 +109,22 @@ var r = {
             var m1 = (m0 * 2) >>> 0;
             table.river.canvas[i].con.fillRect(m0,m0,table.river.canvas[i].can.width-m1,table.river.canvas[i].can.height-m1);
         }
+        
+        rgb.shuf(1.0);
+        p0.canvas.con.fillStyle = rgb.cssr();
+        p0.canvas.con.fillRect(0,0,p0.canvas.can.width,p0.canvas.can.height);
+        rgb.shuf(1.0);
+        y0.canvas.con.fillStyle = rgb.cssr();
+        y0.canvas.con.fillRect(0,0,y0.canvas.can.width,y0.canvas.can.height);
+
+        rgb.shuf(1.0);
+        p1.canvas.con.fillStyle = rgb.cssr();
+        p1.canvas.con.fillRect(0,0,p1.canvas.can.width,p1.canvas.can.height);
+        rgb.shuf(1.0);
+        y1.canvas.con.fillStyle = rgb.cssr();
+        y1.canvas.con.fillRect(0,0,y1.canvas.can.width,y1.canvas.can.height);
+
+
     }
 }
 // deck 
@@ -177,8 +197,24 @@ var player = function() {
     // hand, yaku
 }
 var p0 = {
+    "init": function() {
+        p0.w = 320;
+        p0.h = 720;
+        p0.x = 0;
+        p0.y = 0;
+        p0.canvas = d.canvas([p0.w,p0.h,p0.x,p0.y]);
+        d.add(p0.canvas);
+    }
 }
 var p1 = {
+    "init": function() {
+        p1.w = 320;
+        p1.h = 720;
+        p1.x = 1600;
+        p1.y = 0;
+        p1.canvas = d.canvas([p1.w,p1.h,p1.x,p1.y]);
+        d.add(p1.canvas);
+    }
 }
 // yaku
 var yaku = function() {
@@ -189,7 +225,25 @@ var yaku = function() {
     // hard code data, then generate index
     // chck functions
 }
-var y = {
+var y0 = {
+    "init": function() {
+        y0.w = 960;
+        y0.h = 360;
+        y0.x = 0;
+        y0.y = 720;
+        y0.canvas = d.canvas([y0.w,y0.h,y0.x,y0.y]);
+        d.add(y0.canvas);
+    }
+}
+var y1 = {
+    "init": function() {
+        y1.w = 960;
+        y1.h = 360;
+        y1.x = 960;
+        y1.y = 720;
+        y1.canvas = d.canvas([y1.w,y1.h,y1.x,y1.y]);
+        d.add(y1.canvas);
+    }
 }
 // color
 var rgb = {
