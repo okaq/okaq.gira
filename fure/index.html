@@ -322,13 +322,52 @@ var yakus = {
 
         // akatan
         yakus.akatan = {};
-        yakus.akatan.cards = [2,6,10,14,18,22,26,42,46,49];
+        yakus.akatan.cards = [2,6,10,14,18,22,26,34,38,41];
         yakus.akatan.points = 5;
         yakus.akatan.need 3;
         yakus.akatan.extra = 1;
 
         // aotan
         yakus.aotan = {};
+        yakus.aotan.cards = [26,34,38,2,6,10,14,18,22,41];
+        yakus.aotan.points = 5;
+        yakus.aotan.need = 3;
+        yakus.aotan.extra = 1;
+
+        // akatan, aotan no chofuku
+        yakus.chofuku = {};
+        yakus.chofuku.cards = [2,6,10,26,34,38,14,18,22,41];
+        yakus.chofuku.points = 10;
+        yakus.chofuku.need = 6;
+        yakus.chofuku.extra = 1;
+
+        // tanzaku
+        yakus.tanzaku = {};
+        yakus.tanzaku.cards = [2,6,10,14,18,22,26,34,38,41];
+        yakus.tanzaku.points = 1;
+        yakus.tanzaku.need = 5;
+        yakus.tanzaku.extra = 1;
+
+        // tsukimi-zaki
+        yakus.tsukimi = {};
+        yakus.tsukimi.cards = [39,43];
+        yakus.tsukimi.points = 5;
+        yakus.tsukimi.need = 2;
+        yakus.tsukimi.extra = null;
+
+        // hanami-zaki
+        yakus.hanami = {};
+        yakus.hanami.cards = [11,43];
+        yakus.hanami.points = 5;
+        yakus.hanami.need = 2;
+        yakus.hanami.extra = null;
+
+        // kasu
+        yakus.kasu = {};
+        yakus.kasu.cards = [0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,32,33,36,37,40,44,45];
+        yakus.kasu.points = 1;
+        yakus.kasu.need = 10;
+        yakus.kasu.extra = 1;
 
         // special deal yakus
         // teshi - 4 cards of similar suit - 6pts
