@@ -234,6 +234,11 @@ var yaku = function() {
 // hanafuda
 var hana = {
     "init": function() {
+        hana.suits = [
+            "pine","plum blossom","cherry blossom","wisteria",
+            "iris","peony","bush clover","suski grass",
+            "chrysanthemum","maple","willow","paulownia"
+        ];
         hana.cards = {
             "pine": ["plain","plain","poetry ribbon","crane and sun"],
             "plum blossom": ["plain","plain","poetry ribbon","bush warbler"],
@@ -272,8 +277,67 @@ var yakus = {
         yakus.plains.n = 9; // number needed to win
         yakus.plains.p = 1; // inital pts
         yakus.plains.e = 1; // additional pts
+        
+        // sanko
+        yakus.sanko = {};
+        yakus.sanko.cards = [3,11,31,47];
+        yakus.sanko.points = 5;
+        yakus.sanko.need = 3;
+        yakus.sanko.extra = null;
 
+        // shiko
+        yakus.shiko = {};
+        yakus.shiko.cards = [3,11,31,47];
+        yakus.shiko.points = 8;
+        yakus.shiko.need = 4;
+        yakus.shiko.extra = null;
 
+        // ame-shiko
+        yakus.ame_shiko = {};
+        yakus.ame_shiko.cards = [3,11,31,43,47];
+        yakus.ame_shiko.points = 7;
+        yakus.ame_shiko.need = 4;
+        yakus.ame_shiko.extra = null;
+
+        // goko
+        yakus.goko = {};
+        yakus.goko.cards = [3,11,31,43,47];
+        yakus.goko.points = 10;
+        yakus.goko.need = 10;
+        yakus.goko.extra = null;
+
+        // inoshikacho
+        yakus.inoshikacho = {};
+        yakus.inoshikacho.cards = [23,27,39,7,15,19,29,30,35,42];
+        yakus.inoshikacho.points = 5;
+        yakus.inoshikacho.need = 3;
+        yakus.inoshikacho.extra = 1;
+
+        // tane
+        yakus.tane = {};
+        yakus.tane.cards = [7,15,19,23,27,29,30,35,39,42];
+        yakus.tane.points = 1;
+        yakus.tane.need = 5;
+        yakus.tane.extra = 1;
+
+        // akatan
+        yakus.akatan = {};
+        yakus.akatan.cards = [2,6,10,14,18,22,26,42,46,49];
+        yakus.akatan.points = 5;
+        yakus.akatan.need 3;
+        yakus.akatan.extra = 1;
+
+        // aotan
+        yakus.aotan = {};
+
+        // special deal yakus
+        // teshi - 4 cards of similar suit - 6pts
+        // kuttsuki - 4 pairs of same suit - 6pts
+        // can check mathmatically (card % 4)
+        // if dealt to table, auto redeal without awarding points
+
+        // pattern - follow the card face values
+        // determine from the count, set which yakus get filled
     },
     "copy": function() {
     }
