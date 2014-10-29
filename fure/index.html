@@ -28,9 +28,12 @@
                 table.init();
                 // yaku.init();
                 g.players = [p0,p1,y0,y1];
+                g.players.forEach(function(elem){elem.init();});
+                /*
                 for (var i = 0; i < g.players.length; i++) {
                     g.players[i].init();
-                }
+                    }
+                    */
                 r.render();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
@@ -138,7 +141,8 @@ var deck = {
         console.log(deck.cards);
         // deck needs two rects
         // cards pile and draw pile
-        deck.rects = [[128,196,384,64],[128,196,384,306]];
+        // deck.rects = [[128,196,384,64],[128,196,384,306]];
+        deck.rects = [[160,160,384,64],[160,160,384,306]];
         deck.canvas = deck.rects.map(d.canvas);
         deck.canvas.forEach(d.add);
     },
@@ -164,13 +168,13 @@ var deck = {
 var table = {
     "init": function() {
         table.size = 8;
-        table.nx = 4;
-        table.ny = 2;
+        table.nx = 3;
+        table.ny = 3;
         // make generic
         // assign an area on document
         // but subdivide once size is injected
         // deck is part of table
-        table.area = [800,600,600,32];
+        table.area = [700,700,640,16];
         table.canvas = d.canvas(table.area);
         d.add(table.canvas);
         table.river = {};
@@ -204,6 +208,7 @@ var p0 = {
         p0.y = 0;
         p0.canvas = d.canvas([p0.w,p0.h,p0.x,p0.y]);
         d.add(p0.canvas);
+        p0.hand = [];
     }
 }
 var p1 = {
@@ -214,6 +219,7 @@ var p1 = {
         p1.y = 0;
         p1.canvas = d.canvas([p1.w,p1.h,p1.x,p1.y]);
         d.add(p1.canvas);
+        p1.hand = [];
     }
 }
 // yaku
@@ -224,6 +230,53 @@ var yaku = function() {
     this.t = (deck.size / y.s) >>> 0;
     // hard code data, then generate index
     // chck functions
+}
+// hanafuda
+var hana = {
+    "init": function() {
+        hana.cards = {
+            "pine": ["plain","plain","poetry ribbon","crane and sun"],
+            "plum blossom": ["plain","plain","poetry ribbon","bush warbler"],
+            "cherry blossom": ["plain","plain","poetry ribbon","camp curtain"],
+            "wisteria": ["plain","plain","red ribbon","cuckoo"],
+            "iris": ["plain","plain","red ribbon","water iris"],
+            "peony": ["plain","plain","violet ribbon","butteflies"],
+            "bush clover": ["plain","plain","red ribbon","boar"],
+            "susuki grass": ["plain","plain","geese in flight","red sky full moon"],
+            "chrysanthemum": ["plain","plain","violet ribbon","poetry sake cup"],
+            "maple": ["plain","plain","violet ribbon","deer and maple"],
+            "willow": ["lighting","red ribbon","swallow","rainman"],
+            "paulownia": ["plain","plain","plain","chinese phoenix"]
+        };
+        hana.points = [
+            1,1,5,20,
+            1,1,5,10,
+            1,1,5,20,
+            1,1,5,10,
+            1,1,5,10,
+            1,1,5,10,
+            1,1,5,10,
+            1,10,10,20,
+            1,1,5,10,
+            1,1,5,10,
+            1,5,10,20,
+            1,1,1,20
+        ];
+    }
+}
+var yakus = {
+    "init": function() {
+        // plains
+        yakus.plains = {};
+        yakus.plains.data = [];
+        yakus.plains.n = 9; // number needed to win
+        yakus.plains.p = 1; // inital pts
+        yakus.plains.e = 1; // additional pts
+
+
+    },
+    "copy": function() {
+    }
 }
 var y0 = {
     "init": function() {
@@ -258,6 +311,7 @@ var rgb = {
         rgb.rgba = [];
         rgb.hsla = [];
         rgb.shuf(1.0);
+        // palatte for the cards
     },
     "shuf": function(a0) {
         for (var i = 0; i < 3; i++) {
