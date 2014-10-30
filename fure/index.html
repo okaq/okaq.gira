@@ -127,6 +127,9 @@ var deck = {
             deck.deal[i*3+1] = 1;
             deck.deal[i*3+2] = 2;
         }
+        for (var i = deck.hand * 3; i < deck.size; i++) {
+            deck.deal[i] = null;
+        }
     }
 }
 // entities
@@ -141,7 +144,7 @@ var ent = {
             ent.line.canvas[i] = dom.canvas(ent.line.rects[i]);
             dom.add(ent.line.canvas[i]);
         }
-        ent.line.mx = 8;
+        ent.line.mx = 6;
         ent.line.my = 24;
 
         ent.shuf = {};
@@ -152,9 +155,43 @@ var ent = {
             ent.shuf.canvas[i] = dom.canvas(ent.shuf.rects[i]);
             dom.add(ent.shuf.canvas[i]);
         }
-        ent.shuf.mx = 8;
+        ent.shuf.mx = 6;
         ent.shuf.my = 24;
         // box model - [w,h,x,y] mx,my
+
+        ent.p0 = {}
+        ent.p0.rect = [dom.w, dom.bh, 0, (dom.bh*2)];
+        ent.p0.rects = dom.sub(ent.p0.rect, 48, 1);
+        ent.p0.canvas = [];
+        for (var i = 0; i < ent.p0.rects.length; i++) {
+            ent.p0.canvas[i] = dom.canvas(ent.p0.rects[i]);
+            dom.add(ent.p0.canvas[i]);
+        }
+        ent.p0.mx = 6;
+        ent.p0.my = 24;
+
+        ent.p1 = {}
+        ent.p1.rect = [dom.w, dom.bh, 0, (dom.bh*3)];
+        ent.p1.rects = dom.sub(ent.p1.rect, 48, 1);
+        ent.p1.canvas = [];
+        for (var i = 0; i < ent.p1.rects.length; i++) {
+            ent.p1.canvas[i] = dom.canvas(ent.p1.rects[i]);
+            dom.add(ent.p1.canvas[i]);
+        }
+        ent.p1.mx = 6;
+        ent.p1.my = 24;
+
+        ent.tab = {}
+        ent.tab.rect = [dom.w, dom.bh, 0, (dom.bh*4)];
+        ent.tab.rects = dom.sub(ent.tab.rect, 48, 1);
+        ent.tab.canvas = [];
+        for (var i = 0; i < ent.tab.rects.length; i++) {
+            ent.tab.canvas[i] = dom.canvas(ent.tab.rects[i]);
+            dom.add(ent.tab.canvas[i]);
+        }
+        ent.tab.mx = 6;
+        ent.tab.my = 24;
+
     }
 }
 // render
@@ -170,7 +207,26 @@ var r = {
             ent.shuf.canvas[i].con.fillRect(ent.shuf.mx, ent.shuf.my, ent.shuf.rects[i][0] - (2 * ent.shuf.mx), ent.shuf.rects[i][1] - (2 * ent.shuf.my));
         }
 
+        for (var i = 0; i < ent.p0.canvas.length; i++) {
+            if (deck.deal[i] == 0) {
+                ent.p0.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
+                ent.p0.canvas[i].con.fillRect(ent.p0.mx, ent.p0.my, ent.p0.rects[i][0] - (2 * ent.p0.mx), ent.p0.rects[i][1] - (2 * ent.p0.my));
+            }
+        }
 
+        for (var i = 0; i < ent.p1.canvas.length; i++) {
+            if (deck.deal[i] == 1) {
+                ent.p1.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
+                ent.p1.canvas[i].con.fillRect(ent.p1.mx, ent.p1.my, ent.p1.rects[i][0] - (2 * ent.p1.mx), ent.p1.rects[i][1] - (2 * ent.p1.my));
+            }
+        }
+
+        for (var i = 0; i < ent.tab.canvas.length; i++) {
+            if (deck.deal[i] == 2) {
+                ent.tab.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
+                ent.tab.canvas[i].con.fillRect(ent.tab.mx, ent.tab.my, ent.tab.rects[i][0] - (2 * ent.tab.mx), ent.tab.rects[i][1] - (2 * ent.tab.my));
+            }
+        }
     }
 }
 // color
