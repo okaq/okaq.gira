@@ -24,10 +24,31 @@
                 
                 deck.init();
                 rgb.init();
+                console.log(rgb.css(rgb.pal[24]));
+                dom.init();
 
                 console.log("totat running time: " + (window.performance.now() - t0) + "ms");
             }
         }
+// dom
+var dom = {
+    "init": function() {
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.left = r0[2] + "px";
+        c0.can.style.top = r0[3] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        d.alpha.appendChild(c0.can);
+    }
+}
 // deck
 var deck = {
     "init": function() {
@@ -42,6 +63,7 @@ var deck = {
         deck.deal = []; // deal encoding array
         deck.turn = 0; // turn index
         deck.start();
+        console.log(deck.deal);
         // match method to check if two cards match suits
         // p0,p1 captures list
         // block aligned full width divs
@@ -66,13 +88,35 @@ var deck = {
         return d1;
     },
     "start": function() {
-        for 
+        // encoding 0: p0, 1: p1, 2: tab
+        for (var i = 0; i < deck.hand; i++) {
+            deck.deal[i*3] = 0;
+            deck.deal[i*3+1] = 1;
+            deck.deal[i*3+2] = 2;
+        }
     }
 }
 // color
 var rgb = {
     "init": function() {
-        rgb.pal = [];
+        rgb.pal = rgb.rand(deck.size);
+    },
+    "rand": function(n0) {
+        r0 = [];
+        for (var i = 0; i < n0; i++) {
+            var c0 = [rgb.rb(), rgb.rb(), rgb.rb(), 1.0];
+            r0[i] = c0;
+        }
+        return r0;
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
     }
 }
         </script>
