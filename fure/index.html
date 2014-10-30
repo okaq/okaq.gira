@@ -27,6 +27,7 @@
                 console.log(rgb.css(rgb.pal[24]));
                 dom.init();
                 ent.init();
+                r.render();
 
                 console.log("totat running time: " + (window.performance.now() - t0) + "ms");
             }
@@ -34,6 +35,7 @@
 // dom
 var dom = {
     "init": function() {
+        dom.alpha = document.getElementById("alpha");
         dom.w = 1920;
         dom.h = 1080;
         // full width blocks
@@ -58,7 +60,7 @@ var dom = {
         return c0;
     },
     "add": function(c0) {
-        d.alpha.appendChild(c0.can);
+        dom.alpha.appendChild(c0.can);
     },
     "sub": function(r0, x0, y0) {
         // subdivide rect into x,y subrects
@@ -132,10 +134,43 @@ var ent = {
     "init": function() {
         ent.line = {};
         ent.line.rect = [dom.w, dom.bh, 0, 0];
-        ent.line.rects = dom.sub(ent.line.rect, 8, 1);
+        ent.line.rects = dom.sub(ent.line.rect, 48, 1);
         console.log(ent.line.rects);
-        ent.canvas = [];
-        // dom.canvas(ent.line.rect);
+        ent.line.canvas = [];
+        for (var i = 0; i < ent.line.rects.length; i++) {
+            ent.line.canvas[i] = dom.canvas(ent.line.rects[i]);
+            dom.add(ent.line.canvas[i]);
+        }
+        ent.line.mx = 8;
+        ent.line.my = 24;
+
+        ent.shuf = {};
+        ent.shuf.rect = [dom.w, dom.bh, 0, dom.bh];
+        ent.shuf.rects = dom.sub(ent.shuf.rect, 48, 1);
+        ent.shuf.canvas = [];
+        for (var i = 0; i < ent.shuf.rects.length; i++) {
+            ent.shuf.canvas[i] = dom.canvas(ent.shuf.rects[i]);
+            dom.add(ent.shuf.canvas[i]);
+        }
+        ent.shuf.mx = 8;
+        ent.shuf.my = 24;
+        // box model - [w,h,x,y] mx,my
+    }
+}
+// render
+var r = {
+    "render": function() {
+        for (var i = 0; i < ent.line.canvas.length; i++) {
+            ent.line.canvas[i].con.fillStyle = rgb.css(rgb.pal[i]);
+            ent.line.canvas[i].con.fillRect(ent.line.mx, ent.line.my, ent.line.rects[i][0] - (2 * ent.line.mx), ent.line.rects[i][1] - (2 * ent.line.my));
+        }
+
+        for (var i = 0; i < ent.shuf.canvas.length; i++) {
+            ent.shuf.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
+            ent.shuf.canvas[i].con.fillRect(ent.shuf.mx, ent.shuf.my, ent.shuf.rects[i][0] - (2 * ent.shuf.mx), ent.shuf.rects[i][1] - (2 * ent.shuf.my));
+        }
+
+
     }
 }
 // color
