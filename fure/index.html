@@ -21,9 +21,60 @@
             "init": function(e) {
                 console.log(e);
                 var t0 = window.performance.now();
+                
+                deck.init();
+                rgb.init();
+
                 console.log("totat running time: " + (window.performance.now() - t0) + "ms");
             }
         }
+// deck
+var deck = {
+    "init": function() {
+        deck.size = 48;
+        // initial linear deck
+        deck.linear = deck.line(deck.size);
+        // shuffled deck from linear
+        deck.shuffled = deck.shuf(deck.linear);
+        console.log(deck.size, deck.linear, deck.shuffled);
+        // deals deck with tab,p0,p1 encoding and turn index
+        deck.hand = 8; // initial num of cards to each player
+        deck.deal = []; // deal encoding array
+        deck.turn = 0; // turn index
+        deck.start();
+        // match method to check if two cards match suits
+        // p0,p1 captures list
+        // block aligned full width divs
+    },
+    "line": function(n0) {
+        // linear array
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0[i] = i;
+        }
+        return r0;
+    },
+    "shuf": function(d0) {
+        // new shuffled array
+        var d1 = d0.slice();
+        for (var i = d0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = d1[i0];
+            d1[i0] = d1[i];
+            d1[i] = t0;
+        }
+        return d1;
+    },
+    "start": function() {
+        for 
+    }
+}
+// color
+var rgb = {
+    "init": function() {
+        rgb.pal = [];
+    }
+}
         </script>
     </head>
     <body id="alpha">
