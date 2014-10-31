@@ -169,7 +169,7 @@ var ent = {
             dom.add(ent.p0.canvas[i]);
             ent.p0.canvas[i].can.dataset.chosen = "false";
             // ent.p0.canvas[i].can.addEventListener("click", function(e){console.log(ent.p0.canvas[i].id);}, false);
-            ent.p0.canvas[i].can.addEventListener("click", ent.click, false);
+            ent.p0.canvas[i].can.addEventListener("click", ent.click_p0, false);
         }
         ent.p0.mx = 6;
         ent.p0.my = 24;
@@ -178,9 +178,11 @@ var ent = {
         ent.p1.rect = [dom.w, dom.bh, 0, (dom.bh*3)];
         ent.p1.rects = dom.sub(ent.p1.rect, 48, 1);
         ent.p1.canvas = [];
+        ent.p1.chosen = null;
         for (var i = 0; i < ent.p1.rects.length; i++) {
             ent.p1.canvas[i] = dom.canvas(ent.p1.rects[i]);
             dom.add(ent.p1.canvas[i]);
+            ent.p1.canvas[i].can.addEventListener("click", ent.click_p1, false);
         }
         ent.p1.mx = 6;
         ent.p1.my = 24;
@@ -189,27 +191,29 @@ var ent = {
         ent.tab.rect = [dom.w, dom.bh, 0, (dom.bh*4)];
         ent.tab.rects = dom.sub(ent.tab.rect, 48, 1);
         ent.tab.canvas = [];
+        ent.tab.chosen = null;
         for (var i = 0; i < ent.tab.rects.length; i++) {
             ent.tab.canvas[i] = dom.canvas(ent.tab.rects[i]);
             dom.add(ent.tab.canvas[i]);
+            ent.tab.canvas[i].can.addEventListener("click", ent.click_tab, false);
         }
         ent.tab.mx = 6;
         ent.tab.my = 24;
 
     },
-    "reset": function() {
+    "reset_p0": function() {
         for (var i = 0; i < ent.p0.canvas.length; i++) {
             ent.p0.canvas[i].can.dataset.chosen = "false";
         }
     },
-    "choose": function() {
+    "choose_p0": function() {
         for (var i = 0; i < ent.p0.canvas.length; i++) {
             if (ent.p0.canvas[i].can.dataset.chosen == "true") {
-                ent.chosen = i;
+                ent.p0.chosen = i;
             }
         }
     },
-    "click": function(e) {
+    "click_p0": function(e) {
         console.log(e);
         // either create a bitmap of click true / false vals
         // and update every entry in the click handler
@@ -218,9 +222,47 @@ var ent = {
         // console.log(x0);
 
         // use element dataset
-        ent.reset();
+        ent.reset_p0();
         e.target.dataset.chosen = "true";
-        ent.choose();
+        ent.choose_p0();
+        r.render();
+    },
+    "reset_p1": function() {
+        for (var i = 0; i < ent.p1.canvas.length; i++) {
+            ent.p1.canvas[i].can.dataset.chosen = "false";
+        }
+    },
+    "choose_p1": function() {
+        for (var i = 0; i < ent.p1.canvas.length; i++) {
+            if (ent.p1.canvas[i].can.dataset.chosen == "true") {
+                ent.p1.chosen = i;
+            }
+        }
+    },
+    "click_p1": function(e) {
+        console.log(e);
+        ent.reset_p1();
+        e.target.dataset.chosen = "true";
+        ent.choose_p1();
+        r.render();
+    },
+    "reset_tab": function() {
+        for (var i = 0; i < ent.tab.canvas.length; i++) {
+            ent.tab.canvas[i].can.dataset.chosen = "false";
+        }
+    },
+    "choose_tab": function() {
+        for (var i = 0; i < ent.tab.canvas.length; i++) {
+            if (ent.tab.canvas[i].can.dataset.chosen == "true") {
+                ent.tab.chosen = i;
+            }
+        }
+    },
+    "click_tab": function(e) {
+        console.log(e);
+        ent.reset_tab();
+        e.target.dataset.chosen = "true";
+        ent.choose_tab();
         r.render();
     }
 }
@@ -243,15 +285,17 @@ var r = {
                 ent.p0.canvas[i].con.fillRect(ent.p0.mx, ent.p0.my, ent.p0.rects[i][0] - (2 * ent.p0.mx), ent.p0.rects[i][1] - (2 * ent.p0.my));
             }
             if (ent.p0.canvas[i].can.dataset.chosen == "true") {
-                console.log("chosen: " + i);
+                console.log("p0 chosen: " + i);
             }
         }
-        console.log(ent.chosen);
 
         for (var i = 0; i < ent.p1.canvas.length; i++) {
             if (deck.deal[i] == 1) {
                 ent.p1.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
                 ent.p1.canvas[i].con.fillRect(ent.p1.mx, ent.p1.my, ent.p1.rects[i][0] - (2 * ent.p1.mx), ent.p1.rects[i][1] - (2 * ent.p1.my));
+            }
+            if (ent.p1.canvas[i].can.dataset.chosen == "true") {
+                console.log("p1 chosen: " + i);
             }
         }
 
@@ -259,6 +303,9 @@ var r = {
             if (deck.deal[i] == 2) {
                 ent.tab.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
                 ent.tab.canvas[i].con.fillRect(ent.tab.mx, ent.tab.my, ent.tab.rects[i][0] - (2 * ent.tab.mx), ent.tab.rects[i][1] - (2 * ent.tab.my));
+            }
+            if (ent.tab.canvas[i].can.dataset.chosen == "true") {
+                console.log("tab chosen: " + i);
             }
         }
     }
