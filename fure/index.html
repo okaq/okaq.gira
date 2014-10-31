@@ -163,9 +163,13 @@ var ent = {
         ent.p0.rect = [dom.w, dom.bh, 0, (dom.bh*2)];
         ent.p0.rects = dom.sub(ent.p0.rect, 48, 1);
         ent.p0.canvas = [];
+        ent.p0.chosen = null;
         for (var i = 0; i < ent.p0.rects.length; i++) {
             ent.p0.canvas[i] = dom.canvas(ent.p0.rects[i]);
             dom.add(ent.p0.canvas[i]);
+            ent.p0.canvas[i].can.dataset.chosen = "false";
+            // ent.p0.canvas[i].can.addEventListener("click", function(e){console.log(ent.p0.canvas[i].id);}, false);
+            ent.p0.canvas[i].can.addEventListener("click", ent.click, false);
         }
         ent.p0.mx = 6;
         ent.p0.my = 24;
@@ -192,6 +196,32 @@ var ent = {
         ent.tab.mx = 6;
         ent.tab.my = 24;
 
+    },
+    "reset": function() {
+        for (var i = 0; i < ent.p0.canvas.length; i++) {
+            ent.p0.canvas[i].can.dataset.chosen = "false";
+        }
+    },
+    "choose": function() {
+        for (var i = 0; i < ent.p0.canvas.length; i++) {
+            if (ent.p0.canvas[i].can.dataset.chosen == "true") {
+                ent.chosen = i;
+            }
+        }
+    },
+    "click": function(e) {
+        console.log(e);
+        // either create a bitmap of click true / false vals
+        // and update every entry in the click handler
+        // or determine clicked canvas mathematically using screen x,y
+        // var x0 = e.clientX + window.pageXOffset;
+        // console.log(x0);
+
+        // use element dataset
+        ent.reset();
+        e.target.dataset.chosen = "true";
+        ent.choose();
+        r.render();
     }
 }
 // render
@@ -212,7 +242,11 @@ var r = {
                 ent.p0.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
                 ent.p0.canvas[i].con.fillRect(ent.p0.mx, ent.p0.my, ent.p0.rects[i][0] - (2 * ent.p0.mx), ent.p0.rects[i][1] - (2 * ent.p0.my));
             }
+            if (ent.p0.canvas[i].can.dataset.chosen == "true") {
+                console.log("chosen: " + i);
+            }
         }
+        console.log(ent.chosen);
 
         for (var i = 0; i < ent.p1.canvas.length; i++) {
             if (deck.deal[i] == 1) {
