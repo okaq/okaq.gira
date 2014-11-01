@@ -21,9 +21,66 @@
             "init": function(e) {
                 console.log(e);
                 var t0 = window.performance.now();
+
+                g.w = 1920;
+                g.h = 1080;
+                ent.init();
+                // console.log(rgb.css(rgb.rand()));
+
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             }
         }
+// entities
+var ent = {
+    "init": function() {
+        ent.list = ["p0", "p1", "tab"];
+        ent.rect = [[g.w/6,g.h,0,0],[2*g.w/3,g.h,g.w,6,0],[g.w/6,g.h,5*g.w/6,0]];
+        ent.subs = [[1,1],[1,1],[1,1]];
+        ent.canvas = [];
+    }
+}
+// dom
+var dom = {
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        if (!dom.alpha) {
+            dom.alpha = document.getElementById("alpha");
+        }
+        dom.alpha.appendChild(c0.can);
+    },
+    "sub": function(r0, x0, y0) {
+    }
+}
+// render
+var ren = {
+    "scene": function() {
+    }
+}
+// color
+var rgb = {
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    }
+}
         </script>
     </head>
     <body id ="alpha">
