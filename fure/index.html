@@ -35,8 +35,11 @@
 var ent = {
     "init": function() {
         ent.name = ["p0", "tab", "p1"];
-        ent.rect = [[g.w/6,g.h,0,0],[2*g.w/3,g.h,g.w/6,0],[g.w/6,g.h,5*g.w/6,0]];
-        ent.subs = [[1,1],[1,1],[1,1]];
+        ent.dims = [g.w,(g.w/6)>>>0,(2*g.w/3)>>>0,(5*g.w/6)>>>0,g.h];
+        // ent.rect = [[g.w/6,g.h,0,0],[2*g.w/3,g.h,g.w/6,0],[g.w/6,g.h,5*g.w/6,0]];
+        ent.rect=[[ent.dims[1],ent.dims[4],0,0],[ent.dims[2],ent.dims[4],ent.dims[1],0],
+            [ent.dims[1],ent.dims[4],ent.dims[3],0]];
+        ent.subs = [[2,4],[3,3],[2,4]];
         ent.canvas = [];
         ent.pop();
         ent.db = {};
@@ -55,7 +58,7 @@ var ent = {
                 c1.can.dataset.id = s0;
                 ent.canvas.push(c1);
                 dom.add(c1);
-                ent.canvas[i].can.addEventListener("click", ent.click, false);
+                c1.can.addEventListener("click", ent.click, false);
             }
         }
         console.log(ent.canvas);
@@ -118,7 +121,7 @@ var ren = {
     "scene": function() {
         for (var k in ent.db) {
             ent.db[k].con.fillStyle = rgb.css(rgb.rand());
-            ent.db[k].con.fillRect(0,0,128,128);
+            ent.db[k].con.fillRect(0,0,ent.db[k].can.width,ent.db[k].can.height);
         }
     }
 }
