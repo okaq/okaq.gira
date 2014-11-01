@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head id="zeta">
+        <title>okaq</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
+        <meta name="source" content="https://github.com/okaq/okaq.gira" />
+        <meta name="creator" content="AQ <aq@okaq.com>" />
+        <meta name="date" content="2014-10-30" />
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGJJ+X+CgZaAiaamj1owasGoBaMWjFowasGoBaMWjFowasGoBVQEgAAAAP//+rsCbnzLRbUAAAAASUVORK5CYII=" />
+        <style type="text/css">
+            html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(255,255,255,1.0);}
+        </style>
+        <script type="text/javascript">
+            // ok
+        console.log("okaq gira fure go!");
+        // async load
+        (function(){window.addEventListener("load",function(e){g.init(e);},false);})();
+        // game
+        var g = {
+            "init": function(e) {
+                console.log(e);
+                var t0 = window.performance.now();
+                
+                deck.init();
+                rgb.init();
+                console.log(rgb.css(rgb.pal[24]));
+                dom.init();
+                ent.init();
+                r.render();
+
+                console.log("totat running time: " + (window.performance.now() - t0) + "ms");
+            }
+        }
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        dom.w = 1920;
+        dom.h = 1080;
+        // full width blocks
+        dom.bt = 8;
+        dom.bw = 1920;
+        dom.bh = (dom.h / dom.bt) >>> 0;
+        console.log(dom.bh);
+        // cells
+        dom.ct = 48;
+        dom.cw = (dom.bw / dom.ct) >>> 0;
+        dom.ch = dom.bh;
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.left = r0[2] + "px";
+        c0.can.style.top = r0[3] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "sub": function(r0, x0, y0) {
+        // subdivide rect into x,y subrects
+        // rect is array with [w,h,x,y]
+        if (x0 == 0 || y0 == 0) {
+        }
+        var r1 = [];
+        var w1 = (r0[0] / x0) >>> 0;
+        var h1 = (r0[1] / y0) >>> 0;
+        for (var y = 0; y < y0; y++) {
+            for (var x = 0; x < x0; x++) {
+                var x1 = (x * w1) >>> 0;
+                x1 += r0[2];
+                var y1 = (y * h1) >>> 0;
+                y1 += r0[3];
+                r1.push([w1,h1,x1,y1]);
+            }
+        }
+        return r1;
+    }
+}
+// deck
+var deck = {
+    "init": function() {
+        deck.size = 48;
+        // initial linear deck
+        deck.linear = deck.line(deck.size);
+        // shuffled deck from linear
+        deck.shuffled = deck.shuf(deck.linear);
+        console.log(deck.size, deck.linear, deck.shuffled);
+        // deals deck with tab,p0,p1 encoding and turn index
+        deck.hand = 8; // initial num of cards to each player
+        deck.deal = []; // deal encoding array
+        deck.turn = 0; // turn index
+        deck.start();
+        console.log(deck.deal);
+        // match method to check if two cards match suits
+        // p0,p1 captures list
+        // block aligned full width divs
+    },
+    "line": function(n0) {
+        // linear array
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0[i] = i;
+        }
+        return r0;
+    },
+    "shuf": function(d0) {
+        // new shuffled array
+        var d1 = d0.slice();
+        for (var i = d0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = d1[i0];
+            d1[i0] = d1[i];
+            d1[i] = t0;
+        }
+        return d1;
+    },
+    "start": function() {
+        // encoding 0: p0, 1: p1, 2: tab
+        for (var i = 0; i < deck.hand; i++) {
+            deck.deal[i*3] = 0;
+            deck.deal[i*3+1] = 1;
+            deck.deal[i*3+2] = 2;
+        }
+        for (var i = deck.hand * 3; i < deck.size; i++) {
+            deck.deal[i] = null;
+        }
+    }
+}
+// entities
+var ent = {
+    "init": function() {
+        ent.line = {};
+        ent.line.rect = [dom.w, dom.bh, 0, 0];
+        ent.line.rects = dom.sub(ent.line.rect, 48, 1);
+        console.log(ent.line.rects);
+        ent.line.canvas = [];
+        for (var i = 0; i < ent.line.rects.length; i++) {
+            ent.line.canvas[i] = dom.canvas(ent.line.rects[i]);
+            dom.add(ent.line.canvas[i]);
+        }
+        ent.line.mx = 6;
+        ent.line.my = 24;
+
+        ent.shuf = {};
+        ent.shuf.rect = [dom.w, dom.bh, 0, dom.bh];
+        ent.shuf.rects = dom.sub(ent.shuf.rect, 48, 1);
+        ent.shuf.canvas = [];
+        for (var i = 0; i < ent.shuf.rects.length; i++) {
+            ent.shuf.canvas[i] = dom.canvas(ent.shuf.rects[i]);
+            dom.add(ent.shuf.canvas[i]);
+        }
+        ent.shuf.mx = 6;
+        ent.shuf.my = 24;
+        // box model - [w,h,x,y] mx,my
+
+        ent.p0 = {}
+        ent.p0.rect = [dom.w, dom.bh, 0, (dom.bh*2)];
+        ent.p0.rects = dom.sub(ent.p0.rect, 48, 1);
+        ent.p0.canvas = [];
+        ent.p0.chosen = null;
+        for (var i = 0; i < ent.p0.rects.length; i++) {
+            ent.p0.canvas[i] = dom.canvas(ent.p0.rects[i]);
+            dom.add(ent.p0.canvas[i]);
+            ent.p0.canvas[i].can.dataset.chosen = "false";
+            // ent.p0.canvas[i].can.addEventListener("click", function(e){console.log(ent.p0.canvas[i].id);}, false);
+            ent.p0.canvas[i].can.addEventListener("click", ent.click_p0, false);
+        }
+        ent.p0.mx = 6;
+        ent.p0.my = 24;
+
+        ent.p1 = {}
+        ent.p1.rect = [dom.w, dom.bh, 0, (dom.bh*3)];
+        ent.p1.rects = dom.sub(ent.p1.rect, 48, 1);
+        ent.p1.canvas = [];
+        ent.p1.chosen = null;
+        for (var i = 0; i < ent.p1.rects.length; i++) {
+            ent.p1.canvas[i] = dom.canvas(ent.p1.rects[i]);
+            dom.add(ent.p1.canvas[i]);
+            ent.p1.canvas[i].can.addEventListener("click", ent.click_p1, false);
+        }
+        ent.p1.mx = 6;
+        ent.p1.my = 24;
+
+        ent.tab = {}
+        ent.tab.rect = [dom.w, dom.bh, 0, (dom.bh*4)];
+        ent.tab.rects = dom.sub(ent.tab.rect, 48, 1);
+        ent.tab.canvas = [];
+        ent.tab.chosen = null;
+        for (var i = 0; i < ent.tab.rects.length; i++) {
+            ent.tab.canvas[i] = dom.canvas(ent.tab.rects[i]);
+            dom.add(ent.tab.canvas[i]);
+            ent.tab.canvas[i].can.addEventListener("click", ent.click_tab, false);
+        }
+        ent.tab.mx = 6;
+        ent.tab.my = 24;
+
+    },
+    "reset_p0": function() {
+        for (var i = 0; i < ent.p0.canvas.length; i++) {
+            ent.p0.canvas[i].can.dataset.chosen = "false";
+        }
+    },
+    "choose_p0": function() {
+        for (var i = 0; i < ent.p0.canvas.length; i++) {
+            if (ent.p0.canvas[i].can.dataset.chosen == "true") {
+                ent.p0.chosen = i;
+            }
+        }
+    },
+    "click_p0": function(e) {
+        console.log(e);
+        // either create a bitmap of click true / false vals
+        // and update every entry in the click handler
+        // or determine clicked canvas mathematically using screen x,y
+        // var x0 = e.clientX + window.pageXOffset;
+        // console.log(x0);
+
+        // use element dataset
+        ent.reset_p0();
+        e.target.dataset.chosen = "true";
+        ent.choose_p0();
+        r.render();
+    },
+    "reset_p1": function() {
+        for (var i = 0; i < ent.p1.canvas.length; i++) {
+            ent.p1.canvas[i].can.dataset.chosen = "false";
+        }
+    },
+    "choose_p1": function() {
+        for (var i = 0; i < ent.p1.canvas.length; i++) {
+            if (ent.p1.canvas[i].can.dataset.chosen == "true") {
+                ent.p1.chosen = i;
+            }
+        }
+    },
+    "click_p1": function(e) {
+        console.log(e);
+        ent.reset_p1();
+        e.target.dataset.chosen = "true";
+        ent.choose_p1();
+        r.render();
+    },
+    "reset_tab": function() {
+        for (var i = 0; i < ent.tab.canvas.length; i++) {
+            ent.tab.canvas[i].can.dataset.chosen = "false";
+        }
+    },
+    "choose_tab": function() {
+        for (var i = 0; i < ent.tab.canvas.length; i++) {
+            if (ent.tab.canvas[i].can.dataset.chosen == "true") {
+                ent.tab.chosen = i;
+            }
+        }
+    },
+    "click_tab": function(e) {
+        console.log(e);
+        ent.reset_tab();
+        e.target.dataset.chosen = "true";
+        ent.choose_tab();
+        r.render();
+    }
+}
+// render
+var r = {
+    "render": function() {
+        for (var i = 0; i < ent.line.canvas.length; i++) {
+            ent.line.canvas[i].con.fillStyle = rgb.css(rgb.pal[i]);
+            ent.line.canvas[i].con.fillRect(ent.line.mx, ent.line.my, ent.line.rects[i][0] - (2 * ent.line.mx), ent.line.rects[i][1] - (2 * ent.line.my));
+        }
+
+        for (var i = 0; i < ent.shuf.canvas.length; i++) {
+            ent.shuf.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
+            ent.shuf.canvas[i].con.fillRect(ent.shuf.mx, ent.shuf.my, ent.shuf.rects[i][0] - (2 * ent.shuf.mx), ent.shuf.rects[i][1] - (2 * ent.shuf.my));
+        }
+
+        for (var i = 0; i < ent.p0.canvas.length; i++) {
+            if (deck.deal[i] == 0) {
+                ent.p0.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
+                ent.p0.canvas[i].con.fillRect(ent.p0.mx, ent.p0.my, ent.p0.rects[i][0] - (2 * ent.p0.mx), ent.p0.rects[i][1] - (2 * ent.p0.my));
+            }
+            if (ent.p0.canvas[i].can.dataset.chosen == "true") {
+                console.log("p0 chosen: " + i);
+            }
+        }
+
+        for (var i = 0; i < ent.p1.canvas.length; i++) {
+            if (deck.deal[i] == 1) {
+                ent.p1.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
+                ent.p1.canvas[i].con.fillRect(ent.p1.mx, ent.p1.my, ent.p1.rects[i][0] - (2 * ent.p1.mx), ent.p1.rects[i][1] - (2 * ent.p1.my));
+            }
+            if (ent.p1.canvas[i].can.dataset.chosen == "true") {
+                console.log("p1 chosen: " + i);
+            }
+        }
+
+        for (var i = 0; i < ent.tab.canvas.length; i++) {
+            if (deck.deal[i] == 2) {
+                ent.tab.canvas[i].con.fillStyle = rgb.css(rgb.pal[deck.shuffled[i]]);
+                ent.tab.canvas[i].con.fillRect(ent.tab.mx, ent.tab.my, ent.tab.rects[i][0] - (2 * ent.tab.mx), ent.tab.rects[i][1] - (2 * ent.tab.my));
+            }
+            if (ent.tab.canvas[i].can.dataset.chosen == "true") {
+                console.log("tab chosen: " + i);
+            }
+        }
+    }
+}
+// color
+var rgb = {
+    "init": function() {
+        rgb.pal = rgb.rand(deck.size);
+    },
+    "rand": function(n0) {
+        r0 = [];
+        for (var i = 0; i < n0; i++) {
+            var c0 = [rgb.rb(), rgb.rb(), rgb.rb(), 1.0];
+            r0[i] = c0;
+        }
+        return r0;
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    }
+}
+        </script>
+    </head>
+    <body id="alpha">
+    </body>
+</html>
+
+ 
