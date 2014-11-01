@@ -26,6 +26,7 @@
                 g.h = 1080;
                 ent.init();
                 // console.log(rgb.css(rgb.rand()));
+                ren.scene();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             }
@@ -33,10 +34,43 @@
 // entities
 var ent = {
     "init": function() {
-        ent.list = ["p0", "p1", "tab"];
-        ent.rect = [[g.w/6,g.h,0,0],[2*g.w/3,g.h,g.w,6,0],[g.w/6,g.h,5*g.w/6,0]];
+        ent.name = ["p0", "tab", "p1"];
+        ent.rect = [[g.w/6,g.h,0,0],[2*g.w/3,g.h,g.w/6,0],[g.w/6,g.h,5*g.w/6,0]];
         ent.subs = [[1,1],[1,1],[1,1]];
         ent.canvas = [];
+        ent.pop();
+        ent.db = {};
+        ent.org();
+    },
+    "pop": function() {
+        // populate entity canvas array
+        for (var i = 0; i < ent.name.length; i++) {
+            var c0 = dom.sub(ent.rect[i], ent.subs[i][0], ent.subs[i][1]);
+            for (var j = 0; j < c0.length; j++) {
+                // sub-rects are in x-scan order
+                var s0 = ent.name[i] + "_" + j;
+                // console.log(s0);
+                var c1 = dom.canvas(c0[j]);
+                c1.id = s0;
+                c1.can.dataset.id = s0;
+                ent.canvas.push(c1);
+                dom.add(c1);
+                ent.canvas[i].can.addEventListener("click", ent.click, false);
+            }
+        }
+        console.log(ent.canvas);
+    },
+    "org": function() {
+        // organize entity database table
+        // create records from canvas list
+        for (var i = 0; i < ent.canvas.length; i++) {
+            ent.db[ent.canvas[i].id] = ent.canvas[i];
+        }
+        console.log(ent.db);
+    },
+    "click": function(e) {
+        console.log(e);
+        console.log(e.target.dataset.id);
     }
 }
 // dom
@@ -59,11 +93,33 @@ var dom = {
         dom.alpha.appendChild(c0.can);
     },
     "sub": function(r0, x0, y0) {
+        // subdivide rect into x,y subrects
+        // rect is array with [w,h,x,y]
+        if (x0 == 0 || y0 == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] / x0) >>> 0;
+        var h1 = (r0[1] / y0) >>> 0;
+        for (var y = 0; y < y0; y++) {
+            for (var x = 0; x < x0; x++) {
+                var x1 = (x * w1) >>> 0;
+                x1 += r0[2];
+                var y1 = (y * h1) >>> 0;
+                y1 += r0[3];
+                r1.push([w1,h1,x1,y1]);
+            }
+        }
+        return r1;
     }
 }
 // render
 var ren = {
     "scene": function() {
+        for (var k in ent.db) {
+            ent.db[k].con.fillStyle = rgb.css(rgb.rand());
+            ent.db[k].con.fillRect(0,0,128,128);
+        }
     }
 }
 // color
