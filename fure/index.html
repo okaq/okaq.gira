@@ -24,13 +24,52 @@
 
                 g.w = 1920;
                 g.h = 1080;
+                g.state = 0; // states: [start,p0,p1,end]
+                // state is actually just an index into dealed cards list
                 ent.init();
+                deck.init();
                 // console.log(rgb.css(rgb.rand()));
                 ren.scene();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             }
         }
+// deck
+var deck = {
+    "init": function() {
+        deck.size = 48;
+        deck.cards = deck.shuf(deck.size);
+        console.log(deck.cards);
+        deck.data = []; // encoding location
+        // 0: p0, 1: p1, 2: tab, 3: y0, 4: y1, 5: deck
+        deck.start();
+        console.log(deck.data);
+    },
+    "shuf": function(n0) {
+        var a0 = [];
+        for (var i = 0; i < n0; i++) {
+            a0[i] = i;
+        }
+        for (var i = a0.length - 1; i>= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = a0[i];
+            a0[i] = a0[i0];
+            a0[i0] = t0;
+        }
+        return a0;
+    },
+    "start": function() {
+        for (var i = 0; i < 8; i++) {
+            deck.data[i*3+0] = 0;
+            deck.data[i*3+1] = 1;
+            deck.data[i*3+2] = 2;
+        }
+        for (var i = 24; i < deck.size; i++) {
+            deck.data[i] = 5;
+        }
+        g.state = 24;
+    }
+}
 // entities
 var ent = {
     "init": function() {
@@ -74,6 +113,13 @@ var ent = {
     "click": function(e) {
         console.log(e);
         console.log(e.target.dataset.id);
+        // game state changes
+        // switch case g.state
+        // decompose id
+        var s0 = e.target.dataset.id.split("_");
+        console.log(s0);
+        // switch (e.target.dataset.id) {
+        // }
     }
 }
 // dom
@@ -123,6 +169,7 @@ var ren = {
             ent.db[k].con.fillStyle = rgb.css(rgb.rand());
             ent.db[k].con.fillRect(0,0,ent.db[k].can.width,ent.db[k].can.height);
         }
+        // render card numbers as grid of dots (up to 48, 7x7)
     }
 }
 // color
