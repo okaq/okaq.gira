@@ -42,6 +42,7 @@ var deck = {
         console.log(deck.cards);
         deck.data = []; // encoding location
         // 0: p0, 1: p1, 2: tab, 3: y0, 4: y1, 5: deck
+        // turn based games - sequence of data arrays
         deck.start();
         console.log(deck.data);
     },
@@ -170,6 +171,48 @@ var ren = {
             ent.db[k].con.fillRect(0,0,ent.db[k].can.width,ent.db[k].can.height);
         }
         // render card numbers as grid of dots (up to 48, 7x7)
+        var i0 = 0; // p0 index
+        var i1 = 0; // p1 index
+        var i2 = 0; // tab index
+        for (var i = 0; i < deck.data.length; i++) {
+            var s0 = "";
+            switch (deck.data[i]) {
+                case 0:
+                    s0 = "p0_" + i0;
+                    // console.log(ent.db[s0], deck.cards[i]);
+                    ren.card(ent.db[s0], deck.cards[i]);
+                    i0++;
+                    break;
+                case 1:
+                    s0 = "p1_" + i1;
+                    ren.card(ent.db[s0], deck.cards[i]);
+                    i1++;
+                    break;
+                case 2:
+                    s0 = "tab_" + i2;
+                    ren.card(ent.db[s0], deck.cards[i]);
+                    i2++;
+                    break;
+            }
+            // console.log(s0);
+        }
+    },
+    "card": function(c0, n0) {
+        // canvas c0 draw card of value n0
+        // 7x7 blocks - 20px square
+        var w0 = 20;
+        var m0 = 2;
+        var b0 = [0,0,0,1.0];
+        for (var i = 0; i < 49; i++) {
+            var x0 = i % 7;
+            x0 = (x0 * w0) >>> 0;
+            var y0 = (i / 7) >>> 0;
+            y0 = (y0 * w0) >>> 0;
+            c0.con.fillStyle = rgb.css(b0);
+            if (i <= n0) {
+                c0.con.fillRect(x0 + m0, y0 + m0, w0 - (2 * m0), w0 - (2 * m0));
+            }
+        }
     }
 }
 // color
