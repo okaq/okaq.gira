@@ -38,6 +38,7 @@
 var deck = {
     "init": function() {
         deck.size = 48;
+        rgb.bkgd(deck.size);
         deck.cards = deck.shuf(deck.size);
         console.log(deck.cards);
         deck.data = []; // encoding location
@@ -84,6 +85,7 @@ var ent = {
         ent.pop();
         ent.db = {};
         ent.org();
+        ent.selected = null;
     },
     "pop": function() {
         // populate entity canvas array
@@ -119,8 +121,10 @@ var ent = {
         // decompose id
         var s0 = e.target.dataset.id.split("_");
         console.log(s0);
+        ent.selected = e.target.dataset.id;
         // switch (e.target.dataset.id) {
         // }
+        ren.scene();
     }
 }
 // dom
@@ -165,9 +169,17 @@ var dom = {
 }
 // render
 var ren = {
-    "scene": function() {
+    "clear": function() {
         for (var k in ent.db) {
-            ent.db[k].con.fillStyle = rgb.css(rgb.rand());
+            ent.db[k].con.clearRect(0,0,ent.db[k].can.width,ent.db[k].can.height);
+        }
+    },
+    "scene": function() {
+        ren.clear();
+        var i = 0;
+        for (var k in ent.db) {
+            i++;
+            ent.db[k].con.fillStyle = rgb.bg[i]; // rgb.css(rgb.rand());
             ent.db[k].con.fillRect(0,0,ent.db[k].can.width,ent.db[k].can.height);
         }
         // render card numbers as grid of dots (up to 48, 7x7)
@@ -203,6 +215,9 @@ var ren = {
         var w0 = 20;
         var m0 = 2;
         var b0 = [0,0,0,1.0];
+        if (c0.can.dataset.id == ent.selected) {
+            b0 = [255,0,0,1.0];
+        }
         for (var i = 0; i < 49; i++) {
             var x0 = i % 7;
             x0 = (x0 * w0) >>> 0;
@@ -217,6 +232,12 @@ var ren = {
 }
 // color
 var rgb = {
+    "bkgd": function(n0) {
+        rgb.bg = [];
+        for (var i = 0; i < n0; i++) {
+            rgb.bg[i] = rgb.css(rgb.rand());
+        }
+    },
     "rand": function() {
         return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
     },
