@@ -24,10 +24,101 @@
 
                 g.w = 1920;
                 g.h = 1080;
+                g.start();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "start": function() {
+                // init sub systems
+                g.sub = [dom, rgb, render];
+                g.sub.forEach(function(el){el.init();});
+                render.rand(dom.beta);
+                g.loop();
+            },
+            "loop": function() {
+                // while !yakus.winner, nextTurn
+                g.end();
+            },
+            "end": function() {
+                // winner, endgame, restart
+                // random draw sim with suit-based yakus
             }
         }
+// dom
+var dom = {
+    "init": function() {
+        console.log("dom init");
+        dom.alpha = document.getElementById("alpha");
+        dom.s = 512;
+        dom.beta = dom.canvas([dom.s,dom.s,(g.w/2-(dom.s/2)),(g.h/2-(dom.s/2))]);
+        dom.add(dom.beta);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "sub": function(r0, x0, y0) {
+        // subdivide rect into x,y subrects
+        // rect is array with [w,h,x,y]
+        if (x0 == 0 || y0 == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] / x0) >>> 0;
+        var h1 = (r0[1] / y0) >>> 0;
+        for (var y = 0; y < y0; y++) {
+            for (var x = 0; x < x0; x++) {
+                var x1 = (x * w1) >>> 0;
+                x1 += r0[2];
+                var y1 = (y * h1) >>> 0;
+                y1 += r0[3];
+                r1.push([w1,h1,x1,y1]);
+            }
+        }
+        return r1;
+    }
+}
+// render
+var render = {
+    "init": function() {
+        console.log("render init");
+    },
+    "rand": function(c0) {
+        c0.con.fillStyle = rgb.rc();
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    }
+}
+// rgb
+var rgb = {
+    "init": function() {
+        console.log("rgb init");
+    },
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    },
+    "rc": function() {
+        return rgb.css(rgb.rand());
+    }
+}
         </script>
     </head>
     <body id="alpha">
