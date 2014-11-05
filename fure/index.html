@@ -30,10 +30,21 @@
             },
             "start": function() {
                 // init sub systems
-                g.sub = [dom, rgb, render];
+                g.sub = [dom, rgb, render, deck, table, players, yakus];
                 g.sub.forEach(function(el){el.init();});
                 render.rand(dom.beta);
+                g.encoding = ["p0","p1","tab","y0","y1"]; // dict to game objects
+                g.open();
                 g.loop();
+            },
+            "open": function() {
+                // open deal - 8 cards to each player and table 
+                g.deal = 8;
+                for (var i = 0; i < g.deal; i++) {
+                    for (var j = 0; j < 3; j++) {
+                        deck.deal(1, g.encoding[j]);
+                    }
+                }
             },
             "loop": function() {
                 // while !yakus.winner, nextTurn
@@ -86,6 +97,55 @@ var dom = {
             }
         }
         return r1;
+    }
+}
+// deck
+var deck = {
+    "init": function() {
+        console.log("deck init");
+        deck.size = 48;
+        deck.cards = deck.shuf(deck.size);
+        console.log(deck.cards);
+        deck.data = [];
+        deck.index = 0;
+    },
+    "shuf": function(n0) {
+        var d0 = deck.line(n0);
+        for (var i = d0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = d0[i0];
+            d0[i0] = d0[i];
+            d0[i] = t0;
+        }
+        return d0;
+    },
+    "line": function(n0) {
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0[i] = i;
+        }
+        return r0;
+    },
+    "deal": function(n0, e0) {
+        // number of cards to encoding
+    }
+}
+// players
+var players = {
+    "init": function() {
+        console.log("players init");
+    }
+}
+// yakus 
+var yakus = {
+    "init": function() {
+        console.log("yakus init");
+    }
+}
+// table
+var table = {
+    "init": function() {
+        console.log("table init");
     }
 }
 // render
