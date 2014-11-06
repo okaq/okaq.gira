@@ -24,7 +24,11 @@
 
                 g.w = 1920;
                 g.h = 1080;
+                // var t1 = window.performance.now();
+                // g.stats = [];
+                // loop N times
                 g.start();
+                // console.log("total sim time");
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
@@ -33,7 +37,7 @@
                 g.sub = [dom, rgb, render, deck, table, players, yakus];
                 g.sub.forEach(function(el){el.init();});
                 render.rand(dom.beta);
-                g.encoding = ["p0","p1","tab","y0","y1"]; // dict to game objects
+                g.encoding = ["p0","p1","tab","y0","y1"]; 
                 g.open();
                 g.loop();
             },
@@ -134,12 +138,22 @@ var deck = {
 var players = {
     "init": function() {
         console.log("players init");
+        players.data = {};
+        players.data["p0"] = {};
+        players.data["p0"].hand = [];
+        players.data["p0"].score = 0;
+        players.data["p1"] = {};
+        players.data["p1"].hand = [];
+        players.data["p1"].score = 0;
     }
 }
 // yakus 
 var yakus = {
     "init": function() {
         console.log("yakus init");
+        yakus.data = {};
+        yakus.data["y0"] = {};
+        yakus.data["y1"] = {};
     }
 }
 // table
