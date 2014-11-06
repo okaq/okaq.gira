@@ -38,6 +38,13 @@
                 g.sub.forEach(function(el){el.init();});
                 render.rand(dom.beta);
                 g.encoding = ["p0","p1","tab","y0","y1"]; 
+                // wire game entities
+                g.data = {};
+                g.data["p0"] = players.data["p0"];
+                g.data["p1"] = players.data["p1"];
+                g.data["tab"] = table.data;
+                g.data["y0"] = yakus.data["y0"];
+                g.data["y1"] = yakus.data["y1"];
                 g.open();
                 g.loop();
             },
@@ -49,9 +56,14 @@
                         deck.deal(1, g.encoding[j]);
                     }
                 }
+                console.log(deck.cards);
+                console.log(players.data["p0"].hand);
+                console.log(players.data["p1"].hand);
+                console.log(table.data.hand);
             },
             "loop": function() {
                 // while !yakus.winner, nextTurn
+                yakus.open();
                 g.end();
             },
             "end": function() {
@@ -132,6 +144,11 @@ var deck = {
     },
     "deal": function(n0, e0) {
         // number of cards to encoding
+        for (var i = 0; i < n0; i++) {
+            var c0 = deck.cards.splice(0, 1);
+            g.data[e0].hand.push(c0[0]);
+            // deck.index++;
+        }
     }
 }
 // players
@@ -154,12 +171,17 @@ var yakus = {
         yakus.data = {};
         yakus.data["y0"] = {};
         yakus.data["y1"] = {};
+    },
+    "open": function() {
+        // setup and deal win cond
     }
 }
 // table
 var table = {
     "init": function() {
         console.log("table init");
+        table.data = {};
+        table.data.hand = [];
     }
 }
 // render
