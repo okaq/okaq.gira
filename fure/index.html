@@ -111,10 +111,38 @@ var yakus = {
 var deck = {
     "init": function() {
         console.log("deck init");
+        deck.size = 48;
+        deck.suit = 4;
+        deck.draw = (deck.size/deck.suit) >>> 0;
         // each card object
         // holds renderable bitmap data
+        deck.cards = deck.line(deck.size);
+        deck.shuf(deck.cards);
+        console.log(deck.cards);
 
         // a card is just an index into the lineear array
+    },
+    "line": function(n0) {
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0[i] = i;
+        }
+        return r0;
+    },
+    "shuf": function(d0) {
+        for (var i = d0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = d0[i0];
+            d0[i0] = d0[i];
+            d0[i] = t0;
+        }
+    },
+    "deal": function(n0) {
+        // deal n0 cards
+        if ((n0 - 1) > deck.cards.length) {
+            console.error("Too few cards!");
+        }
+        return deck.cards.slice(0, n0);
     }
 }
 // color
