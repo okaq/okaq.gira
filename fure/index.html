@@ -50,7 +50,7 @@
             },
             "open": function() {
                 // open deal - 8 cards to each player and table 
-                g.deal = 8;
+                g.deal = 16;
                 for (var i = 0; i < g.deal; i++) {
                     for (var j = 0; j < 3; j++) {
                         deck.deal(1, g.encoding[j]);
@@ -120,6 +120,8 @@ var deck = {
     "init": function() {
         console.log("deck init");
         deck.size = 48;
+        deck.suit = 2;
+        deck.sec = (deck.size / deck.suit) >>> 0;
         deck.cards = deck.shuf(deck.size);
         console.log(deck.cards);
         deck.data = [];
@@ -174,6 +176,43 @@ var yakus = {
     },
     "open": function() {
         // setup and deal win cond
+        yakus.check();
+    },
+    "check": function() {
+        yakus.data["y0"] = players.data["p0"].hand;
+        yakus.data["y0"].sort(yakus.sort);
+        console.log(yakus.data["y0"]);
+        yakus.data["y0"].score = 0;
+        for (var i = 0; i < deck.sec; i++) {
+            var s0 = [];
+            for (var j = 0; j < deck.suit; j++) {
+                s0.push((deck.suit * i + j) >>> 0);
+            }
+            for (var j = 0; j < yakus.data["y0"].length; j++) {
+                if (yakus.match(s0, yakus.data["y0"], j)) {
+                    console.log(s0);
+                    yakus.data["y0"].score++;
+                    continue;
+                }
+            }
+        }
+        console.log("p0 score: " + yakus.data["y0"].score);
+        // yakus.data = players.hand.sorted asc
+        // generate the suit [0,1,2,3]
+        // cycle yakus.data and see if we get four matches
+        // for each set of suit matches - players score is one point
+        // check via integer division and increment by deck.suit
+    },
+    "match": function(a,b,j) {
+        for (var i = 0; i < a.length; i++) {
+            if (a[i] !== b[j+i]) {
+                return false;
+            }
+        }
+        return true;
+    },
+    "sort": function(a,b) {
+        return a - b;
     }
 }
 // table
