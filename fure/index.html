@@ -25,43 +25,55 @@
                 g.w = 1920;
                 g.h = 1080;
 
-                // init sub systems
-                g.subs = [deck,table,players,yakus,dom,rgb,render];
-                g.subs.forEach(function(el){el.init()});
-
-                // start
-                g.open();
+                ent.init();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
-            },
-            "open": function() {
-                render.rand(dom.deck.canvas);
             }
         }
+// entities
+var ent = {
+    "init": function() {
+        // id, rect, subsX, subsY
+        ent.config = [
+            ["deck", [g.w,g.h/8,0,0], 2, 1],
+            ["table", [g.w,g.h/8,0,g.h/8], 8, 1]
+        ];
+        ent.db = {};
+        console.log(ent.db);
+        dom.create();
+    },
+    "click": function(e) {
+        console.log(e);
+        console.log(e.target.dataset.id);
+        console.log(e.target.dataset.x);
+    }
+}
 // dom
 var dom = {
-    "init": function() {
-        console.log("dom init");
-        dom.alpha = document.getElementById("alpha");
-        // dom elements contain box, canvas list
-        // and connecting data list
-        // the canvas list is p0's card slots on table
-        // players.p0.hand is the card data
-        // they are connected one-to-one
-        dom.p0 = {};
-        dom.deck = {};
-        dom.deck.rect = [g.w,g.h/8,0,0];
-        dom.deck.rects = dom.sub(dom.deck.rect, 2, 1);
-        dom.deck.canvas = dom.layout(dom.deck.rects);
-        dom.deck.data = [deck.top, deck.side];
-        dom.deck.canvas[0].can.addEventListener("click", deck.place, false);
-        // console.log(dom.deck.canvas);
+    "create": function() {
+        if (!dom.alpha) {
+            dom.alpha = document.getElementById("alpha");
+        }
+        for (var i = 0; i < ent.config.length; i++) {
+            var e0 = ent.config[i]; // entity object data
+            var k0 = e0[0]; // key
+            ent.db[k0] = {};
+            ent.db[k0].id = k0; 
+            ent.db[k0].rect = e0[1]; // main layout rect
+            ent.db[k0].sx = e0[2]; // subrects in x-axis
+            ent.db[k0].sy = e0[3]; // subrects in y-axis
+            ent.db[k0].r = dom.sub(e0[1], e0[2], e0[3]);
+            ent.db[k0].c = dom.layout(k0, ent.db[k0].r);
+        }
     },
-    "layout": function(r0) {
-        // input is array of rects
+    "layout": function(n0, r0) {
+        // input is id name, array of rects
         var c0 = [];
         for (var i = 0; i < r0.length; i++) {
             var c1 = dom.canvas(r0[i]);
+            c1.can.dataset.id = n0 + "_" + i;
+            c1.can.dataset.x = "card" + i;
+            c1.can.addEventListener("click", ent.click, false);
             dom.add(c1);
             c0.push(c1);
         }
@@ -101,149 +113,12 @@ var dom = {
         }
         return r1;
     }
-}
-// render
-var render = {
-    "init": function() {
-        console.log("render init");
-    },
-    "rand": function(c0) {
-        // rand rgb fill list of canvii
-        for (var i = 0; i < c0.length; i++) {
-            c0[i].con.fillStyle = rgb.rc();
-            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
-        }
-    },
-    "deck": function() {
-        render.rand(dom.deck.canvas);
-        render.cards(dom.deck.data, dom.deck.canvas);
-    },
-    "cards": function(d0, c0) {
-        // render each 7x7 card in data list 
-        // in corresponding context from canvas list
-        console.log(dom.deck.data);
-        console.log(deck.cards);
-        for (var i = 0; i < c0.length; i++) {
-            c0[i].con.fillStyle = rgb.rc();
-            var w0 = c0[i].can.width;
-            var h0 = c0[i].can.height;
-            // cell size
-            var s0 = (h0 / 7) >>> 0;
-            // margin
-            var m0 = 2;    
-            for (var j = 0; j < 49; j++) {
-                var x0 = (j % 7);
-                x0 = (x0 * s0) >>> 0;
-                var y0 = (j / 7) >>> 0;
-                y0 = (y0 * s0) >>> 0;
-                if (j <= d0[i]) {
-                    c0[i].con.fillRect(x0 + m0, y0 + m0, s0 - (2 * m0), s0 - (2 * m0));
-                }
-            }
-        }
-    }
-}
-// table
-var table = {
-    "init": function() {
-        console.log("table init");
-    }
-}
-// players
-var players = {
-    "init": function() {
-        console.log("players init");
-        // number of players to be injected
-        players.p0 = {};
-        players.p0.hand = [];
-        players.p0.yakus = yakus.y0;
-        players.p0.score = 0;
-        players.p1 = {};
-        players.p1.hand = [];
-        players.p1.yakus = yakus.y0;
-        players.p1.score = 0;
-    }
-}
-// yakus
-var yakus = {
-    "init": function() {
-        console.log("yakus init");
-        yakus.y0 = {};
-        yakus.y1 = {};
-    }
-}
-// deck
-var deck = {
-    "init": function() {
-        console.log("deck init");
-        deck.size = 48;
-        deck.suit = 4;
-        deck.draw = (deck.size/deck.suit) >>> 0;
-        // each card object
-        // holds renderable bitmap data
-        deck.cards = deck.line(deck.size);
-        deck.shuf(deck.cards);
-        console.log(deck.cards);
-        deck.side = null;
-        deck.top = null;
 
-        // a card is just an index into the lineear array
-    },
-    "line": function(n0) {
-        var r0 = [];
-        for (var i = 0; i < n0; i++) {
-            r0[i] = i;
-        }
-        return r0;
-    },
-    "shuf": function(d0) {
-        for (var i = d0.length - 1; i >= 0; i--) {
-            var i0 = (Math.random() * i) >>> 0;
-            var t0 = d0[i0];
-            d0[i0] = d0[i];
-            d0[i] = t0;
-        }
-    },
-    "deal": function(n0) {
-        // deal n0 cards
-        if ((n0 - 0) > deck.cards.length) {
-            console.error("Too few cards!");
-        }
-        // return deck.cards.slice(0, n0);
-        return deck.cards.pop();
-    },
-    "place": function(e) {
-        console.log(e);
-        deck.side = deck.deal(1);
-        deck.top = deck.cards[deck.cards.length-1];
-        dom.deck.data = [deck.top, deck.side];
-        render.deck();
-    }
-}
-// color
-var rgb = {
-    "init": function() {
-        console.log("rgb init");
-    },
-    "rand": function() {
-        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
-    },
-    "rb": function() {
-        return (Math.random() * 255) >>> 0;
-    },
-    "css": function(c0) {
-        var s0 = "rgba(";
-        s0 += c0.join(",");
-        s0 += ")";
-        return s0;
-    },
-    "rc": function() {
-        return rgb.css(rgb.rand());
-    }
 }
         </script>
     </head>
     <body id="alpha">
     </body>
 </html>
+ 
  
