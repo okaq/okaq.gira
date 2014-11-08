@@ -53,6 +53,8 @@ var dom = {
         dom.deck.rect = [g.w,g.h/8,0,0];
         dom.deck.rects = dom.sub(dom.deck.rect, 2, 1);
         dom.deck.canvas = dom.layout(dom.deck.rects);
+        dom.deck.data = [deck.top, deck.side];
+        dom.deck.canvas[0].can.addEventListener("click", deck.place, false);
         // console.log(dom.deck.canvas);
     },
     "layout": function(r0) {
@@ -111,6 +113,34 @@ var render = {
             c0[i].con.fillStyle = rgb.rc();
             c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
         }
+    },
+    "deck": function() {
+        render.rand(dom.deck.canvas);
+        render.cards(dom.deck.data, dom.deck.canvas);
+    },
+    "cards": function(d0, c0) {
+        // render each 7x7 card in data list 
+        // in corresponding context from canvas list
+        console.log(dom.deck.data);
+        console.log(deck.cards);
+        for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgb.rc();
+            var w0 = c0[i].can.width;
+            var h0 = c0[i].can.height;
+            // cell size
+            var s0 = (h0 / 7) >>> 0;
+            // margin
+            var m0 = 2;    
+            for (var j = 0; j < 49; j++) {
+                var x0 = (j % 7);
+                x0 = (x0 * s0) >>> 0;
+                var y0 = (j / 7) >>> 0;
+                y0 = (y0 * s0) >>> 0;
+                if (j <= d0[i]) {
+                    c0[i].con.fillRect(x0 + m0, y0 + m0, s0 - (2 * m0), s0 - (2 * m0));
+                }
+            }
+        }
     }
 }
 // table
@@ -154,6 +184,8 @@ var deck = {
         deck.cards = deck.line(deck.size);
         deck.shuf(deck.cards);
         console.log(deck.cards);
+        deck.side = null;
+        deck.top = null;
 
         // a card is just an index into the lineear array
     },
@@ -174,10 +206,18 @@ var deck = {
     },
     "deal": function(n0) {
         // deal n0 cards
-        if ((n0 - 1) > deck.cards.length) {
+        if ((n0 - 0) > deck.cards.length) {
             console.error("Too few cards!");
         }
-        return deck.cards.slice(0, n0);
+        // return deck.cards.slice(0, n0);
+        return deck.cards.pop();
+    },
+    "place": function(e) {
+        console.log(e);
+        deck.side = deck.deal(1);
+        deck.top = deck.cards[deck.cards.length-1];
+        dom.deck.data = [deck.top, deck.side];
+        render.deck();
     }
 }
 // color
