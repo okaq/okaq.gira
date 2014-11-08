@@ -26,22 +26,44 @@
                 g.h = 1080;
 
                 // init sub systems
-                g.subs = [deck,table,players,yakus,dom,rgb];
+                g.subs = [deck,table,players,yakus,dom,rgb,render];
                 g.subs.forEach(function(el){el.init()});
 
+                // start
+                g.open();
+
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "open": function() {
+                render.rand(dom.deck.canvas);
             }
         }
 // dom
 var dom = {
     "init": function() {
         console.log("dom init");
+        dom.alpha = document.getElementById("alpha");
         // dom elements contain box, canvas list
         // and connecting data list
         // the canvas list is p0's card slots on table
         // players.p0.hand is the card data
         // they are connected one-to-one
         dom.p0 = {};
+        dom.deck = {};
+        dom.deck.rect = [g.w,g.h/8,0,0];
+        dom.deck.rects = dom.sub(dom.deck.rect, 2, 1);
+        dom.deck.canvas = dom.layout(dom.deck.rects);
+        // console.log(dom.deck.canvas);
+    },
+    "layout": function(r0) {
+        // input is array of rects
+        var c0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var c1 = dom.canvas(r0[i]);
+            dom.add(c1);
+            c0.push(c1);
+        }
+        return c0;
     },
     "canvas": function(r0) {
         var c0 = {};
@@ -76,6 +98,19 @@ var dom = {
             }
         }
         return r1;
+    }
+}
+// render
+var render = {
+    "init": function() {
+        console.log("render init");
+    },
+    "rand": function(c0) {
+        // rand rgb fill list of canvii
+        for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgb.rc();
+            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
     }
 }
 // table
