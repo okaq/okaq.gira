@@ -26,11 +26,61 @@
                 g.h = 1080;
 
                 ent.init();
+                data.init();
                 ren.rand();
+                
+                g.state = 0; // gamestates: 0 = open, 1 = turns, 2 = end
+                g.loop();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "loop": function() {
+            },
+            "click": function(d0) {
+                console.log(d0);
             }
         }
+// data
+var data = {
+    "init": function() {
+        data.hana = data.line(48);
+        data.shuf(data.hana);
+        console.log(data.hana);
+        data.p0 = [];
+        data.p1 = [];
+        data.tab = [];
+        data.open();
+    },
+    "line": function(n0) {
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0.push(i)
+        }
+        return r0;
+    },
+    "shuf": function(a0) {
+        for (var i = a0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = a0[i0];
+            a0[i0] = a0[i];
+            a0[i] = t0;
+        }
+    },
+    "open": function() {
+        for (var i = 0; i < 8; i++) {
+            data.p0[i] = data.hana.pop();
+            data.p1[i] = data.hana.pop();
+            data.tab[i] = data.hana.pop();
+        }
+        data.log();
+    },
+    "log": function() {
+        console.log(data.hana);
+        console.log(data.p0);
+        console.log(data.p1);
+        console.log(data.tab);
+    }
+}
 // entities
 var ent = {
     "init": function() {
@@ -47,8 +97,9 @@ var ent = {
     },
     "click": function(e) {
         console.log(e);
-        console.log(e.target.dataset.id);
-        console.log(e.target.dataset.x);
+        // console.log(e.target.dataset.id);
+        // console.log(e.target.dataset.x);
+        g.click({id:e.target.dataset.id,x:e.target.dataset.x});
     }
 }
 // dom
