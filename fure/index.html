@@ -26,6 +26,7 @@
                 g.h = 1080;
 
                 ent.init();
+                ren.rand();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             }
@@ -36,7 +37,9 @@ var ent = {
         // id, rect, subsX, subsY
         ent.config = [
             ["deck", [g.w,g.h/8,0,0], 2, 1],
-            ["table", [g.w,g.h/8,0,g.h/8], 8, 1]
+            ["table", [g.w,g.h/8,0,g.h/8], 8, 1],
+            ["player0", [g.w,g.h/8,0,2*g.h/8], 8, 1],
+            ["player1", [g.w,g.h/8,0,3*g.h/8], 8, 1],
         ];
         ent.db = {};
         console.log(ent.db);
@@ -114,6 +117,35 @@ var dom = {
         return r1;
     }
 
+}
+// render
+var ren = {
+    "rand": function() {
+        for (var k in ent.db) {
+            for (var i = 0; i < ent.db[k].c.length; i++) {
+                ent.db[k].c[i].con.fillStyle = rgb.rc();
+                ent.db[k].c[i].con.fillRect(0,0,ent.db[k].c[i].can.width,ent.db[k].c[i].can.height);
+            }
+        }
+    }
+}
+// color
+var rgb = {
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    },
+    "rc": function() {
+        return rgb.css(rgb.rand());
+    }
 }
         </script>
     </head>
