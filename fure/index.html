@@ -131,6 +131,7 @@ var ent = {
         ent.db = {};
         console.log(ent.db);
         dom.create();
+        ren.colors();
     },
     "click": function(e) {
         console.log(e);
@@ -208,11 +209,29 @@ var dom = {
 }
 // render
 var ren = {
+    "colors": function() {
+        // palette [fg,bg,border]
+        ren.col = {};
+        for (var k in ent.db) {
+            ren.col[k] = [rgb.rc(),rgb.rc(),rgb.rc()];
+        }
+    },
+    "white": function() {
+        // clear all canvas contexts for drawing
+        for (var k in ent.db) {
+            for (var i = 0; i < ent.db[k].c.length; i++) {
+                ent.db[k].c[i].con.fillStyle = rgb.css([255,255,255,1.0]);
+                ent.db[k].c[i].con.fillRect(0,0,ent.db[k].c[i].can.width,ent.db[k].c[i].can.height);
+            }
+        }
+    },
     "rand": function() {
         for (var k in ent.db) {
             for (var i = 0; i < ent.db[k].c.length; i++) {
-                ent.db[k].c[i].con.fillStyle = rgb.rc();
+                ent.db[k].c[i].con.fillStyle = ren.col[k][2];
                 ent.db[k].c[i].con.fillRect(0,0,ent.db[k].c[i].can.width,ent.db[k].c[i].can.height);
+                ent.db[k].c[i].con.fillStyle = ren.col[k][1];
+                ent.db[k].c[i].con.fillRect(8,8,ent.db[k].c[i].can.width-16,ent.db[k].c[i].can.height-16);
             }
         }
     },
@@ -233,11 +252,14 @@ var ren = {
         }
     },
     "current": function() {
+        ren.white();
+        ren.rand();
+        ren.card();
         var k0 = g.current[0];
         var c0 = parseInt(g.current[1], 10);
         console.log(k0, c0, ent.db[k0], ent.db[k0].c[c0]);
-        ent.db[k0].c[c0].con.fillStyle = rgb.rc();
-        ent.db[k0].c[c0].con.arc(16,96,16,0,2*Math.PI);
+        ent.db[k0].c[c0].con.fillStyle = ren.col[k0][0];
+        ent.db[k0].c[c0].con.arc(96,96,16,0,2*Math.PI);
         ent.db[k0].c[c0].con.fill();
     }
 }
