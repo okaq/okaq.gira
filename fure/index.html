@@ -43,7 +43,7 @@
             },
             "click": function(d0) {
                 console.log(d0);
-                g.previous = g.current;
+                g.previous = g.current.slice(0);
                 g.current = d0.id.split("_");
                 console.log(g.current);
                 // current[0] = db key, [1] = canvas index
@@ -60,6 +60,17 @@
                     if (ts == ps) {
                         console.log(data.suits[ts]);
                     }
+                    // move to yakus
+                    // var tr = data.tab.splice(ti, 1); // card to remove from table
+                    // var pr = data.p0.splice(pi, 1);
+                    data.y0.push(tc);
+                    data.y0.push(pc);
+                    data.tab[ti] = data.hana.pop();
+                    data.p0[pi] = null;
+                    console.log(data.y0);
+                    g.previous = [0,0];
+                    g.current = [0,0];
+                    g.state = "player1";
                 }
             }
         }
@@ -257,6 +268,9 @@ var ren = {
     },
     "cards": function(c0) {
         for (var i = 0; i < c0.c.length; i++) {
+            if (c0.data[i] == null) {
+                continue;
+            }
             var pt = data.points[c0.data[i]];
             var suit = data.suits[(c0.data[i]/4)>>>0];
             var s0 = suit + " " + pt;
