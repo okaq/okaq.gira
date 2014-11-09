@@ -31,7 +31,8 @@
                 
                 g.state = "deck"; // gamestates: 0 = open, 1,2 = turns, 3 = end
                 // gamestate is string matching db key (deck, table, player0, player1)
-                g.current = null; // selected canvas
+                g.previous = [0,0];
+                g.current = [0,0]; // selected canvas
                 g.loop();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
@@ -42,11 +43,24 @@
             },
             "click": function(d0) {
                 console.log(d0);
+                g.previous = g.current;
                 g.current = d0.id.split("_");
                 console.log(g.current);
                 // current[0] = db key, [1] = canvas index
                 // if g.state == g.current[0]
                 ren.current();
+                if (g.state == "player0" && g.previous[0] == "player0" && g.current[0] == "table") {
+                    // console.log("bingo!");
+                    var ti = parseInt(g.current[1], 10); // table index
+                    var tc = data.tab[ti]; // table card
+                    var ts = (tc / 4) >>> 0; // table suit
+                    var pi = parseInt(g.previous[1], 10);
+                    var pc = data.p0[pi];
+                    var ps = (pc / 4) >>> 0;
+                    if (ts == ps) {
+                        console.log(data.suits[ts]);
+                    }
+                }
             }
         }
 // data
