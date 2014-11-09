@@ -42,6 +42,47 @@
                 g.state = "player0";
             },
             "click": function(d0) {
+                g.parse(d0);
+                ren.current();
+                g.update();
+            },
+            "parse": function(d0) {
+                g.previous = g.current.slice(0);
+                g.current = d0.id.split("_");
+            },
+            "update": function() {
+                if (g.current[0] != "table" || g.previous[0] != g.state) {
+                    return;
+                }
+                var t0 = g.ice(g.current);
+                var p0 = g.ice(g.previous);
+                if (t0[2] == p0[2]) {
+                    console.log(data.suits[t0[2]]);
+                    ent.db[g.state].yakus.push(t0[1]);
+                    ent.db[g.state].yakus.push(p0[1]);
+                    ent.db["table"].data[t0[0]] = data.hana.pop();
+                    ent.db[g.state].data[p0[0]] = null;
+                    g.previous = [0,0];
+                    g.current = [0,0];
+                    g.turn();
+                }
+            },
+            "turn": function() {
+                if (g.state == "player0") {
+                    g.state = "player1";
+                } else {
+                    g.state = "player0";
+                }
+            },
+            "ice": function(a0) {
+                // return index, card, suit
+                var r0 = [];
+                r0[0] = parseInt(a0[1], 10);
+                r0[1] = ent.db[a0[0]].data[r0[0]];
+                r0[2] = (r0[1] / 4) >>> 0;
+                return r0;
+            },
+            "click2": function(d0) {
                 console.log(d0);
                 g.previous = g.current.slice(0);
                 g.current = d0.id.split("_");
@@ -89,7 +130,9 @@ var data = {
         // color data (bg, fg, border)
         data.open();
         data.y0 = [];
+        ent.db["player0"].yakus = data.y0;
         data.y1 = [];
+        ent.db["player1"].yakus = data.y1;
         data.yakus();
     },
     "line": function(n0) {
