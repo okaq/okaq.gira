@@ -29,16 +29,24 @@
                 data.init();
                 ren.rand();
                 
-                g.state = 0; // gamestates: 0 = open, 1 = turns, 2 = end
+                g.state = "deck"; // gamestates: 0 = open, 1,2 = turns, 3 = end
+                // gamestate is string matching db key (deck, table, player0, player1)
+                g.current = null; // selected canvas
                 g.loop();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "loop": function() {
                 ren.card();
+                g.state = "player0";
             },
             "click": function(d0) {
                 console.log(d0);
+                g.current = d0.id.split("_");
+                console.log(g.current);
+                // current[0] = db key, [1] = canvas index
+                // if g.state == g.current[0]
+                ren.current();
             }
         }
 // data
@@ -53,6 +61,7 @@ var data = {
         ent.db["player1"].data = data.p1;
         data.tab = [];
         ent.db["table"].data = data.tab;
+        // color data (bg, fg, border)
         data.open();
         data.y0 = [];
         data.y1 = [];
@@ -222,6 +231,14 @@ var ren = {
             c0.c[i].con.font = "20px sans-serif";
             c0.c[i].con.fillText(s0, 16, 32);
         }
+    },
+    "current": function() {
+        var k0 = g.current[0];
+        var c0 = parseInt(g.current[1], 10);
+        console.log(k0, c0, ent.db[k0], ent.db[k0].c[c0]);
+        ent.db[k0].c[c0].con.fillStyle = rgb.rc();
+        ent.db[k0].c[c0].con.arc(16,96,16,0,2*Math.PI);
+        ent.db[k0].c[c0].con.fill();
     }
 }
 // color
