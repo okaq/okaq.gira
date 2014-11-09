@@ -35,6 +35,7 @@
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "loop": function() {
+                ren.card();
             },
             "click": function(d0) {
                 console.log(d0);
@@ -47,9 +48,15 @@ var data = {
         data.shuf(data.hana);
         console.log(data.hana);
         data.p0 = [];
+        ent.db["player0"].data = data.p0;
         data.p1 = [];
+        ent.db["player1"].data = data.p1;
         data.tab = [];
+        ent.db["table"].data = data.tab;
         data.open();
+        data.y0 = [];
+        data.y1 = [];
+        data.yakus();
     },
     "line": function(n0) {
         var r0 = [];
@@ -79,6 +86,27 @@ var data = {
         console.log(data.p0);
         console.log(data.p1);
         console.log(data.tab);
+    },
+    "yakus": function() {
+        data.points = [
+            1,1,5,20,
+            1,1,5,10,
+            1,1,5,20,
+            1,1,5,10,
+            1,1,5,10,
+            1,1,5,10,
+            1,1,5,10,
+            1,10,10,20,
+            1,1,5,10,
+            1,1,5,10,
+            1,5,10,20,
+            1,1,1,20
+        ];
+        data.suits = [
+            "pine","plum blossom","cherry blossom","wisteria",
+            "iris","peony","bush clover","suski grass",
+            "chrysanthemum","maple","willow","paulownia"
+        ];
     }
 }
 // entities
@@ -177,6 +205,22 @@ var ren = {
                 ent.db[k].c[i].con.fillStyle = rgb.rc();
                 ent.db[k].c[i].con.fillRect(0,0,ent.db[k].c[i].can.width,ent.db[k].c[i].can.height);
             }
+        }
+    },
+    "card": function() {
+        var c0 = [ent.db["player0"], ent.db["player1"], ent.db["table"]];
+        for (var i = 0; i < c0.length; i++) {
+            ren.cards(c0[i]);
+        }
+    },
+    "cards": function(c0) {
+        for (var i = 0; i < c0.c.length; i++) {
+            var pt = data.points[c0.data[i]];
+            var suit = data.suits[(c0.data[i]/4)>>>0];
+            var s0 = suit + " " + pt;
+            c0.c[i].con.fillStyle = rgb.css([0,0,0,1.0]);
+            c0.c[i].con.font = "20px sans-serif";
+            c0.c[i].con.fillText(s0, 16, 32);
         }
     }
 }
