@@ -44,6 +44,8 @@
             "click": function(d0) {
                 g.parse(d0);
                 ren.current();
+                var m0 = g.matches(ent.db["table"].data, ent.db[g.state].data);
+                console.log(g.state, m0);
                 g.update();
             },
             "parse": function(d0) {
@@ -54,10 +56,12 @@
                 if (g.current[0] != "table" || g.previous[0] != g.state) {
                     return;
                 }
+                // var m0 = g.matches(ent.db["table"].data, ent.db[g.state].data);
+                // console.log(m0);
                 var t0 = g.ice(g.current);
                 var p0 = g.ice(g.previous);
                 if (t0[2] == p0[2]) {
-                    console.log(data.suits[t0[2]]);
+                    // console.log(data.suits[t0[2]]);
                     ent.db[g.state].yakus.push(t0[1]);
                     ent.db[g.state].yakus.push(p0[1]);
                     ent.db["table"].data[t0[0]] = data.hana.pop();
@@ -66,6 +70,25 @@
                     g.current = [0,0];
                     g.turn();
                 }
+            },
+            "matches": function(a0, b0) {
+                // count matches in two arrays
+                // return list of pairs of indicies
+                var r0 = [];
+                for (var i = 0; i < a0.length; i++) {
+                    for (var j = 0; j < b0.length; j++) {
+                        if (!a0[i] || !b0[j]) {
+                            continue;
+                        }
+                        var a1 = (a0[i] / 4) >>> 0;
+                        var b1 = (b0[j] / 4) >>> 0;
+                        if (a1 == b1) {
+                            console.log(a1, b1);
+                            r0.push([i,j]);
+                        }
+                    }
+                }
+                return r0;
             },
             "turn": function() {
                 if (g.state == "player0") {
@@ -202,7 +225,7 @@ var ent = {
         ren.colors();
     },
     "click": function(e) {
-        console.log(e);
+        // console.log(e);
         // console.log(e.target.dataset.id);
         // console.log(e.target.dataset.x);
         g.click({id:e.target.dataset.id,x:e.target.dataset.x});
@@ -328,7 +351,7 @@ var ren = {
         ren.card();
         var k0 = g.current[0];
         var c0 = parseInt(g.current[1], 10);
-        console.log(k0, c0, ent.db[k0], ent.db[k0].c[c0]);
+        // console.log(k0, c0, ent.db[k0], ent.db[k0].c[c0]);
         ent.db[k0].c[c0].con.fillStyle = ren.col[k0][0];
         ent.db[k0].c[c0].con.arc(96,96,16,0,2*Math.PI);
         ent.db[k0].c[c0].con.fill();
