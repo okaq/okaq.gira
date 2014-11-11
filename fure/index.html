@@ -27,7 +27,8 @@
                 
                 rgb.init();
                 ent.init();
-                ren.test();
+                // ren.test();
+                ren.rand();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             }
@@ -36,13 +37,19 @@
 var ent = {
     "init": function() {
         ent.config = [
-            ["test", [g.w,g.w/12,0,g.h/4], 12, 1]
-            ];
+            // ["test", [g.w,g.w/12,0,g.h/4], 12, 1],
+            ["p0", [g.w/4,g.h/2,0,0], 3, 3],
+            ["y0", [g.w/4,g.h/2,0,g.h/2], 14, 10],
+            ["deck", [g.w/2,g.h/6,g.w/4,0], 2, 1],
+            ["tab", [g.w/2,5*g.h/6,g.w/4,g.h/6], 4, 4]
+        ];
         ent.db = {};
         dom.create();
+        // inject data
     },
     "click": function(e) {
         console.log(e);
+        console.log(e.target.dataset);
     }
 }
 // dom
@@ -111,7 +118,6 @@ var dom = {
         return r1;
     }
 
-
 }
 // render
 var ren = {
@@ -120,12 +126,20 @@ var ren = {
             ent.db["test"].c[i].con.fillStyle = rgb.pal[i];
             ent.db["test"].c[i].con.fillRect(8,8,ent.db["test"].c[i].can.width-16,ent.db["test"].c[i].can.height-16);
         }
+    },
+    "rand": function() {
+        for (var k in ent.db) {
+            for (var i = 0; i < ent.db[k].c.length; i++) {
+                ent.db[k].c[i].con.fillStyle = rgb.rc();
+                ent.db[k].c[i].con.fillRect(4,4,ent.db[k].c[i].can.width-8,ent.db[k].c[i].can.height-8);
+            }
+        }
     }
 }
 // color
 var rgb = {
     "init": function() {
-        rgb.pal = [];
+        rgb.pal = []; // just store hue for each, shuffle
         var t0 = 359.0 / 12.0;
         var t1 = Math.random() * t0;
         for (var i = 0; i < 12; i++) {
@@ -137,6 +151,10 @@ var rgb = {
             rgb.pal.push(hsla);
         }
         // console.log(rgb.pal);
+    },
+    "cssh": function(a0) {
+        // input array [h,s,l,a]
+        return "hsla(" + a0[0] + "," + a0[1] + "%," + a0[2] + "%," + a0[3] + ")";
     },
     "rand": function() {
         return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
