@@ -46,6 +46,28 @@ var ent = {
         ent.db = {};
         dom.create();
         // inject data
+        ent.hana = {};
+        ent.hana.points = [
+            1,1,5,20,
+            1,1,5,10,
+            1,1,5,20,
+            1,1,5,10,
+            1,1,5,10,
+            1,1,5,10,
+            1,1,5,10,
+            1,10,10,20,
+            1,1,5,10,
+            1,1,5,10,
+            1,5,10,20,
+            1,1,1,20
+        ];
+        ent.hana.suits = [
+            "pine","plum blossom","cherry blossom","wisteria",
+            "iris","peony","bush clover","suski grass",
+            "chrysanthemum","maple","willow","paulownia"
+        ];
+        ren.hana();
+ 
     },
     "click": function(e) {
         console.log(e);
@@ -134,6 +156,72 @@ var ren = {
                 ent.db[k].c[i].con.fillRect(4,4,ent.db[k].c[i].can.width-8,ent.db[k].c[i].can.height-8);
             }
         }
+        ren.card((Math.random()*48)>>>0,ent.db["tab"].c[0]);
+    },
+    "card": function(n0, c0) {
+        var w0 = c0.can.width;
+        var w1 = 0;
+    },
+    "hana": function() {
+        // 48 bitmaps and colors
+        rgb.fuda = {};
+        rgb.fuda.pal = [];
+        rgb.fuda.bmp = [];
+        var h0 = rgb.hues(12);
+        for (var i = 0; i < 12; i++) {
+            // pal is hsla wheel with 12 spokes
+            var h1 = [];
+            h1[0] = [h0[i], 100, 25, 1.0];
+            h1[1] = [h0[i], 100, 50, 1.0];
+            h1[2] = [h0[i], 100, 75, 1.0];
+            h1[3] = [h0[i], 100, 100, 1.0];
+            h1.forEach(function(el){rgb.fuda.pal.push(el);});
+            // fg,bg,border tones for each hue
+            // bmp is 7x7
+            for (var j = 0; j < 4; j++) {
+                var b0 = [];
+                b0[0] = ren.bc(1);
+                b0[1] = ren.bc(2);
+                b0[2] = ren.oc(10);
+                b0[3] = ren.oc(20);
+                b0.forEach(function(el){rgb.fuda.bmp.push(el)});
+            }
+        }
+        console.log(rgb.fuda.pal);
+    },
+    "bc": function(n0) {
+        // 7x7 bmp with random center filled
+        var b0 = [];
+        for (var i = 0; i < 49; i++) {
+            b0[i] = 0;
+        }
+        for (var i = 0; i < n0; i++) {
+            var i0 = (Math.random * 7) >>> 0;
+            i0 = ((i0 * 7) + 3) >>> 0;
+            if (b0[i0] == 1) {
+                continue;
+            } else {
+                b0[i0] = 1;
+            }
+        }
+        return b0;
+    },
+    "oc": function(n0) {
+        // 7x7 bmp sym filled
+        var b0 = [];
+        for (var i = 0; i < 49; i++) {
+            b0[i] = 0;
+        }
+        for (var i = 0; i < n0; i++) {
+            var i0 = (Math.random() * 7);
+            i0 = ((i0 * 7) + (Math.random() * 3)) >>> 0;
+            if (b0[i] == 1) {
+                continue;
+            } else {
+                b0[i] = 1;
+            }
+        }
+        return b0;
     }
 }
 // color
@@ -151,6 +239,16 @@ var rgb = {
             rgb.pal.push(hsla);
         }
         // console.log(rgb.pal);
+    },
+    "hues": function(n0) {
+        var h0 = 359.0 / n0;
+        var h1 = Math.random() * h0;
+        var h2 = [];
+        for (var i = 0; i < n0; i++) {
+            var h3 = h1 + (i * h0);
+            h2.push(h3);
+        }
+        return h2;
     },
     "cssh": function(a0) {
         // input array [h,s,l,a]
