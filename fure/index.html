@@ -160,24 +160,28 @@ var ren = {
     },
     "card": function(n0, c0) {
         var w0 = c0.can.width;
+        var h0 = c0.can.height;
         var m0 = 4;
-        var w1 = c0.can.width - (2 * m0);
+        var w1 = (c0.can.width - (2 * m0)) >>> 0;
+        var h1 = (c0.can.height - (2 * m0)) >>> 0;
         var m1 = 8;
-        var w2 = w1 - (2 * m1);
+        var w2 = (w1 - (2 * m1)) >>> 0;
+        var h2 = (h1 - (2 * m1)) >>> 0;
         var w3 = (w2 / 7) >>> 0;
-        var m2 = m0 + m1;
+        var h3 = (h2 / 7) >>> 0;
+        var m2 = (m0 + m1) >>> 0;
         var suit = (n0 / 4) >>> 0;
         var card = n0 % 4;
+        c0.con.fillStyle = rgb.cssh(rgb.fuda.pal[suit+0]);
+        c0.con.fillRect(m0,m0,w1,h1);
         c0.con.fillStyle = rgb.cssh(rgb.fuda.pal[suit+1]);
-        c0.con.fillRect(m0,m0,w1,w1);
-        c0.con.fillStyle = rgb.cssh(rgb.fuda.pal[suit+2]);
-        c0.con.fillRect(m2,m2,w2,w2);
+        c0.con.fillRect(m2,m2,w2,h2);
         for (var i = 0; i < 49; i++) {
             var x0 = ((i % 7) * w3) + m2;
             var y0 = (((i / 7) >>> 0) * w3) + m2;
             if (rgb.fuda.bmp[n0][i] == 1) {
-                c0.con.fillStyle = rgb.cssh(rgb.fuda.pal[suit]);
-                c0.con.fillRect(x0,y0,w3,w3);
+                c0.con.fillStyle = rgb.cssh(rgb.fuda.pal[suit+2]);
+                c0.con.fillRect(x0,y0,w3,h3);
             }
         }
     },
@@ -201,8 +205,8 @@ var ren = {
                 var b0 = [];
                 b0[0] = ren.bc(1);
                 b0[1] = ren.bc(2);
-                b0[2] = ren.oc(10);
-                b0[3] = ren.oc(20);
+                b0[2] = ren.oc(5); // half since its mirrored
+                b0[3] = ren.oc(10);
                 b0.forEach(function(el){rgb.fuda.bmp.push(el)});
             // }
         }
@@ -214,13 +218,16 @@ var ren = {
         for (var i = 0; i < 49; i++) {
             b0[i] = 0;
         }
-        for (var i = 0; i < n0; i++) {
-            var i0 = (Math.random * 7) >>> 0;
+        var j = n0;
+        while (j > 0) {
+        // for (var i = 0; i < n0; i++) {
+            var i0 = (Math.random() * 7) >>> 0;
             i0 = ((i0 * 7) + 3) >>> 0;
             if (b0[i0] == 1) {
                 continue;
             } else {
                 b0[i0] = 1;
+                j--;
             }
         }
         return b0;
@@ -231,14 +238,25 @@ var ren = {
         for (var i = 0; i < 49; i++) {
             b0[i] = 0;
         }
-        for (var i = 0; i < n0; i++) {
-            var i0 = (Math.random() * 7);
-            i0 = ((i0 * 7) + (Math.random() * 3)) >>> 0;
+        var j = n0;
+        while (j > 0) {
+        // for (var i = 0; i < n0; i++) {
+            var i0 = (Math.random() * 7) >>> 0;
+            i0 = (i0 * 7) >>> 0;
+            i0 = i0 + ((Math.random() * 3) >>> 0);
             if (b0[i0] == 1) {
                 continue;
             } else {
                 b0[i0] = 1;
+                j--;
             }
+        }
+        // mirror
+        for (var i = 0; i < 7; i++) {
+            var i0 = (i * 7) >>> 0;
+            b0[i0+6] = b0[i0];
+            b0[i0+5] = b0[i0+1];
+            b0[i0+4] = b0[i0+2];
         }
         return b0;
     }
