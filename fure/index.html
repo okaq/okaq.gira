@@ -40,6 +40,7 @@
             "play": function() {
                 console.log("player: " + g.state + " turn.");
                 console.log("number of matches: " + ent.db[g.state].mat.length);
+                // if no matches, call g.deck
             },
             "click": function(d0) {
                 g.ds = d0.id.split("_"); // id, index
@@ -50,15 +51,16 @@
                 // console.log(m0);
                 // console.log(ent.db[g.state].mat);
                 var i0 = g.match2(); // index into match list
-                console.log(i0);
+                // console.log(i0);
+                console.log(g.state, g.choose);
                 if (i0 != null) {
                     console.log(ent.db[g.state].mat[i0]);
                     ent.collect(i0);
                     // var m1 = ent.db[g.state].mat[i0];
                     // ent.db[g.state].yaku.push(ent.db[g.state].data[m1[1]]);
                     // ent.db[g.state].yaku.push(ent.db["tab"].data[m1[0]]);
+                    g.deck();
                 }
-                g.deck();
             },
             "match2": function() {
                 for (var i = 0; i < ent.db[g.state].mat.length; i++) {
@@ -114,7 +116,10 @@
                 // game state turn
                 g.turn();
                 // reset chooser
+                g.choose = {"deck":null, "p0":null, "p1":null, "tab":null};
+ 
                 ren.frame();
+                g.play();
             }
         }
 // entities
