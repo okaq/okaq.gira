@@ -25,21 +25,50 @@
                 g.w = 1920;
                 g.h = 1080;
                 g.state = "p0";
-                g.choose = {"p0":null, "p1":null, "tab":null}; // tab, p0, p1 chosen indicies
+                g.choose = {"deck":null, "p0":null, "p1":null, "tab":null}; // tab, p0, p1 chosen indicies
                 
                 rgb.init();
                 ent.init();
                 // ren.test();
                 ren.rand();
                 ren.frame();
+                console.log("starting koi koi. initial deal...");
+                g.play();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "play": function() {
+                console.log("player: " + g.state + " turn.");
+                console.log("number of matches: " + ent.db[g.state].mat.length);
             },
             "click": function(d0) {
                 g.ds = d0.id.split("_"); // id, index
                 g.choose[g.ds[0]] = parseInt(g.ds[1], 10);
                 ent.matches();
-                console.log(ent.db);
+                // console.log(ent.db);
+                var m0 = [g.choose["tab"], g.choose[g.state]];
+                // console.log(m0);
+                // console.log(ent.db[g.state].mat);
+                var i0 = g.match2(); // index into match list
+                console.log(i0);
+                if (i0 != null) {
+                    console.log(ent.db[g.state].mat[i0]);
+                    ent.collect(i0);
+                    // var m1 = ent.db[g.state].mat[i0];
+                    // ent.db[g.state].yaku.push(ent.db[g.state].data[m1[1]]);
+                    // ent.db[g.state].yaku.push(ent.db["tab"].data[m1[0]]);
+                }
+                g.deck();
+            },
+            "match2": function() {
+                for (var i = 0; i < ent.db[g.state].mat.length; i++) {
+                    // console.log(ent.db[g.state].mat);
+                    // console.log(g.choose);
+                    if ((ent.db[g.state].mat[i][0] == g.choose["tab"]) && (ent.db[g.state].mat[i][1] == g.choose[g.state])) {
+                        return i;
+                    }
+                }
+                return null;
             },
             "click2": function(d0) {
                 g.ds = d0.id.split("_"); // id, index
@@ -81,6 +110,11 @@
                 }
             },
             "deck": function() {
+                g.choose["deck"] = ent.db["deck"].data.pop();
+                // game state turn
+                g.turn();
+                // reset chooser
+                ren.frame();
             }
         }
 // entities
@@ -182,6 +216,13 @@ var ent = {
                 }
             }
         }
+    },
+    "collect": function(i0) {
+        var m1 = ent.db[g.state].mat[i0];
+        ent.db[g.state].yaku.push(ent.db[g.state].data[m1[1]]);
+        ent.db[g.state].yaku.push(ent.db["tab"].data[m1[0]]);
+        ent.db[g.state].data[m1[1]] = null;
+        ent.db["tab"].data[m1[0]] = null;
     }
 }
 // dom
@@ -273,6 +314,8 @@ var ren = {
             ren.card(ent.db["tab"].data[i], ent.db["tab"].c[i]);
             ren.card(ent.db["p0"].data[i], ent.db["p0"].c[i]);
             ren.card(ent.db["p1"].data[i], ent.db["p1"].c[i]);
+            ren.card(ent.db["p0"].yaku[i], ent.db["y0"].c[i]);
+            ren.card(ent.db["p1"].yaku[i], ent.db["y1"].c[i]);
         }
     },
     "frame": function() {
