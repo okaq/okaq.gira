@@ -67,11 +67,32 @@ var ent = {
             "chrysanthemum","maple","willow","paulownia"
         ];
         ren.hana();
- 
+        ent.db["deck"].data = ent.deck(48); 
+        // console.log(ent.db["deck"].data);
+        ent.db["tab"].data = [];
+        ent.db["p0"].data = [];
+        for (var i = 0; i < 8; i++) {
+            ent.db["tab"].data.push(ent.db["deck"].data.pop());
+            ent.db["p0"].data.push(ent.db["deck"].data.pop());
+        }
+        // console.log(ent.db);
     },
     "click": function(e) {
         console.log(e);
         console.log(e.target.dataset);
+    },
+    "deck": function(n0) {
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0[i] = i;
+        }
+        for (var i = r0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = r0[i0];
+            r0[i0] = r0[i];
+            r0[i] = t0;
+        }
+        return r0;
     }
 }
 // dom
@@ -156,26 +177,31 @@ var ren = {
                 ent.db[k].c[i].con.fillRect(4,4,ent.db[k].c[i].can.width-8,ent.db[k].c[i].can.height-8);
             }
         }
-        ren.card((Math.random()*48)>>>0,ent.db["tab"].c[0]);
+        // ren.card((Math.random()*48)>>>0,ent.db["tab"].c[0]);
+        for (var i = 0; i < 8; i++) {
+            ren.card(ent.db["tab"].data[i], ent.db["tab"].c[i]);
+            ren.card(ent.db["p0"].data[i], ent.db["p0"].c[i]);
+        }
     },
     "card": function(n0, c0) {
         var w0 = c0.can.width;
         var h0 = c0.can.height;
-        var m0 = 4;
+        var m0 = 0;
         var w1 = (c0.can.width - (2 * m0)) >>> 0;
         var h1 = (c0.can.height - (2 * m0)) >>> 0;
-        var m1 = 8;
+        var m1 = 0;
         var w2 = (w1 - (2 * m1)) >>> 0;
         var h2 = (h1 - (2 * m1)) >>> 0;
         var w3 = (w2 / 7) >>> 0;
         var h3 = (h2 / 7) >>> 0;
         var m2 = (m0 + m1) >>> 0;
         var suit = (n0 / 4) >>> 0;
+        suit = (suit * 4) >>> 0;
         var card = n0 % 4;
         c0.con.fillStyle = rgb.cssh(rgb.fuda.pal[suit+0]);
         c0.con.fillRect(m0,m0,w1,h1);
         c0.con.fillStyle = rgb.cssh(rgb.fuda.pal[suit+1]);
-        c0.con.fillRect(m2,m2,w2,h2);
+        // c0.con.fillRect(m2,m2,w2,h2);
         for (var i = 0; i < 49; i++) {
             var x0 = ((i % 7) * w3) + m2;
             var y0 = (((i / 7) >>> 0) * w3) + m2;
