@@ -37,17 +37,34 @@
             "click": function(d0) {
                 g.ds = d0.id.split("_"); // id, index
                 g.choose[g.ds[0]] = parseInt(g.ds[1], 10);
-                console.log(g.choose);
-                console.log(g.match());
+                // console.log(g.choose);
+                // console.log(g.match());
+                if (g.match()) {
+                    g.turn();
+                    console.log(ent.db);
+                }
+            },
+            "turn": function() {
+                if (g.state == "p0") {
+                    g.state = "p1";
+                } else {
+                    g.state = "p0";
+                }
             },
             "match": function() {
+                console.log(g.state);
                 var i0 = g.choose[g.state];
-                i0 = ent.db[g.state].data[i0];
-                i0 = (i0 / 4) >>> 0;
-                var i1 = g.choose["tab"];
-                i1 = ent.db["tab"].data[i1];
+                var i1  = ent.db[g.state].data[i0];
                 i1 = (i1 / 4) >>> 0;
-                if (i0 == i1) {
+                var i2 = g.choose["tab"];
+                var i3 = ent.db["tab"].data[i2];
+                i3 = (i3 / 4) >>> 0;
+                if (i1 == i3) {
+                    ent.db[g.state].yaku.push(i1);
+                    ent.db[g.state].yaku.push(i3);
+                    ent.db[g.state].data[i0] = null;
+                    ent.db["tab"].data[i2] = null;
+                    ren.rand();
                     return true;
                 } else {
                     return false;
@@ -60,7 +77,9 @@ var ent = {
         ent.config = [
             // ["test", [g.w,g.w/12,0,g.h/4], 12, 1],
             ["p0", [g.w/4,g.h/2,0,0], 3, 3],
+            ["p1", [g.w/8,g.h/2,7*g.w/8,0], 1, 1],
             ["y0", [g.w/4,g.h/2,0,g.h/2], 14, 10],
+            ["y1", [g.w/8,g.h/2,7*g.w/8,g.h/2], 1, 1],
             ["deck", [g.w/2,g.h/6,g.w/4,0], 2, 1],
             ["tab", [g.w/2,5*g.h/6,g.w/4,g.h/6], 4, 4]
         ];
@@ -92,10 +111,13 @@ var ent = {
         // console.log(ent.db["deck"].data);
         ent.db["tab"].data = [];
         ent.db["p0"].data = [];
-        ent.db["y0"].data = [];
+        ent.db["p0"].yaku = [];
+        ent.db["p1"].data = [];
+        ent.db["p1"].yaku = [];
         for (var i = 0; i < 8; i++) {
             ent.db["tab"].data.push(ent.db["deck"].data.pop());
             ent.db["p0"].data.push(ent.db["deck"].data.pop());
+            ent.db["p1"].data.push(ent.db["deck"].data.pop());
         }
         // console.log(ent.db);
     },
@@ -207,6 +229,9 @@ var ren = {
         }
     },
     "card": function(n0, c0) {
+        if (n0 == null) {
+            return;
+        }
         var w0 = c0.can.width;
         var h0 = c0.can.height;
         var m0 = 0;
