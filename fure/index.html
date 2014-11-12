@@ -24,6 +24,8 @@
 
                 g.w = 1920;
                 g.h = 1080;
+                g.state = "p0";
+                g.choose = {"p0":null, "p1":null, "tab":null}; // tab, p0, p1 chosen indicies
                 
                 rgb.init();
                 ent.init();
@@ -31,6 +33,25 @@
                 ren.rand();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "click": function(d0) {
+                g.ds = d0.id.split("_"); // id, index
+                g.choose[g.ds[0]] = parseInt(g.ds[1], 10);
+                console.log(g.choose);
+                console.log(g.match());
+            },
+            "match": function() {
+                var i0 = g.choose[g.state];
+                i0 = ent.db[g.state].data[i0];
+                i0 = (i0 / 4) >>> 0;
+                var i1 = g.choose["tab"];
+                i1 = ent.db["tab"].data[i1];
+                i1 = (i1 / 4) >>> 0;
+                if (i0 == i1) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
 // entities
@@ -71,6 +92,7 @@ var ent = {
         // console.log(ent.db["deck"].data);
         ent.db["tab"].data = [];
         ent.db["p0"].data = [];
+        ent.db["y0"].data = [];
         for (var i = 0; i < 8; i++) {
             ent.db["tab"].data.push(ent.db["deck"].data.pop());
             ent.db["p0"].data.push(ent.db["deck"].data.pop());
@@ -78,8 +100,9 @@ var ent = {
         // console.log(ent.db);
     },
     "click": function(e) {
-        console.log(e);
-        console.log(e.target.dataset);
+        // console.log(e);
+        // console.log(e.target.dataset);
+        g.click(e.target.dataset);
     },
     "deck": function(n0) {
         var r0 = [];
