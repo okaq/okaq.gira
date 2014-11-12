@@ -31,10 +31,17 @@
                 ent.init();
                 // ren.test();
                 ren.rand();
+                ren.frame();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "click": function(d0) {
+                g.ds = d0.id.split("_"); // id, index
+                g.choose[g.ds[0]] = parseInt(g.ds[1], 10);
+                ent.matches();
+                console.log(ent.db);
+            },
+            "click2": function(d0) {
                 g.ds = d0.id.split("_"); // id, index
                 g.choose[g.ds[0]] = parseInt(g.ds[1], 10);
                 // console.log(g.choose);
@@ -43,6 +50,9 @@
                     g.turn();
                     console.log(ent.db);
                 }
+                g.deck();
+                // p1 match & deck
+                // upon initial render, matches should be visible
             },
             "turn": function() {
                 if (g.state == "p0") {
@@ -64,11 +74,13 @@
                     ent.db[g.state].yaku.push(i3);
                     ent.db[g.state].data[i0] = null;
                     ent.db["tab"].data[i2] = null;
-                    ren.rand();
+                    ren.frame();
                     return true;
                 } else {
                     return false;
                 }
+            },
+            "deck": function() {
             }
         }
 // entities
@@ -77,9 +89,9 @@ var ent = {
         ent.config = [
             // ["test", [g.w,g.w/12,0,g.h/4], 12, 1],
             ["p0", [g.w/4,g.h/2,0,0], 3, 3],
-            ["p1", [g.w/8,g.h/2,7*g.w/8,0], 1, 1],
+            ["p1", [g.w/4,g.h/2,3*g.w/4,0], 3, 3],
             ["y0", [g.w/4,g.h/2,0,g.h/2], 14, 10],
-            ["y1", [g.w/8,g.h/2,7*g.w/8,g.h/2], 1, 1],
+            ["y1", [g.w/4,g.h/2,3*g.w/4,g.h/2], 14, 10],
             ["deck", [g.w/2,g.h/6,g.w/4,0], 2, 1],
             ["tab", [g.w/2,5*g.h/6,g.w/4,g.h/6], 4, 4]
         ];
@@ -114,12 +126,16 @@ var ent = {
         ent.db["p0"].yaku = [];
         ent.db["p1"].data = [];
         ent.db["p1"].yaku = [];
+        // matches
+        ent.db["p0"].mat = [];
+        ent.db["p1"].mat = [];
         for (var i = 0; i < 8; i++) {
             ent.db["tab"].data.push(ent.db["deck"].data.pop());
             ent.db["p0"].data.push(ent.db["deck"].data.pop());
             ent.db["p1"].data.push(ent.db["deck"].data.pop());
         }
         // console.log(ent.db);
+        ent.matches();
     },
     "click": function(e) {
         // console.log(e);
@@ -138,6 +154,34 @@ var ent = {
             r0[i] = t0;
         }
         return r0;
+    },
+    "matches": function() {
+        ent.db["p0"].mat = [];
+        ent.db["p1"].mat = [];
+        for (var i = 0; i < ent.db["tab"].data.length; i++) {
+            if (ent.db["tab"].data[i] == null) {
+                continue;
+            }
+            var s0 = (ent.db["tab"].data[i] / 4) >>> 0;
+            for (var j = 0; j < ent.db["p0"].data.length; j++) {
+                if (ent.db["p0"].data[j] != null) {
+                    var s1 = (ent.db["p0"].data[j] / 4) >>> 0;
+                    if (s1 == s0) {
+                        var s2 = [i,j];
+                        ent.db["p0"].mat.push(s2);
+                    }
+                }
+            }
+            for (var j = 0; j < ent.db["p1"].data.length; j++) {
+                if (ent.db["p1"].data[j] != null) {
+                    var s1 = (ent.db["p1"].data[j] / 4) >>> 0;
+                    if (s1 == s0) {
+                        var s2 = [i,j];
+                        ent.db["p1"].mat.push(s2);
+                    }
+                }
+            }
+        }
     }
 }
 // dom
@@ -222,10 +266,25 @@ var ren = {
                 ent.db[k].c[i].con.fillRect(4,4,ent.db[k].c[i].can.width-8,ent.db[k].c[i].can.height-8);
             }
         }
+    },
+    "cards": function() {
         // ren.card((Math.random()*48)>>>0,ent.db["tab"].c[0]);
         for (var i = 0; i < 8; i++) {
             ren.card(ent.db["tab"].data[i], ent.db["tab"].c[i]);
             ren.card(ent.db["p0"].data[i], ent.db["p0"].c[i]);
+            ren.card(ent.db["p1"].data[i], ent.db["p1"].c[i]);
+        }
+    },
+    "frame": function() {
+        ren.white();
+        ren.cards();
+    },
+    "white": function() {
+        for (var k in ent.db) {
+            for (var i = 0; i < ent.db[k].c.length; i++) {
+                ent.db[k].c[i].con.fillStyle = rgb.css([255,255,255,1.0]);
+                ent.db[k].c[i].con.fillRect(4,4,ent.db[k].c[i].can.width-8,ent.db[k].c[i].can.height-8);
+            }
         }
     },
     "card": function(n0, c0) {
