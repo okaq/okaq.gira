@@ -38,6 +38,7 @@
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "play": function() {
+                ent.matches();
                 console.log("player: " + g.state + " turn.");
                 console.log("number of matches: " + ent.db[g.state].mat.length);
                 // if no matches, call g.deck
@@ -112,7 +113,23 @@
                 }
             },
             "deck": function() {
+                console.log(ent.db["tab"].data);
                 g.choose["deck"] = ent.db["deck"].data.pop();
+                var m0 = (g.choose["deck"] / 4) >>> 0;
+                for (var i = 0; i < ent.db["tab"].data.length; i++) {
+                    var m1 = (ent.db["tab"].data[i] / 4) >>> 0;
+                    if (m0 == m1) {
+                        ent.db[g.state].yaku.push(g.choose["deck"]);
+                        ent.db[g.state].yaku.push(ent.db["tab"].data[i]);
+                        ent.db["tab"].data[i] = null;
+                        g.choose["deck"] = null;
+                        break;
+                    }
+                }
+                if (g.choose["deck"] != null) {
+                    ent.db["tab"].data.push(g.choose["deck"]);
+                    // refactor: push to nearest empty slot
+                }
                 // game state turn
                 g.turn();
                 // reset chooser
@@ -316,11 +333,14 @@ var ren = {
     "cards": function() {
         // ren.card((Math.random()*48)>>>0,ent.db["tab"].c[0]);
         for (var i = 0; i < 8; i++) {
-            ren.card(ent.db["tab"].data[i], ent.db["tab"].c[i]);
+            // ren.card(ent.db["tab"].data[i], ent.db["tab"].c[i]);
             ren.card(ent.db["p0"].data[i], ent.db["p0"].c[i]);
             ren.card(ent.db["p1"].data[i], ent.db["p1"].c[i]);
             ren.card(ent.db["p0"].yaku[i], ent.db["y0"].c[i]);
             ren.card(ent.db["p1"].yaku[i], ent.db["y1"].c[i]);
+        }
+        for (var i = 0; i < ent.db["tab"].data.length; i++) {
+            ren.card(ent.db["tab"].data[i], ent.db["tab"].c[i]);
         }
     },
     "frame": function() {
@@ -331,7 +351,7 @@ var ren = {
         for (var k in ent.db) {
             for (var i = 0; i < ent.db[k].c.length; i++) {
                 ent.db[k].c[i].con.fillStyle = rgb.css([255,255,255,1.0]);
-                ent.db[k].c[i].con.fillRect(4,4,ent.db[k].c[i].can.width-8,ent.db[k].c[i].can.height-8);
+                ent.db[k].c[i].con.fillRect(0, 0 ,ent.db[k].c[i].can.width ,ent.db[k].c[i].can.height);
             }
         }
     },
