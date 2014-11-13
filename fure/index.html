@@ -165,6 +165,7 @@
                 g.play();
             },
             "end": function() {
+                ren.frame();
                 console.log("end of game");
                 var p0 = ent.total("p0");
                 var p1 = ent.total("p1");
@@ -214,7 +215,8 @@ var ent = {
             "pine","plum blossom","cherry blossom","wisteria",
             "iris","peony","bush clover","suski grass",
             "chrysanthemum","maple","willow","paulownia"
-        ];
+                ];
+        yakus.init();
         ren.hana();
         ent.db["deck"].data = ent.deck(48); 
         // console.log(ent.db["deck"].data);
@@ -299,6 +301,108 @@ var ent = {
             sum = sum + t0;
         }
         return sum;
+    },
+}
+// yakus
+var yakus = {
+    "init": function() {
+        // plains
+        yakus.plains = {};
+        yakus.plains.data = [];
+        yakus.plains.n = 9; // number needed to win
+        yakus.plains.p = 1; // inital pts
+        yakus.plains.e = 1; // additional pts
+        
+        // sanko
+        yakus.sanko = {};
+        yakus.sanko.cards = [3,11,31,47];
+        yakus.sanko.points = 5;
+        yakus.sanko.need = 3;
+        yakus.sanko.extra = null;
+
+        // shiko
+        yakus.shiko = {};
+        yakus.shiko.cards = [3,11,31,47];
+        yakus.shiko.points = 8;
+        yakus.shiko.need = 4;
+        yakus.shiko.extra = null;
+
+        // ame-shiko
+        yakus.ame_shiko = {};
+        yakus.ame_shiko.cards = [3,11,31,43,47];
+        yakus.ame_shiko.points = 7;
+        yakus.ame_shiko.need = 4;
+        yakus.ame_shiko.extra = null;
+
+        // goko
+        yakus.goko = {};
+        yakus.goko.cards = [3,11,31,43,47];
+        yakus.goko.points = 10;
+        yakus.goko.need = 10;
+        yakus.goko.extra = null;
+
+        // inoshikacho
+        yakus.inoshikacho = {};
+        yakus.inoshikacho.cards = [23,27,39,7,15,19,29,30,35,42];
+        yakus.inoshikacho.points = 5;
+        yakus.inoshikacho.need = 3;
+        yakus.inoshikacho.extra = 1;
+
+        // tane
+        yakus.tane = {};
+        yakus.tane.cards = [7,15,19,23,27,29,30,35,39,42];
+        yakus.tane.points = 1;
+        yakus.tane.need = 5;
+        yakus.tane.extra = 1;
+
+        // akatan
+        yakus.akatan = {};
+        yakus.akatan.cards = [2,6,10,14,18,22,26,34,38,41];
+        yakus.akatan.points = 5;
+        yakus.akatan.need = 3;
+        yakus.akatan.extra = 1;
+
+        // aotan
+        yakus.aotan = {};
+        yakus.aotan.cards = [26,34,38,2,6,10,14,18,22,41];
+        yakus.aotan.points = 5;
+        yakus.aotan.need = 3;
+        yakus.aotan.extra = 1;
+
+        // akatan, aotan no chofuku
+        yakus.chofuku = {};
+        yakus.chofuku.cards = [2,6,10,26,34,38,14,18,22,41];
+        yakus.chofuku.points = 10;
+        yakus.chofuku.need = 6;
+        yakus.chofuku.extra = 1;
+
+        // tanzaku
+        yakus.tanzaku = {};
+        yakus.tanzaku.cards = [2,6,10,14,18,22,26,34,38,41];
+        yakus.tanzaku.points = 1;
+        yakus.tanzaku.need = 5;
+        yakus.tanzaku.extra = 1;
+
+        // tsukimi-zaki
+        yakus.tsukimi = {};
+        yakus.tsukimi.cards = [39,43];
+        yakus.tsukimi.points = 5;
+        yakus.tsukimi.need = 2;
+        yakus.tsukimi.extra = null;
+
+        // hanami-zaki
+        yakus.hanami = {};
+        yakus.hanami.cards = [11,43];
+        yakus.hanami.points = 5;
+        yakus.hanami.need = 2;
+        yakus.hanami.extra = null;
+
+        // kasu
+        yakus.kasu = {};
+        yakus.kasu.cards = [0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,32,33,36,37,40,44,45];
+        yakus.kasu.points = 1;
+        yakus.kasu.need = 10;
+        yakus.kasu.extra = 1;
     }
 }
 // dom
