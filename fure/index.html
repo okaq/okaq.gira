@@ -49,6 +49,9 @@
                 }
             },
             "click": function(d0) {
+                if (g.state == "end") {
+                    return;
+                }
                 g.ds = d0.id.split("_"); // id, index
                 g.choose[g.ds[0]] = parseInt(g.ds[1], 10);
                 ent.matches();
@@ -119,12 +122,17 @@
             },
             "deck": function() {
                 if (ent.db["deck"].data.length == 0) {
+                    g.state = "end";
                     g.end();
+                    return;
                 }
                 console.log(ent.db["tab"].data);
                 g.choose["deck"] = ent.db["deck"].data.pop();
                 var m0 = (g.choose["deck"] / 4) >>> 0;
                 for (var i = 0; i < ent.db["tab"].data.length; i++) {
+                    if (ent.db["tab"].data[i] == null) {
+                        continue;
+                    }
                     var m1 = (ent.db["tab"].data[i] / 4) >>> 0;
                     if (m0 == m1) {
                         ent.db[g.state].yaku.push(g.choose["deck"]);
@@ -279,14 +287,18 @@ var ent = {
         ent.db[g.state].data[m1[1]] = null;
         ent.db["tab"].data[m1[0]] = null;
     },
-    "total": function(p0) {
+    "total": function(n0) {
+        console.log(ent.db[n0].yaku);
         var sum = 0;
-        for (var i = 0; i < ent.db[p0].yaku.length; i++) {
-            var i0 = ent.db[p0].yaku[i];
+        for (var i = 0; i < ent.db[n0].yaku.length; i++) {
+            if (ent.db[n0].yaku[i] == null) {
+                continue;
+            }
+            var i0 = ent.db[n0].yaku[i];
             var t0 = ent.hana.points[i0];
             sum = sum + t0;
         }
-        return t0;
+        return sum;
     }
 }
 // dom
@@ -378,7 +390,11 @@ var ren = {
             // ren.card(ent.db["tab"].data[i], ent.db["tab"].c[i]);
             ren.card(ent.db["p0"].data[i], ent.db["p0"].c[i]);
             ren.card(ent.db["p1"].data[i], ent.db["p1"].c[i]);
+        }
+        for (var i = 0; i < ent.db["p0"].yaku.length; i++) {
             ren.card(ent.db["p0"].yaku[i], ent.db["y0"].c[i]);
+        }
+        for (var i = 0; i < ent.db["p1"].yaku.length; i++) {
             ren.card(ent.db["p1"].yaku[i], ent.db["y1"].c[i]);
         }
         for (var i = 0; i < ent.db["tab"].data.length; i++) {
