@@ -38,10 +38,15 @@
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "play": function() {
+                // check yakus
+                // invest: math encoding solution to yaku scoring
                 ent.matches();
                 console.log("player: " + g.state + " turn.");
                 console.log("number of matches: " + ent.db[g.state].mat.length);
                 // if no matches, call g.deck
+                if (ent.db[g.state].mat.length == 0) {
+                    g.deck();
+                }
             },
             "click": function(d0) {
                 g.ds = d0.id.split("_"); // id, index
@@ -113,6 +118,9 @@
                 }
             },
             "deck": function() {
+                if (ent.db["deck"].data.length == 0) {
+                    g.end();
+                }
                 console.log(ent.db["tab"].data);
                 g.choose["deck"] = ent.db["deck"].data.pop();
                 var m0 = (g.choose["deck"] / 4) >>> 0;
@@ -127,7 +135,17 @@
                     }
                 }
                 if (g.choose["deck"] != null) {
-                    ent.db["tab"].data.push(g.choose["deck"]);
+                    var found = false;
+                    for (var i = 0; i < 8; i++) {
+                        if (ent.db["tab"].data[i] == null) {
+                            ent.db["tab"].data[i] = g.choose["deck"];
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        ent.db["tab"].data.push(g.choose["deck"]);
+                    }
                     // refactor: push to nearest empty slot
                 }
                 // game state turn
@@ -137,6 +155,21 @@
  
                 ren.frame();
                 g.play();
+            },
+            "end": function() {
+                console.log("end of game");
+                var p0 = ent.total("p0");
+                var p1 = ent.total("p1");
+                console.log("total score. p0: " + p0 + " p1: " + p1);
+                if (p0 > p1) {
+                    console.log("p0 wins!");
+                }
+                if (p1 > p0) {
+                    console.log("p1 wins!");
+                }
+                if (p0 == p1) {
+                    console.log("it's a tie!");
+                }
             }
         }
 // entities
@@ -245,6 +278,15 @@ var ent = {
         ent.db[g.state].yaku.push(ent.db["tab"].data[m1[0]]);
         ent.db[g.state].data[m1[1]] = null;
         ent.db["tab"].data[m1[0]] = null;
+    },
+    "total": function(p0) {
+        var sum = 0;
+        for (var i = 0; i < ent.db[p0].yaku.length; i++) {
+            var i0 = ent.db[p0].yaku[i];
+            var t0 = ent.hana.points[i0];
+            sum = sum + t0;
+        }
+        return t0;
     }
 }
 // dom
