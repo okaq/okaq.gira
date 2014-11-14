@@ -122,6 +122,7 @@
             },
             "deck": function() {
                 if (ent.db["deck"].data.length == 0) {
+                    // also check for no matches, either player
                     g.state = "end";
                     g.end();
                     return;
@@ -156,6 +157,8 @@
                     }
                     // refactor: push to nearest empty slot
                 }
+                // check yakus
+                ent.check(g.state);
                 // game state turn
                 g.turn();
                 // reset chooser
@@ -216,7 +219,7 @@ var ent = {
             "iris","peony","bush clover","suski grass",
             "chrysanthemum","maple","willow","paulownia"
                 ];
-        yakus.init();
+        // yakus.init();
         ren.hana();
         ent.db["deck"].data = ent.deck(48); 
         // console.log(ent.db["deck"].data);
@@ -302,17 +305,34 @@ var ent = {
         }
         return sum;
     },
+    "check": function(n0) {
+        for (var k in yakus) {
+            // console.log(yakus[k]);
+            var match = 0;
+            for (var i = 0; i < ent.db[n0].yaku.length; i++) {
+                var m0 = ent.db[n0].yaku[i];
+                for (var j = 0; j < yakus[k].cards.length; j++) {
+                    var m1 = yakus[k].cards[j];
+                    if (m0 == m1) {
+                        match = match + 1;
+                    }
+                }
+            }
+            var success = false;
+            var points = 0;
+            if (match >= yakus[k].need) {
+                success = true;
+                points = yakus[k].points;
+                if (yakus[k].extra != null) {
+                    points = points + ((match - yakus[k].need) * yakus[k].extra);
+                }
+            }
+            console.log(k + ": " + success + ". points awarded: " + points);
+        }
+    }
 }
 // yakus
-var yakus = {
-    "init": function() {
-        // plains
-        yakus.plains = {};
-        yakus.plains.data = [];
-        yakus.plains.n = 9; // number needed to win
-        yakus.plains.p = 1; // inital pts
-        yakus.plains.e = 1; // additional pts
-        
+var yakus = {};
         // sanko
         yakus.sanko = {};
         yakus.sanko.cards = [3,11,31,47];
@@ -403,8 +423,6 @@ var yakus = {
         yakus.kasu.points = 1;
         yakus.kasu.need = 10;
         yakus.kasu.extra = 1;
-    }
-}
 // dom
 var dom = {
     "create": function() {
