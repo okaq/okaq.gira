@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
         <meta name="source" content="https://github.com/okaq/okaq.gira" />
         <meta name="creator" content="AQ <aq@okaq.com>" />
-        <meta name="date" content="2014-11-08" />
+        <meta name="date" content="2014-11-14" />
         <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGJJ+X+CgZaAiaamj1owasGoBaMWjFowasGoBaMWjFowasGoBVQEgAAAAP//+rsCbnzLRbUAAAAASUVORK5CYII=" />
         <style type="text/css">
             html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(255,255,255,1.0);}
@@ -27,31 +27,41 @@
 
                 dom.init();
                 // r.test();
-                ent.init();
+                // ent.init();
 
                 g.ev = new Event("pop");
-                dom.test[0].can.addEventListener("pop", g.click, false);
+                // dom.test[0].can.addEventListener("pop", g.click, false);
                 // dom.remove(dom.test[0]);
-                dom.test[0].can.dispatchEvent(g.ev);
+                // dom.test[0].can.dispatchEvent(g.ev);
+                // g.ev = document.createEevent("pop");
+                document.addEventListener("pop", g.click, false);
+                document.dispatchEvent(g.ev);
+                ent.init();
 
-                r.rand();
- 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "click": function(e) {
                 console.log(e);
+                if (e.detail) {
+                    e.detail[0].call(this);
+                }
             }
         }
 // entities
 var ent = {
     "init": function() {
+        // all 2^N square rects, add cpu panel
         ent.config = [
             ["deck", [g.w/4,g.h/2,0,0], 2, 1],
             ["tab", [g.w/2,g.h/2,g.w/4,0], 4, 4],
-            ["p0", [g.w,g.h/4,0,5*g.h/8], 8, 1]
+            ["p0", [g.w,g.h/4,0,5*g.h/8], 8, 1],
+            ["cpu", [g.w/4,g.h/2,3*g.w/4,0], 1, 1]
         ];
         ent.db = {};
         ent.create();
+
+        g.ev = new CustomEvent("pop", {"detail": [r.rand]});
+        document.dispatchEvent(g.ev);
     },
     "create": function() {
         for (var i = 0; i < ent.config.length; i++) {
@@ -123,6 +133,9 @@ var dom = {
             }
         }
         return r1;
+    },
+    "subm": function(r0, x0, y0, m0) {
+        // subdivide with a margin between sub rects
     }
 }
 // render
