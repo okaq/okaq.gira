@@ -26,12 +26,15 @@
                 g.h = 1080;
 
                 dom.init();
-                r.test();
+                // r.test();
+                ent.init();
 
                 g.ev = new Event("pop");
                 dom.test[0].can.addEventListener("pop", g.click, false);
-                dom.remove(dom.test[0]);
+                // dom.remove(dom.test[0]);
                 dom.test[0].can.dispatchEvent(g.ev);
+
+                r.rand();
  
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
@@ -39,6 +42,31 @@
                 console.log(e);
             }
         }
+// entities
+var ent = {
+    "init": function() {
+        ent.config = [
+            ["deck", [g.w/4,g.h/2,0,0], 2, 1],
+            ["tab", [g.w/2,g.h/2,g.w/4,0], 4, 4],
+            ["p0", [g.w,g.h/4,0,5*g.h/8], 8, 1]
+        ];
+        ent.db = {};
+        ent.create();
+    },
+    "create": function() {
+        for (var i = 0; i < ent.config.length; i++) {
+            var e0 = ent.config[i]; // entity object data
+            var k0 = e0[0]; // key
+            ent.db[k0] = {};
+            ent.db[k0].id = k0; 
+            ent.db[k0].rect = e0[1]; // main layout rect
+            ent.db[k0].sx = e0[2]; // subrects in x-axis
+            ent.db[k0].sy = e0[3]; // subrects in y-axis
+            ent.db[k0].r = dom.sub(e0[1], e0[2], e0[3]);
+            ent.db[k0].c = dom.layout(k0, ent.db[k0].r);
+        }
+    }
+}
 // dom
 var dom = {
     "init": function() {
@@ -106,6 +134,14 @@ var r = {
     "white": function(c0) {
         c0.con.fillStyle = rgb.css([255,255,255,1.0]);
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "rand": function() {
+        for (var k in ent.db) {
+            for (var i = 0; i < ent.db[k].c.length; i++) {
+                ent.db[k].c[i].con.fillStyle = rgb.rc();
+                ent.db[k].c[i].con.fillRect(0,0,ent.db[k].c[i].can.width,ent.db[k].c[i].can.height);
+            }
+        }
     }
 }
 // color
