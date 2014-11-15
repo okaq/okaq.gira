@@ -50,13 +50,24 @@
 // entities
 var ent = {
     "init": function() {
+        /*
         // all 2^N square rects, add cpu panel
         ent.config = [
             ["deck", [g.w/4,g.h/2,0,0], 2, 1],
             ["tab", [g.w/2,g.h/2,g.w/4,0], 4, 4],
             ["p0", [g.w,g.h/4,0,5*g.h/8], 8, 1],
             ["cpu", [g.w/4,g.h/2,3*g.w/4,0], 1, 1]
-        ];
+                ];
+        // 1920/8=240, 240-128=112
+        // bmp = 5x5, 5*32=160 card, 5*8=40 yaku
+         */
+        ent.config = [
+            ["deck", [160,320,64,128], 1, 2, 16],
+        ["tab", [960,384,300,8], 5, 2, 32],
+        ["cpu", [388,444,1400,16], 1, 1, 16],
+        ["p0", [1280,160,180,480], 8, 1, 16],
+        ["y0", [784,560,16,640], 14, 10, 8]
+            ];
         ent.db = {};
         ent.create();
 
@@ -72,8 +83,10 @@ var ent = {
             ent.db[k0].rect = e0[1]; // main layout rect
             ent.db[k0].sx = e0[2]; // subrects in x-axis
             ent.db[k0].sy = e0[3]; // subrects in y-axis
-            ent.db[k0].r = dom.sub(e0[1], e0[2], e0[3]);
+            ent.db[k0].r = dom.subm(e0[1], e0[2], e0[3], e0[4]);
             ent.db[k0].c = dom.layout(k0, ent.db[k0].r);
+
+            ent.db[k0].data = []; // hand
         }
     }
 }
@@ -136,6 +149,26 @@ var dom = {
     },
     "subm": function(r0, x0, y0, m0) {
         // subdivide with a margin between sub rects
+        // rect is array with [w,h,x,y]
+        if (x0 == 0 || y0 == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] / x0) >>> 0;
+        var w2 = w1 - (2 * m0);
+        var h1 = (r0[1] / y0) >>> 0;
+        var h2 = h1 - (2 * m0);
+        for (var y = 0; y < y0; y++) {
+            for (var x = 0; x < x0; x++) {
+                var x1 = (x * w1) >>> 0;
+                x1 += r0[2] + m0;
+                var y1 = (y * h1) >>> 0;
+                y1 += r0[3] + m0;
+                r1.push([w2,h2,x1,y1]);
+            }
+        }
+        return r1;
+ 
     }
 }
 // render
