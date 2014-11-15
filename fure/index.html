@@ -73,6 +73,9 @@ var ent = {
 
         g.ev = new CustomEvent("pop", {"detail": [r.rand]});
         document.dispatchEvent(g.ev);
+
+        ent.bmp = bmp.create(48);
+        r.yaku();
     },
     "create": function() {
         for (var i = 0; i < ent.config.length; i++) {
@@ -88,6 +91,45 @@ var ent = {
 
             ent.db[k0].data = []; // hand
         }
+    }
+}
+// bitmap
+var bmp = {
+    "create": function(n0) {
+        var r0 = [];
+        var n1 = (n0 / 4) >>> 0;
+        for (var i = 0; i < n1; i++) {
+            r0.push(bmp.inv(1));
+            r0.push(bmp.inv(5));
+            r0.push(bmp.inv(9));
+            r0.push(bmp.inv(13));
+        }
+        return r0;
+    },
+    "inv": function(n0) {
+        // 5x5 mirror inv with n0 fills
+        var r0 = [];
+        for (var i = 0; i < 25; i++) {
+            r0[i] = 0;
+        }
+        var n1 = n0;
+        while (n1 >= 0) {
+            var i0 = (Math.random() * 15) >>> 0;
+            var i1 = (i0 / 3) >>> 0;
+            var i2 = i0 % 3;
+            var i3 = ((i1 * 5) + i2) >>> 0;
+            if (r0[i3] == 0) {
+                r0[i3] = 1;
+                n1--;
+            }
+        }
+        // mirror
+        for (var i = 0; i < 5; i++) {
+            var i0 = (i * 5) >>> 0;
+            r0[i0+4] = r0[i0];
+            r0[i0+3] = r0[i0+1];
+        }
+        return r0;
     }
 }
 // dom
@@ -186,6 +228,30 @@ var r = {
             for (var i = 0; i < ent.db[k].c.length; i++) {
                 ent.db[k].c[i].con.fillStyle = rgb.rc();
                 ent.db[k].c[i].con.fillRect(0,0,ent.db[k].c[i].can.width,ent.db[k].c[i].can.height);
+            }
+        }
+    },
+    "yaku": function() {
+        var h0 = rgb.hues(12);
+        for (var i = 0; i < ent.bmp.length; i++) {
+            var i0 = (i / 4) >>> 0;
+            var fg = [h0[i0], 90, 70, 1.0];
+            var fgc = rgb.cssh(fg);
+            var bg = [h0[i0], 90, 30, 1.0];
+            var bgc = rgb.cssh(bg);
+            var s0 = (ent.db["y0"].c[0].can.width / 5) >>> 0;
+            var c0 = ent.db["y0"].c[i].con;
+            for (var j = 0; j < ent.bmp[i].length; j++) {
+                if (ent.bmp[i][j] == 0) {
+                    c0.fillStyle = bgc;
+                } else {
+                    c0.fillStyle = fgc;
+                }
+                var x0 = j % 5;
+                x0 = (x0 * s0) >>> 0;
+                var y0 = (j / 5) >>> 0;
+                y0 = (y0 * s0) >>> 0;
+                c0.fillRect(x0, y0, s0, s0);
             }
         }
     }
