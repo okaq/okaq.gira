@@ -78,11 +78,12 @@ var ent = {
          */
         // cell size, margin, origin x,y, count x,y
         ent.config = [
-            ["deck", [20, 16, 64, 128, 1, 2]],
-            ["tab", [20, 16, 256, 32, 3, 3]],
-            ["p0", [20, 16, 32, 460, 8, 1]],
-            ["cpu", [100, 16, 1200, 32, 1, 1]],
-            ["y0", [8, 8, 16, 640, 14, 10]]
+            ["deck", [20, 16, 64, 108, 1, 2]],
+            ["tab", [20, 16, 256, 12, 3, 3]],
+            ["p0", [20, 16, 32, 420, 8, 1]],
+            ["cpu", [100, 16, 1200, 12, 1, 1]],
+            ["y0", [6, 7, 70, 560, 22, 11]],
+            ["cards", [7, 3, 1360, 550, 4, 12]]
             ];
         ent.db = {};
         ent.bmp = bmp.create(ent.size);
@@ -92,8 +93,10 @@ var ent = {
         document.dispatchEvent(g.ev);
 
         // ent.bmp = bmp.create(48);
-        r.yaku();
+        // r.yaku();
+        r.cards();
         ent.deck();
+        ent.yakus();
     },
     "deck": function() {
         for (var i = 0; i < ent.size; i++) {
@@ -140,6 +143,12 @@ var ent = {
             ent.db["tab"].data.push(ent.db["deck"].data.pop());
         }
         console.log(ent.db);
+    },
+    "yakus": function() {
+        ent.db["p0"].m = []; // matches
+        ent.db["p0"].y = []; // yakus
+        ent.db["cpu"].m = [];
+        ent.db["cpu"].y = [];
     }
 }
 // yakus
@@ -174,7 +183,7 @@ yakus.goko.extra = null;
 
 // inoshikacho
 yakus.inoshikacho = {};
-yakus.inoshikacho.cards = [23,27,39,7,15,19,29,30,35,42];
+yakus.inoshikacho.cards = [7,15,19,23,27,29,30,35,39,42];
 yakus.inoshikacho.points = 5;
 yakus.inoshikacho.need = 3;
 yakus.inoshikacho.extra = 1;
@@ -195,14 +204,14 @@ yakus.akatan.extra = 1;
 
 // aotan
 yakus.aotan = {};
-yakus.aotan.cards = [26,34,38,2,6,10,14,18,22,41];
+yakus.aotan.cards = [2,6,10,14,18,22,26,34,38,41];
 yakus.aotan.points = 5;
 yakus.aotan.need = 3;
 yakus.aotan.extra = 1;
 
 // akatan, aotan no chofuku
 yakus.chofuku = {};
-yakus.chofuku.cards = [2,6,10,26,34,38,14,18,22,41];
+yakus.chofuku.cards = [2,6,10,14,18,22,26,34,38,41];
 yakus.chofuku.points = 10;
 yakus.chofuku.need = 6;
 yakus.chofuku.extra = 1;
@@ -234,6 +243,11 @@ yakus.kasu.cards = [0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,32,33,36,37,40,44,45]
 yakus.kasu.points = 1;
 yakus.kasu.need = 10;
 yakus.kasu.extra = 1;
+
+yakus.n = ["sanko","shiko", "ame-shiko","goko","inoshikacho",
+"tane","akatan","aotan","chofuku",
+    "tanzaku","tsukimi","hanami","kasu"];
+// longest kasu = 22 cards
 // bitmap
 var bmp = {
     "create": function(n0) {
@@ -408,6 +422,11 @@ var r = {
             r.bmp(ent.db["tab"].c[i], ent.db["tab"].data[i]);
         }
         r.bmp(ent.db["deck"].c[0], ent.db["deck"].data[ent.db["deck"].data.length-1]);
+    },
+    "cards": function() {
+        for (var i = 0; i < ent.size; i++) {
+            r.bmp(ent.db["cards"].c[i], i);
+        }
     },
     "yaku": function() {
         var h0 = rgb.hue(12);
