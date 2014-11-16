@@ -28,6 +28,7 @@
                 dom.init();
                 // r.test();
                 // ent.init();
+                rgb.init();
 
                 g.ev = new Event("pop");
                 // dom.test[0].can.addEventListener("pop", g.click, false);
@@ -37,6 +38,8 @@
                 document.addEventListener("pop", g.click, false);
                 document.dispatchEvent(g.ev);
                 ent.init();
+                ent.open();
+                r.open();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
@@ -75,7 +78,19 @@ var ent = {
         document.dispatchEvent(g.ev);
 
         ent.bmp = bmp.create(48);
-        r.yaku();
+        // r.yaku();
+        ent.deck();
+    },
+    "deck": function() {
+        for (var i = 0; i < 48; i++) {
+            ent.db["deck"].data.push(i);
+        }
+        for (var i = 47; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = ent.db["deck"].data[i0];
+            ent.db["deck"].data[i0] = ent.db["deck"].data[i];
+            ent.db["deck"].data[i] = t0;
+        }
     },
     "create": function() {
         for (var i = 0; i < ent.config.length; i++) {
@@ -91,6 +106,14 @@ var ent = {
 
             ent.db[k0].data = []; // hand
         }
+    },
+    "open": function() {
+        for (var i = 0; i < 8; i++) {
+            ent.db["p0"].data.push(ent.db["deck"].data.pop());
+            ent.db["cpu"].data.push(ent.db["deck"].data.pop());
+            ent.db["tab"].data.push(ent.db["deck"].data.pop());
+        }
+        console.log(ent.db);
     }
 }
 // bitmap
@@ -231,8 +254,14 @@ var r = {
             }
         }
     },
+    "open": function() {
+        for (var i = 0; i < 8; i++) {
+            r.bmp(ent.db["p0"].c[i], ent.db["p0"].data[i]);
+            r.bmp(ent.db["tab"].c[i], ent.db["tab"].data[i]);
+        }
+    },
     "yaku": function() {
-        var h0 = rgb.hues(12);
+        var h0 = rgb.hue(12);
         for (var i = 0; i < ent.bmp.length; i++) {
             var i0 = (i / 4) >>> 0;
             var fg = [h0[i0], 90, 70, 1.0];
@@ -254,6 +283,28 @@ var r = {
                 c0.fillRect(x0, y0, s0, s0);
             }
         }
+    },
+    "bmp": function(c0, i0) {
+        // render bitmap i0 in canvas object c0
+        var i1 = (i0 / 4) >>> 0;
+        var fg = [rgb.hues[i1], 90, 70, 1.0];
+        var fgc = rgb.cssh(fg);
+        var bg = [rgb.hues[i1], 90, 30, 1.0];
+        var bgc = rgb.cssh(bg);
+        var s0 = (c0.can.width / 5) >>> 0; 
+        var c1 = c0.con;
+        for (var j = 0; j < ent.bmp[i0].length; j++) {
+            if (ent.bmp[i0][j] == 0) {
+                c1.fillStyle = bgc;
+            } else {
+                c1.fillStyle = fgc;
+            }
+            var x0 = j % 5;
+            x0 = (x0 * s0) >>> 0;
+            var y0 = (j / 5) >>> 0;
+            y0 = (y0 * s0) >>> 0;
+            c1.fillRect(x0, y0, s0, s0);
+        }
     }
 }
 // color
@@ -270,8 +321,9 @@ var rgb = {
             var hsla = "hsla(" + h0 + "," + s0 + "%," + l0 + "%," + a0 + ")";
             rgb.pal.push(hsla);
         }
+        rgb.hues = rgb.hue(12);
     },
-    "hues": function(n0) {
+    "hue": function(n0) {
         var h0 = 359.0 / n0;
         var h1 = Math.random() * h0;
         var h2 = [];
