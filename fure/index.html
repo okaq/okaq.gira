@@ -53,6 +53,7 @@
 // entities
 var ent = {
     "init": function() {
+        ent.size = 48;
         /*
         // all 2^N square rects, add cpu panel
         ent.config = [
@@ -64,6 +65,7 @@ var ent = {
         // 1920/8=240, 240-128=112
         // bmp = 5x5, 5*32=160 card, 5*8=40 yaku
          */
+        /*
         // begin with cell sizes, margin, origin
         // cell size below is 130 / 5 = 26
         ent.config = [
@@ -72,27 +74,49 @@ var ent = {
         ["cpu", [388,444,1400,16], 1, 1, 16],
         ["p0", [1296,162,180,480], 8, 1, 16],
         ["y0", [784,560,16,640], 14, 10, 8]
+        ];
+         */
+        // cell size, margin, origin x,y, count x,y
+        ent.config = [
+            ["deck", [20, 16, 64, 128, 1, 2]],
+            ["tab", [20, 16, 256, 32, 3, 3]],
+            ["p0", [20, 16, 32, 460, 8, 1]],
+            ["cpu", [100, 16, 1200, 32, 1, 1]],
+            ["y0", [8, 8, 16, 640, 14, 10]]
             ];
         ent.db = {};
-        ent.create();
+        ent.bmp = bmp.create(ent.size);
+        ent.create2();
 
         g.ev = new CustomEvent("pop", {"detail": [r.rand]});
         document.dispatchEvent(g.ev);
 
-        ent.bmp = bmp.create(48);
-        // r.yaku();
+        // ent.bmp = bmp.create(48);
+        r.yaku();
         ent.deck();
     },
     "deck": function() {
-        for (var i = 0; i < 48; i++) {
+        for (var i = 0; i < ent.size; i++) {
             ent.db["deck"].data.push(i);
         }
-        for (var i = 47; i >= 0; i--) {
+        for (var i = ent.size-1; i >= 0; i--) {
             var i0 = (Math.random() * i) >>> 0;
             var t0 = ent.db["deck"].data[i0];
             ent.db["deck"].data[i0] = ent.db["deck"].data[i];
             ent.db["deck"].data[i] = t0;
         }
+    },
+    "create2": function() {
+        for (var i = 0; i < ent.config.length; i++) {
+            var e0 = ent.config[i]; // entity object data
+            var k0 = e0[0]; // key
+            ent.db[k0] = {};
+            ent.db[k0].id = k0; 
+            ent.db[k0].r = dom.subc(e0[1]);
+            ent.db[k0].c = dom.layout(k0, ent.db[k0].r);
+
+            ent.db[k0].data = []; // hand
+        } 
     },
     "create": function() {
         for (var i = 0; i < ent.config.length; i++) {
@@ -243,6 +267,29 @@ var dom = {
         }
         return r1;
  
+    },
+    "subc": function(r0) {
+        // cell size, margin, origin x,y, count x,y
+        if (r0[4] == 0 || r0[5] == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] * bmp.nx) >>> 0;
+        var w2 = (w1 + (2 * r0[1])) >>> 0;
+        var h1 = (r0[0] * bmp.ny) >>> 0;
+        var h2 = (h1 + (2 * r0[1])) >>> 0;
+        for (var y = 0; y < r0[5]; y++) {
+            for (var x = 0; x < r0[4]; x++) {
+                var x0 = (x * w2) >>> 0;
+                x0 = x0 + r0[2];
+                x0 = x0 + r0[1];
+                var y0 = (y * h2) >>> 0;
+                y0 = y0 + r0[3];
+                y0 = y0 + r0[1];
+                r1.push([w1,h1,x0,y0]);
+            }
+        }
+        return r1;
     }
 }
 // render
