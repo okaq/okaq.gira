@@ -41,6 +41,15 @@
                 ent.open();
                 r.open();
 
+                g.state = {
+                    "turn": "p0",
+                    "deck": null,
+                    "p0": null,
+                    "cpu": null,
+                    "tab": null
+                }; // turn, selections
+                g.play();
+
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "click": function(e) {
@@ -48,6 +57,9 @@
                 if (e.detail) {
                     // e.detail[0].call(this);
                 }
+                console.log(e.target.dataset.id);
+            },
+            "play": function() {
             }
         }
 // entities
@@ -322,7 +334,7 @@ var dom = {
             var c1 = dom.canvas(r0[i]);
             c1.can.dataset.id = n0 + "_" + i;
             c1.can.dataset.x = "card" + i;
-            c1.can.addEventListener("click", dom.click, false);
+            c1.can.addEventListener("click", g.click, false);
             dom.add(c1);
             c0.push(c1);
         }
