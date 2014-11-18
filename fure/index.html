@@ -24,9 +24,78 @@
 
                 g.w = 1920;
                 g.h = 1080;
+
+                dom.init();
+                ent.init();
+
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             }
         }
+// entities
+var ent = {
+    "init": function() {
+        ent.size = 48;
+        ent.start = 8; // number of card sto deal at open
+        ent.config = [
+            ["tab"],
+            ["p0"],
+            ["y0"],
+            ["y1"]
+                ];
+        ent.deal();
+    },
+    "deal": function() {
+        // deck setup
+        ent.hana = {};
+        ent.hana.fuda = ent.shuf(ent.size);
+        // console.log(ent.hana);
+        ent.hana.e = []; // encoding
+        // h:hana,p0,p1,y0,y1,t
+        for (var i = 0; i < ent.size; i++) {
+            ent.hana.e[i] = "h";
+        }
+        ent.hana.i = 0; // index of next deal card
+        ent.open();
+    },
+    "open": function() {
+        for (var i = 0; i < ent.start; i++) {
+            /*
+            ent.hana.e[i*3] = "p0";
+            ent.hana.e[i*3+1] = "p1";
+            ent.hana.e[i*3+2] = "t";
+             */
+            ent.card("p0");
+            ent.card("p1");
+            ent.card("tab");
+        }
+        // ent.hana.i = ent.start * 3;
+        console.log(ent.hana);
+    },
+    "shuf": function(n0) {
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0[i] = i;
+        }
+        for (var i = r0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = r0[i0];
+            r0[i0] = r0[i];
+            r0[i] = t0;
+        }
+        return r0;
+    },
+    "card": function(p0) {
+        // deal card to player (or table)
+        ent.hana.e[ent.hana.i] = p0;
+        ent.hana.i++;
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+    }
+}
     </script>
     </head>
     <body id="alpha">
