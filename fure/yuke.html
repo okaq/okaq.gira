@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head id="zeta">
+        <title>okaq</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
+        <meta name="source" content="https://github.com/okaq/okaq.gira" />
+        <meta name="creator" content="AQ <aq@okaq.com>" />
+        <meta name="date" content="2014-11-14" />
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGJJ+X+CgZaAiaamj1owasGoBaMWjFowasGoBaMWjFowasGoBVQEgAAAAP//+rsCbnzLRbUAAAAASUVORK5CYII=" />
+        <style type="text/css">
+            html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(255,255,255,1.0);}
+        </style>
+        <script type="text/javascript">
+            // ok
+        console.log("okaq gira fure go!");
+        // async load
+        (function(){window.addEventListener("load",function(e){g.init(e);},false);})();
+        // game
+        var g = {
+            "init": function(e) {
+                console.log(e);
+                var t0 = window.performance.now();
+
+                g.w = 1920;
+                g.h = 1080;
+
+                dom.init();
+                // r.test();
+                // ent.init();
+                rgb.init();
+
+                g.ev = new Event("pop");
+                // dom.test[0].can.addEventListener("pop", g.click, false);
+                // dom.remove(dom.test[0]);
+                // dom.test[0].can.dispatchEvent(g.ev);
+                // g.ev = document.createEevent("pop");
+                // document.addEventListener("pop", g.click, false);
+                document.dispatchEvent(g.ev);
+                ent.init();
+                ent.open();
+                r.open();
+
+                g.state = {
+                    "turn": "p0",
+                    "deck": null,
+                    "p0": null,
+                    "cpu": null,
+                    "tab": null
+                }; // turn, selections
+                // g.play();
+
+                console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "click": function(e) {
+                // console.log(e);
+                if (e.detail) {
+                    // e.detail[0].call(this);
+                }
+                // console.log(e.target.dataset.id);
+                var d0 = e.target.dataset.id;
+                var d1 = d0.split("_");
+                // console.log(d1);
+                if (g.state.turn == d1[0]) {
+                    g.state[d1[0]] = d1[1];
+                }
+                if (d1[0] == "tab") {
+                    g.state.tab = d1[1];
+                }
+                console.log(g.state);
+                g.play();
+            },
+            "play": function() {
+                // ent.matches();
+                // console.log(ent.db);
+                if (g.state.turn == "p0") {
+                    ent.collect();
+                }
+            }
+        }
+// entities
+var ent = {
+    "init": function() {
+        ent.size = 48;
+        /*
+        // all 2^N square rects, add cpu panel
+        ent.config = [
+            ["deck", [g.w/4,g.h/2,0,0], 2, 1],
+            ["tab", [g.w/2,g.h/2,g.w/4,0], 4, 4],
+            ["p0", [g.w,g.h/4,0,5*g.h/8], 8, 1],
+            ["cpu", [g.w/4,g.h/2,3*g.w/4,0], 1, 1]
+                ];
+        // 1920/8=240, 240-128=112
+        // bmp = 5x5, 5*32=160 card, 5*8=40 yaku
+         */
+        /*
+        // begin with cell sizes, margin, origin
+        // cell size below is 130 / 5 = 26
+        ent.config = [
+            ["deck", [162,324,64,128], 1, 2, 16],
+        ["tab", [970,388,300,8], 5, 2, 32],
+        ["cpu", [388,444,1400,16], 1, 1, 16],
+        ["p0", [1296,162,180,480], 8, 1, 16],
+        ["y0", [784,560,16,640], 14, 10, 8]
+        ];
+         */
+        // cell size, margin, origin x,y, count x,y
+        ent.config = [
+            ["deck", [20, 16, 64, 108, 1, 2]],
+            ["tab", [20, 16, 256, 12, 3, 3]],
+            ["p0", [20, 16, 32, 420, 8, 1]],
+            ["cpu", [100, 16, 1200, 12, 1, 1]],
+            ["y0", [6, 4, 70, 560, 22, 13]],
+            ["cards", [7, 3, 1360, 550, 4, 12]]
+            ];
+        ent.db = {};
+        ent.bmp = bmp.create(ent.size);
+        ent.create2();
+
+        g.ev = new CustomEvent("pop", {"detail": [r.rand]});
+        document.dispatchEvent(g.ev);
+
+        // ent.bmp = bmp.create(48);
+        // r.yaku();
+        r.cards();
+        ent.deck();
+        ent.yakus();
+        r.yakus();
+    },
+    "deck": function() {
+        for (var i = 0; i < ent.size; i++) {
+            ent.db["deck"].data.push(i);
+        }
+        for (var i = ent.size-1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = ent.db["deck"].data[i0];
+            ent.db["deck"].data[i0] = ent.db["deck"].data[i];
+            ent.db["deck"].data[i] = t0;
+        }
+    },
+    "create2": function() {
+        for (var i = 0; i < ent.config.length; i++) {
+            var e0 = ent.config[i]; // entity object data
+            var k0 = e0[0]; // key
+            ent.db[k0] = {};
+            ent.db[k0].id = k0; 
+            ent.db[k0].r = dom.subc(e0[1]);
+            ent.db[k0].c = dom.layout(k0, ent.db[k0].r);
+
+            ent.db[k0].data = []; // hand
+        } 
+    },
+    "create": function() {
+        for (var i = 0; i < ent.config.length; i++) {
+            var e0 = ent.config[i]; // entity object data
+            var k0 = e0[0]; // key
+            ent.db[k0] = {};
+            ent.db[k0].id = k0; 
+            ent.db[k0].rect = e0[1]; // main layout rect
+            ent.db[k0].sx = e0[2]; // subrects in x-axis
+            ent.db[k0].sy = e0[3]; // subrects in y-axis
+            ent.db[k0].r = dom.subm(e0[1], e0[2], e0[3], e0[4]);
+            ent.db[k0].c = dom.layout(k0, ent.db[k0].r);
+
+            ent.db[k0].data = []; // hand
+        }
+    },
+    "open": function() {
+        for (var i = 0; i < 8; i++) {
+            ent.db["p0"].data.push(ent.db["deck"].data.pop());
+            ent.db["cpu"].data.push(ent.db["deck"].data.pop());
+            ent.db["tab"].data.push(ent.db["deck"].data.pop());
+        }
+        // console.log(ent.db);
+        ent.matches();
+    },
+    "yakus": function() {
+        ent.db["p0"].m = []; // matches
+        ent.db["p0"].y = []; // yakus
+        ent.db["cpu"].m = [];
+        ent.db["cpu"].y = [];
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = yakus.n[i];
+            // console.log(k0, yakus[k0].cards.length);
+            var d0 = 22-yakus[k0].cards.length;
+            var i0 = (i * 22) >>> 0;
+            while (d0 > 0) {
+                ent.db["y0"].c[yakus[k0].cards.length+d0-1+i0] = null
+                // ent.db["y0"].c.pop();
+                d0--;
+            }
+        }
+        // console.log(ent.db["y0"].c);
+        // r.rand();
+    },
+    "matches": function() {
+        // smart data stacks, push pop and match automagically
+        // ops on game object card data: add, remove, click, compare
+        ent.db["p0"].m = [];
+        ent.db["cpu"].m = [];
+        for (var i = 0; i < ent.db["tab"].data.length; i++) {
+            if (ent.db["tab"].data[i] == null) {
+                continue;
+            }
+            ent.match("p0", ent.db["tab"].data[i], i);
+            ent.match("cpu", ent.db["tab"].data[i], i);
+        }
+    },
+    "match": function(p0, c0, i0) {
+        // match card with players deck, push indicies to matches data
+        for (var i = 0; i < ent.db[p0].data.length; i++) {
+            if (ent.db[p0].data[i] == null) {
+                continue;
+            }
+            var m0 = ent.suit(ent.db[p0].data[i], c0);
+            if (m0) {
+                ent.db[p0].m.push([i0,i]);
+            }
+        }
+    },
+    "suit": function(c0, c1) {
+        // do input cards share the same suit
+        var s0 = (c0 / 4) >>> 0;
+        var s1 = (c1 / 4) >>> 0;
+        return s0 == s1;
+    },
+    "collect": function() {
+        // are selections in match data
+        for (var i = 0; i < ent.db["p0"].m.length; i++) {
+            var m0 = [g.state.tab, g.state.p0];
+            var m1 = ent.compare(ent.db["p0"].m[i], m0);
+            // console.log(m1);
+            if (m1) {
+                ent.db["p0"].y.push(g.state.tab);
+                ent.db["p0"].y.push(g.state.p0);
+                ent.db["tab"].data[g.state.tab] = null;
+                ent.db["p0"].data[g.state.p0] = null;
+                r.cards();
+                break;
+            }
+        }
+    },
+    "compare": function(a0, a1) {
+        // array equality
+        if (a0.length != a1.length) {
+            console.error("cannot compare different sized arrays!");
+        }
+        for (var i = 0; i < a0.length; i++) {
+            if (a0[i] != a1[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+// yakus
+var yakus = {};
+// sanko
+yakus.sanko = {};
+yakus.sanko.cards = [3,11,31,47];
+yakus.sanko.points = 5;
+yakus.sanko.need = 3;
+yakus.sanko.extra = null;
+
+// shiko
+yakus.shiko = {};
+yakus.shiko.cards = [3,11,31,47];
+yakus.shiko.points = 8;
+yakus.shiko.need = 4;
+yakus.shiko.extra = null;
+
+// ame-shiko
+yakus.ame_shiko = {};
+yakus.ame_shiko.cards = [3,11,31,43,47];
+yakus.ame_shiko.points = 7;
+yakus.ame_shiko.need = 4;
+yakus.ame_shiko.extra = null;
+
+// goko
+yakus.goko = {};
+yakus.goko.cards = [3,11,31,43,47];
+yakus.goko.points = 10;
+yakus.goko.need = 10;
+yakus.goko.extra = null;
+
+// inoshikacho
+yakus.inoshikacho = {};
+yakus.inoshikacho.cards = [7,15,19,23,27,29,30,35,39,42];
+yakus.inoshikacho.points = 5;
+yakus.inoshikacho.need = 3;
+yakus.inoshikacho.extra = 1;
+
+// tane
+yakus.tane = {};
+yakus.tane.cards = [7,15,19,23,27,29,30,35,39,42];
+yakus.tane.points = 1;
+yakus.tane.need = 5;
+yakus.tane.extra = 1;
+
+// akatan
+yakus.akatan = {};
+yakus.akatan.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.akatan.points = 5;
+yakus.akatan.need = 3;
+yakus.akatan.extra = 1;
+
+// aotan
+yakus.aotan = {};
+yakus.aotan.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.aotan.points = 5;
+yakus.aotan.need = 3;
+yakus.aotan.extra = 1;
+
+// akatan, aotan no chofuku
+yakus.chofuku = {};
+yakus.chofuku.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.chofuku.points = 10;
+yakus.chofuku.need = 6;
+yakus.chofuku.extra = 1;
+
+// tanzaku
+yakus.tanzaku = {};
+yakus.tanzaku.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.tanzaku.points = 1;
+yakus.tanzaku.need = 5;
+yakus.tanzaku.extra = 1;
+
+// tsukimi-zaki
+yakus.tsukimi = {};
+yakus.tsukimi.cards = [39,43];
+yakus.tsukimi.points = 5;
+yakus.tsukimi.need = 2;
+yakus.tsukimi.extra = null;
+
+// hanami-zaki
+yakus.hanami = {};
+yakus.hanami.cards = [11,43];
+yakus.hanami.points = 5;
+yakus.hanami.need = 2;
+yakus.hanami.extra = null;
+
+// kasu
+yakus.kasu = {};
+yakus.kasu.cards = [0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,32,33,36,37,40,44,45];
+yakus.kasu.points = 1;
+yakus.kasu.need = 10;
+yakus.kasu.extra = 1;
+
+yakus.n = ["sanko","shiko", "ame_shiko","goko","inoshikacho",
+"tane","akatan","aotan","chofuku",
+    "tanzaku","tsukimi","hanami","kasu"];
+// longest kasu = 22 cards
+// bitmap
+var bmp = {
+    "create": function(n0) {
+        bmp.nx = 5;
+        bmp.ny = 5;
+        bmp.nt = (bmp.nx * bmp.ny) >>> 0;
+        var r0 = [];
+        var n1 = (n0 / 4) >>> 0;
+        for (var i = 0; i < n1; i++) {
+            r0.push(bmp.inv(1));
+            r0.push(bmp.inv(5));
+            r0.push(bmp.inv(9));
+            r0.push(bmp.inv(13));
+        }
+        return r0;
+    },
+    "inv": function(n0) {
+        // 5x5 mirror inv with n0 fills
+        var r0 = [];
+        for (var i = 0; i < bmp.nt; i++) {
+            r0[i] = 0;
+        }
+        var n2 = (bmp.nx / 2) >>> 0;
+        n2 = n2 + 1;
+        var n3 = (n2 * bmp.nx) >>> 0;
+        var n1 = n0;
+        while (n1 >= 0) {
+            var i0 = (Math.random() * n3) >>> 0;
+            var i1 = (i0 / n2) >>> 0;
+            var i2 = i0 % n2;
+            var i3 = ((i1 * bmp.nx) + i2) >>> 0;
+            if (r0[i3] == 0) {
+                r0[i3] = 1;
+                n1--;
+            }
+        }
+        // mirror
+        for (var i = 0; i < bmp.nx; i++) {
+            var i0 = (i * bmp.nx) >>> 0;
+            // for loop here for n2-1 mirrors
+            r0[i0+4] = r0[i0];
+            r0[i0+3] = r0[i0+1];
+        }
+        return r0;
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        dom.test = dom.layout("test", [[512,512,256,128]]);
+        // console.log(dom.test);
+    },
+    "layout": function(n0, r0) {
+        // input is id name, array of rects
+        var c0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var c1 = dom.canvas(r0[i]);
+            c1.can.dataset.id = n0 + "_" + i;
+            c1.can.dataset.x = "card" + i;
+            c1.can.addEventListener("click", g.click, false);
+            dom.add(c1);
+            c0.push(c1);
+        }
+        return c0;
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    },
+    "sub": function(r0, x0, y0) {
+        // subdivide rect into x,y subrects
+        // rect is array with [w,h,x,y]
+        if (x0 == 0 || y0 == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] / x0) >>> 0;
+        var h1 = (r0[1] / y0) >>> 0;
+        for (var y = 0; y < y0; y++) {
+            for (var x = 0; x < x0; x++) {
+                var x1 = (x * w1) >>> 0;
+                x1 += r0[2];
+                var y1 = (y * h1) >>> 0;
+                y1 += r0[3];
+                r1.push([w1,h1,x1,y1]);
+            }
+        }
+        return r1;
+    },
+    "subm": function(r0, x0, y0, m0) {
+        // subdivide with a margin between sub rects
+        // rect is array with [w,h,x,y]
+        if (x0 == 0 || y0 == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] / x0) >>> 0;
+        var w2 = w1 - (2 * m0);
+        var h1 = (r0[1] / y0) >>> 0;
+        var h2 = h1 - (2 * m0);
+        for (var y = 0; y < y0; y++) {
+            for (var x = 0; x < x0; x++) {
+                var x1 = (x * w1) >>> 0;
+                x1 += r0[2] + m0;
+                var y1 = (y * h1) >>> 0;
+                y1 += r0[3] + m0;
+                r1.push([w2,h2,x1,y1]);
+            }
+        }
+        return r1;
+ 
+    },
+    "subc": function(r0) {
+        // cell size, margin, origin x,y, count x,y
+        if (r0[4] == 0 || r0[5] == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] * bmp.nx) >>> 0;
+        var w2 = (w1 + (2 * r0[1])) >>> 0;
+        var h1 = (r0[0] * bmp.ny) >>> 0;
+        var h2 = (h1 + (2 * r0[1])) >>> 0;
+        for (var y = 0; y < r0[5]; y++) {
+            for (var x = 0; x < r0[4]; x++) {
+                var x0 = (x * w2) >>> 0;
+                x0 = x0 + r0[2];
+                x0 = x0 + r0[1];
+                var y0 = (y * h2) >>> 0;
+                y0 = y0 + r0[3];
+                y0 = y0 + r0[1];
+                r1.push([w1,h1,x0,y0]);
+            }
+        }
+        return r1;
+    }
+}
+// render
+var r = {
+    "test": function() {
+        dom.test[0].con.fillStyle = rgb.rc();
+        dom.test[0].con.fillRect(0,0,512,512);
+    },
+    "white": function(c0) {
+        c0.con.fillStyle = rgb.css([255,255,255,1.0]);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "rand": function() {
+        for (var k in ent.db) {
+            for (var i = 0; i < ent.db[k].c.length; i++) {
+                if (ent.db[k].c[i] == null) {
+                    continue;
+                }
+                ent.db[k].c[i].con.fillStyle = rgb.rc();
+                ent.db[k].c[i].con.fillRect(0,0,ent.db[k].c[i].can.width,ent.db[k].c[i].can.height);
+            }
+        }
+    },
+    "open": function() {
+        for (var i = 0; i < 8; i++) {
+            r.bmp(ent.db["p0"].c[i], ent.db["p0"].data[i]);
+            r.bmp(ent.db["tab"].c[i], ent.db["tab"].data[i]);
+        }
+        r.bmp(ent.db["deck"].c[0], ent.db["deck"].data[ent.db["deck"].data.length-1]);
+    },
+    "cards": function() {
+        for (var i = 0; i < ent.size; i++) {
+            r.bmp(ent.db["cards"].c[i], i);
+        }
+    },
+    "yaku": function() {
+        var h0 = rgb.hue(12);
+        for (var i = 0; i < ent.bmp.length; i++) {
+            var i0 = (i / 4) >>> 0;
+            var fg = [h0[i0], 90, 70, 1.0];
+            var fgc = rgb.cssh(fg);
+            var bg = [h0[i0], 90, 30, 1.0];
+            var bgc = rgb.cssh(bg);
+            var s0 = (ent.db["y0"].c[0].can.width / bmp.nx) >>> 0;
+            var c0 = ent.db["y0"].c[i].con;
+            for (var j = 0; j < ent.bmp[i].length; j++) {
+                if (ent.bmp[i][j] == 0) {
+                    c0.fillStyle = bgc;
+                } else {
+                    c0.fillStyle = fgc;
+                }
+                var x0 = j % bmp.nx;
+                x0 = (x0 * s0) >>> 0;
+                var y0 = (j / bmp.nx) >>> 0;
+                y0 = (y0 * s0) >>> 0;
+                c0.fillRect(x0, y0, s0, s0);
+            }
+        }
+    },
+    "bmp": function(c0, i0, l0) {
+        var l0 = l0 || 90;
+        // render bitmap i0 in canvas object c0
+        var i1 = (i0 / 4) >>> 0;
+        var fg = [rgb.hues[i1], l0, 70, 1.0];
+        var fgc = rgb.cssh(fg);
+        var bg = [rgb.hues[i1], l0, 30, 1.0];
+        var bgc = rgb.cssh(bg);
+        var s0 = (c0.can.width / 5) >>> 0; 
+        var c1 = c0.con;
+        for (var j = 0; j < ent.bmp[i0].length; j++) {
+            if (ent.bmp[i0][j] == 0) {
+                c1.fillStyle = bgc;
+            } else {
+                c1.fillStyle = fgc;
+            }
+            var x0 = j % 5;
+            x0 = (x0 * s0) >>> 0;
+            var y0 = (j / 5) >>> 0;
+            y0 = (y0 * s0) >>> 0;
+            c1.fillRect(x0, y0, s0, s0);
+        }
+    },
+    "yakus": function() {
+        for (var i = 0; i < ent.db["y0"].c.length; i++) {
+            if (ent.db["y0"].c[i] == null) {
+                continue;
+            }
+            var i0 = (i / 22) >>> 0;
+            var i1 = i % 22;
+            var i2 = yakus[yakus.n[i0]].cards[i1];
+            r.bmp(ent.db["y0"].c[i], i2, 50);
+        }
+    }
+}
+// color
+var rgb = {
+    "init": function() {
+        rgb.pal = []; // just store hue for each, shuffle
+        var t0 = 359.0 / 12.0;
+        var t1 = Math.random() * t0;
+        for (var i = 0; i < 12; i++) {
+            var h0 = t1 + (i * t0);
+            var s0 = 90;
+            var l0 = 50;
+            var a0 = 1.0;
+            var hsla = "hsla(" + h0 + "," + s0 + "%," + l0 + "%," + a0 + ")";
+            rgb.pal.push(hsla);
+        }
+        rgb.hues = rgb.hue(12);
+    },
+    "hue": function(n0) {
+        var h0 = 359.0 / n0;
+        var h1 = Math.random() * h0;
+        var h2 = [];
+        for (var i = 0; i < n0; i++) {
+            var h3 = h1 + (i * h0);
+            h2.push(h3);
+        }
+        return h2;
+    },
+    "cssh": function(a0) {
+        // input array [h,s,l,a]
+        return "hsla(" + a0[0] + "," + a0[1] + "%," + a0[2] + "%," + a0[3] + ")";
+    },
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    },
+    "rc": function() {
+        return rgb.css(rgb.rand());
+    }
+}
+        </script>
+    </head>
+    <body id="alpha">
+    </body>
+</html>
