@@ -35,7 +35,7 @@
                 // dom.remove(dom.test[0]);
                 // dom.test[0].can.dispatchEvent(g.ev);
                 // g.ev = document.createEevent("pop");
-                document.addEventListener("pop", g.click, false);
+                // document.addEventListener("pop", g.click, false);
                 document.dispatchEvent(g.ev);
                 ent.init();
                 ent.open();
@@ -53,13 +53,26 @@
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "click": function(e) {
-                console.log(e);
+                // console.log(e);
                 if (e.detail) {
                     // e.detail[0].call(this);
                 }
-                console.log(e.target.dataset.id);
+                // console.log(e.target.dataset.id);
+                var d0 = e.target.dataset.id;
+                var d1 = d0.split("_");
+                // console.log(d1);
+                if (g.state.turn == d1[0]) {
+                    g.state[d1[0]] = d1[1];
+                }
+                if (d1[0] == "tab") {
+                    g.state.tab = d1[1];
+                }
+                console.log(g.state);
             },
             "play": function() {
+                ent.matches();
+                console.log(ent.db);
+                ent.collect();
             }
         }
 // entities
@@ -155,7 +168,7 @@ var ent = {
             ent.db["cpu"].data.push(ent.db["deck"].data.pop());
             ent.db["tab"].data.push(ent.db["deck"].data.pop());
         }
-        console.log(ent.db);
+        // console.log(ent.db);
     },
     "yakus": function() {
         ent.db["p0"].m = []; // matches
@@ -164,7 +177,7 @@ var ent = {
         ent.db["cpu"].y = [];
         for (var i = 0; i < yakus.n.length; i++) {
             var k0 = yakus.n[i];
-            console.log(k0, yakus[k0].cards.length);
+            // console.log(k0, yakus[k0].cards.length);
             var d0 = 22-yakus[k0].cards.length;
             var i0 = (i * 22) >>> 0;
             while (d0 > 0) {
@@ -175,6 +188,40 @@ var ent = {
         }
         // console.log(ent.db["y0"].c);
         // r.rand();
+    },
+    "matches": function() {
+        // smart data stacks, push pop and match automagically
+        // ops on game object card data: add, remove, click, compare
+        ent.db["p0"].m = [];
+        ent.db["cpu"].m = [];
+        for (var i = 0; i < ent.db["tab"].data.length; i++) {
+            if (ent.db["tab"].data[i] == null) {
+                continue;
+            }
+            ent.match("p0", ent.db["tab"].data[i], i);
+            ent.match("cpu", ent.db["tab"].data[i], i);
+        }
+    },
+    "match": function(p0, c0, i0) {
+        // match card with players deck, push indicies to matches data
+        for (var i = 0; i < ent.db[p0].data.length; i++) {
+            if (ent.db[p0].data[i] == null) {
+                continue;
+            }
+            var m0 = ent.suit(ent.db[p0].data[i], c0);
+            if (m0) {
+                ent.db[p0].m.push([i0,i]);
+            }
+        }
+    },
+    "suit": function(c0, c1) {
+        // do input cards share the same suit
+        var s0 = (c0 / 4) >>> 0;
+        var s1 = (c1 / 4) >>> 0;
+        return s0 == s1;
+    },
+    "collect": function() {
+        var d0 = 0;
     }
 }
 // yakus
@@ -512,7 +559,7 @@ var r = {
             var i0 = (i / 22) >>> 0;
             var i1 = i % 22;
             var i2 = yakus[yakus.n[i0]].cards[i1];
-            r.bmp(ent.db["y0"].c[i], i2, 70);
+            r.bmp(ent.db["y0"].c[i], i2, 50);
         }
     }
 }
