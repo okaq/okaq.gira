@@ -50,11 +50,19 @@ var ent = {
     },
     "create": function() {
         ent.bmp = bmp.create(ent.size);
+        ent.pal = rgb.hue((ent.size/4)>>>0); // pallette of hues
+        
         ent.db.tab = {};
         ent.db.tab.r = dom.subc([16, 8, 64, 64, 12, 1]);
         ent.db.tab.c = dom.layout("tab", ent.db.tab.r);
-        console.log(ent.db);
+        ent.db.p0 = {};
+        ent.db.p0.r = dom.subc([16, 8, 128, 256, 8, 1]);
+        ent.db.p0.c = dom.layout("tab", ent.db.p0.r);
+ 
+        // console.log(ent.db);
         r.tab();
+        ent.sync();
+        console.log(ent.db);
     },
     "deal": function() {
         // deck setup
@@ -64,7 +72,7 @@ var ent = {
         ent.hana.e = []; // encoding
         // h:hana,p0,p1,y0,y1,t
         for (var i = 0; i < ent.size; i++) {
-            ent.hana.e[i] = "h";
+            ent.hana.e[i] = "hana";
         }
         ent.hana.i = 0; // index of next deal card
         ent.open();
@@ -100,6 +108,26 @@ var ent = {
         // deal card to player (or table)
         ent.hana.e[ent.hana.i] = p0;
         ent.hana.i++;
+    },
+    "sync": function() {
+        // fan out encoding data to canvas object datasets
+        var i0 = 0; // p0 counter
+        var i1 = 1; // y0 counter
+        var i2 = 0; // y1 counter
+        var i3 = 0; // tab counter
+        for (var i = 0; i < ent.hana.e.length; i++) {
+            if (ent.hana.e[i] == "hana") {
+                break;
+            }
+            if (ent.hana.e[i] == "tab") {
+                ent.db.tab.c[i3].can.dataset.x = ent.hana.fuda[i];
+                i3++;
+            }
+            if (ent.hana.e[i] == "p0") {
+                ent.db.p0.c[i0].can.dataset.x = ent.hana.fuda[i];
+                i0++;
+            }
+        }
     }
 }
 // dom
@@ -315,6 +343,15 @@ var r = {
             r.rand(ent.db.tab.c[i]);
         }
     },
+    "tabc": function() {
+        // render bmp card on tab canvas object
+        var i0 = 0;
+        for (var i = 0; i < ent.hana.e.length; i++) {
+            if (ent.hana.e[i] == "h") {
+                break;
+            }
+        }
+    },
     "white": function(c0) {
         c0.con.fillStyle = rgb.css([255,255,255,1.0]);
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
@@ -322,6 +359,9 @@ var r = {
     "rand": function(c0) {
         c0.con.fillStyle = rgb.rc();
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "hana": function(c0, i0) {
+        // render bitmap on canvas
     }
 }
 // colors
