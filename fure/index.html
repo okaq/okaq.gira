@@ -53,16 +53,17 @@ var ent = {
         ent.pal = rgb.hue((ent.size/4)>>>0); // pallette of hues
         
         ent.db.tab = {};
-        ent.db.tab.r = dom.subc([16, 8, 64, 64, 12, 1]);
+        ent.db.tab.r = dom.subc([20, 8, 64, 64, 12, 1]);
         ent.db.tab.c = dom.layout("tab", ent.db.tab.r);
         ent.db.p0 = {};
-        ent.db.p0.r = dom.subc([16, 8, 128, 256, 8, 1]);
+        ent.db.p0.r = dom.subc([20, 8, 128, 256, 8, 1]);
         ent.db.p0.c = dom.layout("tab", ent.db.p0.r);
  
         // console.log(ent.db);
-        r.tab();
+        // r.tab();
         ent.sync();
         console.log(ent.db);
+        r.open();
     },
     "deal": function() {
         // deck setup
@@ -334,6 +335,21 @@ var bmp = {
 }
 // render
 var r = {
+    "open": function() {
+        r.tab();
+        r.p0();
+        r.tabc();
+        r.p0c();
+    },
+    "p0": function() {
+        for (var i = 0; i < ent.db.p0.c.length; i++) {
+            if (ent.db.p0.c[i] == null) {
+                continue;
+            }
+            r.white(ent.db.p0.c[i]);
+            r.rand(ent.db.p0.c[i]);
+        }
+    },
     "tab": function() {
         for (var i = 0; i < ent.db.tab.c.length; i++) {
             if (ent.db.tab.c[i] == null) {
@@ -345,11 +361,32 @@ var r = {
     },
     "tabc": function() {
         // render bmp card on tab canvas object
+        /*
         var i0 = 0;
         for (var i = 0; i < ent.hana.e.length; i++) {
             if (ent.hana.e[i] == "h") {
                 break;
             }
+            }
+         */
+        // sync'd canvas method
+        for (var i = 0; i < ent.db.tab.c.length; i++) {
+            if (ent.db.tab.c[i] == null) {
+                continue;
+            }
+            var i0 = parseInt(ent.db.tab.c[i].can.dataset.x, 10);
+            var i1 = ent.hana.fuda[i0];
+            r.bmp(ent.db.tab.c[i], ent.bmp[i1]);
+        }
+    },
+    "p0c": function() {
+        for (var i = 0; i < ent.db.p0.c.length; i++) {
+            if (ent.db.p0.c[i] == null) {
+                continue;
+            }
+            var i0 = parseInt(ent.db.p0.c[i].can.dataset.x, 10);
+            var i1 = ent.hana.fuda[i0];
+            r.bmp(ent.db.p0.c[i], ent.bmp[i1]);
         }
     },
     "white": function(c0) {
@@ -360,8 +397,25 @@ var r = {
         c0.con.fillStyle = rgb.rc();
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     },
-    "hana": function(c0, i0) {
+    "bmp": function(c0, b0) {
+        if (b0 == null) {
+            return;
+        }
         // render bitmap on canvas
+        var w0 = (c0.can.width / bmp.nx) >>> 0;
+        var h0 = (c0.can.height / bmp.ny) >>> 0;
+        for (var i = 0; i < b0.length; i++) {
+            var x0 = i % bmp.nx;
+            x0 = (x0 * w0) >>> 0;
+            var y0 = (i / bmp.nx) >>> 0;
+            y0 = (y0 * h0) >>> 0;
+            if (b0[i] == 1) {
+                c0.con.fillStyle = rgb.css([255,0,0,1.0]);
+            } else {
+                c0.con.fillStyle = rgb.css([0,255,255,1.0]);
+            }
+            c0.con.fillRect(x0,y0,w0,h0);
+        }
     }
 }
 // colors
