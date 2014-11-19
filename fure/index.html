@@ -55,15 +55,23 @@ var ent = {
         ent.db.tab = {};
         ent.db.tab.r = dom.subc([20, 8, 64, 64, 12, 1]);
         ent.db.tab.c = dom.layout("tab", ent.db.tab.r);
+        
         ent.db.p0 = {};
         ent.db.p0.r = dom.subc([20, 8, 128, 256, 8, 1]);
         ent.db.p0.c = dom.layout("tab", ent.db.p0.r);
- 
+
+        ent.yakus();
+
         // console.log(ent.db);
         // r.tab();
         ent.sync();
         console.log(ent.db);
         r.open();
+    },
+    "yakus": function() {
+        // create yakus
+        ent.db.y0 = {};
+        ent.db.y1 = {};
     },
     "deal": function() {
         // deck setup
@@ -376,7 +384,7 @@ var r = {
             }
             var i0 = parseInt(ent.db.tab.c[i].can.dataset.x, 10);
             var i1 = ent.hana.fuda[i0];
-            r.bmp(ent.db.tab.c[i], ent.bmp[i1]);
+            r.bmp(ent.db.tab.c[i], i1);
         }
     },
     "p0c": function() {
@@ -386,7 +394,7 @@ var r = {
             }
             var i0 = parseInt(ent.db.p0.c[i].can.dataset.x, 10);
             var i1 = ent.hana.fuda[i0];
-            r.bmp(ent.db.p0.c[i], ent.bmp[i1]);
+            r.bmp(ent.db.p0.c[i], i1);
         }
     },
     "white": function(c0) {
@@ -397,10 +405,14 @@ var r = {
         c0.con.fillStyle = rgb.rc();
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     },
-    "bmp": function(c0, b0) {
+    "bmp": function(c0, i0) {
+        var b0 = ent.bmp[i0];
         if (b0 == null) {
             return;
         }
+        // colors
+        var h0 = (i0 / 4) >>> 0;
+        var h1 = rgb.grad(ent.pal[h0]);
         // render bitmap on canvas
         var w0 = (c0.can.width / bmp.nx) >>> 0;
         var h0 = (c0.can.height / bmp.ny) >>> 0;
@@ -410,9 +422,9 @@ var r = {
             var y0 = (i / bmp.nx) >>> 0;
             y0 = (y0 * h0) >>> 0;
             if (b0[i] == 1) {
-                c0.con.fillStyle = rgb.css([255,0,0,1.0]);
+                c0.con.fillStyle = h1[0]; // rgb.css([255,0,0,1.0]);
             } else {
-                c0.con.fillStyle = rgb.css([0,255,255,1.0]);
+                c0.con.fillStyle = h1[1]; // rgb.css([0,255,255,1.0]);
             }
             c0.con.fillRect(x0,y0,w0,h0);
         }
@@ -429,6 +441,12 @@ var rgb = {
             h2.push(h3);
         }
         return h2;
+    },
+    "grad": function(h0) {
+        var r0 = [];
+        r0[0] = rgb.cssh([h0,90,35,1.0]);
+        r0[1] = rgb.cssh([h0,90,75,1.0]);
+        return r0;
     },
     "cssh": function(a0) {
         // input array [h,s,l,a]
