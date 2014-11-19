@@ -58,7 +58,7 @@ var ent = {
         
         ent.db.p0 = {};
         ent.db.p0.r = dom.subc([20, 8, 128, 256, 8, 1]);
-        ent.db.p0.c = dom.layout("tab", ent.db.p0.r);
+        ent.db.p0.c = dom.layout("p0", ent.db.p0.r);
 
         ent.yakus();
 
@@ -72,6 +72,22 @@ var ent = {
         // create yakus
         ent.db.y0 = {};
         ent.db.y1 = {};
+        var c0 = 6; // cell size
+        var c1 = 42; // yaku height
+        var m0 = 4; // margin
+        var x0 = 16; // y0 x margin
+        var y0 = 400; // y0 y margin
+        var x1 = 900;
+        var y1 = 400;
+        for (var i = 0; i < yakus.n.length; i++) {
+            ent.db.y0[yakus.n[i]] = {};
+            ent.db.y0[yakus.n[i]].r = dom.subc([c0, m0, x0, (y0 + (i * c1)), yakus[yakus.n[i]].cards.length, 1]);
+            ent.db.y0[yakus.n[i]].c = dom.layout("y0_"+yakus.n[i],ent.db.y0[yakus.n[i]].r);
+
+            ent.db.y1[yakus.n[i]] = {};
+            ent.db.y1[yakus.n[i]].r = dom.subc([c0, m0, x1, (y1 + (i * c1)), yakus[yakus.n[i]].cards.length, 1]);
+            ent.db.y1[yakus.n[i]].c = dom.layout("y1_"+yakus.n[i],ent.db.y1[yakus.n[i]].r);
+        }
     },
     "deal": function() {
         // deck setup
@@ -136,6 +152,7 @@ var ent = {
                 ent.db.p0.c[i0].can.dataset.x = ent.hana.fuda[i];
                 i0++;
             }
+            // for yakus dataset.x indicates has card
         }
     }
 }
@@ -348,6 +365,8 @@ var r = {
         r.p0();
         r.tabc();
         r.p0c();
+        r.y0();
+        r.y1();
     },
     "p0": function() {
         for (var i = 0; i < ent.db.p0.c.length; i++) {
@@ -395,6 +414,20 @@ var r = {
             var i0 = parseInt(ent.db.p0.c[i].can.dataset.x, 10);
             var i1 = ent.hana.fuda[i0];
             r.bmp(ent.db.p0.c[i], i1);
+        }
+    },
+    "y0": function() {
+        for (var i = 0; i < yakus.n.length; i++) {
+            for (var j = 0; j < ent.db.y0[yakus.n[i]].c.length; j++) {
+                r.rand(ent.db.y0[yakus.n[i]].c[j]);
+            }
+        }
+    },
+    "y1": function() {
+        for (var i = 0; i < yakus.n.length; i++) {
+            for (var j = 0; j < ent.db.y1[yakus.n[i]].c.length; j++) {
+                r.rand(ent.db.y1[yakus.n[i]].c[j]);
+            }
         }
     },
     "white": function(c0) {
