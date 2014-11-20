@@ -436,7 +436,7 @@ var r = {
             }
             var i0 = parseInt(ent.db.tab.c[i].can.dataset.x, 10);
             var i1 = ent.hana.fuda[i0];
-            r.bmp(ent.db.tab.c[i], i1);
+            r.bmp(ent.db.tab.c[i], i1, 4, 6);
         }
     },
     "p0c": function() {
@@ -446,7 +446,7 @@ var r = {
             }
             var i0 = parseInt(ent.db.p0.c[i].can.dataset.x, 10);
             var i1 = ent.hana.fuda[i0];
-            r.bmp(ent.db.p0.c[i], i1);
+            r.bmp(ent.db.p0.c[i], i1, 4, 6);
         }
     },
     "y0": function() {
@@ -462,7 +462,7 @@ var r = {
                 // make yakus cards and canvas object link explicit
                 var i0 = yakus[k].cards[i];
                 // var i1 = ent.hana.fuda[i0];
-                r.bmp(ent.db.y0[k].c[i], i0);
+                r.bmp(ent.db.y0[k].c[i], i0, 3, 7);
             }
         }
     },
@@ -479,7 +479,7 @@ var r = {
                 // make yakus cards and canvas object link explicit
                 var i0 = yakus[k].cards[i];
                 // var i1 = ent.hana.fuda[i0];
-                r.bmp(ent.db.y1[k].c[i], i0);
+                r.bmp(ent.db.y1[k].c[i], i0, 3, 7);
             }
         }
     },
@@ -491,7 +491,7 @@ var r = {
         c0.con.fillStyle = rgb.rc();
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     },
-    "bmp": function(c0, i0) {
+    "bmp": function(c0, i0, lum0, lum1) {
         var b0 = ent.bmp[i0];
         if (b0 == null) {
             return;
@@ -508,9 +508,9 @@ var r = {
             var y0 = (i / bmp.nx) >>> 0;
             y0 = (y0 * h0) >>> 0;
             if (b0[i] == 1) {
-                c0.con.fillStyle = h1[0]; // rgb.css([255,0,0,1.0]);
+                c0.con.fillStyle = h1[lum0]; // rgb.css([255,0,0,1.0]);
             } else {
-                c0.con.fillStyle = h1[1]; // rgb.css([0,255,255,1.0]);
+                c0.con.fillStyle = h1[lum1]; // rgb.css([0,255,255,1.0]);
             }
             c0.con.fillRect(x0,y0,w0,h0);
         }
@@ -529,9 +529,14 @@ var rgb = {
         return h2;
     },
     "grad": function(h0) {
+        // luminance gradations
         var r0 = [];
-        r0[0] = rgb.cssh([h0,90,35,1.0]);
-        r0[1] = rgb.cssh([h0,90,75,1.0]);
+        for (var i = 0; i <= 10; i++) {
+            var lum0 = (i * 10) >>> 0;
+            r0[i] = rgb.cssh([h0,90,lum0,1.0]);
+        }
+        // r0[0] = rgb.cssh([h0,90,35,1.0]);
+        // r0[1] = rgb.cssh([h0,90,75,1.0]);
         return r0;
     },
     "cssh": function(a0) {
