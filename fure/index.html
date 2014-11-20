@@ -29,6 +29,16 @@
                 ent.init();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "click": function(e) {
+                console.log(e);
+                var id0 = e.target.dataset.id.split("_");
+                g.c = {};
+                g.c.id = [];
+                g.c.id[0] = id0[0];
+                g.c.id[1] = parseInt(id0[1]);
+                g.c.x = parseInt(e.target.dataset["x"]);
+                console.log(g.c);
             }
         }
 // entities
@@ -153,6 +163,26 @@ var ent = {
                 i0++;
             }
             // for yakus dataset.x indicates has card
+            if (ent.hana.e[i] == "y0") {
+                var c0 = ent.hana.fuda[i];
+                for (var k in ent.db.y0) {
+                    for (var j = 0; j < yakus[k].cards.length; i++) {
+                        if (yakus[k].cards[j] == c0) {
+                            ent.db.y0[k].c[j].dataset.x = c0;
+                        }
+                    }
+                }
+            }
+            if (ent.hana.e[i] == "y0") {
+                var c0 = ent.hana.fuda[i];
+                for (var k in ent.db.y0) {
+                    for (var j = 0; j < yakus[k].cards.length; i++) {
+                        if (yakus[k].cards[j] == c0) {
+                            ent.db.y0[k].c[j].dataset.x = c0;
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -167,7 +197,7 @@ var dom = {
         for (var i = 0; i < r0.length; i++) {
             var c1 = dom.canvas(r0[i]);
             c1.can.dataset.id = n0 + "_" + i;
-            c1.can.dataset.x = "card" + i;
+            c1.can.dataset.x = ent.size + 100; // "card" + i;
             c1.can.addEventListener("click", g.click, false);
             dom.add(c1);
             c0.push(c1);
