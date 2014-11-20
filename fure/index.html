@@ -60,7 +60,8 @@ var ent = {
     },
     "create": function() {
         ent.bmp = bmp.create(ent.size);
-        ent.pal = rgb.hue((ent.size/4)>>>0); // pallette of hues
+        ent.pal = rgb.hue((ent.size/4)>>>0); // palette of hues
+        // console.log(ent.pal);
         
         ent.db.tab = {};
         ent.db.tab.r = dom.subc([20, 8, 64, 64, 12, 1]);
@@ -396,7 +397,9 @@ var r = {
         r.tabc();
         r.p0c();
         r.y0();
+        r.y0c();
         r.y1();
+        r.y1c();
     },
     "p0": function() {
         for (var i = 0; i < ent.db.p0.c.length; i++) {
@@ -453,10 +456,30 @@ var r = {
             }
         }
     },
+    "y0c": function() {
+        for (var k in ent.db.y0) {
+            for (var i = 0; i < yakus[k].cards.length; i++) {
+                // make yakus cards and canvas object link explicit
+                var i0 = yakus[k].cards[i];
+                // var i1 = ent.hana.fuda[i0];
+                r.bmp(ent.db.y0[k].c[i], i0);
+            }
+        }
+    },
     "y1": function() {
         for (var i = 0; i < yakus.n.length; i++) {
             for (var j = 0; j < ent.db.y1[yakus.n[i]].c.length; j++) {
                 r.rand(ent.db.y1[yakus.n[i]].c[j]);
+            }
+        }
+    },
+    "y1c": function() {
+        for (var k in ent.db.y1) {
+            for (var i = 0; i < yakus[k].cards.length; i++) {
+                // make yakus cards and canvas object link explicit
+                var i0 = yakus[k].cards[i];
+                // var i1 = ent.hana.fuda[i0];
+                r.bmp(ent.db.y1[k].c[i], i0);
             }
         }
     },
