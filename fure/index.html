@@ -25,6 +25,8 @@
                 g.w = 1920;
                 g.h = 1080;
 
+                g.state = {};
+
                 dom.init();
                 ent.init();
 
@@ -39,6 +41,24 @@
                 g.c.id[1] = parseInt(id0[1]);
                 g.c.x = parseInt(e.target.dataset["x"]);
                 console.log(g.c);
+                // g.state
+                g.update();
+            },
+            "update": function() {
+                // state [tab,p0]
+                g.state[g.c.id[0]] = g.c.id[1];
+                console.log(g.state);
+                g.match();
+            },
+            "match": function() {
+                if (g.state.tab == null || g.state.p0 == null) {
+                    return;
+                }
+                var c0 = parseInt(ent.db.tab.c[g.state.tab].can.dataset.x);
+                var c1 = (c0 / 4) >>> 0;
+                var c2 = parseInt(ent.db.p0.c[g.state.p0].can.dataset.x);
+                var c3 = (c2 / 4) >>> 0;
+                console.log(c0, c1, c2, c3);
             }
         }
 // entities
@@ -435,8 +455,8 @@ var r = {
                 continue;
             }
             var i0 = parseInt(ent.db.tab.c[i].can.dataset.x, 10);
-            var i1 = ent.hana.fuda[i0];
-            r.bmp(ent.db.tab.c[i], i1, 4, 6);
+            // var i1 = ent.hana.fuda[i0];
+            r.bmp(ent.db.tab.c[i], i0, 4, 6);
         }
     },
     "p0c": function() {
@@ -445,8 +465,8 @@ var r = {
                 continue;
             }
             var i0 = parseInt(ent.db.p0.c[i].can.dataset.x, 10);
-            var i1 = ent.hana.fuda[i0];
-            r.bmp(ent.db.p0.c[i], i1, 4, 6);
+            // var i1 = ent.hana.fuda[i0];
+            r.bmp(ent.db.p0.c[i], i0, 4, 6);
         }
     },
     "y0": function() {
