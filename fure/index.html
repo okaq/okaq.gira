@@ -30,7 +30,14 @@
                 dom.init();
                 ent.init();
 
+                g.play();
+
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "play": function() {
+                // determine matches
+                g.m = ent.matches();
+                console.log(g.m);
             },
             "click": function(e) {
                 console.log(e);
@@ -59,6 +66,12 @@
                 var c2 = parseInt(ent.db.p0.c[g.state.p0].can.dataset.x);
                 var c3 = (c2 / 4) >>> 0;
                 console.log(c0, c1, c2, c3);
+                if (c1 == c3) {
+                    console.log("it's a match!");
+                    g.collect();
+                } 
+            },
+            "collect": function() {
             }
         }
 // entities
@@ -205,6 +218,35 @@ var ent = {
                 }
             }
         }
+    },
+    "matches": function() {
+        // return list of [tab,p0] matches
+        var t0 = 0; // tab counter
+        var p0 = 0; // p0 counter
+        // extract tab, p0 cards
+        var t1 = ent.extract("tab");
+        var p1 = ent.extract("p0");
+        console.log(t1, p1);
+        var r0 = [];
+        for (var i = 0; i < t1.length; i++) {
+            var c0 = (t1[i] / 4) >>> 0;
+            for (var j = 0; j < p1.length; j++) {
+                var c1 = (p1[j] / 4) >>> 0;
+                if (c1 == c0) {
+                    r0.push([i,j]);
+                }
+            }
+        }
+        return r0;
+    },
+    "extract": function(s0) {
+        var r0 = [];
+        for (var i = 0; i < ent.hana.e.length; i++) {
+            if (ent.hana.e[i] == s0) {
+                r0.push(ent.hana.fuda[i]);
+            }
+        }
+        return r0;
     }
 }
 // dom
