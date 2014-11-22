@@ -57,7 +57,7 @@
             "update": function() {
                 // state [tab,p0]
                 g.state[g.c.id[0]] = g.c.id[1];
-                console.log(g.state);
+                // console.log(g.state);
                 if (g.state.discard == true) {
                     g.discard();
                 } else {
@@ -87,6 +87,38 @@
             "cpu": function() {
             },
             "deck": function() {
+                // deal one card, if match set to yaku
+                // otherwise set to table
+                var c0 = ent.hana.fuda[ent.hana.i];
+                var c1 = (c0 / 4) >>> 0;
+                console.log("Deal card: " + c0);
+                var f0 = false;
+                for (var i = 0; i < ent.hana.e.length; i++) {
+                    if (ent.hana.e[i] == "tab") {
+                        var c2 = ent.hana.fuda[i];
+                        var c3 = (c2 / 4) >>> 0;
+                        if (c1 == c3) {
+                            console.log("Table match found!");
+                            ent.hana.e[i] = "y0";
+                            ent.hana.e[ent.hana.i] = "y0";
+                            ent.hana.i++;
+                            f0 = true;
+                            break;
+                        }
+                    }
+                }
+                if (!f0) {
+                    // match not found
+                    console.log("No match for deck deal. Card goes to table");
+                    ent.hana.e[ent.hana.i] = "tab";
+                    ent.hana.i++;
+                }
+                ent.sync();
+                r.open();
+                g.turn();
+                g.play();
+            },
+            "turn": function() {
             },
             "discard": function() {
                 if (g.state.tab == null || g.state.p0 == null) {
@@ -96,7 +128,7 @@
                 // var c1 = (c0 / 4) >>> 0;
                 var c2 = parseInt(ent.db.p0.c[g.state.p0].can.dataset.x);
                 // var c3 = (c2 / 4) >>> 0;
-                console.log(c0, c2);
+                // console.log(c0, c2);
                 if (c0 > ent.size && c2 < ent.size) {
                     console.log("Discarding: " + g.state.p0);
                     ent.discard(c2);
@@ -595,8 +627,13 @@ var r = {
             for (var i = 0; i < yakus[k].cards.length; i++) {
                 // make yakus cards and canvas object link explicit
                 var i0 = yakus[k].cards[i];
+                var i1 = parseInt(ent.db.y0[k].c[i].can.dataset.x, 10);
                 // var i1 = ent.hana.fuda[i0];
-                r.bmp(ent.db.y0[k].c[i], i0, 3, 7);
+                if (i0 == i1) {
+                    r.bmp(ent.db.y0[k].c[i], i0, 2, 8);
+                } else {
+                    r.bmp(ent.db.y0[k].c[i], i0, 4, 6);
+                }
             }
         }
     },
@@ -612,8 +649,14 @@ var r = {
             for (var i = 0; i < yakus[k].cards.length; i++) {
                 // make yakus cards and canvas object link explicit
                 var i0 = yakus[k].cards[i];
+                var i1 = parseInt(ent.db.y1[k].c[i].can.dataset.x, 10);
                 // var i1 = ent.hana.fuda[i0];
-                r.bmp(ent.db.y1[k].c[i], i0, 3, 7);
+                if (i0 == i1) {
+                    r.bmp(ent.db.y1[k].c[i], i0, 2, 8);
+                } else {
+                    r.bmp(ent.db.y1[k].c[i], i0, 4, 6);
+                }
+ 
             }
         }
     },
