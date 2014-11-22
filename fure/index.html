@@ -39,17 +39,18 @@
                 console.log(g.m);
                 if (g.m.length == 0) {
                     console.log("sorry, no matches! please discard one");
+                    g.state.discard = true;
                 }
             },
             "click": function(e) {
-                console.log(e);
+                // console.log(e);
                 var id0 = e.target.dataset.id.split("_");
                 g.c = {};
                 g.c.id = [];
                 g.c.id[0] = id0[0];
                 g.c.id[1] = parseInt(id0[1]);
                 g.c.x = parseInt(e.target.dataset["x"]);
-                console.log(g.c);
+                // console.log(g.c);
                 // g.state
                 g.update();
             },
@@ -57,7 +58,11 @@
                 // state [tab,p0]
                 g.state[g.c.id[0]] = g.c.id[1];
                 console.log(g.state);
-                g.match();
+                if (g.state.discard == true) {
+                    g.discard();
+                } else {
+                    g.match();
+                }
             },
             "match": function() {
                 if (g.state.tab == null || g.state.p0 == null) {
@@ -67,18 +72,37 @@
                 var c1 = (c0 / 4) >>> 0;
                 var c2 = parseInt(ent.db.p0.c[g.state.p0].can.dataset.x);
                 var c3 = (c2 / 4) >>> 0;
-                console.log(c0, c1, c2, c3);
+                // console.log(c0, c1, c2, c3);
                 if (c1 == c3) {
                     console.log("it's a match!");
                     ent.db.tab.c[g.state.tab].can.dataset.x = ent.size + 100;
                     ent.db.p0.c[g.state.p0].can.dataset.x = ent.size + 100;
                     ent.collect("y0", c0, c2);
+                    g.deck();
                 }
                 g.cpu();
                 r.open();
                 g.play();
             },
             "cpu": function() {
+            },
+            "deck": function() {
+            },
+            "discard": function() {
+                if (g.state.tab == null || g.state.p0 == null) {
+                    return;
+                }
+                var c0 = parseInt(ent.db.tab.c[g.state.tab].can.dataset.x);
+                // var c1 = (c0 / 4) >>> 0;
+                var c2 = parseInt(ent.db.p0.c[g.state.p0].can.dataset.x);
+                // var c3 = (c2 / 4) >>> 0;
+                console.log(c0, c2);
+                if (c0 > ent.size && c2 < ent.size) {
+                    console.log("Discarding: " + g.state.p0);
+                    ent.discard(c2);
+                }
+                r.open();
+                g.deck();
             }
         }
 // entities
@@ -252,7 +276,7 @@ var ent = {
         // extract tab, p0 cards
         var t1 = ent.extract("tab");
         var p1 = ent.extract("p0");
-        console.log(t1, p1);
+        // console.log(t1, p1);
         var r0 = [];
         for (var i = 0; i < t1.length; i++) {
             var c0 = (t1[i] / 4) >>> 0;
@@ -285,7 +309,15 @@ var ent = {
                 ent.hana.e[i] = y0;
             }
         }
-        console.log(ent.hana);
+        // console.log(ent.hana);
+        ent.sync();
+    },
+    "discard": function(c0) {
+        for (var i = 0; i < ent.hana.e.length; i++) {
+            if (ent.hana.fuda[i] == c0) {
+                ent.hana.e[i] = "tab";
+            }
+        }
         ent.sync();
     }
 }
