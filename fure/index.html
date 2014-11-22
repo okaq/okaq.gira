@@ -25,8 +25,6 @@
                 g.w = 1920;
                 g.h = 1080;
 
-                g.state = {};
-
                 dom.init();
                 ent.init();
 
@@ -36,8 +34,12 @@
             },
             "play": function() {
                 // determine matches
+                g.state = {};
                 g.m = ent.matches();
                 console.log(g.m);
+                if (g.m.length == 0) {
+                    console.log("sorry, no matches! please discard one");
+                }
             },
             "click": function(e) {
                 console.log(e);
@@ -68,10 +70,15 @@
                 console.log(c0, c1, c2, c3);
                 if (c1 == c3) {
                     console.log("it's a match!");
-                    g.collect();
-                } 
+                    ent.db.tab.c[g.state.tab].can.dataset.x = ent.size + 100;
+                    ent.db.p0.c[g.state.p0].can.dataset.x = ent.size + 100;
+                    ent.collect("y0", c0, c2);
+                }
+                g.cpu();
+                r.open();
+                g.play();
             },
-            "collect": function() {
+            "cpu": function() {
             }
         }
 // entities
@@ -179,6 +186,7 @@ var ent = {
         ent.hana.i++;
     },
     "sync": function() {
+        ent.reset();
         // fan out encoding data to canvas object datasets
         var i0 = 0; // p0 counter
         var i1 = 1; // y0 counter
@@ -200,22 +208,40 @@ var ent = {
             if (ent.hana.e[i] == "y0") {
                 var c0 = ent.hana.fuda[i];
                 for (var k in ent.db.y0) {
-                    for (var j = 0; j < yakus[k].cards.length; i++) {
+                    for (var j = 0; j < yakus[k].cards.length; j++) {
                         if (yakus[k].cards[j] == c0) {
-                            ent.db.y0[k].c[j].dataset.x = c0;
+                            ent.db.y0[k].c[j].can.dataset.x = c0;
                         }
                     }
                 }
             }
-            if (ent.hana.e[i] == "y0") {
+            if (ent.hana.e[i] == "y1") {
                 var c0 = ent.hana.fuda[i];
                 for (var k in ent.db.y0) {
-                    for (var j = 0; j < yakus[k].cards.length; i++) {
+                    for (var j = 0; j < yakus[k].cards.length; j++) {
                         if (yakus[k].cards[j] == c0) {
-                            ent.db.y0[k].c[j].dataset.x = c0;
+                            ent.db.y1[k].c[j].can.dataset.x = c0;
                         }
                     }
                 }
+            }
+        }
+    },
+    "reset": function() {
+        for (var i = 0; i < ent.db.tab.c.length; i++) {
+            ent.db.tab.c[i].can.dataset.x = ent.size + 100;
+        }
+        for (var i = 0; i < ent.db.p0.c.length; i++) {
+            ent.db.p0.c[i].can.dataset.x = ent.size + 100;
+        }
+        for (var k in ent.db.y0) {
+            for (var i = 0; i < ent.db.y0[k].c.length; i++) {
+                ent.db.y0[k].c[i].can.dataset.x = ent.size + 100;
+            }
+        }
+        for (var k in ent.db.y1) {
+            for (var i = 0; i < ent.db.y1[k].c.length; i++) {
+                ent.db.y1[k].c[i].can.dataset.x = ent.size + 100;
             }
         }
     },
@@ -247,6 +273,20 @@ var ent = {
             }
         }
         return r0;
+    },
+    "collect": function(y0, c0, c1) {
+        // award player cards as yakus and re-sync
+        // input: yaku key, card values
+        for (var i = 0; i < ent.hana.e.length; i++) {
+            if (ent.hana.fuda[i] == c0) {
+                ent.hana.e[i] = y0;
+            }
+            if (ent.hana.fuda[i] == c1) {
+                ent.hana.e[i] = y0;
+            }
+        }
+        console.log(ent.hana);
+        ent.sync();
     }
 }
 // dom
