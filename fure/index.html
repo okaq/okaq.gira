@@ -29,8 +29,12 @@
                 can.init();
                 bmp.init();
                 console.log(bmp);
+                r.rand(dom.test);
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "click": function(e) {
+                console.log(e);
             }
         }
 // canvas objects
@@ -60,6 +64,59 @@ var can = {
 var dom = {
     "init": function() {
         dom.alpha = document.getElementById("alpha");
+        dom.test = dom.layout("test", [[512,512,712,64]]);
+    },
+    "layout": function(n0, r0) {
+        // input is id name, array of rects
+        var c0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var c1 = dom.canvas(r0[i]);
+            c1.can.dataset.id = n0 + "_" + i;
+            c1.can.addEventListener("click", g.click, false);
+            dom.add(c1);
+            c0.push(c1);
+        }
+        return c0;
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    },
+    "subc": function(r0) {
+        // cell size, margin, origin x,y, count x,y
+        if (r0[4] == 0 || r0[5] == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] * bmp.nx) >>> 0;
+        var w2 = (w1 + (2 * r0[1])) >>> 0;
+        var h1 = (r0[0] * bmp.ny) >>> 0;
+        var h2 = (h1 + (2 * r0[1])) >>> 0;
+        for (var y = 0; y < r0[5]; y++) {
+            for (var x = 0; x < r0[4]; x++) {
+                var x0 = (x * w2) >>> 0;
+                x0 = x0 + r0[2];
+                x0 = x0 + r0[1];
+                var y0 = (y * h2) >>> 0;
+                y0 = y0 + r0[3];
+                y0 = y0 + r0[1];
+                r1.push([w1,h1,x0,y0]);
+            }
+        }
+        return r1;
     }
 }
 // yakus
@@ -207,6 +264,58 @@ var bmp = {
             }
         }
         return r0;
+    }
+}
+// render
+var r = {
+    "rand": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgb.rc();
+            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
+    }
+}
+// colors
+var rgb = {
+    "hue": function(n0) {
+        var h0 = 359.0 / n0;
+        var h1 = Math.random() * h0;
+        var h2 = [];
+        for (var i = 0; i < n0; i++) {
+            var h3 = h1 + (i * h0);
+            h2.push(h3);
+        }
+        return h2;
+    },
+    "grad": function(h0) {
+        // luminance gradations
+        var r0 = [];
+        for (var i = 0; i <= 10; i++) {
+            var lum0 = (i * 10) >>> 0;
+            r0[i] = rgb.cssh([h0,90,lum0,1.0]);
+        }
+        // r0[0] = rgb.cssh([h0,90,35,1.0]);
+        // r0[1] = rgb.cssh([h0,90,75,1.0]);
+        return r0;
+    },
+    "cssh": function(a0) {
+        // input array [h,s,l,a]
+        return "hsla(" + a0[0] + "," + a0[1] + "%," + a0[2] + "%," + a0[3] + ")";
+    },
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    },
+    "rc": function() {
+        return rgb.css(rgb.rand());
     }
 }
     </script>
