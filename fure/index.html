@@ -25,9 +25,190 @@
                 g.w = 1920;
                 g.h = 1080;
 
+                dom.init();
+                can.init();
+                bmp.init();
+                console.log(bmp);
+
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             }
         }
+// canvas objects
+var can = {
+    "init": function() {
+        can.config = {
+            "p0": [],
+            "p1": [],
+            "y0": [],
+            "y1": [],
+            "tab": [],
+            "deck": []
+        }
+        can.create();
+    },
+    "create": function() {
+        for (var k in can.config) {
+            can[k] = {};
+            can[k].d = {}; // data
+        }
+        console.log(can);
+        can.deck.d.size = 48;
+        can.deck.d.suit = 4;
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+    }
+}
+// yakus
+var yakus = {};
+// sanko
+yakus.sanko = {};
+yakus.sanko.cards = [3,11,31,47];
+yakus.sanko.points = 5;
+yakus.sanko.need = 3;
+yakus.sanko.extra = null;
+
+// shiko
+yakus.shiko = {};
+yakus.shiko.cards = [3,11,31,47];
+yakus.shiko.points = 8;
+yakus.shiko.need = 4;
+yakus.shiko.extra = null;
+
+// ame-shiko
+yakus.ame_shiko = {};
+yakus.ame_shiko.cards = [3,11,31,43,47];
+yakus.ame_shiko.points = 7;
+yakus.ame_shiko.need = 4;
+yakus.ame_shiko.extra = null;
+
+// goko
+yakus.goko = {};
+yakus.goko.cards = [3,11,31,43,47];
+yakus.goko.points = 10;
+yakus.goko.need = 10;
+yakus.goko.extra = null;
+
+// inoshikacho
+yakus.inoshikacho = {};
+yakus.inoshikacho.cards = [7,15,19,23,27,29,30,35,39,42];
+yakus.inoshikacho.points = 5;
+yakus.inoshikacho.need = 3;
+yakus.inoshikacho.extra = 1;
+
+// tane
+yakus.tane = {};
+yakus.tane.cards = [7,15,19,23,27,29,30,35,39,42];
+yakus.tane.points = 1;
+yakus.tane.need = 5;
+yakus.tane.extra = 1;
+
+// akatan
+yakus.akatan = {};
+yakus.akatan.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.akatan.points = 5;
+yakus.akatan.need = 3;
+yakus.akatan.extra = 1;
+
+// aotan
+yakus.aotan = {};
+yakus.aotan.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.aotan.points = 5;
+yakus.aotan.need = 3;
+yakus.aotan.extra = 1;
+
+// akatan, aotan no chofuku
+yakus.chofuku = {};
+yakus.chofuku.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.chofuku.points = 10;
+yakus.chofuku.need = 6;
+yakus.chofuku.extra = 1;
+
+// tanzaku
+yakus.tanzaku = {};
+yakus.tanzaku.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.tanzaku.points = 1;
+yakus.tanzaku.need = 5;
+yakus.tanzaku.extra = 1;
+
+// tsukimi-zaki
+yakus.tsukimi = {};
+yakus.tsukimi.cards = [39,43];
+yakus.tsukimi.points = 5;
+yakus.tsukimi.need = 2;
+yakus.tsukimi.extra = null;
+
+// hanami-zaki
+yakus.hanami = {};
+yakus.hanami.cards = [11,43];
+yakus.hanami.points = 5;
+yakus.hanami.need = 2;
+yakus.hanami.extra = null;
+
+// kasu
+yakus.kasu = {};
+yakus.kasu.cards = [0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,32,33,36,37,40,44,45];
+yakus.kasu.points = 1;
+yakus.kasu.need = 10;
+yakus.kasu.extra = 1;
+
+yakus.n = ["sanko","shiko", "ame_shiko","goko","inoshikacho",
+"tane","akatan","aotan","chofuku",
+    "tanzaku","tsukimi","hanami","kasu"];
+// longest kasu = 22 cards
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.nx = 9;
+        bmp.ny = 9;
+        bmp.nt = (bmp.nx * bmp.ny) >>> 0;
+        bmp.d = [];
+        var n1 = (can.deck.d.size / can.deck.d.suit) >>> 0;
+        var n2 = ((bmp.nt / 2) / (can.deck.d.suit + 1)) >>> 0;
+        for (var i = 0; i < n1; i++) {
+            for (var j = 0; j < can.deck.d.suit; j++) {
+                var f0 = (j * n2 + 1) >>> 0; // number of fills
+                bmp.d.push(bmp.inv(f0));
+            }
+        }
+    },
+    "inv": function(n0) {
+        // nx*ny mirror inv with n0 fills
+        var r0 = [];
+        for (var i = 0; i < bmp.nt; i++) {
+            r0[i] = 0;
+        }
+        var n2 = (bmp.nx / 2) >>> 0;
+        n2 = n2 + 1;
+        var n3 = (n2 * bmp.ny) >>> 0;
+        var n1 = n0;
+        while (n1 >= 0) {
+            var i0 = (Math.random() * n3) >>> 0;
+            var i1 = (i0 / n2) >>> 0;
+            var i2 = i0 % n2;
+            var i3 = ((i1 * bmp.nx) + i2) >>> 0;
+            if (r0[i3] == 0) {
+                r0[i3] = 1;
+                n1--;
+            }
+        }
+        // mirror
+        for (var i = 0; i < bmp.ny; i++) {
+            var i0 = (i * bmp.nx) >>> 0;
+            // for loop here for n2-1 mirrors
+            for (var j = 0; j < (n2 - 1); j++) {
+                var i1 = bmp.nx + i0 - j - 1;
+                var i2 = i0 + j;
+                r0[i1] = r0[i2]; 
+                // console.log(i0, i1, i2, i0 + n2 - 1, j); 
+            }
+        }
+        return r0;
+    }
+}
     </script>
 </head>
 <body id="alpha">
