@@ -28,16 +28,27 @@
                 dom.init();
                 ent.init();
 
+                g.state = {};
+                // g.state.turn = "p0";
                 g.play();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "play": function() {
                 // determine matches
-                g.state = {};
-                g.m = ent.matches();
+                // g.state = {};
+                if (g.state.turn == "p1") {
+                    g.cpu();
+                    return;
+                }
+                g.m = ent.matches("p0");
                 console.log(g.m);
                 if (g.m.length == 0) {
+                    var c0 = ent.count("p0");
+                    if (c0 == 0) {
+                        g.deck("p0");
+                        return;
+                    }
                     console.log("sorry, no matches! please discard one");
                     g.state.discard = true;
                 }
@@ -78,15 +89,59 @@
                     ent.db.tab.c[g.state.tab].can.dataset.x = ent.size + 100;
                     ent.db.p0.c[g.state.p0].can.dataset.x = ent.size + 100;
                     ent.collect("y0", c0, c2);
-                    g.deck();
+                    r.open();
+                    g.deck("y0");
+                    // g.cpu();
+                    // r.open();
+                    // g.play();
                 }
-                g.cpu();
-                r.open();
-                g.play();
             },
             "cpu": function() {
+                console.log("CPU turn!");
+                // match or discard
+                var m0 = ent.matches("p1");
+                console.log(m0);
+                if (m0.length == 0) {
+                    for (var i = 0; i < ent.hana.e.length; i++) {
+                        if (ent.hana.e[i] == "p1") {
+                            // match with tab
+                            ent.hana.e[i] == "tab";
+                            break;
+                        }
+                    }
+                } else {
+                    var c0 = m0[0][0];
+                    var c1 = m0[0][1];
+                    var c2 = 0;
+                    var c3 = 0;
+                    for (var i = 0; i < ent.hana.e.length; i++) {
+                        if (ent.hana.e[i] == "tab") {
+                            c2 = c2 + 1;
+                            if (c2 == c0) {
+                                ent.hana.e[i] = "y1";
+                                break;
+                            }
+                        }
+                    }
+                    for (var i = 0; i < ent.hana.e.length; i++) {
+                        if (ent.hana.e[i] == "p1") {
+                            c3 = c3 + 1;
+                            if (c3 == c1) {
+                                ent.hana.e[i] = "y1";
+                                break;
+                            }
+                        }
+                    }
+                }
+                ent.sync();
+                r.open();
+                // pick from deck
+                g.deck("y1");
+                // r.open();
+                // g.play();
+                // check yakus
             },
-            "deck": function() {
+            "deck": function(s0) {
                 // deal one card, if match set to yaku
                 // otherwise set to table
                 var c0 = ent.hana.fuda[ent.hana.i];
@@ -99,8 +154,8 @@
                         var c3 = (c2 / 4) >>> 0;
                         if (c1 == c3) {
                             console.log("Table match found!");
-                            ent.hana.e[i] = "y0";
-                            ent.hana.e[ent.hana.i] = "y0";
+                            ent.hana.e[i] = s0; // "y0";
+                            ent.hana.e[ent.hana.i] = s0; // "y0";
                             ent.hana.i++;
                             f0 = true;
                             break;
@@ -116,9 +171,19 @@
                 ent.sync();
                 r.open();
                 g.turn();
-                g.play();
+                // g.cpu();
+                // g.play();
             },
             "turn": function() {
+                g.state.p0 = null;
+                g.state.tab = null;
+                g.state.discard = false;
+                if (g.state.turn == "p0") {
+                    g.state.turn = "p1";
+                } else {
+                    g.state.turn = "p0";
+                }
+                g.play();
             },
             "discard": function() {
                 if (g.state.tab == null || g.state.p0 == null) {
@@ -134,7 +199,7 @@
                     ent.discard(c2);
                 }
                 r.open();
-                g.deck();
+                g.deck("y0");
             }
         }
 // entities
@@ -301,13 +366,13 @@ var ent = {
             }
         }
     },
-    "matches": function() {
+    "matches": function(s0) {
         // return list of [tab,p0] matches
         var t0 = 0; // tab counter
         var p0 = 0; // p0 counter
         // extract tab, p0 cards
         var t1 = ent.extract("tab");
-        var p1 = ent.extract("p0");
+        var p1 = ent.extract(s0);
         // console.log(t1, p1);
         var r0 = [];
         for (var i = 0; i < t1.length; i++) {
@@ -351,6 +416,15 @@ var ent = {
             }
         }
         ent.sync();
+    },
+    "count": function(s0) {
+        var c0 = 0;
+        for (var i = 0; i < ent.hana.e.length; i++) {
+            if (ent.hana.e[i] == s0) {
+                c0++;
+            }
+        }
+        return c0;
     }
 }
 // dom
