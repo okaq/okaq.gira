@@ -30,6 +30,7 @@
                 bmp.init();
                 console.log(bmp);
                 r.rand(dom.test);
+                r.rbmp(dom.test);
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
@@ -64,7 +65,7 @@ var can = {
 var dom = {
     "init": function() {
         dom.alpha = document.getElementById("alpha");
-        dom.test = dom.layout("test", [[512,512,712,64]]);
+        dom.test = dom.layout("test", [[900,900,512,64]]);
     },
     "layout": function(n0, r0) {
         // input is id name, array of rects
@@ -272,6 +273,27 @@ var r = {
         for (var i = 0; i < c0.length; i++) {
             c0[i].con.fillStyle = rgb.rc();
             c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
+    },
+    "rbmp": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            var fg = rgb.rc();
+            var bg = rgb.rc();
+            var i0 = (Math.random() * bmp.d.length) >>> 0;
+            var sx = (c0[i].can.width / bmp.nx) >>> 0;
+            var sy = (c0[i].can.height / bmp.ny) >>> 0;
+            for (var j = 0; j < bmp.nt; j++) {
+                var x0 = j % bmp.nx;
+                var x1 = (x0 * sx) >>> 0;
+                var y0 = (j / bmp.nx) >>> 0;
+                var y1 = (y0 * sy) >>> 0;
+                if (bmp.d[i0][j] == 0) {
+                    c0[i].con.fillStyle = bg;
+                } else {
+                    c0[i].con.fillStyle = fg;
+                }
+                c0[i].con.fillRect(x1, y1, sx, sy);
+            }
         }
     }
 }
