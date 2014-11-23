@@ -29,12 +29,18 @@
                 ent.init();
 
                 g.state = {};
-                // g.state.turn = "p0";
+                g.state.turn = "p0";
                 g.play();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "play": function() {
+                // yakus score
+                ent.score();
+                if (g.state.win == true) {
+                    g.end();
+                    return;
+                }
                 // determine matches
                 // g.state = {};
                 if (g.state.turn == "p1") {
@@ -200,6 +206,10 @@
                 }
                 r.open();
                 g.deck("y0");
+            },
+            "end": function() {
+                console.log("Win!");
+                console.log(ent.winner);
             }
         }
 // entities
@@ -422,6 +432,46 @@ var ent = {
         for (var i = 0; i < ent.hana.e.length; i++) {
             if (ent.hana.e[i] == s0) {
                 c0++;
+            }
+        }
+        return c0;
+    },
+    "score": function() {
+        // cycle thru yakus
+        ent.winner = {};
+        ent.winner.y0 = [];
+        ent.winner.y1 = [];
+        var y0 = ent.extract("y0");
+        var y1 = ent.extract("y1");
+        console.log(y0, y1);
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = yakus.n[i];
+            var m0 = ent.compare(y0, yakus[k0].cards);
+            var m1 = yakus[k0].need - m0;
+            if (m1 <= 0) {
+                ent.winner.y0.push([k0,m0]);
+            }
+        }
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = yakus.n[i];
+            var m0 = ent.compare(y1, yakus[k0].cards);
+            var m1 = yakus[k0].need - m0;
+            if (m1 <= 0) {
+                ent.winner.y1.push([k0,m0]);
+            }
+        }
+        if (ent.winner.y0.length > 0 || ent.winner.y1.length > 0) {
+            g.state.win = true;
+        }
+    },
+    "compare": function(a0, a1) {
+        // return number of common elements in two arrays
+        var c0 = 0;
+        for (var i = 0; i < a0.length; i++) {
+            for (var j = 0; j < a1.length; j++) {
+                if (a0[i] == a1[j]) {
+                    c0++;
+                }
             }
         }
         return c0;
