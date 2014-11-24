@@ -66,6 +66,37 @@ var can = {
             can[k].c = dom.layout(k, can[k].r);
         }
         // console.log(can);
+        // creating external db requires sync
+        can.db = {};
+        for (var k in can.config) {
+            for (var i = 0; i < can[k].c.length; i++) {
+                var k0 = can[k].c[i].can.dataset.x;
+                can.db[k0] = {};
+                can.db[k0].card = null;
+                can.db[k0].clicked = null;
+            }
+        }
+        // console.log(can.db);
+        can.shuffle();
+    },
+    "shuffle": function() {
+        // shuffle the deck
+        var d0 = [];
+        for (var i = 0; i < can.size; i++) {
+            d0[i] = i;
+        }
+        for (var i = d0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = d0[i0];
+            d0[i0] = d0[i];
+            d0[i] = t0;
+        }
+        console.log(d0);
+        for (var i = 0; i < can.deck.c.length; i++) {
+            var k0 = can.deck.c[i].can.dataset.x;
+            can.db[k0].card = d0[i];
+        }
+        console.log(can.db);
     },
     "bmp": function() {
         r.rbmp(can.tab.c);
@@ -85,7 +116,7 @@ var dom = {
         var c0 = [];
         for (var i = 0; i < r0.length; i++) {
             var c1 = dom.canvas(r0[i]);
-            c1.can.dataset.id = n0 + "_" + i;
+            c1.can.dataset.x = n0 + "_" + i;
             c1.can.addEventListener("click", g.click, false);
             dom.add(c1);
             c0.push(c1);
