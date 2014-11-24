@@ -27,10 +27,13 @@
 
                 dom.init();
                 can.init();
-                bmp.init();
-                console.log(bmp);
-                r.rand(dom.test);
-                r.rbmp(dom.test);
+                // bmp.init();
+                // console.log(bmp);
+                // r.rand(dom.test);
+                // r.rbmp(dom.test);
+                can.bmp();
+
+                g.state = {};
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
@@ -41,13 +44,17 @@
 // canvas objects
 var can = {
     "init": function() {
+        can.size = 48;
+        can.suit = 4;
+        can.suits = (can.size/can.suit) >>> 0;
+        bmp.init();
         can.config = {
-            "p0": [],
-            "p1": [],
-            "y0": [],
-            "y1": [],
-            "tab": [],
-            "deck": []
+            "p0": [10, 4, 64, 200, 8, 1],
+            "p1": [10, 4, 64, 200, 8, 1],
+            "y0": [2, 1, 64, 340, 22, 14],
+            "y1": [2, 1, 800, 340, 22, 14],
+            "tab": [10, 4, 64, 64, 8, 1],
+            "deck": [1, 1, 64, 64, can.size, 1]
         }
         can.create();
     },
@@ -55,10 +62,16 @@ var can = {
         for (var k in can.config) {
             can[k] = {};
             can[k].d = {}; // data
+            can[k].r = dom.subc(can.config[k]);
+            can[k].c = dom.layout(k, can[k].r);
         }
-        console.log(can);
-        can.deck.d.size = 48;
-        can.deck.d.suit = 4;
+        // console.log(can);
+    },
+    "bmp": function() {
+        r.rbmp(can.tab.c);
+        r.rbmp(can.p0.c);
+        r.rbmp(can.y0.c);
+        r.rbmp(can.y1.c);
     }
 }
 // dom
@@ -224,10 +237,10 @@ var bmp = {
         bmp.ny = 9;
         bmp.nt = (bmp.nx * bmp.ny) >>> 0;
         bmp.d = [];
-        var n1 = (can.deck.d.size / can.deck.d.suit) >>> 0;
-        var n2 = ((bmp.nt / 2) / (can.deck.d.suit + 1)) >>> 0;
+        var n1 = (can.size / can.suit) >>> 0;
+        var n2 = ((bmp.nt / 2) / (can.suit + 1)) >>> 0;
         for (var i = 0; i < n1; i++) {
-            for (var j = 0; j < can.deck.d.suit; j++) {
+            for (var j = 0; j < can.suit; j++) {
                 var f0 = (j * n2 + 1) >>> 0; // number of fills
                 bmp.d.push(bmp.inv(f0));
             }
