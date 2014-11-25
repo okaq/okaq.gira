@@ -39,6 +39,10 @@
             },
             "click": function(e) {
                 console.log(e);
+            },
+            "turn": function() {
+                // p0,p0/tab,p1,p1/tab
+                // during tab check table match
             }
         }
 // canvas objects
@@ -51,8 +55,8 @@ var can = {
         can.config = {
             "p0": [10, 4, 64, 200, 8, 1],
             "p1": [10, 4, 64, 200, 8, 1],
-            "y0": [2, 1, 64, 340, 22, 14],
-            "y1": [2, 1, 800, 340, 22, 14],
+            "y0": [3, 1, 64, 340, 22, 14],
+            "y1": [3, 1, 800, 340, 22, 14],
             "tab": [10, 4, 64, 64, 8, 1],
             "deck": [1, 1, 64, 64, can.size, 1]
         }
@@ -92,11 +96,26 @@ var can = {
             d0[i] = t0;
         }
         console.log(d0);
+        /*
         for (var i = 0; i < can.deck.c.length; i++) {
             var k0 = can.deck.c[i].can.dataset.x;
             can.db[k0].card = d0[i];
+            }
+         */
+        var k0 = can.keys(can.deck);
+        for (var i = 0; i < d0.length; i++) {
+            var k1 = k0[i];
+            can.db[k1].card = d0[i];
         }
         console.log(can.db);
+    },
+    "keys": function(c0) {
+        // extract keys from canvas object
+        var r0 = [];
+        for (var i = 0; i < c0.c.length; i++) {
+            r0.push(c0.c[i].can.dataset.x);
+        }
+        return r0;
     },
     "bmp": function() {
         r.rbmp(can.tab.c);
