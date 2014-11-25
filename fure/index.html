@@ -34,8 +34,25 @@
                 can.bmp();
 
                 g.state = {};
+                g.events();
 
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "events": function() {
+                g.ev = {
+                    "open": {},
+                    "p0_tab": {},
+                    "p0_deck": {},
+                    "p1_tab": {},
+                    "p1_deck": {},
+                    "end": {}
+                };
+                for (var k in g.ev) {
+                    g.ev[k] = new Event(k);
+                    document.addEventListener(k, g.click, false);
+                    document.dispatchEvent(g.ev[k]);
+                }
+                console.log(g.ev);
             },
             "click": function(e) {
                 console.log(e);
