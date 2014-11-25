@@ -47,9 +47,12 @@
                     "p1_deck": {},
                     "end": {}
                 };
+                g.hand = {
+                };
                 for (var k in g.ev) {
                     g.ev[k] = new Event(k);
-                    document.addEventListener(k, g.click, false);
+                    g.hand[k] = function(e){console.log(k+" handler called.");console.log(e);};
+                    document.addEventListener(k, g.hand[k], false);
                     document.dispatchEvent(g.ev[k]);
                 }
                 console.log(g.ev);
