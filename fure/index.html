@@ -41,18 +41,20 @@
             "events": function() {
                 g.ev = {
                     "open": {},
+                    /*
                     "p0_tab": {},
                     "p0_deck": {},
                     "p1_tab": {},
                     "p1_deck": {},
+                     */
+                    "play": {},
                     "end": {}
                 };
-                g.hand = {
-                };
+                // g.hand = {};
                 for (var k in g.ev) {
                     g.ev[k] = new Event(k);
-                    g.hand[k] = function(e){console.log(k+" handler called.");console.log(e);};
-                    document.addEventListener(k, g.hand[k], false);
+                    // g.hand[k] = function(e){console.log(k+" handler called.");console.log(e);};
+                    document.addEventListener(k, g[k], false);
                     document.dispatchEvent(g.ev[k]);
                 }
                 console.log(g.ev);
@@ -63,6 +65,15 @@
             "turn": function() {
                 // p0,p0/tab,p1,p1/tab
                 // during tab check table match
+            },
+            "open": function() {
+                console.log("Koi koi opening deal");
+            },
+            "play": function() {
+                console.log("game play turn");
+            },
+            "end": function() {
+                console.log("winner declared");
             }
         }
 // canvas objects
@@ -75,12 +86,36 @@ var can = {
         can.config = {
             "p0": [10, 4, 64, 200, 8, 1],
             "p1": [10, 4, 64, 200, 8, 1],
-            "y0": [3, 1, 64, 340, 22, 14],
-            "y1": [3, 1, 800, 340, 22, 14],
+            // "y0": [3, 1, 64, 340, 22, 14],
+            // "y1": [3, 1, 800, 340, 22, 14],
             "tab": [10, 4, 64, 64, 8, 1],
             "deck": [1, 1, 64, 64, can.size, 1]
         }
+        can.yakus();
         can.create();
+    },
+    "yakus": function() {
+        for (var i = 0; i < yakus.n.length; i++) {
+            var x0 = 64;
+            var x1 = 800;
+            var y0 = 340;
+            var s0 = 3 * bmp.nx + 2;
+            var y1 = (y0 + (i * s0)) >>> 0;
+            var k0 = yakus.n[i];
+            var k1 = "y0_" + k0;
+            var k2 = "y1_" + k0;
+            var c0 = yakus[k0].cards.length;
+            can.config[k1] = [3,1,x0,y1,c0,1];
+            can.config[k2] = [3,1,x1,y1,c0,1];
+            /*
+            for (var j = 0; j < c0; j++) {
+                var x2 = x0 + (j * s0);
+                var x3 = x1 + (j * s0);
+                var y1 = y0 + (i * s0);
+                can.config[k1] = [3,1,x0,y1,c0,1];
+                }
+                */
+        }
     },
     "create": function() {
         for (var k in can.config) {
@@ -102,6 +137,8 @@ var can = {
         }
         // console.log(can.db);
         can.shuffle();
+        // can.yakus();
+        console.log(can);
     },
     "shuffle": function() {
         // shuffle the deck
@@ -127,7 +164,16 @@ var can = {
             var k1 = k0[i];
             can.db[k1].card = d0[i];
         }
-        console.log(can.db);
+        // console.log(can.db);
+    },
+    "yaku": function(p0) {
+        // extract yakus canvas objects for p0
+        var r0 = [];
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = p0 + "_" + yakus.n[i];
+            r0.push(can[k0]);
+        }
+        return r0;
     },
     "keys": function(c0) {
         // extract keys from canvas object
@@ -140,8 +186,16 @@ var can = {
     "bmp": function() {
         r.rbmp(can.tab.c);
         r.rbmp(can.p0.c);
-        r.rbmp(can.y0.c);
-        r.rbmp(can.y1.c);
+        // r.rbmp(can.y0.c);
+        // r.rbmp(can.y1.c);
+        r0 = can.yaku("y0");
+        for (var i = 0; i < r0.length; i++) {
+            r.rbmp(r0[i].c);
+        }
+        r1 = can.yaku("y1");
+        for (var i = 0; i < r1.length; i++) {
+            r.rbmp(r1[i].c);
+        }
     }
 }
 // dom
