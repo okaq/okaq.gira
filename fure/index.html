@@ -125,7 +125,8 @@ var can = {
                 var y1 = y0 + (i * s0);
                 can.config[k1] = [3,1,x0,y1,c0,1];
                 }
-                */
+             */
+            // refactor: yakus canvas object of the form can.y0.goko
         }
     },
     "create": function() {
@@ -465,6 +466,7 @@ var r = {
     "frame": function() {
         r.cards(can.tab);
         r.cards(can.p0);
+        r.yakus();
     },
     "cards": function(c0) {
         // c0 is canvas object list (e.g. can.tab.c)
@@ -493,6 +495,54 @@ var r = {
                 c0.con.fillStyle = fg;
             }
             c0.con.fillRect(x1, y1, sx, sy);
+        }
+    },
+    "ybmp": function(c0, b0, a0) {
+        // render single bmp in canvas object
+        var bg = rgb.css([255,0,0,a0]);
+        var fg = rgb.css([0,255,255,a0]);
+        var sx = (c0.can.width / bmp.nx) >>> 0;
+        var sy = (c0.can.height / bmp.ny) >>> 0;
+        for (var i = 0; i < bmp.nt; i++) {
+            var x0 = i % bmp.nx;
+            var x1 = (x0 * sx) >>> 0;
+            var y0 = (i / bmp.nx) >>> 0;
+            var y1 = (y0 * sy) >>> 0;
+            if (b0[i] == 0) {
+                c0.con.fillStyle = bg;
+            } else {
+                c0.con.fillStyle = fg;
+            }
+            c0.con.fillRect(x1, y1, sx, sy);
+        }
+    },
+    "yakus": function() {
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = yakus.n[i];
+            var k1 = "y0_" + k0;
+            var k2 = "y1_" + k0;
+            var y0 = can[k1];
+            var y1 = can[k2];
+            for (var j = 0; j < y0.c.length; j++) {
+                var k3 = y0.c[j].can.dataset.x;
+                var c0 = can.db[k3].card;
+                var c1 = yakus[k0].cards[j];
+                if (c0) {
+                    r.ybmp(y0.c[j], bmp.d[c1], 1.0);
+                } else {
+                    r.ybmp(y0.c[j], bmp.d[c1], 0.5);
+                }
+            }
+            for (var j = 0; j < y1.c.length; j++) {
+                var k3 = y1.c[j].can.dataset.x;
+                var c0 = can.db[k3].card;
+                var c1 = yakus[k0].cards[j];
+                if (c0) {
+                    r.ybmp(y1.c[j], bmp.d[c1], 1.0);
+                } else {
+                    r.ybmp(y1.c[j], bmp.d[c1], 0.5);
+                }
+            }
         }
     }
 }
