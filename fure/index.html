@@ -31,7 +31,7 @@
                 // console.log(bmp);
                 // r.rand(dom.test);
                 // r.rbmp(dom.test);
-                can.bmp();
+                // can.bmp();
 
                 g.state = {};
                 g.events();
@@ -78,6 +78,7 @@
                     can.deal(1, "p1");
                 }
                 console.log(can);
+                r.frame();
             },
             "play": function() {
                 console.log("game play turn");
@@ -98,7 +99,7 @@ var can = {
             "p1": [10, 4, 64, 200, 8, 1],
             // "y0": [3, 1, 64, 340, 22, 14],
             // "y1": [3, 1, 800, 340, 22, 14],
-            "tab": [10, 4, 64, 64, 8, 1],
+            "tab": [10, 4, 64, 64, 12, 1],
             "deck": [1, 1, 64, 64, can.size, 1]
         }
         can.yakus();
@@ -459,6 +460,39 @@ var r = {
                 }
                 c0[i].con.fillRect(x1, y1, sx, sy);
             }
+        }
+    },
+    "frame": function() {
+        r.cards(can.tab);
+        r.cards(can.p0);
+    },
+    "cards": function(c0) {
+        // c0 is canvas object list (e.g. can.tab.c)
+        for (var i = 0; i < c0.c.length; i++) {
+            var k0 = c0.c[i].can.dataset.x;
+            var c1 = can.db[k0].card;
+            if (c1 != null) {
+                r.bmp(c0.c[i], bmp.d[c1]);
+            }
+        }
+    },
+    "bmp": function(c0, b0) {
+        // render single bmp in canvas object
+        var bg = rgb.css([255,0,0,1.0]);
+        var fg = rgb.css([0,255,255,1.0]);
+        var sx = (c0.can.width / bmp.nx) >>> 0;
+        var sy = (c0.can.height / bmp.ny) >>> 0;
+        for (var i = 0; i < bmp.nt; i++) {
+            var x0 = i % bmp.nx;
+            var x1 = (x0 * sx) >>> 0;
+            var y0 = (i / bmp.nx) >>> 0;
+            var y1 = (y0 * sy) >>> 0;
+            if (b0[i] == 0) {
+                c0.con.fillStyle = bg;
+            } else {
+                c0.con.fillStyle = fg;
+            }
+            c0.con.fillRect(x1, y1, sx, sy);
         }
     }
 }
