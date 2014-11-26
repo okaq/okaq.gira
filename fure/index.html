@@ -36,6 +36,10 @@
                 g.state = {};
                 g.events();
 
+                g.state.turn = "p0";
+                g.open();
+                g.play();
+
                 console.log("total running time: " + (window.performance.now() - t0) + "ms");
             },
             "events": function() {
@@ -55,7 +59,7 @@
                     g.ev[k] = new Event(k);
                     // g.hand[k] = function(e){console.log(k+" handler called.");console.log(e);};
                     document.addEventListener(k, g[k], false);
-                    document.dispatchEvent(g.ev[k]);
+                    // document.dispatchEvent(g.ev[k]);
                 }
                 console.log(g.ev);
             },
@@ -68,6 +72,12 @@
             },
             "open": function() {
                 console.log("Koi koi opening deal");
+                for (var i = 0; i < 8; i++) {
+                    can.deal(1, "p0");
+                    can.deal(1, "tab");
+                    can.deal(1, "p1");
+                }
+                console.log(can);
             },
             "play": function() {
                 console.log("game play turn");
@@ -165,12 +175,13 @@ var can = {
             can.db[k1].card = d0[i];
         }
         // console.log(can.db);
+        can.db["deck"] = 0; // index
     },
-    "yaku": function(p0) {
-        // extract yakus canvas objects for p0
+    "yaku": function(t0) {
+        // extract yakus canvas objects for t0
         var r0 = [];
         for (var i = 0; i < yakus.n.length; i++) {
-            var k0 = p0 + "_" + yakus.n[i];
+            var k0 = t0 + "_" + yakus.n[i];
             r0.push(can[k0]);
         }
         return r0;
@@ -195,6 +206,23 @@ var can = {
         r1 = can.yaku("y1");
         for (var i = 0; i < r1.length; i++) {
             r.rbmp(r1[i].c);
+        }
+    },
+    "deal": function(n0, t0) {
+        // deal n0 cards from deck to p0
+        var k0 = can.empty(t0);
+        var k1 = "deck_" + can.db.deck;
+        can.db[k0].card = can.db[k1].card;
+        can.db.deck++;
+    },
+    "empty": function(t0) {
+        // return next empty card slot for p0
+        var k0 = can.keys(can[t0]);
+        for (var i = 0; i < k0.length; i++) {
+            // console.log(can.db[k0[i]], k0[i]);
+            if (can.db[k0[i]].card == null) {
+                return k0[i];
+            }
         }
     }
 }
