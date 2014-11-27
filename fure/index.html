@@ -62,7 +62,7 @@
                     document.addEventListener(k, g[k], false);
                     // document.dispatchEvent(g.ev[k]);
                 }
-                console.log(g.ev);
+                // console.log(g.ev);
             },
             "click": function(e) {
                 // console.log(e);
@@ -85,7 +85,7 @@
                     can.deal(1, "tab");
                     can.deal(1, "p1");
                 }
-                console.log(can);
+                // console.log(can);
                 r.frame();
             },
             "play": function() {
@@ -93,6 +93,7 @@
                 g.match();
             },
             "match": function() {
+                g.state.match = [];
                 // check match
                 g.state.match = can.match(g.state.turn, "tab");
                 console.log(g.state);
@@ -114,6 +115,7 @@
                 } else {
                     console.log("No match. Try again!");
                 }
+                g.match();
             },
             "deck": function() {
                 // deal one card from deck
@@ -141,6 +143,8 @@ var can = {
         can.yakus();
         can.create();
         can.remove("p1");
+        can.assign();
+        console.log(can);
     },
     "yakus": function() {
         for (var i = 0; i < yakus.n.length; i++) {
@@ -187,7 +191,7 @@ var can = {
         // console.log(can.db);
         can.shuffle();
         // can.yakus();
-        console.log(can);
+        // console.log(can);
     },
     "shuffle": function() {
         // shuffle the deck
@@ -220,6 +224,32 @@ var can = {
         // remove s0 from the dom
         for (var i = 0; i < can[s0].c.length; i++) {
             dom.remove(can[s0].c[i]);   
+        }
+    },
+    "assign": function() {
+        // assign initial yakus
+        var c0 = can.yaku("y0");
+        var c1 = can.yaku("y1");
+        for (var i = 0; i < c0.length; i++) {
+            var k0 = can.keys(c0[i]);
+            var k1 = k0[0].split("_");
+            var k2 = k1[1]; // kasu name
+            // console.log(k0,k1,k2);
+            for (var j = 0; j < k0.length; j++) {
+                var k3 = k0[j];
+                can.db[k3].card = yakus[k2].cards[j];
+                can.db[k3].collect = false;
+            }
+        }
+        for (var i = 0; i < c1.length; i++) {
+            var k0 = can.keys(c1[i]);
+            var k1 = k0[0].split("_");
+            var k2 = k1[1]; // kasu name
+            for (var j = 0; j < k0.length; j++) {
+                var k3 = k0[j];
+                can.db[k3].card = yakus[k2].cards[j];
+                can.db[k3].collect = false;
+            }
         }
     },
     "yaku": function(t0) {
@@ -322,6 +352,9 @@ var can = {
     "similar": function(k0, k1) {
         var c0 = can.db[k0].card;
         var c1 = can.db[k1].card;
+        if (c0 == null || c1 == null) {
+            return false;
+        }
         var s0 = (c0 / can.suit) >>> 0;
         var s1 = (c1 / can.suit) >>> 0;
         return (s0 == s1);
@@ -427,11 +460,11 @@ yakus.shiko.need = 4;
 yakus.shiko.extra = null;
 
 // ame-shiko
-yakus.ame_shiko = {};
-yakus.ame_shiko.cards = [3,11,31,43,47];
-yakus.ame_shiko.points = 7;
-yakus.ame_shiko.need = 4;
-yakus.ame_shiko.extra = null;
+yakus.ameshiko = {};
+yakus.ameshiko.cards = [3,11,31,43,47];
+yakus.ameshiko.points = 7;
+yakus.ameshiko.need = 4;
+yakus.ameshiko.extra = null;
 
 // goko
 yakus.goko = {};
@@ -503,7 +536,7 @@ yakus.kasu.points = 1;
 yakus.kasu.need = 10;
 yakus.kasu.extra = 1;
 
-yakus.n = ["sanko","shiko", "ame_shiko","goko","inoshikacho",
+yakus.n = ["sanko","shiko", "ameshiko","goko","inoshikacho",
 "tane","akatan","aotan","chofuku",
     "tanzaku","tsukimi","hanami","kasu"];
 // longest kasu = 22 cards
