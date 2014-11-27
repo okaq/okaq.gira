@@ -110,6 +110,7 @@ var can = {
         }
         can.yakus();
         can.create();
+        can.remove("p1");
     },
     "yakus": function() {
         for (var i = 0; i < yakus.n.length; i++) {
@@ -184,6 +185,12 @@ var can = {
         }
         // console.log(can.db);
         can.db["deck"] = 0; // index
+    },
+    "remove": function(s0) {
+        // remove s0 from the dom
+        for (var i = 0; i < can[s0].c.length; i++) {
+            dom.remove(can[s0].c[i]);   
+        }
     },
     "yaku": function(t0) {
         // extract yakus canvas objects for t0
