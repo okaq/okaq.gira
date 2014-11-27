@@ -362,7 +362,7 @@ var can = {
     "collect": function(s0, k0, k1) {
         var s1 = s0 == "p0" ? "y0" : "y1";
         var c0 = can.db[k0].card;
-        var c1 = can.db[k0].card;
+        var c1 = can.db[k1].card;
         can.tally(s1, [c0, c1]);
         can.db[k0].card = null;
         can.db[k0].clicked = null;
@@ -382,6 +382,14 @@ var can = {
     "place": function(k0, c0) {
         // place card in yakus card set
         // yakus may require additional field (collected)
+        // console.log(k0, c0);
+        var k1 = can[k0];
+        for (var i = 0; i < k1.c.length; i++) {
+            var k2 = k1.c[i].can.dataset.x;
+            if (can.db[k2].card == c0) {
+                can.db[k2].collect = true;
+            }
+        }
     }
 }
 // dom
@@ -690,6 +698,10 @@ var r = {
         // var bg = rgb.css([255,0,0,a0]);
         var fg = rgb.css(rgb0[3]);
         // var fg = rgb.css([0,255,255,a0]);
+        if (a0) {
+            bg = rgb.css(rgb0[0]);
+            fg = rgb.css(rgb0[1]);
+        }
         var sx = (c0.can.width / bmp.nx) >>> 0;
         var sy = (c0.can.height / bmp.ny) >>> 0;
         for (var i = 0; i < bmp.nt; i++) {
@@ -714,23 +726,29 @@ var r = {
             var y1 = can[k2];
             for (var j = 0; j < y0.c.length; j++) {
                 var k3 = y0.c[j].can.dataset.x;
-                var c0 = can.db[k3].card;
+                var c0 = can.db[k3].collect; // can.db[k3].card;
                 var c1 = yakus[k0].cards[j];
+                r.ybmp(y0.c[j], bmp.d[c1], c0, c1);
+                /*
                 if (c0) {
                     r.ybmp(y0.c[j], bmp.d[c1], 1.0, c1);
                 } else {
                     r.ybmp(y0.c[j], bmp.d[c1], 0.5, c1);
-                }
+                    }
+                    */
             }
             for (var j = 0; j < y1.c.length; j++) {
                 var k3 = y1.c[j].can.dataset.x;
-                var c0 = can.db[k3].card;
+                var c0 = can.db[k3].collect; // can.db[k3].card;
                 var c1 = yakus[k0].cards[j];
+                r.ybmp(y1.c[j], bmp.d[c1], c0, c1);
+                /*
                 if (c0) {
                     r.ybmp(y1.c[j], bmp.d[c1], 1.0, c1);
                 } else {
                     r.ybmp(y1.c[j], bmp.d[c1], 0.5, c1);
-                }
+                    }
+                    */
             }
         }
     }
@@ -746,9 +764,9 @@ var rgb = {
                 var bg = rgb.rand();
                 var fg = rgb.rand();
                 var bga = bg.slice(0);
-                bga[3] = 0.7;
+                bga[3] = 0.2;
                 var fga = fg.slice(0);
-                fga[3] = 0.7;
+                fga[3] = 0.2;
                 rgb.cards[i0] = bg;
                 rgb.cards[i0+1] = fg;
                 rgb.cards[i0+2] = bga;
