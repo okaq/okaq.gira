@@ -71,6 +71,8 @@
                 // clear all other clicks, and assign this one
                 can.clicked(e.target.dataset.x);
                 r.frame();
+                // g.match();
+                g.collect();
             },
             "turn": function() {
                 // p0,p0/tab,p1,p1/tab
@@ -88,6 +90,25 @@
             },
             "play": function() {
                 console.log("game play turn");
+                g.match();
+            },
+            "match": function() {
+                // check match
+                g.state.match = can.match(g.state.turn, "tab");
+                console.log(g.state);
+                // speedup: only check if clicked cards match, rather than whole set
+                // collect
+                // deck deal
+            },
+            "collect": function() {
+                var k0 = can.chosen("tab");
+                var k1 = can.chosen(g.state.turn);
+                if (k0 == null || k1 == null) {
+                    return;
+                }
+                if (can.similar(k0, k1)) {
+                    console.log("It's a match!");
+                }
             },
             "end": function() {
                 console.log("winner declared");
@@ -262,6 +283,39 @@ var can = {
         can.db[k0].clicked = true;
         // bug: p1 is rendered on top of p0
         // visibility, dom add flag
+    },
+    "chosen": function(s0) {
+        // return clicked key
+        var k0 = can.keys(can[s0]);
+        for (var i = 0; i < k0.length; i++) {
+            var k1 = k0[i];
+            if (can.db[k1].clicked == true) {
+                return k1;
+            }
+        }
+    },
+    "match": function(t0, t1) {
+        // return match set (keys) for t0, t1
+        var r0 = [];
+        var k0 = can.keys(can[t0]);
+        var k1 = can.keys(can[t1]);
+        for (var i = 0; i < k0.length; i++) {
+            var k2 = k0[i];
+            for (var j = 0; j < k1.length; j++) {
+                var k3 = k1[j];
+                if (can.similar(k2, k3)) {
+                    r0.push([k2,k3]);
+                }
+            }
+        }
+        return r0;
+    },
+    "similar": function(k0, k1) {
+        var c0 = can.db[k0].card;
+        var c1 = can.db[k1].card;
+        var s0 = (c0 / can.suit) >>> 0;
+        var s1 = (c1 / can.suit) >>> 0;
+        return (s0 == s1);
     }
 }
 // dom
