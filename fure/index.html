@@ -436,6 +436,27 @@ var bmp = {
 }
 // render
 var r = {
+    "white": function() {
+        var rgb0 = [255,255,255,1.0];
+        r.color(can.p0.c, rgb0);
+        // r.color(can.p1.c, rgb0);
+        r.color(can.tab.c, rgb0);
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = yakus.n[i];
+            var k1 = "y0_" + k0;
+            var k2 = "y1_" + k0;
+            var y0 = can[k1];
+            var y1 = can[k2];
+            r.color(y0.c, rgb0);
+            r.color(y1.c, rgb0);
+        }
+    },
+    "color": function(c0, rgb0) {
+         for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgb.css(rgb0);
+            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
+    },
     "rand": function(c0) {
         for (var i = 0; i < c0.length; i++) {
             c0[i].con.fillStyle = rgb.rc();
@@ -464,6 +485,7 @@ var r = {
         }
     },
     "frame": function() {
+        r.white();
         r.cards(can.tab);
         r.cards(can.p0);
         r.yakus();
@@ -564,9 +586,9 @@ var rgb = {
                 var bg = rgb.rand();
                 var fg = rgb.rand();
                 var bga = bg.slice(0);
-                bga[3] = 0.8;
+                bga[3] = 0.7;
                 var fga = fg.slice(0);
-                fga[3] = 0.8;
+                fga[3] = 0.7;
                 rgb.cards[i0] = bg;
                 rgb.cards[i0+1] = fg;
                 rgb.cards[i0+2] = bga;
