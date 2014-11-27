@@ -37,6 +37,7 @@
                 g.events();
 
                 g.state.turn = "p0";
+
                 g.open();
                 g.play();
 
@@ -64,7 +65,12 @@
                 console.log(g.ev);
             },
             "click": function(e) {
-                console.log(e);
+                // console.log(e);
+                // console.log(e.target.dataset.x);
+                // get db key (p0, tab)
+                // clear all other clicks, and assign this one
+                can.clicked(e.target.dataset.x);
+                r.frame();
             },
             "turn": function() {
                 // p0,p0/tab,p1,p1/tab
@@ -196,6 +202,14 @@ var can = {
         }
         return r0;
     },
+    "extract": function(s0) {
+        var r0 = [];
+        for (var i = 0; i < can[s0].c.length; i++) {
+            var k0 = s0 + "_" + i;
+            r0.push(k0);
+        }
+        return r0;
+    },
     "bmp": function() {
         r.rbmp(can.tab.c);
         r.rbmp(can.p0.c);
@@ -226,13 +240,28 @@ var can = {
                 return k0[i];
             }
         }
+    },
+    "clicked": function(k0) {
+        if (can.db[k0].card == null) {
+            return;
+        }
+        var k1 = k0.split("_");
+        // console.log(k1);
+        var k2 = can.extract(k1[0]);
+        // console.log(k2);
+        for (var i = 0; i < k2.length; i++) {
+            can.db[k2[i]].clicked = null;
+        }
+        can.db[k0].clicked = true;
+        // bug: p1 is rendered on top of p0
+        // visibility, dom add flag
     }
 }
 // dom
 var dom = {
     "init": function() {
         dom.alpha = document.getElementById("alpha");
-        dom.test = dom.layout("test", [[900,900,512,64]]);
+        // dom.test = dom.layout("test", [[900,900,512,64]]);
     },
     "layout": function(n0, r0) {
         // input is id name, array of rects
@@ -507,6 +536,10 @@ var r = {
         // var bg = rgb.css([255,0,0,1.0]);
         var fg = rgb.css(rgb0[1]);
         // var fg = rgb.css([0,255,255,1.0]);
+        if (can.db[c0.can.dataset.x].clicked == true) {
+            bg = rgb.css(rgb0[2]);
+            fg = rgb.css(rgb0[3]);
+        }
         var sx = (c0.can.width / bmp.nx) >>> 0;
         var sy = (c0.can.height / bmp.ny) >>> 0;
         for (var i = 0; i < bmp.nt; i++) {
