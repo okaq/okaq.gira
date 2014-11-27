@@ -108,7 +108,16 @@
                 }
                 if (can.similar(k0, k1)) {
                     console.log("It's a match!");
+                    can.collect(g.state.turn, k0, k1);
+                    r.frame();
+                    g.deck();
+                } else {
+                    console.log("No match. Try again!");
                 }
+            },
+            "deck": function() {
+                // deal one card from deck
+                // if match, collect, else, goes to table
             },
             "end": function() {
                 console.log("winner declared");
@@ -316,6 +325,30 @@ var can = {
         var s0 = (c0 / can.suit) >>> 0;
         var s1 = (c1 / can.suit) >>> 0;
         return (s0 == s1);
+    },
+    "collect": function(s0, k0, k1) {
+        var s1 = s0 == "p0" ? "y0" : "y1";
+        var c0 = can.db[k0].card;
+        var c1 = can.db[k0].card;
+        can.tally(s1, [c0, c1]);
+        can.db[k0].card = null;
+        can.db[k0].clicked = null;
+        can.db[k1].card = null;
+        can.db[k1].clicked = null;
+    },
+    "tally": function(s0, c0) {
+        // add c0 list of cards to yakus
+        for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i];
+            for (var j = 0; j < yakus.n.length; j++) {
+                var k0 = s0 + "_" + yakus.n[j];
+                can.place(k0, c1);
+            }
+        }
+    },
+    "place": function(k0, c0) {
+        // place card in yakus card set
+        // yakus may require additional field (collected)
     }
 }
 // dom
