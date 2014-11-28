@@ -77,6 +77,12 @@
             "turn": function() {
                 // p0,p0/tab,p1,p1/tab
                 // during tab check table match
+                if (g.state.turn == "p0") {
+                    g.state.turn = "p1";
+                } else {
+                    g.state.turn = "p0";
+                }
+                console.log("Turn: " + g.state.turn);
             },
             "open": function() {
                 console.log("Koi koi opening deal");
@@ -110,16 +116,30 @@
                 if (can.similar(k0, k1)) {
                     console.log("It's a match!");
                     can.collect(g.state.turn, k0, k1);
-                    r.frame();
-                    g.deck();
                 } else {
                     console.log("No match. Try again!");
                 }
-                g.match();
+                r.frame();
+                // g.match();
+                g.deck();
             },
             "deck": function() {
                 // deal one card from deck
                 // if match, collect, else, goes to table
+                var c0 = can.single();
+                // console.log(c0, can.db.deck);
+                g.state.match = [];
+                g.state.match = can.draw(c0);
+                // console.log(c0, g.state.match);
+                if (g.state.match.length == 0) {
+                    var k0 = can.empty("tab");
+                    // console.log(k0);
+                    can.db[k0].card = c0;
+                } else {
+                    // can.achieve(g.state.turn, g.state.match[0], c0)
+                }
+                r.frame();
+                g.turn();
             },
             "end": function() {
                 console.log("winner declared");
@@ -292,14 +312,21 @@ var can = {
         }
     },
     "deal": function(n0, t0) {
-        // deal n0 cards from deck to p0
+        // deal n0 cards from deck to t0
         var k0 = can.empty(t0);
         var k1 = "deck_" + can.db.deck;
         can.db[k0].card = can.db[k1].card;
         can.db.deck++;
     },
+    "single": function() {
+        // return one card from deck
+        var k1 = "deck_" + can.db.deck;
+        var c0 = can.db[k1].card;
+        can.db.deck++;
+        return c0;
+    },
     "empty": function(t0) {
-        // return next empty card slot for p0
+        // return next empty card slot for t0
         var k0 = can.keys(can[t0]);
         for (var i = 0; i < k0.length; i++) {
             // console.log(can.db[k0[i]], k0[i]);
@@ -345,6 +372,24 @@ var can = {
                 if (can.similar(k2, k3)) {
                     r0.push([k2,k3]);
                 }
+            }
+        }
+        return r0;
+    },
+    "draw": function(c0) {
+        // return set of matches (tab keys) of c0 with table
+        var r0 = [];
+        var k0 = can.keys(can.tab);
+        for (var i = 0; i < k0.length; i++) {
+            var k1 = k0[i];
+            var c1 = can.db[k1].card;
+            if (c1 == null) {
+                continue;
+            }
+            var s0 = (c0 / can.suit) >>> 0;
+            var s1 = (c1 / can.suit) >>> 0;
+            if (s0 == s1) {
+                r0.push[k1];
             }
         }
         return r0;
@@ -764,9 +809,9 @@ var rgb = {
                 var bg = rgb.rand();
                 var fg = rgb.rand();
                 var bga = bg.slice(0);
-                bga[3] = 0.2;
+                bga[3] = 0.4;
                 var fga = fg.slice(0);
-                fga[3] = 0.2;
+                fga[3] = 0.4;
                 rgb.cards[i0] = bg;
                 rgb.cards[i0+1] = fg;
                 rgb.cards[i0+2] = bga;
