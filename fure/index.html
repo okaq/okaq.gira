@@ -124,6 +124,10 @@
                 g.deck();
             },
             "deck": function() {
+                // refactor: don't increment can.db.deck until end
+                // match current deck key with table keys
+                // collect(t0, [keys]);
+
                 // deal one card from deck
                 // if match, collect, else, goes to table
                 var c0 = can.single();
@@ -136,7 +140,7 @@
                     // console.log(k0);
                     can.db[k0].card = c0;
                 } else {
-                    // can.achieve(g.state.turn, g.state.match[0], c0)
+                    can.achieve(g.state.turn, g.state.match[0], c0)
                 }
                 r.frame();
                 g.turn();
@@ -435,6 +439,8 @@ var can = {
                 can.db[k2].collect = true;
             }
         }
+    },
+    "achieve": function(t0, m0, c0) {
     }
 }
 // dom
