@@ -121,7 +121,15 @@
                 }
                 r.frame();
                 // g.match();
-                g.deck();
+                // g.deck();
+                g.deck2();
+            },
+            "deck2": function() {
+                var k0 = "deck_" + can.db.deck;
+                console.log(k0);
+                g.state.match = [];
+                g.state.match = can.match2("tab", k0);
+                console.log(g.state.match);
             },
             "deck": function() {
                 // refactor: don't increment can.db.deck until end
@@ -394,6 +402,17 @@ var can = {
             var s1 = (c1 / can.suit) >>> 0;
             if (s0 == s1) {
                 r0.push[k1];
+            }
+        }
+        return r0;
+    },
+    "match2": function(t0, k0) {
+        var r0 = [];
+        var k1 = can.keys(can[t0]);
+        for (var i = 0; i < k1.length; i++) {
+            var k2 = k1[i];
+            if (can.similar(k2, k0)) {
+                r0.push([k2,k0]);
             }
         }
         return r0;
