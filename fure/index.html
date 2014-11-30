@@ -130,6 +130,7 @@
                 g.state.match = [];
                 g.state.match = can.match2("tab", k0);
                 console.log(g.state.match);
+                g.deck3();
             },
             "deck": function() {
                 // refactor: don't increment can.db.deck until end
@@ -143,6 +144,9 @@
                 g.state.match = [];
                 g.state.match = can.draw(c0);
                 // console.log(c0, g.state.match);
+                g.deck3();
+            },
+            "deck3": function() {
                 if (g.state.match.length == 0) {
                     var k0 = can.empty("tab");
                     // console.log(k0);
