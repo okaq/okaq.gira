@@ -147,10 +147,12 @@
                 g.deck3();
             },
             "deck3": function() {
+                var k0 = "deck_" + can.db.deck;
                 if (g.state.match.length == 0) {
-                    var k0 = can.empty("tab");
+                    var k1 = can.empty("tab");
                     // console.log(k0);
-                    can.db[k0].card = c0;
+                    can.db[k1].card = can.db[k0].card; // c0;
+                    can.deck++;
                 } else {
                     can.achieve(g.state.turn, g.state.match[0], c0)
                 }
