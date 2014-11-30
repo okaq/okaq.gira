@@ -153,8 +153,11 @@
                     // console.log(k0);
                     can.db[k1].card = can.db[k0].card; // c0;
                     can.deck++;
+                } else if (g.state.match.length == 1) {
+                    console.log("Deck deal matches single card!");
+                    // can.achieve(g.state.turn, g.state.match[0], c0)
                 } else {
-                    can.achieve(g.state.turn, g.state.match[0], c0)
+                    console.log("Deck deal matches " + g.state.match.length);
                 }
                 r.frame();
                 g.turn();
