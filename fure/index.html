@@ -116,13 +116,15 @@
                 if (can.similar(k0, k1)) {
                     console.log("It's a match!");
                     can.collect(g.state.turn, k0, k1);
+                    r.frame();
+                    g.deck2();
                 } else {
                     console.log("No match. Try again!");
                 }
-                r.frame();
+                // r.frame();
                 // g.match();
                 // g.deck();
-                g.deck2();
+                // g.deck2();
             },
             "deck2": function() {
                 var k0 = "deck_" + can.db.deck;
@@ -156,8 +158,14 @@
                 } else if (g.state.match.length == 1) {
                     console.log("Deck deal matches single card!");
                     // can.achieve(g.state.turn, g.state.match[0], c0)
+                    // can.achieve(g.state.turn, g.state.match[0]);
+                    can.collect(g.state.turn, g.state.match[0][0], g.state.match[0][1]);
+                    can.db.deck++;
                 } else {
                     console.log("Deck deal matches " + g.state.match.length);
+                    // placeholder, just the first
+                    can.collect(g.state.turn, g.state.match[0][0], g.state.match[0][1]);
+                    can.db.deck++;
                 }
                 r.frame();
                 g.turn();
@@ -468,7 +476,10 @@ var can = {
             }
         }
     },
-    "achieve": function(t0, m0, c0) {
+    "achieve": function(c0) {
+        // input is g.state.match list
+        var c1 = can.db[c0[0]].card;
+        var c2 = can.db[c0[1]].card;
     }
 }
 // dom
