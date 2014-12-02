@@ -83,6 +83,7 @@
                     g.state.turn = "p0";
                 }
                 console.log("Turn: " + g.state.turn);
+                g.play();
             },
             "open": function() {
                 console.log("Koi koi opening deal");
@@ -97,6 +98,10 @@
             "play": function() {
                 console.log("game play turn");
                 g.match();
+                // if g.turn = p1
+                if (g.state.turn == "p1") {
+                    g.cpu();
+                }
             },
             "match": function() {
                 g.state.match = [];
@@ -169,6 +174,18 @@
                 }
                 r.frame();
                 g.turn();
+            },
+            "cpu": function() {
+                if (g.state.match.length == 0) {
+                    console.log("No matches for CPU!");
+                    // g.deck2();
+                } else {
+                    console.log("CPU has " + g.state.match.length + " matches");
+                    // naive: collect first match
+                    can.collect(g.state.turn, g.state.match[0][0], g.state.match[0][1]);
+                }
+                r.frame();
+                g.deck2();
             },
             "end": function() {
                 console.log("winner declared");
