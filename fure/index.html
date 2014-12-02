@@ -97,10 +97,19 @@
             },
             "play": function() {
                 console.log("game play turn");
+                if (can.db.deck == 48) {
+                    console.log("No more cards left to deal!");
+                    g.end();
+                    return;
+                }
                 g.match();
                 // if g.turn = p1
                 if (g.state.turn == "p1") {
                     g.cpu();
+                    return;
+                }
+                if (g.state.turn == "p0" && g.state.match.length == 0) {
+                    g.deck2();
                 }
             },
             "match": function() {
