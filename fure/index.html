@@ -131,6 +131,7 @@
                     console.log("It's a match!");
                     can.collect(g.state.turn, k0, k1);
                     r.frame();
+                    // g.yakus();
                     g.deck2();
                 } else {
                     console.log("No match. Try again!");
@@ -182,6 +183,7 @@
                     can.db.deck++;
                 }
                 r.frame();
+                // g.yakus();
                 g.turn();
             },
             "cpu": function() {
@@ -194,10 +196,21 @@
                     can.collect(g.state.turn, g.state.match[0][0], g.state.match[0][1]);
                 }
                 r.frame();
+                // g.yakus();
                 g.deck2();
+            },
+            "yakus": function() {
+                // determine yakus
+                g.state.yakus = {};
+                g.state.yakus.p0 = can.score("p0");
+                g.state.yakus.p1 = can.score("p1");
+                console.log(g.state.yakus);
+                // bug: players collecting same cards?
+
             },
             "end": function() {
                 console.log("winner declared");
+                g.yakus();
             }
         }
 // canvas objects
@@ -506,6 +519,28 @@ var can = {
         // input is g.state.match list
         var c1 = can.db[c0[0]].card;
         var c2 = can.db[c0[1]].card;
+    },
+    "score": function(t0) {
+        // return type
+        var r0 = {};
+        // determine yakus for player t0
+        var t1 = (t0 == "p0") ? "y0" : "y1";
+        for (var i = 0; i < yakus.n.length; i++) {
+            // yaku canvas object
+            var c0 = t1 + "_" + yakus.n[i];
+            // yaku keys
+            var k0 = can.keys(can[c0]);
+            var c1 = 0;
+            r0[c0] = [];
+            for (var j = 0; j < k0.length; j++) {
+                // count collected
+                if (can.db[k0[j]].collect == true) {
+                    c1++;
+                }
+            }
+            r0[c0].push(c1);
+        }
+        return r0;
     }
 }
 // dom
