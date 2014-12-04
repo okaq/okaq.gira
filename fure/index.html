@@ -150,6 +150,7 @@
             "deck2": function() {
                 if (can.db.deck >= 48) {
                     console.log("Deck is empty!");
+                    g.play();
                     return;
                 }
                 var k0 = "deck_" + can.db.deck;
@@ -223,10 +224,26 @@
                 g.state.points.p0 = can.points("p0");
                 g.state.points.p1 = can.points("p1");
                 console.log(g.state.points);
+                g.win();
             },
             "end": function() {
                 console.log("winner declared");
                 g.yakus();
+            },
+            "win": function() {
+                console.log("final score!");
+                console.log("p0: " + g.state.points.p0.total);
+                console.log("p1: " + g.state.points.p1.total);
+                var t0 = g.state.points.p0.total - g.state.points.p1.total;
+                if (t0 > 0) {
+                    console.log("p0 wins!");
+                }
+                if (t0 < 0) {
+                    console.log("p1 wins!");
+                }
+                if (t0 == 0) {
+                    console.log("its a tie!");
+                }
             }
         }
 // canvas objects
@@ -560,14 +577,36 @@ var can = {
         return r0;
     },
     "points": function(t0) {
+        var r0 = {};
         var t1 = (t0 == "p0") ? "y0" : "y1";
-        for (var i = 0; i < g.state.yakus[t0].length; i++) {
-            var n0 = g.state.yakus[t0][i];
+        // console.log(g.state.yakus[t0]);
+        var y0 = g.state.yakus[t0];
+        for (var k in y0) {
+            // var n0 = y0[k];
             // var n1 = n0.split("_");
             // var n2 = n1[1];
-            var n1 = n0.substr(3);
-            console.log(n1);
+            var n0 = k.substr(3);
+            // console.log(n0);
+            var n1 = y0[k][0];
+            var n2 = yakus[n0].need;
+            var n3 = n1 - n2;
+            if (n3 >= 0) {
+                r0[k] = yakus[n0].points;
+            } else {
+                r0[k] = 0;
+                continue;
+            }
+            if (yakus[n0].extra) {
+                r0[k] += (yakus[n0].extra * n3);
+            }
         }
+        // total
+        var t2 = 0;
+        for (var k in r0) {
+            t2 += r0[k];
+        }
+        r0.total = t2;
+        return r0;
     }
 }
 // dom
