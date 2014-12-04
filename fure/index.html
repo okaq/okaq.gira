@@ -97,12 +97,17 @@
             },
             "play": function() {
                 console.log("game play turn");
-                if (can.db.deck == 48) {
+                if (can.db.deck >= 48) {
                     console.log("No more cards left to deal!");
+                    // g.end();
+                    // return;
+                }
+                g.match();
+                if (can.db.deck >= 48 && g.state.match.length == 0) {
+                    console.log("Round finished time to score yakus!");
                     g.end();
                     return;
                 }
-                g.match();
                 // if g.turn = p1
                 if (g.state.turn == "p1") {
                     g.cpu();
@@ -135,6 +140,7 @@
                     g.deck2();
                 } else {
                     console.log("No match. Try again!");
+                    g.play();
                 }
                 // r.frame();
                 // g.match();
@@ -142,6 +148,10 @@
                 // g.deck2();
             },
             "deck2": function() {
+                if (can.db.deck >= 48) {
+                    console.log("Deck is empty!");
+                    return;
+                }
                 var k0 = "deck_" + can.db.deck;
                 console.log(k0);
                 g.state.match = [];
@@ -150,6 +160,7 @@
                 g.deck3();
             },
             "deck": function() {
+
                 // refactor: don't increment can.db.deck until end
                 // match current deck key with table keys
                 // collect(t0, [keys]);
@@ -208,8 +219,10 @@
                 g.state.yakus.p1 = can.score("p1");
                 console.log(g.state.yakus);
                 // bug: players collecting same cards?
-                // g.state.points = {};
-
+                g.state.points = {};
+                g.state.points.p0 = can.points("p0");
+                g.state.points.p1 = can.points("p1");
+                console.log(g.state.points);
             },
             "end": function() {
                 console.log("winner declared");
@@ -545,6 +558,16 @@ var can = {
             r0[c0].push(c1);
         }
         return r0;
+    },
+    "points": function(t0) {
+        var t1 = (t0 == "p0") ? "y0" : "y1";
+        for (var i = 0; i < g.state.yakus[t0].length; i++) {
+            var n0 = g.state.yakus[t0][i];
+            // var n1 = n0.split("_");
+            // var n2 = n1[1];
+            var n1 = n0.substr(3);
+            console.log(n1);
+        }
     }
 }
 // dom
