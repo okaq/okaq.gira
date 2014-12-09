@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head id="zeta">
+        <title>okaq</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
+        <meta name="source" content="https://github.com/okaq/okaq.gira" />
+        <meta name="creator" content="AQ <aq@okaq.com>" />
+        <meta name="date" content="2014-11-24" />
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAXklEQVR4nGJZc6SLgZaAiaamDwsLWJA57ouXYFW0MzYGqzgx6od+EI1aMAIsYBwti0YtGLUAtT7ABXylsbtj89N/BPUO/SAatWAEWEBUPiAmveMCQz+IaG4BIAAA//+6ug/SDvh8KQAAAABJRU5ErkJggg==" />
+        <style type="text/css">
+            html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(255,255,255,1.0);}
+        </style>
+        <script type="text/javascript">
+            // ok
+        console.log("okaq gira fure go!");
+        // async load
+        (function(){window.addEventListener("load",function(e){g.init(e);},false);})();
+        // game
+        var g = {
+            "init": function(e) {
+                console.log(e);
+                var t0 = window.performance.now();
+
+                g.w = 1920;
+                g.h = 1080;
+
+                dom.init();
+                can.init();
+                // bmp.init();
+                // console.log(bmp);
+                // r.rand(dom.test);
+                // r.rbmp(dom.test);
+                // can.bmp();
+
+                g.state = {};
+                g.events();
+
+                g.state.turn = "p0";
+
+                g.open();
+                g.play();
+
+                console.log("total running time: " + (window.performance.now() - t0) + "ms");
+            },
+            "events": function() {
+                g.ev = {
+                    "open": {},
+                    /*
+                    "p0_tab": {},
+                    "p0_deck": {},
+                    "p1_tab": {},
+                    "p1_deck": {},
+                     */
+                    "play": {},
+                    "end": {}
+                };
+                // g.hand = {};
+                for (var k in g.ev) {
+                    g.ev[k] = new Event(k);
+                    // g.hand[k] = function(e){console.log(k+" handler called.");console.log(e);};
+                    document.addEventListener(k, g[k], false);
+                    // document.dispatchEvent(g.ev[k]);
+                }
+                // console.log(g.ev);
+            },
+            "click": function(e) {
+                // console.log(e);
+                // console.log(e.target.dataset.x);
+                // get db key (p0, tab)
+                // clear all other clicks, and assign this one
+                can.clicked(e.target.dataset.x);
+                r.frame();
+                // g.match();
+                g.collect();
+            },
+            "turn": function() {
+                // p0,p0/tab,p1,p1/tab
+                // during tab check table match
+                if (g.state.turn == "p0") {
+                    g.state.turn = "p1";
+                } else {
+                    g.state.turn = "p0";
+                }
+                console.log("Turn: " + g.state.turn);
+                g.play();
+            },
+            "open": function() {
+                console.log("Koi koi opening deal");
+                for (var i = 0; i < 8; i++) {
+                    can.deal(1, "p0");
+                    can.deal(1, "tab");
+                    can.deal(1, "p1");
+                }
+                // console.log(can);
+                r.frame();
+            },
+            "play": function() {
+                console.log("game play turn");
+                if (can.db.deck >= 48) {
+                    console.log("No more cards left to deal!");
+                    // g.end();
+                    // return;
+                }
+                g.match();
+                if (can.db.deck >= 48 && g.state.match.length == 0) {
+                    console.log("Round finished time to score yakus!");
+                    g.end();
+                    return;
+                }
+                // if g.turn = p1
+                if (g.state.turn == "p1") {
+                    g.cpu();
+                    return;
+                }
+                if (g.state.turn == "p0" && g.state.match.length == 0) {
+                    g.deck2();
+                }
+            },
+            "match": function() {
+                g.state.match = [];
+                // check match
+                g.state.match = can.match(g.state.turn, "tab");
+                console.log(g.state);
+                // speedup: only check if clicked cards match, rather than whole set
+                // collect
+                // deck deal
+            },
+            "collect": function() {
+                var k0 = can.chosen("tab");
+                var k1 = can.chosen(g.state.turn);
+                if (k0 == null || k1 == null) {
+                    return;
+                }
+                if (can.similar(k0, k1)) {
+                    console.log("It's a match!");
+                    can.collect(g.state.turn, k0, k1);
+                    r.frame();
+                    // g.yakus();
+                    g.deck2();
+                } else {
+                    console.log("No match. Try again!");
+                    g.play();
+                }
+                // r.frame();
+                // g.match();
+                // g.deck();
+                // g.deck2();
+            },
+            "deck2": function() {
+                if (can.db.deck >= 48) {
+                    console.log("Deck is empty!");
+                    g.play();
+                    return;
+                }
+                var k0 = "deck_" + can.db.deck;
+                console.log(k0);
+                g.state.match = [];
+                g.state.match = can.match2("tab", k0);
+                console.log(g.state.match);
+                g.deck3();
+            },
+            "deck": function() {
+
+                // refactor: don't increment can.db.deck until end
+                // match current deck key with table keys
+                // collect(t0, [keys]);
+
+                // deal one card from deck
+                // if match, collect, else, goes to table
+                var c0 = can.single();
+                // console.log(c0, can.db.deck);
+                g.state.match = [];
+                g.state.match = can.draw(c0);
+                // console.log(c0, g.state.match);
+                g.deck3();
+            },
+            "deck3": function() {
+                var k0 = "deck_" + can.db.deck;
+                if (g.state.match.length == 0) {
+                    var k1 = can.empty("tab");
+                    // console.log(k0);
+                    can.db[k1].card = can.db[k0].card; // c0;
+                    // can.deck++;
+                    // bug: deck not incrementing on table deal
+                    can.db.deck++;
+                } else if (g.state.match.length == 1) {
+                    console.log("Deck deal matches single card!");
+                    // can.achieve(g.state.turn, g.state.match[0], c0)
+                    // can.achieve(g.state.turn, g.state.match[0]);
+                    can.collect(g.state.turn, g.state.match[0][0], g.state.match[0][1]);
+                    can.db.deck++;
+                } else {
+                    console.log("Deck deal matches " + g.state.match.length);
+                    // placeholder, just the first
+                    can.collect(g.state.turn, g.state.match[0][0], g.state.match[0][1]);
+                    can.db.deck++;
+                }
+                r.frame();
+                // g.yakus();
+                g.turn();
+            },
+            "cpu": function() {
+                if (g.state.match.length == 0) {
+                    console.log("No matches for CPU!");
+                    // g.deck2();
+                } else {
+                    console.log("CPU has " + g.state.match.length + " matches");
+                    // naive: collect first match
+                    can.collect(g.state.turn, g.state.match[0][0], g.state.match[0][1]);
+                }
+                r.frame();
+                // g.yakus();
+                g.deck2();
+            },
+            "yakus": function() {
+                // determine yakus
+                g.state.yakus = {};
+                g.state.yakus.p0 = can.score("p0");
+                g.state.yakus.p1 = can.score("p1");
+                console.log(g.state.yakus);
+                // bug: players collecting same cards?
+                g.state.points = {};
+                g.state.points.p0 = can.points("p0");
+                g.state.points.p1 = can.points("p1");
+                console.log(g.state.points);
+                g.win();
+            },
+            "end": function() {
+                console.log("winner declared");
+                g.yakus();
+            },
+            "win": function() {
+                console.log("final score!");
+                console.log("p0: " + g.state.points.p0.total);
+                console.log("p1: " + g.state.points.p1.total);
+                var t0 = g.state.points.p0.total - g.state.points.p1.total;
+                if (t0 > 0) {
+                    console.log("p0 wins!");
+                }
+                if (t0 < 0) {
+                    console.log("p1 wins!");
+                }
+                if (t0 == 0) {
+                    console.log("its a tie!");
+                }
+            }
+        }
+// canvas objects
+var can = {
+    "init": function() {
+        can.size = 48;
+        can.suit = 4;
+        can.suits = (can.size/can.suit) >>> 0;
+        bmp.init();
+        can.config = {
+            "p0": [10, 4, 64, 200, 8, 1],
+            "p1": [10, 4, 64, 200, 8, 1],
+            // "y0": [3, 1, 64, 340, 22, 14],
+            // "y1": [3, 1, 800, 340, 22, 14],
+            "tab": [10, 4, 64, 64, 12, 1],
+            "deck": [1, 1, 64, 64, can.size, 1]
+        }
+        can.yakus();
+        can.create();
+        can.remove("p1");
+        can.assign();
+        console.log(can);
+    },
+    "yakus": function() {
+        for (var i = 0; i < yakus.n.length; i++) {
+            var x0 = 64;
+            var x1 = 800;
+            var y0 = 340;
+            var s0 = 3 * bmp.nx + 2;
+            var y1 = (y0 + (i * s0)) >>> 0;
+            var k0 = yakus.n[i];
+            var k1 = "y0_" + k0;
+            var k2 = "y1_" + k0;
+            var c0 = yakus[k0].cards.length;
+            can.config[k1] = [3,1,x0,y1,c0,1];
+            can.config[k2] = [3,1,x1,y1,c0,1];
+            /*
+            for (var j = 0; j < c0; j++) {
+                var x2 = x0 + (j * s0);
+                var x3 = x1 + (j * s0);
+                var y1 = y0 + (i * s0);
+                can.config[k1] = [3,1,x0,y1,c0,1];
+                }
+             */
+            // refactor: yakus canvas object of the form can.y0.goko
+        }
+    },
+    "create": function() {
+        for (var k in can.config) {
+            can[k] = {};
+            can[k].d = {}; // data
+            can[k].r = dom.subc(can.config[k]);
+            can[k].c = dom.layout(k, can[k].r);
+        }
+        // console.log(can);
+        // creating external db requires sync
+        can.db = {};
+        for (var k in can.config) {
+            for (var i = 0; i < can[k].c.length; i++) {
+                var k0 = can[k].c[i].can.dataset.x;
+                can.db[k0] = {};
+                can.db[k0].card = null;
+                can.db[k0].clicked = null;
+            }
+        }
+        // console.log(can.db);
+        can.shuffle();
+        // can.yakus();
+        // console.log(can);
+    },
+    "shuffle": function() {
+        // shuffle the deck
+        var d0 = [];
+        for (var i = 0; i < can.size; i++) {
+            d0[i] = i;
+        }
+        for (var i = d0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = d0[i0];
+            d0[i0] = d0[i];
+            d0[i] = t0;
+        }
+        console.log(d0);
+        /*
+        for (var i = 0; i < can.deck.c.length; i++) {
+            var k0 = can.deck.c[i].can.dataset.x;
+            can.db[k0].card = d0[i];
+            }
+         */
+        var k0 = can.keys(can.deck);
+        for (var i = 0; i < d0.length; i++) {
+            var k1 = k0[i];
+            can.db[k1].card = d0[i];
+        }
+        // console.log(can.db);
+        can.db["deck"] = 0; // index
+    },
+    "remove": function(s0) {
+        // remove s0 from the dom
+        for (var i = 0; i < can[s0].c.length; i++) {
+            dom.remove(can[s0].c[i]);   
+        }
+    },
+    "assign": function() {
+        // assign initial yakus
+        var c0 = can.yaku("y0");
+        var c1 = can.yaku("y1");
+        for (var i = 0; i < c0.length; i++) {
+            var k0 = can.keys(c0[i]);
+            var k1 = k0[0].split("_");
+            var k2 = k1[1]; // kasu name
+            // console.log(k0,k1,k2);
+            for (var j = 0; j < k0.length; j++) {
+                var k3 = k0[j];
+                can.db[k3].card = yakus[k2].cards[j];
+                can.db[k3].collect = false;
+            }
+        }
+        for (var i = 0; i < c1.length; i++) {
+            var k0 = can.keys(c1[i]);
+            var k1 = k0[0].split("_");
+            var k2 = k1[1]; // kasu name
+            for (var j = 0; j < k0.length; j++) {
+                var k3 = k0[j];
+                can.db[k3].card = yakus[k2].cards[j];
+                can.db[k3].collect = false;
+            }
+        }
+    },
+    "yaku": function(t0) {
+        // extract yakus canvas objects for t0
+        var r0 = [];
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = t0 + "_" + yakus.n[i];
+            r0.push(can[k0]);
+        }
+        return r0;
+    },
+    "keys": function(c0) {
+        // extract keys from canvas object
+        var r0 = [];
+        for (var i = 0; i < c0.c.length; i++) {
+            r0.push(c0.c[i].can.dataset.x);
+        }
+        return r0;
+    },
+    "extract": function(s0) {
+        var r0 = [];
+        for (var i = 0; i < can[s0].c.length; i++) {
+            var k0 = s0 + "_" + i;
+            r0.push(k0);
+        }
+        return r0;
+    },
+    "bmp": function() {
+        r.rbmp(can.tab.c);
+        r.rbmp(can.p0.c);
+        // r.rbmp(can.y0.c);
+        // r.rbmp(can.y1.c);
+        r0 = can.yaku("y0");
+        for (var i = 0; i < r0.length; i++) {
+            r.rbmp(r0[i].c);
+        }
+        r1 = can.yaku("y1");
+        for (var i = 0; i < r1.length; i++) {
+            r.rbmp(r1[i].c);
+        }
+    },
+    "deal": function(n0, t0) {
+        // deal n0 cards from deck to t0
+        var k0 = can.empty(t0);
+        var k1 = "deck_" + can.db.deck;
+        can.db[k0].card = can.db[k1].card;
+        can.db.deck++;
+    },
+    "single": function() {
+        // return one card from deck
+        var k1 = "deck_" + can.db.deck;
+        var c0 = can.db[k1].card;
+        can.db.deck++;
+        return c0;
+    },
+    "empty": function(t0) {
+        // return next empty card slot for t0
+        var k0 = can.keys(can[t0]);
+        for (var i = 0; i < k0.length; i++) {
+            // console.log(can.db[k0[i]], k0[i]);
+            if (can.db[k0[i]].card == null) {
+                return k0[i];
+            }
+        }
+    },
+    "clicked": function(k0) {
+        if (can.db[k0].card == null) {
+            return;
+        }
+        var k1 = k0.split("_");
+        // console.log(k1);
+        var k2 = can.extract(k1[0]);
+        // console.log(k2);
+        for (var i = 0; i < k2.length; i++) {
+            can.db[k2[i]].clicked = null;
+        }
+        can.db[k0].clicked = true;
+        // bug: p1 is rendered on top of p0
+        // visibility, dom add flag
+    },
+    "chosen": function(s0) {
+        // return clicked key
+        var k0 = can.keys(can[s0]);
+        for (var i = 0; i < k0.length; i++) {
+            var k1 = k0[i];
+            if (can.db[k1].clicked == true) {
+                return k1;
+            }
+        }
+    },
+    "match": function(t0, t1) {
+        // return match set (keys) for t0, t1
+        var r0 = [];
+        var k0 = can.keys(can[t0]);
+        var k1 = can.keys(can[t1]);
+        for (var i = 0; i < k0.length; i++) {
+            var k2 = k0[i];
+            for (var j = 0; j < k1.length; j++) {
+                var k3 = k1[j];
+                if (can.similar(k2, k3)) {
+                    r0.push([k2,k3]);
+                }
+            }
+        }
+        return r0;
+    },
+    "draw": function(c0) {
+        // return set of matches (tab keys) of c0 with table
+        var r0 = [];
+        var k0 = can.keys(can.tab);
+        for (var i = 0; i < k0.length; i++) {
+            var k1 = k0[i];
+            var c1 = can.db[k1].card;
+            if (c1 == null) {
+                continue;
+            }
+            var s0 = (c0 / can.suit) >>> 0;
+            var s1 = (c1 / can.suit) >>> 0;
+            if (s0 == s1) {
+                r0.push[k1];
+            }
+        }
+        return r0;
+    },
+    "match2": function(t0, k0) {
+        var r0 = [];
+        var k1 = can.keys(can[t0]);
+        for (var i = 0; i < k1.length; i++) {
+            var k2 = k1[i];
+            if (can.similar(k2, k0)) {
+                r0.push([k2,k0]);
+            }
+        }
+        return r0;
+    },
+    "similar": function(k0, k1) {
+        var c0 = can.db[k0].card;
+        var c1 = can.db[k1].card;
+        if (c0 == null || c1 == null) {
+            return false;
+        }
+        var s0 = (c0 / can.suit) >>> 0;
+        var s1 = (c1 / can.suit) >>> 0;
+        return (s0 == s1);
+    },
+    "collect": function(s0, k0, k1) {
+        var s1 = (s0 == "p0") ? "y0" : "y1";
+        var c0 = can.db[k0].card;
+        var c1 = can.db[k1].card;
+        console.log(s1 + " collecting: " + c0 + " " + c1);
+        can.tally(s1, [c0, c1]);
+        can.db[k0].card = null;
+        can.db[k0].clicked = null;
+        can.db[k1].card = null;
+        can.db[k1].clicked = null;
+    },
+    "tally": function(s0, c0) {
+        // add c0 list of cards to yakus
+        for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i];
+            for (var j = 0; j < yakus.n.length; j++) {
+                var k0 = s0 + "_" + yakus.n[j];
+                can.place(k0, c1);
+            }
+        }
+    },
+    "place": function(k0, c0) {
+        // place card in yakus card set
+        // yakus may require additional field (collected)
+        // console.log(k0, c0);
+        var k1 = can[k0];
+        for (var i = 0; i < k1.c.length; i++) {
+            var k2 = k1.c[i].can.dataset.x;
+            if (can.db[k2].card == c0) {
+                can.db[k2].collect = true;
+            }
+        }
+    },
+    "achieve": function(c0) {
+        // input is g.state.match list
+        var c1 = can.db[c0[0]].card;
+        var c2 = can.db[c0[1]].card;
+    },
+    "score": function(t0) {
+        // return type
+        var r0 = {};
+        // determine yakus for player t0
+        var t1 = (t0 == "p0") ? "y0" : "y1";
+        for (var i = 0; i < yakus.n.length; i++) {
+            // yaku canvas object
+            var c0 = t1 + "_" + yakus.n[i];
+            // yaku keys
+            var k0 = can.keys(can[c0]);
+            var c1 = 0;
+            r0[c0] = [];
+            for (var j = 0; j < k0.length; j++) {
+                // count collected
+                if (can.db[k0[j]].collect == true) {
+                    c1++;
+                }
+            }
+            r0[c0].push(c1);
+        }
+        return r0;
+    },
+    "points": function(t0) {
+        var r0 = {};
+        var t1 = (t0 == "p0") ? "y0" : "y1";
+        // console.log(g.state.yakus[t0]);
+        var y0 = g.state.yakus[t0];
+        for (var k in y0) {
+            // var n0 = y0[k];
+            // var n1 = n0.split("_");
+            // var n2 = n1[1];
+            var n0 = k.substr(3);
+            // console.log(n0);
+            var n1 = y0[k][0];
+            var n2 = yakus[n0].need;
+            var n3 = n1 - n2;
+            if (n3 >= 0) {
+                r0[k] = yakus[n0].points;
+            } else {
+                r0[k] = 0;
+                continue;
+            }
+            if (yakus[n0].extra) {
+                r0[k] += (yakus[n0].extra * n3);
+            }
+        }
+        // total
+        var t2 = 0;
+        for (var k in r0) {
+            t2 += r0[k];
+        }
+        r0.total = t2;
+        return r0;
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        // dom.test = dom.layout("test", [[900,900,512,64]]);
+    },
+    "layout": function(n0, r0) {
+        // input is id name, array of rects
+        var c0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var c1 = dom.canvas(r0[i]);
+            c1.can.dataset.x = n0 + "_" + i;
+            c1.can.addEventListener("click", g.click, false);
+            dom.add(c1);
+            c0.push(c1);
+        }
+        return c0;
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    },
+    "subc": function(r0) {
+        // cell size, margin, origin x,y, count x,y
+        if (r0[4] == 0 || r0[5] == 0) {
+            console.error("Input dims must be non-zero!");
+        }
+        var r1 = [];
+        var w1 = (r0[0] * bmp.nx) >>> 0;
+        var w2 = (w1 + (2 * r0[1])) >>> 0;
+        var h1 = (r0[0] * bmp.ny) >>> 0;
+        var h2 = (h1 + (2 * r0[1])) >>> 0;
+        for (var y = 0; y < r0[5]; y++) {
+            for (var x = 0; x < r0[4]; x++) {
+                var x0 = (x * w2) >>> 0;
+                x0 = x0 + r0[2];
+                x0 = x0 + r0[1];
+                var y0 = (y * h2) >>> 0;
+                y0 = y0 + r0[3];
+                y0 = y0 + r0[1];
+                r1.push([w1,h1,x0,y0]);
+            }
+        }
+        return r1;
+    }
+}
+// yakus
+var yakus = {};
+// sanko
+yakus.sanko = {};
+yakus.sanko.cards = [3,11,31,47];
+yakus.sanko.points = 5;
+yakus.sanko.need = 3;
+yakus.sanko.extra = null;
+
+// shiko
+yakus.shiko = {};
+yakus.shiko.cards = [3,11,31,47];
+yakus.shiko.points = 8;
+yakus.shiko.need = 4;
+yakus.shiko.extra = null;
+
+// ame-shiko
+yakus.ameshiko = {};
+yakus.ameshiko.cards = [3,11,31,43,47];
+yakus.ameshiko.points = 7;
+yakus.ameshiko.need = 4;
+yakus.ameshiko.extra = null;
+
+// goko
+yakus.goko = {};
+yakus.goko.cards = [3,11,31,43,47];
+yakus.goko.points = 10;
+yakus.goko.need = 10;
+yakus.goko.extra = null;
+
+// inoshikacho
+yakus.inoshikacho = {};
+yakus.inoshikacho.cards = [7,15,19,23,27,29,30,35,39,42];
+yakus.inoshikacho.points = 5;
+yakus.inoshikacho.need = 3;
+yakus.inoshikacho.extra = 1;
+
+// tane
+yakus.tane = {};
+yakus.tane.cards = [7,15,19,23,27,29,30,35,39,42];
+yakus.tane.points = 1;
+yakus.tane.need = 5;
+yakus.tane.extra = 1;
+
+// akatan
+yakus.akatan = {};
+yakus.akatan.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.akatan.points = 5;
+yakus.akatan.need = 3;
+yakus.akatan.extra = 1;
+
+// aotan
+yakus.aotan = {};
+yakus.aotan.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.aotan.points = 5;
+yakus.aotan.need = 3;
+yakus.aotan.extra = 1;
+
+// akatan, aotan no chofuku
+yakus.chofuku = {};
+yakus.chofuku.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.chofuku.points = 10;
+yakus.chofuku.need = 6;
+yakus.chofuku.extra = 1;
+
+// tanzaku
+yakus.tanzaku = {};
+yakus.tanzaku.cards = [2,6,10,14,18,22,26,34,38,41];
+yakus.tanzaku.points = 1;
+yakus.tanzaku.need = 5;
+yakus.tanzaku.extra = 1;
+
+// tsukimi-zaki
+yakus.tsukimi = {};
+yakus.tsukimi.cards = [39,43];
+yakus.tsukimi.points = 5;
+yakus.tsukimi.need = 2;
+yakus.tsukimi.extra = null;
+
+// hanami-zaki
+yakus.hanami = {};
+yakus.hanami.cards = [11,43];
+yakus.hanami.points = 5;
+yakus.hanami.need = 2;
+yakus.hanami.extra = null;
+
+// kasu
+yakus.kasu = {};
+yakus.kasu.cards = [0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,32,33,36,37,40,44,45];
+yakus.kasu.points = 1;
+yakus.kasu.need = 10;
+yakus.kasu.extra = 1;
+
+yakus.n = ["sanko","shiko", "ameshiko","goko","inoshikacho",
+"tane","akatan","aotan","chofuku",
+    "tanzaku","tsukimi","hanami","kasu"];
+// longest kasu = 22 cards
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.nx = 9;
+        bmp.ny = 9;
+        bmp.nt = (bmp.nx * bmp.ny) >>> 0;
+        bmp.d = [];
+        var n1 = (can.size / can.suit) >>> 0;
+        var n2 = ((bmp.nt / 2) / (can.suit + 1)) >>> 0;
+        for (var i = 0; i < n1; i++) {
+            for (var j = 0; j < can.suit; j++) {
+                var f0 = (j * n2 + 1) >>> 0; // number of fills
+                bmp.d.push(bmp.inv(f0));
+            }
+        }
+    },
+    "inv": function(n0) {
+        // nx*ny mirror inv with n0 fills
+        var r0 = [];
+        for (var i = 0; i < bmp.nt; i++) {
+            r0[i] = 0;
+        }
+        var n2 = (bmp.nx / 2) >>> 0;
+        n2 = n2 + 1;
+        var n3 = (n2 * bmp.ny) >>> 0;
+        var n1 = n0;
+        while (n1 >= 0) {
+            var i0 = (Math.random() * n3) >>> 0;
+            var i1 = (i0 / n2) >>> 0;
+            var i2 = i0 % n2;
+            var i3 = ((i1 * bmp.nx) + i2) >>> 0;
+            if (r0[i3] == 0) {
+                r0[i3] = 1;
+                n1--;
+            }
+        }
+        // mirror
+        for (var i = 0; i < bmp.ny; i++) {
+            var i0 = (i * bmp.nx) >>> 0;
+            // for loop here for n2-1 mirrors
+            for (var j = 0; j < (n2 - 1); j++) {
+                var i1 = bmp.nx + i0 - j - 1;
+                var i2 = i0 + j;
+                r0[i1] = r0[i2]; 
+                // console.log(i0, i1, i2, i0 + n2 - 1, j); 
+            }
+        }
+        return r0;
+    }
+}
+// render
+var r = {
+    "white": function() {
+        var rgb0 = [255,255,255,1.0];
+        r.color(can.p0.c, rgb0);
+        // r.color(can.p1.c, rgb0);
+        r.color(can.tab.c, rgb0);
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = yakus.n[i];
+            var k1 = "y0_" + k0;
+            var k2 = "y1_" + k0;
+            var y0 = can[k1];
+            var y1 = can[k2];
+            r.color(y0.c, rgb0);
+            r.color(y1.c, rgb0);
+        }
+    },
+    "color": function(c0, rgb0) {
+         for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgb.css(rgb0);
+            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
+    },
+    "rand": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgb.rc();
+            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
+    },
+    "rbmp": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            var fg = rgb.rc();
+            var bg = rgb.rc();
+            var i0 = (Math.random() * bmp.d.length) >>> 0;
+            var sx = (c0[i].can.width / bmp.nx) >>> 0;
+            var sy = (c0[i].can.height / bmp.ny) >>> 0;
+            for (var j = 0; j < bmp.nt; j++) {
+                var x0 = j % bmp.nx;
+                var x1 = (x0 * sx) >>> 0;
+                var y0 = (j / bmp.nx) >>> 0;
+                var y1 = (y0 * sy) >>> 0;
+                if (bmp.d[i0][j] == 0) {
+                    c0[i].con.fillStyle = bg;
+                } else {
+                    c0[i].con.fillStyle = fg;
+                }
+                c0[i].con.fillRect(x1, y1, sx, sy);
+            }
+        }
+    },
+    "frame": function() {
+        r.white();
+        r.cards(can.tab);
+        r.cards(can.p0);
+        r.yakus();
+    },
+    "cards": function(c0) {
+        // c0 is canvas object list (e.g. can.tab.c)
+        for (var i = 0; i < c0.c.length; i++) {
+            var k0 = c0.c[i].can.dataset.x;
+            var c1 = can.db[k0].card;
+            if (c1 != null) {
+                r.bmp(c0.c[i], bmp.d[c1], c1);
+            }
+        }
+    },
+    "bmp": function(c0, b0, i0) {
+        // render single bmp in canvas object
+        var rgb0 = rgb.card(i0);
+        var bg = rgb.css(rgb0[0]);
+        // var bg = rgb.css([255,0,0,1.0]);
+        var fg = rgb.css(rgb0[1]);
+        // var fg = rgb.css([0,255,255,1.0]);
+        if (can.db[c0.can.dataset.x].clicked == true) {
+            bg = rgb.css(rgb0[2]);
+            fg = rgb.css(rgb0[3]);
+        }
+        var sx = (c0.can.width / bmp.nx) >>> 0;
+        var sy = (c0.can.height / bmp.ny) >>> 0;
+        for (var i = 0; i < bmp.nt; i++) {
+            var x0 = i % bmp.nx;
+            var x1 = (x0 * sx) >>> 0;
+            var y0 = (i / bmp.nx) >>> 0;
+            var y1 = (y0 * sy) >>> 0;
+            if (b0[i] == 0) {
+                c0.con.fillStyle = bg;
+            } else {
+                c0.con.fillStyle = fg;
+            }
+            c0.con.fillRect(x1, y1, sx, sy);
+        }
+    },
+    "ybmp": function(c0, b0, a0, i0) {
+        // render single bmp in canvas object
+        var rgb0 = rgb.card(i0);
+        // console.log(rgb0);
+        var bg = rgb.css(rgb0[2]);
+        // var bg = rgb.css([255,0,0,a0]);
+        var fg = rgb.css(rgb0[3]);
+        // var fg = rgb.css([0,255,255,a0]);
+        if (a0) {
+            bg = rgb.css(rgb0[0]);
+            fg = rgb.css(rgb0[1]);
+        }
+        var sx = (c0.can.width / bmp.nx) >>> 0;
+        var sy = (c0.can.height / bmp.ny) >>> 0;
+        for (var i = 0; i < bmp.nt; i++) {
+            var x0 = i % bmp.nx;
+            var x1 = (x0 * sx) >>> 0;
+            var y0 = (i / bmp.nx) >>> 0;
+            var y1 = (y0 * sy) >>> 0;
+            if (b0[i] == 0) {
+                c0.con.fillStyle = bg;
+            } else {
+                c0.con.fillStyle = fg;
+            }
+            c0.con.fillRect(x1, y1, sx, sy);
+        }
+    },
+    "yakus": function() {
+        for (var i = 0; i < yakus.n.length; i++) {
+            var k0 = yakus.n[i];
+            var k1 = "y0_" + k0;
+            var k2 = "y1_" + k0;
+            var y0 = can[k1];
+            var y1 = can[k2];
+            for (var j = 0; j < y0.c.length; j++) {
+                var k3 = y0.c[j].can.dataset.x;
+                var c0 = can.db[k3].collect; // can.db[k3].card;
+                var c1 = yakus[k0].cards[j];
+                r.ybmp(y0.c[j], bmp.d[c1], c0, c1);
+                /*
+                if (c0) {
+                    r.ybmp(y0.c[j], bmp.d[c1], 1.0, c1);
+                } else {
+                    r.ybmp(y0.c[j], bmp.d[c1], 0.5, c1);
+                    }
+                    */
+            }
+            for (var j = 0; j < y1.c.length; j++) {
+                var k3 = y1.c[j].can.dataset.x;
+                var c0 = can.db[k3].collect; // can.db[k3].card;
+                var c1 = yakus[k0].cards[j];
+                r.ybmp(y1.c[j], bmp.d[c1], c0, c1);
+                /*
+                if (c0) {
+                    r.ybmp(y1.c[j], bmp.d[c1], 1.0, c1);
+                } else {
+                    r.ybmp(y1.c[j], bmp.d[c1], 0.5, c1);
+                    }
+                    */
+            }
+        }
+    }
+}
+// colors
+var rgb = {
+    "card": function(c0) {
+        // return color set (bg,fg,bga,fga) for a given card
+        if (rgb.cards == null) {
+            rgb.cards = [];
+            for (var i = 0; i < can.suits; i++) {
+                var i0 = (i * 4) >>> 0;
+                var bg = rgb.rand();
+                var fg = rgb.rand();
+                var bga = bg.slice(0);
+                bga[3] = 0.4;
+                var fga = fg.slice(0);
+                fga[3] = 0.4;
+                rgb.cards[i0] = bg;
+                rgb.cards[i0+1] = fg;
+                rgb.cards[i0+2] = bga;
+                rgb.cards[i0+3] = fga;
+            }
+        }
+        var i1 = (c0 / can.suit) >>> 0;
+        var i2 = (i1 * can.suit) >>> 0;
+        return rgb.cards.slice(i2, i2+4);
+    },
+    "hue": function(n0) {
+        var h0 = 359.0 / n0;
+        var h1 = Math.random() * h0;
+        var h2 = [];
+        for (var i = 0; i < n0; i++) {
+            var h3 = h1 + (i * h0);
+            h2.push(h3);
+        }
+        return h2;
+    },
+    "grad": function(h0) {
+        // luminance gradations
+        var r0 = [];
+        for (var i = 0; i <= 10; i++) {
+            var lum0 = (i * 10) >>> 0;
+            r0[i] = rgb.cssh([h0,90,lum0,1.0]);
+        }
+        // r0[0] = rgb.cssh([h0,90,35,1.0]);
+        // r0[1] = rgb.cssh([h0,90,75,1.0]);
+        return r0;
+    },
+    "cssh": function(a0) {
+        // input array [h,s,l,a]
+        return "hsla(" + a0[0] + "," + a0[1] + "%," + a0[2] + "%," + a0[3] + ")";
+    },
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    },
+    "rc": function() {
+        return rgb.css(rgb.rand());
+    }
+}
+    </script>
+</head>
+<body id="alpha">
+</body>
+</html>
+
+ 
+
+ 
