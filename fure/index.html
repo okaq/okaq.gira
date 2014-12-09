@@ -26,16 +26,42 @@
                 g.h = 1080;
 
                 dom.init();
+                ent.init();
+                scene.init();
 
                 var t1 = window.performance.now() - t0;
                 console.log("total init time: " + t1 + "ms");
             }
         }
+// entities
+var ent = {
+    "init": function() {
+        ent.size = 48;
+        ent.suit = 4;
+        ent.suits = (ent.size/ent.suit) >>> 0;
+        // bmp.init();
+    }
+}
 // dom
 var dom = {
     "init": function() {
         dom.alpha = document.getElementById("alpha");
         console.log(dom.alpha);
+    }
+}
+// scene graph
+var state = {
+    "init": function() {
+        scene.g = {};
+        scene.g.bmp = [];
+        scene.g.select = [];
+        // current scene
+        scene.curr = "bmp";
+    }
+}
+// bmp
+var bmp {
+    "init": function() {
     }
 }
     </script>
