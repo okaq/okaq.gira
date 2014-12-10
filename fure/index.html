@@ -53,6 +53,7 @@ var ent = {
 
         // key db
         ent.db = {};
+        ent.groups = {}; // key cache
 
         ent.create();
     },
@@ -67,6 +68,7 @@ var ent = {
                 console.log(k + "Input size must be non-zero!");
                 continue;
             }
+            ent.groups[k] = [];
             for (var y0 = 0; y0 < ent0[5]; y0++) {
                 for (var x0 = 0; x0 < ent0[4]; x0++) {
                     var k0 = k + "_" + y0 + "_" + x0;
@@ -74,10 +76,12 @@ var ent = {
                     ent.db[k0].c = dom.layout(y0, x0, ent0);
                     dom.add(ent.db[k0].c);
                     ent.db[k0].c.can.dataset.x = k0;
+                    ent.groups[k].push(k0);
                 }
             }
          }
          console.log(ent.db);
+         console.log(ent.groups);
     }
 }
 // dom
