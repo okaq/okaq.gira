@@ -28,6 +28,7 @@
                 dom.init();
                 ent.init();
                 scene.init();
+                ren.test();
 
                 var t1 = window.performance.now() - t0;
                 console.log("total init time: " + t1 + "ms");
@@ -45,8 +46,8 @@ var ent = {
         // config data - cell, margin, originX,Y, sizeX,Y
         ent.config = {
             "nav": [2,8,32,32,1,3],
-            "bmp": [2,4,128,64,ent.suit,ent.suits],
-            "select": [8,64,256,256,2,1],
+            "bmp": [2,4,256,64,ent.suit,ent.suits],
+            "select": [8,64,600,256,2,1],
             "p0": [],
             "tab": []
         };
@@ -153,6 +154,33 @@ var scene = {
         scene.g.select = [];
         // current scene
         scene.curr = "bmp";
+    }
+}
+// render
+var ren = {
+    "test": function() {
+        for (var k in ent.db) {
+            ent.db[k].c.con.fillStyle = rgb.rc();
+            ent.db[k].c.con.fillRect(0,0,ent.db[k].c.can.width,ent.db[k].c.can.height);
+        }
+    }
+}
+// color
+var rgb = {
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    },
+    "rc": function() {
+        return rgb.css(rgb.rand());
     }
 }
 // bmp
