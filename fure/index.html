@@ -64,6 +64,8 @@ var ent = {
         ent.create();
         // ent.yakus();
         ent.nav();
+        ent.hidden(["bmp","select"]);
+        ent.visible(["nav"]);
     },
     "create": function() {
          for (var k in ent.config) {
@@ -99,9 +101,20 @@ var ent = {
     },
     "visible": function(v0) {
         // set of groups to make visible
+        for (var i = 0; i < v0.length; i++) {
+            var k0 = v0[i];
+            var k1 = ent.groups[k0];
+            dom.visible(k1);
+        }
     },
     "hidden": function(h0) {
         // set of groups to hide
+        for (var i = 0; i < h0.length; i++) {
+            var k0 = h0[i];
+            var k1 = ent.groups[k0];
+            dom.hidden(k1);
+        }
+ 
     }
 }
 // dom
@@ -163,16 +176,33 @@ var dom = {
             }
         }
         return r1;
+    },
+    "visible": function(k0) {
+        for (var i = 0; i < k0.length; i++) {
+            var k1 = k0[i];
+            var c0 = ent.db[k1].c;
+            c0.can.style.visibility = "visible";
+        }
+    },
+    "hidden": function(k0) {
+        for (var i = 0; i < k0.length; i++) {
+            var k1 = k0[i];
+            var c0 = ent.db[k1].c;
+            c0.can.style.visibility = "hidden";
+        }
     }
 }
 // scene graph
 var scene = {
     "init": function() {
         scene.g = {};
+        scene.g.empty = [];
+        scene.g.begin = ["nav"];
         scene.g.bmp = ["nav","bmp"];
         scene.g.select = ["nav","select"];
         // current scene
-        scene.curr = "bmp";
+        scene.curr = "empty";
+        scene.next("begin");
     },
     "next": function(s0) {
         var p0 = scene.curr + "";
@@ -197,6 +227,7 @@ var scene = {
         // console.log(v0, h0);
         ent.visible(v0);
         ent.hidden(h0);
+        ren.test();
     }
 }
 // yakus
