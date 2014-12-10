@@ -96,6 +96,12 @@ var ent = {
         ent.db["nav_0_0"].c.can.addEventListener("click", g.nav_click, false);
         ent.db["nav_1_0"].c.can.dataset.next = "select";
         ent.db["nav_1_0"].c.can.addEventListener("click", g.nav_click, false);
+    },
+    "visible": function(v0) {
+        // set of groups to make visible
+    },
+    "hidden": function(h0) {
+        // set of groups to hide
     }
 }
 // dom
@@ -171,9 +177,26 @@ var scene = {
     "next": function(s0) {
         var p0 = scene.curr + "";
         scene.curr = s0;
-        console.log(scene.curr, p0);
+        var p1 = scene.g[p0];
+        var s1 = scene.g[scene.curr];
+        // console.log(scene.curr, p0);
         var v0 = []; // visible set
         var h0 = []; // hidden set
+        for (var i = 0; i < s1.length; i++) {
+            var s2 = s1[i];
+            if (p1.indexOf(s2) == -1) {
+                v0.push(s2);
+            }
+        }
+        for (var i = 0; i < p1.length; i++) {
+            var p2 = p1[i];
+            if (s1.indexOf(p2) == -1) {
+                h0.push(p2);
+            }
+        }
+        // console.log(v0, h0);
+        ent.visible(v0);
+        ent.hidden(h0);
     }
 }
 // yakus
