@@ -159,9 +159,46 @@ var scene = {
 // render
 var ren = {
     "test": function() {
+        for (var i = 0; i < ent.groups["nav"].length; i++) {
+            var k0 = ent.groups["nav"][i];
+            ren.rand(ent.db[k0].c);
+        }
+        for (var i = 0; i < ent.groups["bmp"].length; i++) {
+            var k0 = ent.groups["bmp"][i];
+            ren.rbmp(ent.db[k0].c);
+        }
+        for (var i = 0; i < ent.groups["select"].length; i++) {
+            var k0 = ent.groups["select"][i];
+            ren.rand(ent.db[k0].c);
+        }
+        /*
         for (var k in ent.db) {
             ent.db[k].c.con.fillStyle = rgb.rc();
             ent.db[k].c.con.fillRect(0,0,ent.db[k].c.can.width,ent.db[k].c.can.height);
+            }
+            */
+    },
+    "rand": function(c0) {
+        c0.con.fillStyle = rgb.rc();
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "rbmp": function(c0) {
+        // random bitmap
+        var fg = rgb.rc();
+        var bg = rgb.rc();
+        var w0 = (c0.can.width / bmp.nx) >>> 0;
+        for (var y0 = 0; y0 < bmp.ny; y0++) {
+            for (var x0 = 0; x0 < bmp.nx; x0++) {
+                var f0 = Math.random();
+                if (f0 > 0.5) {
+                    c0.con.fillStyle = fg;
+                } else {
+                    c0.con.fillStyle = bg;
+                }
+                var x1 = (x0 * w0) >>> 0;
+                var y1 = (y0 * w0) >>> 0;
+                c0.con.fillRect(x1,y1,w0,w0);
+            }
         }
     }
 }
