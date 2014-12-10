@@ -44,9 +44,9 @@ var ent = {
         
         // config data - cell, margin, originX,Y, sizeX,Y
         ent.config = {
-            "nav": [24,16,32,32,1,3],
-            "bmp": [16,8,128,64,ent.suit,ent.suits],
-            "select": [64,128,256,256,2,1],
+            "nav": [2,8,32,32,1,3],
+            "bmp": [2,4,128,64,ent.suit,ent.suits],
+            "select": [8,64,256,256,2,1],
             "p0": [],
             "tab": []
         };
@@ -71,10 +71,13 @@ var ent = {
                 for (var x0 = 0; x0 < ent0[4]; x0++) {
                     var k0 = k + "_" + y0 + "_" + x0;
                     ent.db[k0] = {};
-                    ent.db.c = dom.layout(y0, x0, ent0);
+                    ent.db[k0].c = dom.layout(y0, x0, ent0);
+                    dom.add(ent.db[k0].c);
+                    ent.db[k0].c.can.dataset.x = k0;
                 }
             }
-        }
+         }
+         console.log(ent.db);
     }
 }
 // dom
@@ -85,8 +88,29 @@ var dom = {
     },
     "layout": function(y0, x0, ent0) {
         // add canvas at x0,y0 to the dom
-        var r0 = dom.subc(d0);
-    }
+        // bmp size
+        var w0 = (ent0[0] * bmp.nx) >>> 0;
+        w0 = (w0 + (2 * ent0[1])) >>> 0;
+        var h0 = (ent0[0] * bmp.ny) >>> 0;
+        h0 = (h0 + (2 * ent0[1])) >>> 0;
+        // position
+        var x1 = (w0 * x0) >>> 0;
+        x1 = (x1 + ent0[2] + ent0[1]) >>> 0;
+        var y1 = (h0 * y0) >>> 0;
+        y1 = (y1 + ent0[3] + ent0[1]) >>> 0;
+        return dom.canvas(w0,h0,x1,y1);
+    },
+    "canvas": function(w0, h0, x0, y0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = w0;
+        c0.can.height = h0;
+        c0.can.style.position = "absolute";
+        c0.can.style.top = y0 + "px";
+        c0.can.style.left = x0 + "px";
+        return c0;
+    },
     "add": function(c0) {
         dom.alpha.appendChild(c0.can);
     },
@@ -118,7 +142,7 @@ var dom = {
     }
 }
 // scene graph
-var state = {
+var scene = {
     "init": function() {
         scene.g = {};
         scene.g.bmp = [];
@@ -128,7 +152,7 @@ var state = {
     }
 }
 // bmp
-var bmp {
+var bmp = {
     "init": function() {
         // bmp size == 32x32
         bmp.nx = 32;
