@@ -40,6 +40,16 @@
                 var s0 = e.target.dataset.next;
                 scene.next(s0);
             },
+            "select_click": function(e) {
+                console.log(e);
+                var s0 = e.target.dataset.next;
+                scene.next(s0);
+                if (s0 == "kk_start") {
+                    console.log("staring round of koikoi!");
+                } else {
+                    console.log("how about a bit of mahjong!");
+                }
+            },
             "events": function() {
                 // eventing system
                 // configuration: map of event names to handler functions
@@ -51,8 +61,9 @@
                 g.hand = []; // handlers list
 
                 for (var k in g.hap) {
-                    g.ev[k] = document.createEvent("Event");
-                    g.ev[k].initEvent(k, true, true);
+                    // g.ev[k] = document.createEvent("Event");
+                    // g.ev[k].initEvent(k, true, true);
+                    g.ev[k] = new Event(k);
                     g.hand[k] = g.hap[k];
                     document.addEventListener(k ,g.hand[k]);
                 }
@@ -91,6 +102,7 @@ var ent = {
             "mj_p0": [],
             "mj_tab": []
         };
+        ent.yakus();
 
         // key db
         ent.db = {};
@@ -99,6 +111,7 @@ var ent = {
         ent.create();
         // ent.yakus();
         ent.nav();
+        ent.selection();
         ent.hidden(["bmp","select"]);
         ent.visible(["nav"]);
 
@@ -130,11 +143,22 @@ var ent = {
          console.log(ent.db);
          console.log(ent.groups);
     },
+    "yakus": function() {
+        for (var i = 0; i < yakus.en.length; i++) {
+        }
+    },
     "nav": function() {
         ent.db["nav_0_0"].c.can.dataset.next = "bmp";
         ent.db["nav_0_0"].c.can.addEventListener("click", g.nav_click, false);
         ent.db["nav_1_0"].c.can.dataset.next = "select";
         ent.db["nav_1_0"].c.can.addEventListener("click", g.nav_click, false);
+    },
+    "selection": function() {
+        ent.db["select_0_0"].c.can.dataset.next = "kk_start";
+        ent.db["select_0_0"].c.can.addEventListener("click", g.select_click, false);
+        ent.db["select_0_1"].c.can.dataset.next = "mj_start";
+        ent.db["select_0_1"].c.can.addEventListener("click", g.select_click, false);
+        
     },
     "visible": function(v0) {
         // set of groups to make visible
@@ -151,7 +175,6 @@ var ent = {
             var k1 = ent.groups[k0];
             dom.hidden(k1);
         }
- 
     }
 }
 // dom
@@ -237,6 +260,8 @@ var scene = {
         scene.g.begin = ["nav"];
         scene.g.bmp = ["nav","bmp"];
         scene.g.select = ["nav","select"];
+        scene.g.kk_start = ["nav"];
+        scene.g.mj_start = ["nav"];
         // current scene
         scene.curr = "empty";
         scene.next("begin");
