@@ -46,8 +46,10 @@
                 scene.next(s0);
                 if (s0 == "kk_start") {
                     console.log("staring round of koikoi!");
+                    document.dispatchEvent(g.ev["kk_deal"]);
                 } else {
                     console.log("how about a bit of mahjong!");
+                    document.dispatchEvent(g.ev["mj_deal"]);
                 }
             },
             "events": function() {
@@ -55,7 +57,8 @@
                 // configuration: map of event names to handler functions
                 g.hap = {
                     "frame": g.frame,
-                    "deal": g.deal
+                    "kk_deal": kk.deal,
+                    "mj_deal": mj.deal
                 };
                 g.ev = []; // event list
                 g.hand = []; // handlers list
@@ -85,6 +88,18 @@
                 console.log("ready to deal!");
             }
         }
+// koi koi
+var kk = {
+    "deal": function() {
+        console.log("koi koi opening deal!");
+    }
+}
+// mahjong
+var mj = {
+    "deal": function() {
+        console.log("mahjong opening deal!");
+    }
+}
 // entities
 var ent = {
     "init": function() {
@@ -99,8 +114,8 @@ var ent = {
             "nav": [1,8,2,2,3,1],
             "bmp": [3,4,256,64,ent.suit,ent.suits],
             "select": [12,64,340,256,2,1],
-            "kk_p0": [8,8,128,32,2,4],
-            "kk_tab": [8,8,386,64,4,4],
+            "kk_p0": [2,8,128,64,2,4],
+            "kk_tab": [2,8,386,64,4,4],
             "mj_p0": [2,4,64,128,3,3],
             "mj_tab": [2,2,512,128,6,6]
         };
@@ -117,7 +132,7 @@ var ent = {
         ent.hidden(["bmp","select","kk_p0","kk_tab","mj_p0","mj_tab"]);
         ent.visible(["nav"]);
 
-        document.dispatchEvent(g.ev["deal"]);
+        // document.dispatchEvent(g.ev["deal"]);
     },
     "create": function() {
          for (var k in ent.config) {
