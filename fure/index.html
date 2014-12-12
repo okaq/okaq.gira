@@ -65,7 +65,7 @@
                     // g.ev[k].initEvent(k, true, true);
                     g.ev[k] = new Event(k);
                     g.hand[k] = g.hap[k];
-                    document.addEventListener(k ,g.hand[k]);
+                    document.addEventListener(k, g.hand[k]);
                 }
                 /*
                 g.ev[0] = document.createEvent("Event");
@@ -76,7 +76,9 @@
             },
             "frame": function(e) {
                 console.log(e);
-                ren.test();
+                // ren.test();
+                // render visible set mapped to render functions
+                ren.frame();
             },
             "deal": function(e) {
                 console.log(e);
@@ -94,13 +96,13 @@ var ent = {
         
         // config data - cell, margin, originX,Y, sizeX,Y
         ent.config = {
-            "nav": [4,8,32,32,1,3],
+            "nav": [1,8,2,2,3,1],
             "bmp": [3,4,256,64,ent.suit,ent.suits],
             "select": [12,64,340,256,2,1],
-            "kk_p0": [],
-            "kk_tab": [],
-            "mj_p0": [],
-            "mj_tab": []
+            "kk_p0": [8,8,128,32,2,4],
+            "kk_tab": [8,8,386,64,4,4],
+            "mj_p0": [2,4,64,128,3,3],
+            "mj_tab": [2,2,512,128,6,6]
         };
         ent.yakus();
 
@@ -112,7 +114,7 @@ var ent = {
         // ent.yakus();
         ent.nav();
         ent.selection();
-        ent.hidden(["bmp","select"]);
+        ent.hidden(["bmp","select","kk_p0","kk_tab","mj_p0","mj_tab"]);
         ent.visible(["nav"]);
 
         document.dispatchEvent(g.ev["deal"]);
@@ -150,8 +152,8 @@ var ent = {
     "nav": function() {
         ent.db["nav_0_0"].c.can.dataset.next = "bmp";
         ent.db["nav_0_0"].c.can.addEventListener("click", g.nav_click, false);
-        ent.db["nav_1_0"].c.can.dataset.next = "select";
-        ent.db["nav_1_0"].c.can.addEventListener("click", g.nav_click, false);
+        ent.db["nav_0_1"].c.can.dataset.next = "select";
+        ent.db["nav_0_1"].c.can.addEventListener("click", g.nav_click, false);
     },
     "selection": function() {
         ent.db["select_0_0"].c.can.dataset.next = "kk_start";
@@ -255,15 +257,27 @@ var dom = {
 // scene graph
 var scene = {
     "init": function() {
+        // graph of entity groups in each scene
         scene.g = {};
         scene.g.empty = [];
         scene.g.begin = ["nav"];
         scene.g.bmp = ["nav","bmp"];
         scene.g.select = ["nav","select"];
-        scene.g.kk_start = ["nav"];
-        scene.g.mj_start = ["nav"];
+        scene.g.kk_start = ["nav","kk_p0","kk_tab"];
+        scene.g.mj_start = ["nav","mj_p0","mj_tab"];
         // current scene
         scene.curr = "empty";
+        // scene.next("begin");
+        // map of render functions for each entity group
+        scene.r = {};
+        scene.r["nav"] = ren.rbmp;
+        scene.r["bmp"] = ren.rdata;
+        scene.r["select"] = ren.rdata;
+        scene.r["kk_p0"] = ren.rdata;
+        scene.r["kk_tab"] = ren.rdata;
+        scene.r["mj_p0"] = ren.rand;
+        scene.r["mj_tab"] = ren.rand;
+
         scene.next("begin");
     },
     "next": function(s0) {
@@ -462,6 +476,24 @@ var ren = {
                 var y1 = (y0 * w0) >>> 0;
                 c0.con.fillRect(x1,y1,w0,w0);
             }
+        }
+    },
+    "frame": function() {
+        var s0 = scene.curr;
+        var g0 = scene.g[s0];
+        for (var i = 0; i < g0.length; i++) {
+            var k0 = g0[i];
+            var k1 = ent.groups[k0];
+            var r0 = scene.r[k0];
+            ren.map(k1, r0);
+        }
+    },
+    "map": function(k0, r0) {
+        // apply render function to set of keys
+        for (var i = 0; i < k0.length; i++) {
+            var k1 = k0[i];
+            var c0 = ent.db[k1].c;
+            r0(c0);
         }
     }
 }
