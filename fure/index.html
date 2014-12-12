@@ -46,10 +46,10 @@
                 scene.next(s0);
                 if (s0 == "kk_start") {
                     console.log("staring round of koikoi!");
-                    document.dispatchEvent(g.ev["kk_deal"]);
+                    document.dispatchEvent(g.ev["kk_open"]);
                 } else {
                     console.log("how about a bit of mahjong!");
-                    document.dispatchEvent(g.ev["mj_deal"]);
+                    document.dispatchEvent(g.ev["mj_open"]);
                 }
             },
             "events": function() {
@@ -57,8 +57,8 @@
                 // configuration: map of event names to handler functions
                 g.hap = {
                     "frame": g.frame,
-                    "kk_deal": kk.deal,
-                    "mj_deal": mj.deal
+                    "kk_open": kk.open,
+                    "mj_open": mj.open
                 };
                 g.ev = []; // event list
                 g.hand = []; // handlers list
@@ -90,11 +90,15 @@
         }
 // koi koi
 var kk = {
-    "deal": function() {
+    "open": function() {
         console.log("koi koi opening deal!");
         kk.index = 0; // pointer to next card to deal
         kk.deck = kk.shuffle(ent.size); // shuffled deck
         console.log(kk.deck);
+        kk.assign();
+        kk.size = 8; // initial deal size
+        kk.hands = ["kk-p0", "kk-p1", "kk-tab"];
+        kk.deal(kk.size, kk.hands);
     },
     "shuffle": function(n0) {
         var r0 = [];
@@ -110,11 +114,30 @@ var kk = {
             r0[i] = t0;
         }
         return r0;
+    },
+    "deal": function(n0, b0) {
+        // deal no cards to each player in b0 list
+        var g0 = []; // groups
+        for (var i = 0; i < b0.length; i++) {
+            g0[i] = ent.groups[b0[i]];
+        }
+
+    },
+    "assign": function() {
+        var k0 = ent.groups["kk-deck"];
+        // console.log(k0, k0.length);
+        for (var i = 0; i < k0.length; i++) {
+            var v0 = ent.coords(k0[i]);
+            // var v1 = v0[0] + v0[1];
+            // console.log(k0[i], v0[5]);
+            // dataset.card is an index into kk.deck
+            ent.db[k0[i]].c.can.dataset.card = v0[5];
+        }
     }
 }
 // mahjong
 var mj = {
-    "deal": function() {
+    "open": function() {
         console.log("mahjong opening deal!");
     }
 }
@@ -128,15 +151,17 @@ var ent = {
         bmp.init();
         
         // config data - cell, margin, originX,Y, sizeX,Y
+        // key in the form "game-id_y_x"
         ent.config = {
             "nav": [1,8,2,2,3,1],
             "bmp": [3,4,256,64,ent.suit,ent.suits],
             "select": [12,64,340,256,2,1],
-            "kk_p0": [2,8,128,64,2,4],
-            "kk_tab": [2,8,386,64,4,4],
-            "kk_deck": [1,0,0,0,ent.suits,ent.suit],
-            "mj_p0": [2,4,64,128,3,3],
-            "mj_tab": [2,2,512,128,6,6]
+            "kk-p0": [2,8,128,64,2,4],
+            "kk-p1": [2,8,128,256,2,4],
+            "kk-tab": [2,8,386,64,4,4],
+            "kk-deck": [1,0,0,0,ent.suits,ent.suit],
+            "mj-p0": [2,4,64,128,3,3],
+            "mj-tab": [2,2,512,128,6,6]
         };
         ent.yakus();
 
@@ -148,7 +173,7 @@ var ent = {
         // ent.yakus();
         ent.nav();
         ent.selection();
-        ent.hidden(["bmp","select","kk_p0","kk_tab","mj_p0","mj_tab","kk_deck"]);
+        ent.hidden(["bmp","select","kk-p0","kk-p1","kk-tab","mj-p0","mj-tab","kk-deck"]);
         ent.visible(["nav"]);
 
         // document.dispatchEvent(g.ev["deal"]);
@@ -211,6 +236,21 @@ var ent = {
             var k1 = ent.groups[k0];
             dom.hidden(k1);
         }
+    },
+    "coords": function(k0) {
+        // return [y,x] from key
+        var s0 = k0.split("_");
+        var r0 = [];
+        // r0[0] = parseInt(s0[s0.length - 1], 10);
+        // r0[1] = parseInt(s0[s0.length - 2], 10);
+        // group, y, stridey, x, stridex, y*stridex+x
+        r0[0] = s0[0];
+        r0[1] = parseInt(s0[1], 10);
+        r0[2] = ent.config[r0[0]][5];
+        r0[3] = parseInt(s0[2], 10);
+        r0[4] = ent.config[r0[0]][4];
+        r0[5] = ((r0[1] * r0[4]) + r0[3]) >>> 0;
+        return r0;
     }
 }
 // dom
@@ -297,8 +337,8 @@ var scene = {
         scene.g.begin = ["nav"];
         scene.g.bmp = ["nav","bmp"];
         scene.g.select = ["nav","select"];
-        scene.g.kk_start = ["nav","kk_p0","kk_tab"];
-        scene.g.mj_start = ["nav","mj_p0","mj_tab"];
+        scene.g.kk_start = ["nav","kk-p0","kk-tab"];
+        scene.g.mj_start = ["nav","mj-p0","mj-tab"];
         // current scene
         scene.curr = "empty";
         // scene.next("begin");
@@ -307,11 +347,12 @@ var scene = {
         scene.r["nav"] = ren.rbmp;
         scene.r["bmp"] = ren.rdata;
         scene.r["select"] = ren.rdata;
-        scene.r["kk_p0"] = ren.rdata;
-        scene.r["kk_tab"] = ren.rdata;
-        scene.r["kk_deck"] = ren.rdata;
-        scene.r["mj_p0"] = ren.rand;
-        scene.r["mj_tab"] = ren.rand;
+        scene.r["kk-p0"] = ren.rdata;
+        scene.r["kk-p1"] = ren.rdata;
+        scene.r["kk-tab"] = ren.rdata;
+        scene.r["kk-deck"] = ren.rdata;
+        scene.r["mj-p0"] = ren.rand;
+        scene.r["mj-tab"] = ren.rand;
 
         scene.next("begin");
     },
