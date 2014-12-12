@@ -92,6 +92,24 @@
 var kk = {
     "deal": function() {
         console.log("koi koi opening deal!");
+        kk.index = 0; // pointer to next card to deal
+        kk.deck = kk.shuffle(ent.size); // shuffled deck
+        console.log(kk.deck);
+    },
+    "shuffle": function(n0) {
+        var r0 = [];
+        // line array
+        for (var i = 0; i < n0; i++) {
+            r0[i] = i;
+        }
+        // shuffle
+        for (var i = r0.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = r0[i0];
+            r0[i0] = r0[i];
+            r0[i] = t0;
+        }
+        return r0;
     }
 }
 // mahjong
@@ -116,6 +134,7 @@ var ent = {
             "select": [12,64,340,256,2,1],
             "kk_p0": [2,8,128,64,2,4],
             "kk_tab": [2,8,386,64,4,4],
+            "kk_deck": [1,0,0,0,ent.suits,ent.suit],
             "mj_p0": [2,4,64,128,3,3],
             "mj_tab": [2,2,512,128,6,6]
         };
@@ -129,7 +148,7 @@ var ent = {
         // ent.yakus();
         ent.nav();
         ent.selection();
-        ent.hidden(["bmp","select","kk_p0","kk_tab","mj_p0","mj_tab"]);
+        ent.hidden(["bmp","select","kk_p0","kk_tab","mj_p0","mj_tab","kk_deck"]);
         ent.visible(["nav"]);
 
         // document.dispatchEvent(g.ev["deal"]);
@@ -290,6 +309,7 @@ var scene = {
         scene.r["select"] = ren.rdata;
         scene.r["kk_p0"] = ren.rdata;
         scene.r["kk_tab"] = ren.rdata;
+        scene.r["kk_deck"] = ren.rdata;
         scene.r["mj_p0"] = ren.rand;
         scene.r["mj_tab"] = ren.rand;
 
