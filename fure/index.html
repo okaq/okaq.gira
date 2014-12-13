@@ -99,6 +99,7 @@ var kk = {
         kk.size = 8; // initial deal size
         kk.hands = ["kk-p0", "kk-p1", "kk-tab"];
         kk.deal(kk.size, kk.hands);
+        // console.log(kk.enc);
     },
     "shuffle": function(n0) {
         var r0 = [];
@@ -116,12 +117,22 @@ var kk = {
         return r0;
     },
     "deal": function(n0, b0) {
-        // deal no cards to each player in b0 list
+        // deal n0 cards to each player in b0 list
+        /*
         var g0 = []; // groups
         for (var i = 0; i < b0.length; i++) {
             g0[i] = ent.groups[b0[i]];
         }
-
+         */
+        for (var i = 0; i < n0; i++) {
+            for (var j = 0; j < b0.length; j++) {
+                var h0 = b0[j]; // hand
+                // var e0 = ent.empty(h0); // key of next empty canvas
+                kk.enc[kk.index] = h0;
+                kk.index++;
+            }
+        }
+        ent.sync();
     },
     "assign": function() {
         var k0 = ent.groups["kk-deck"];
@@ -132,6 +143,11 @@ var kk = {
             // console.log(k0[i], v0[5]);
             // dataset.card is an index into kk.deck
             ent.db[k0[i]].c.can.dataset.card = v0[5];
+        }
+        // deck encoding
+        kk.enc = [];
+        for (var i = 0; i < kk.deck.length; i++) {
+            kk.enc[i] = "kk-deck";
         }
     }
 }
@@ -251,6 +267,33 @@ var ent = {
         r0[4] = ent.config[r0[0]][4];
         r0[5] = ((r0[1] * r0[4]) + r0[3]) >>> 0;
         return r0;
+    },
+    "empty": function(h0) {
+        // return key of next empty canvas
+        // if it doesn't exist add?
+        var g0 = ent.groups[h0];
+        for (var i = 0; i < g0.length; i++) {
+            var k0 = g0[i];
+            var c0 = ent.db[k0].c.can.dataset.card;
+            if (c0 == null) {
+                return k0;
+            }
+        }
+    },
+    "sync": function() {
+        // sync kk.enc with canvas dataset card data
+        var t0 = {};
+        for (var i = 0; i < kk.enc.length; i++) {
+            var h0 = kk.enc[i];
+            if (h0 == "kk_deck") {
+                continue; // edge case
+            }
+            if (t0[h0] == null) {
+                t0[h0] = [];
+            }
+            t0[h0].push(i);
+        }
+        console.log(t0);
     }
 }
 // dom
