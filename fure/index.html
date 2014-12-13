@@ -294,6 +294,17 @@ var ent = {
             t0[h0].push(i);
         }
         console.log(t0);
+        // t0["kk-p0"] = [0,3,6...]
+        // conform data to ent.group
+        for (var k in t0) {
+            var g0 = ent.groups[k];
+            var i0 = t0[k];
+            for (var i = 0; i < g0.length; i++) {
+                var k0 = g0[i];
+                var c0 = ent.db[k0].c;
+                c0.can.dataset.card = i0[i];
+            }
+        }
     }
 }
 // dom
