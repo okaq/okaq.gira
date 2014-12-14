@@ -1,1 +1,121 @@
-koi koi
+<!DOCTYPE html>
+<html lang="en">
+    <head id="zeta">
+        <title>okaq</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
+        <meta name="source" content="https://github.com/okaq/okaq.gira" />
+        <meta name="creator" content="AQ <aq@okaq.com>" />
+        <meta name="date" content="2014-12-14" />
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAX0lEQVR4nGI5XKvPQEvARFPTh4UFLMic4D1HsSpa62KNVZwY9UM/iEYtGAEWMI6WRaMWjFqAWh/gAmqzT2AVv5VqQVDv0A+iUQtGgAVE5QNi0jsuMPSDiOYWAAIAAP//qu0Nneayd6QAAAAASUVORK5CYII=" />
+        <style type="text/css">
+            html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(255,255,255,1.0);}
+        </style>
+        <script type="text/javascript">
+            // ok
+        console.log("okaq gira hika koikoi");
+        // async load
+        (function(){window.addEventListener("load",function(e){g.init(e);},false);})();
+        // game
+        var g = {
+            "init": function(e) {
+                console.log(e);
+                var t0 = window.performance.now();
+
+                scene.init();
+                g.frame();
+
+                var t1 = window.performance.now() - t0;
+                console.log("total running time: " + t1 + " ms");
+            },
+            "frame": function() {
+                for (var k in scene.c) {
+                    scene.c[k].ren();
+                }
+            },
+            "click": function(e) {
+                console.log(e);
+                console.log(e.target.dataset.id);
+            }
+        }
+// scene graph
+var scene = {
+    "init": function() {
+        scene.layout = {
+            // layout object rect = [w,h,x,y]
+            "p0_0": [128,128,256,32],
+            "tab_0": [128,128,512,64]
+        }
+        scene.canv();
+    },
+    "canv": function() {
+        // canvas object db
+        scene.c = {};
+        for (var k in scene.layout) {
+            scene.c[k] = dom.canvas(scene.layout[k]);
+            scene.c[k].can.dataset.id = k;
+            scene.c[k].can.addEventListener("click", g.click, false);
+            scene.c[k].ren = ren[k];
+            dom.add(scene.c[k]);
+        }
+    }
+}
+// dom
+var dom = {
+    "canvas": function(r0) {
+        // input layout rect [w,h,x,y]
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        if (!dom.alpha) {
+            dom.alpha = document.getElementById("alpha");
+        }
+        dom.alpha.appendChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "p0_0": function() {
+        var c0 = scene.c["p0_0"];
+        c0.con.fillStyle = rgb.rc();
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "tab_0": function() {
+        var c0 = scene.c["tab_0"];
+        c0.con.fillStyle = rgb.rc();
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    }
+}
+// colors
+var rgb = {
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    },
+    "rc": function() {
+        return rgb.css(rgb.rand());
+    }
+}
+    </script>
+</head>
+<body id="alpha">
+</body>
+</html>
+
+
