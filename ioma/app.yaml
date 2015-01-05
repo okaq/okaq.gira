@@ -1,0 +1,15 @@
+application: okaq-funka-aq
+version: 9
+runtime: go
+api_version: go1
+
+handlers:
+    - url: /(.*\.html$)
+      static_files: \1
+      application_readable: true
+      upload: .*\.html$
+
+    - url: /.*
+      script: _go_app
+
+
