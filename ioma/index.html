@@ -22,32 +22,76 @@
 var g = {
     "init": function(e) {
         console.log(e);
-        s.init();
-        dom.init();
+        g.motd = "Welcome to okaq scene graph, layout tree test page. AQ<aq@okaq.com> 2015-01.";
+        g.subs = [log, evt, dom, s, t, n];
+        g.subs.forEach(function(el){el.init();});
     }
 }
 // state
 var s = {
     "init": function() {
-        s.states = [];
+        s.states = [4,3,2,1];
+        evt.dispatch("log", s.states.length);
+    }
+}
+// debug
+var log = {
+    "init": function() {
+        // flag
+        log.D = true;
+        log.msg = ""; // global messages
+    },
+    "console": function(e) {
+        var msg = e.data;
+        if (log.D) {
+            console.log(msg);
+        }
     }
 }
 // events
-var e = {
+var evt = {
+    "init": function() {
+        evt.db = {};
+        evt.custom("log", document, log.console);
+        evt.dispatch("log", g.motd);
+    },
+    "custom": function(name0, target0, handler0) {
+        // create and register a custom event
+        var evt0 = new CustomEvent(name0);
+        document.addEventListener(name0, log.console, false);
+        evt.db[name0] = [name0, target0, handler0, evt0];
+    },
+    "dispatch": function(name0, msg0) {
+        // trigger event if cached
+        if (evt.db[name0]) {
+            var target0 = evt.db[name0][1];
+            var evt0 = evt.db[name0][3];
+            evt0.data = msg0;
+            target0.dispatchEvent(evt0);
+        } else {
+            s0 = "event: " + name0 + " is not in the event cache.";
+            evt.dispatch("log", s0); // infinite loop?
+        }
+    }
 }
 // layout trees
 var t = {
+    "init": function() {
+        t.nodes = {};
+    }
 }
 // scene graph
 var n = {
     "init": function() {
+        n.nodes = {};
     }
 }
 // dom
 var dom = {
     "init": function() {
         dom.alpha = document.getElementById("alpha");
-        console.log(dom.alpha);
+        // console.log(dom.alpha);
+        evt.dispatch("log", dom.alpha);
     },
     "canvas": function(w0, h0, x0, y0) {
         var c0 = {};
