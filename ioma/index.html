@@ -92,18 +92,40 @@ var evt = {
         // remove builtin events
         target0.removeEventListener(name0, handler0);
         evt.db[name0] = null;
+        delete evt.db[name0];
     },
 }
 // layout trees
 var t = {
     "init": function() {
         t.nodes = {};
+        t.alpha = [1920,1080,0,0];
+        t.quads = t.quad(t.alpha);
+        evt.dispatch("log", t.quads);
+    },
+    "quad": function(r0) {
+        // input [w,h,x,y]
+        // output quad subdivision
+        var w = r0[0];
+        var h = r0[1];
+        var x = r0[2];
+        var y = r0[3];
+        var w2 = (w/2) >>> 0;
+        var h2 = (h/2) >>> 0;
+        var x2 = (x+w2) >>> 0;
+        var y2 = (y+h2) >>> 0;
+        var r1 = [w2,h2,x,y];
+        var r2 = [w2,h2,x2,y];
+        var r3 = [w2,h2,x,y2];
+        var r4 = [w2,h2,x2,y2];
+        return [r1,r2,r3,r4];
     }
 }
 // scene graph
 var n = {
     "init": function() {
-        n.nodes = {};
+        n.V = [];
+        n.E = {};
     },
     "start": function(e) {
         evt.dispatch("log", "starting scene graph");
