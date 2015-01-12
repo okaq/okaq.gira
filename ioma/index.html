@@ -102,6 +102,8 @@ var t = {
         t.alpha = [1920,1080,0,0];
         t.quads = t.quad(t.alpha);
         evt.dispatch("log", t.quads);
+
+        t.db = {};
     },
     "quad": function(r0) {
         // input [w,h,x,y]
@@ -119,16 +121,41 @@ var t = {
         var r3 = [w2,h2,x,y2];
         var r4 = [w2,h2,x2,y2];
         return [r1,r2,r3,r4];
+    },
+    "gen": function(n0) {
+        // generate the layout at depth n0
+        if (n0 == 0) {
+        } else {
+        }
     }
 }
 // scene graph
 var n = {
     "init": function() {
-        n.V = [];
-        n.E = {};
+        // linear array of scenes
+        // position in array determines edges
+        n.db = [];
+        // pointer - current location
+        n.point = 0;
+        n.gen(9);
     },
     "start": function(e) {
         evt.dispatch("log", "starting scene graph");
+    },
+    "fore": function(e) {
+        // event handler to transition to next scene
+    },
+    "back": function(e) {
+        // event handler to transition to previous scene
+    },
+    "gen": function(n0) {
+        // init to n0 scenes
+        for (var i = 0; i < n0; i++) {
+            var k0 = "tree_" + i.toString();
+            n.db[i] = k0;
+            t.db[k0] = t.gen(i);
+        }
+        evt.dispatch("log", "scene graph generated: " + n.db);
     }
 }
 // dom
