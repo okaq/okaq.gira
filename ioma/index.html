@@ -137,16 +137,28 @@ var n = {
         n.db = [];
         // pointer - current location
         n.point = 0;
-        n.gen(9);
+        // count - how many scenes have we created
+        n.count = 16;
     },
     "start": function(e) {
         evt.dispatch("log", "starting scene graph");
+        n.gen(n.count);
     },
     "fore": function(e) {
         // event handler to transition to next scene
+        if (n.point == n.db.length - 1) {
+            evt.dispatch("log", "scene graph: cannot move forward. already at the end.");
+            return;
+        }
+        n.point++;
     },
     "back": function(e) {
         // event handler to transition to previous scene
+        if (n.point == 0) {
+            evt.dispatch("log", "scene graph: at starting node.");
+            return;
+        }
+        n.point--;
     },
     "gen": function(n0) {
         // init to n0 scenes
@@ -155,7 +167,31 @@ var n = {
             n.db[i] = k0;
             t.db[k0] = t.gen(i);
         }
+        // n.shuffle();
         evt.dispatch("log", "scene graph generated: " + n.db);
+    },
+    "add": function() {
+        // create new scene and push to end
+        var k0 = "tree_" + n.count;
+        n.db.push(k0);
+        // increment counter
+        n.count++;
+    },
+    "shuffle": function() {
+        // inplace shuffle of scene array
+        for (var i = n.db.length - 1; i >= 0; i--) {
+            var i0 = (Math.random() * i) >>> 0;
+            var t0 = n.db[i0];
+            n.db[i0] = n.db[i];
+            n.db[i] = t0;
+        }
+    },
+    "del": function(k0) {
+        // remove scene by key, e.g. "tree_0"
+        var i0 = n.db.indexOf(k0);
+        if (i0 > -1) {
+            n.db.splice(i0, 1);
+        }
     }
 }
 // dom
