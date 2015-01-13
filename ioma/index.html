@@ -124,9 +124,15 @@ var t = {
     },
     "gen": function(n0) {
         // generate the layout at depth n0
-        if (n0 == 0) {
-        } else {
+        // layout defined as a list of space-filling canvas objects
+        var r0 = [];
+        r0.push(t.alpha.slice());
+        var r1 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var c0 = dom.canvas(r0[i]);
+            r1.push(c0);
         }
+        return r1;
     }
 }
 // scene graph
@@ -169,6 +175,7 @@ var n = {
         }
         // n.shuffle();
         evt.dispatch("log", "scene graph generated: " + n.db);
+        evt.dispatch("log", t.db);
     },
     "add": function() {
         // create new scene and push to end
