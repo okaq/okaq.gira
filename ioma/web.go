@@ -8,11 +8,12 @@ import (
 )
 
 const (
-    HTML = "index.html"
+    // HTML = "index.html"
+    SHIN = "shin.html" // new
 )
 
 func SelectorHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, HTML)
+    http.ServeFile(w, req, SHIN)
 }
 
 func init() {
