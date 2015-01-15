@@ -32,6 +32,14 @@ var data = {
     "init": function() {
         // grid of points, random centers and rgba nearest neighbors
         console.log("data system init");
+        data.w = 1920; // page size
+        data.h = 1080;
+        data.cw = 32; // cell size
+        data.ch = 32;
+        data.nx = (data.w / data.cw) >>> 0;
+        data.ny = (data.h / data.ch) >>> 0;
+        data.nt = (data.nx * data.ny) >>> 0;
+        console.log(data);
     }
 }
 // layout
