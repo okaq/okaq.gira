@@ -22,14 +22,44 @@
 var g = {
     "init": function(e) {
         console.log(e);
+        // subsytems
+        g.subs = [dom, data, lay, cells, timer];
+        g.subs.forEach(function(el){el.init();});
      }
+}
+// data
+var data = {
+    "init": function() {
+        // grid of points, random centers and rgba nearest neighbors
+        console.log("data system init");
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // list of 2^N x 2^N rects, static
+        console.log("layout system init");
+    }
+}
+// cells
+var cells = {
+    "init": function() {
+        // canvas objects
+        console.log("cells system init");
+    }
+}
+// timers and stats
+var timer = {
+    "init": function() {
+        // timer gets its own dedicated class
+        console.log("timer system init");
+    }
 }
 // dom
 var dom = {
     "init": function() {
         dom.alpha = document.getElementById("alpha");
-        // console.log(dom.alpha);
-        evt.dispatch("log", dom.alpha);
+        console.log(dom.alpha);
     },
     "canvas": function(w0, h0, x0, y0) {
         var c0 = {};
