@@ -39,6 +39,17 @@ var data = {
         data.nx = (data.w / data.cw) >>> 0;
         data.ny = (data.h / data.ch) >>> 0;
         data.nt = (data.nx * data.ny) >>> 0;
+        data.p = []; // points
+        data.q = 32; // number of centroids (unique)
+        // console.log(data);
+
+        data.rand();
+    },
+    "rand": function() {
+        // set each point to rand rgba
+        for (var i = 0; i < data.nt; i++) {
+            data.p[i] = rgb.rand();
+        }
         console.log(data);
     }
 }
@@ -47,6 +58,16 @@ var lay = {
     "init": function() {
         // list of 2^N x 2^N rects, static
         console.log("layout system init");
+        lay.r = [];
+        for (var y = 0; y < data.ny; y++) {
+            for (var x = 0; x < data.nx; x++) {
+                var i0 = ((y * data.nx) + x) >>> 0;
+                var x0 = (x * data.cw) >>> 0;
+                var y0 = (y * data.ch) >>> 0;
+                lay.r[i0] = [data.cw, data.ch, x0, y0];
+            }
+        }
+        console.log(lay);
     }
 }
 // cells
