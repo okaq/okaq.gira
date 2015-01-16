@@ -41,6 +41,8 @@ var data = {
         data.nt = (data.nx * data.ny) >>> 0;
         data.p = []; // points
         data.q = 32; // number of centroids (unique)
+        data.r = []; // index of centroids
+        data.s = []; // centroid rgba
         // console.log(data);
 
         data.rand();
@@ -49,6 +51,12 @@ var data = {
         // set each point to rand rgba
         for (var i = 0; i < data.nt; i++) {
             data.p[i] = rgb.rand();
+        }
+        // random pick for now, eventually poisson
+        for (var i = 0; i < data.q; i++) {
+            var i0 = (Math.random() * data.nt) >>> 0;
+            data.r[i] = i0;
+            data.s[i] = data.p[i0];
         }
         console.log(data);
     }
