@@ -25,6 +25,11 @@ var g = {
         // subsytems
         g.subs = [dom, data, lay, cells, timer];
         g.subs.forEach(function(el){el.init();});
+        // render test
+        var t0 = window.performance.now();
+        ren.data();
+        var t1 = window.performance.now() - t0;
+        console.log("total render time: " + t1 + "ms");
      }
 }
 // data
@@ -83,6 +88,12 @@ var cells = {
     "init": function() {
         // canvas objects
         console.log("cells system init");
+        cells.c = [];
+        cells.db = {};
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i] = dom.canvas(lay.r[i]);
+            dom.add(cells.c[i]);
+        }
     }
 }
 // timers and stats
@@ -92,21 +103,37 @@ var timer = {
         console.log("timer system init");
     }
 }
+// render
+var ren = {
+    "white": function() {
+        var rgba0 = rgb.css([255,255,255,1.0]);
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i].con.fillStyle = rgba0;
+            cells.c[i].con.fillRect(0,0,data.cw,data.ch);
+        }
+    },
+    "data": function() {
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i].con.fillStyle = rgb.css(data.p[i]);
+            cells.c[i].con.fillRect(0,0,data.cw,data.ch);
+        }
+    }
+}
 // dom
 var dom = {
     "init": function() {
         dom.alpha = document.getElementById("alpha");
         console.log(dom.alpha);
     },
-    "canvas": function(w0, h0, x0, y0) {
+    "canvas": function(r0) {
         var c0 = {};
         c0.can = document.createElement("canvas");
         c0.con = c0.can.getContext("2d");
-        c0.can.width = w0;
-        c0.can.height = h0;
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
         c0.can.style.position = "absolute";
-        c0.can.style.top = y0 + "px";
-        c0.can.style.left = x0 + "px";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
         return c0;
     },
     "add": function(c0) {
