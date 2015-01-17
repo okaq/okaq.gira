@@ -38,6 +38,9 @@ var g = {
     "click": function(e) {
         console.log(e);
         g.state++;
+        data.flood();
+        ren.white();
+        ren.data();
     }
 }
 // data
@@ -85,6 +88,34 @@ var data = {
             data.t[i] = [[data.r[i]]];
         }
         console.log(data);
+    },
+    "flood": function() {
+        // next step in seeded flood fill
+        for (var i = 0; i < data.t.length; i++) {
+            // new frontier
+            var r0 = [];
+            for (var j = 0; j < data.t[i].length; j++) {
+                // north
+                var j0 = data.t[i][j];
+                var j1 = j0 - data.nx;
+                if (j1 > 0) {
+                    // check for white
+                    var wh0 = rgb.compare(data.p[j1], [255,255,255,1.0]);
+                    if (wh0) {
+                        data.p[j1] = data.s[i];
+                    }
+                    // push neighbors onto new frontier
+                    /*
+                    var j2 = j1 - data.nx;
+                    if (j2 > 0) {
+                        r0.push(j2);
+                        }
+                     */
+                    r0.push(j1);
+                }
+            }
+            data.t[i] = r0.slice(0);
+        }
     }
 }
 // layout
@@ -180,6 +211,14 @@ var rgb = {
     },
     "rc": function() {
         return rgb.css(rgb.rand());
+    },
+    "compare": function(rgba0, rgba1) {
+        for (var i = 0; i < rgba0.length; i++) {
+            if (rgba0[i] != rgba1[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
