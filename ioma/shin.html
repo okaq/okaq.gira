@@ -85,7 +85,7 @@ var data = {
         s0.sort(function(a,b){return a-b;}); // sorted array
         // sorting determines expansion intersection rules
         for (var i = 0; i < data.q; i++) {
-            data.t[i] = [[data.r[i]]];
+            data.t[i] = [data.r[i]];
         }
         console.log(data);
     },
@@ -94,15 +94,17 @@ var data = {
         for (var i = 0; i < data.t.length; i++) {
             // new frontier
             var r0 = [];
-            for (var j = 0; j < data.t[i].length; j++) {
+            var t0 = data.t[i].slice(0);
+            for (var j = 0; j < t0.length; j++) {
                 // north
-                var j0 = data.t[i][j];
+                var j0 = t0[j];
                 var j1 = j0 - data.nx;
                 if (j1 > 0) {
                     // check for white
                     var wh0 = rgb.compare(data.p[j1], [255,255,255,1.0]);
                     if (wh0) {
                         data.p[j1] = data.s[i];
+                        r0.push(j1);
                     }
                     // push neighbors onto new frontier
                     /*
@@ -111,11 +113,43 @@ var data = {
                         r0.push(j2);
                         }
                      */
-                    r0.push(j1);
+                    // r0.push(j1);
+                }
+                // west
+                var j2 = j0 + 1;
+                var row0 = (j0 / data.nx) >>> 0;
+                var row1 = (row0 * data.nx) >>> 0;
+                var row2 = row1 + data.nx;
+                // console.log(i, j, t0, data.t[i], data.t[i][j], j0, j1, j2, row0, row1, row2);
+                if (j2 < row2) {
+                    var wh1 = rgb.compare(data.p[j2], [255,255,255,1.0]);
+                    if (wh1) {
+                        data.p[j2] = data.s[i];
+                        r0.push(j2);
+                    }
+                }
+                // south
+                var j3 = j0 + data.nx;
+                if (j3 < data.nt) {
+                    var wh2 = rgb.compare(data.p[j3], [255,255,255,1.0]);
+                    if (wh2) {
+                        data.p[j3] = data.s[i];
+                        r0.push(j3);
+                    }
+                }
+                // east
+                var j4 = j0 - 1;
+                if (j4 >= row1) {
+                    var wh3 = rgb.compare(data.p[j4], [255,255,255,1.0]);
+                    if (wh3) {
+                        data.p[j4] = data.s[i];
+                        r0.push(j4);
+                    }
                 }
             }
             data.t[i] = r0.slice(0);
         }
+        console.log(data.t);
     }
 }
 // layout
