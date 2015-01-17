@@ -56,6 +56,7 @@ var data = {
         data.q = 32; // number of centroids (unique)
         data.r = []; // index of centroids
         data.s = []; // centroid rgba
+        data.t = []; // expansion frontier
         // console.log(data);
 
         data.rand();
@@ -71,6 +72,17 @@ var data = {
             data.r[i] = i0;
             data.s[i] = rgb.rand();
             data.p[i0] = data.s[i];
+        }
+        // console.log(data);
+        // initial frontier [[centroid1],[centroid2],...]
+        // at each step, expand in 4 compass directions
+        // check data.p using rgb.equals
+        // only expand if white
+        var s0 = data.r.slice(0);
+        s0.sort(function(a,b){return a-b;}); // sorted array
+        // sorting determines expansion intersection rules
+        for (var i = 0; i < data.q; i++) {
+            data.t[i] = [[data.r[i]]];
         }
         console.log(data);
     }
