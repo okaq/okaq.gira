@@ -30,7 +30,15 @@ var g = {
         ren.data();
         var t1 = window.performance.now() - t0;
         console.log("total render time: " + t1 + "ms");
-     }
+        // state
+        g.state = 0;
+        // handler
+        document.addEventListener("click", g.click, false);
+    },
+    "click": function(e) {
+        console.log(e);
+        g.state++;
+    }
 }
 // data
 var data = {
@@ -55,13 +63,14 @@ var data = {
     "rand": function() {
         // set each point to rand rgba
         for (var i = 0; i < data.nt; i++) {
-            data.p[i] = rgb.rand();
+            data.p[i] = [255,255,255,1.0]; // rgb.rand();
         }
         // random pick for now, eventually poisson
         for (var i = 0; i < data.q; i++) {
             var i0 = (Math.random() * data.nt) >>> 0;
             data.r[i] = i0;
-            data.s[i] = data.p[i0];
+            data.s[i] = rgb.rand();
+            data.p[i0] = data.s[i];
         }
         console.log(data);
     }
