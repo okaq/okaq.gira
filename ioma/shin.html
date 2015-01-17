@@ -36,11 +36,14 @@ var g = {
         document.addEventListener("click", g.click, false);
     },
     "click": function(e) {
-        console.log(e);
+        // console.log(e);
+        timer.start();
         g.state++;
         data.flood();
         ren.white();
         ren.data();
+        var end = timer.stop();
+        console.log("frame render time: " + end + "ms");
     }
 }
 // data
@@ -149,7 +152,7 @@ var data = {
             }
             data.t[i] = r0.slice(0);
         }
-        console.log(data.t);
+        // console.log(data.t);
     }
 }
 // layout
@@ -187,6 +190,15 @@ var timer = {
     "init": function() {
         // timer gets its own dedicated class
         console.log("timer system init");
+        timer.now = null;
+    },
+    "start": function() {
+        timer.now = window.performance.now();
+    },
+    "stop": function() {
+        var t0 = window.performance.now() - timer.now;
+        timer.now = null;
+        return t0;
     }
 }
 // render
