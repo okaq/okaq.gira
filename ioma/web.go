@@ -9,11 +9,12 @@ import (
 
 const (
     // HTML = "index.html"
-    SHIN = "shin.html" // new
+    // SHIN = "shin.html" // new
+    TETO = "teto.html" // 1fps diffusion
 )
 
 func SelectorHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, SHIN)
+    http.ServeFile(w, req, TETO)
 }
 
 func init() {
