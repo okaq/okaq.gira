@@ -25,7 +25,13 @@ var g = {
         // subsystems
         g.subs = [dom, data, lay, cells, timer];
         g.subs.forEach(function(el){el.init();});
-     }
+
+        g.frame();
+    },
+    "frame": function() {
+        ren.white();
+        ren.data();
+    }
 }
 // data
 var data = {
@@ -54,7 +60,7 @@ var data = {
         for (var i = 0; i < data.q; i++) {
             var i0 = (Math.random() * data.nt) >>> 0;
             data.r[i] = i0;
-            data.s[i] = rgba.rb();
+            data.s[i] = rgb.rb();
             data.p[i0] = data.s[i];
         }
         for (var i = 0; i < data.q; i++) {
@@ -65,11 +71,25 @@ var data = {
 // layout
 var lay = {
     "init": function() {
+        lay.r = [];
+        for (var y = 0; y < data.ny; y++) {
+            for (var x = 0; x < data.nx; x++) {
+                var i0 = ((y * data.nx) + x) >>> 0;
+                var x0 = (x * data.cw) >>> 0;
+                var y0 = (y * data.ch);
+                lay.r[i0] = [data.cw, data.ch, x0, y0];
+            }
+        }
     }
 }
 // canvas
 var cells = {
     "init": function() {
+        cells.c = [];
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i] = dom.canvas(lay.r[i]);
+            dom.add(cells.c[i]);
+        }
     }
 }
 // clock
@@ -88,6 +108,19 @@ var timer = {
 }
 // render
 var ren = {
+    "white": function() {
+        var rgba0 = rgb.css([255,255,255,1.0]);
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i].con.fillStyle = rgba0;
+            cells.c[i].con.fillRect(0,0,data.cw,data.ch);
+        }
+    },
+    "data": function() {
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i].con.fillStyle = rgb.hue(data.p[i]);
+            cells.c[i].con.fillRect(0,0,data.cw,data.ch);
+        }
+    }
 }
 // dom
 var dom = {
@@ -137,6 +170,16 @@ var rgb = {
             }
         }
         return true;
+    },
+    "hue": function(h0) {
+        if (h0 == 0) {
+            return "hsla(0,100%,100%,1.0)";
+        } else {
+            var s0 = "hsla(";
+            s0 += h0;
+            s0 += ",100%,50%,1.0)";
+            return s0;
+        }
     }
 }
 
