@@ -67,6 +67,29 @@ var data = {
             data.t[i] = [data.r[i]];
         }
     }
+    "flood": function() {
+        // obtain compass indicies
+        for (var i = 0; i < data.t.length) {
+            var r0 = []; // new frontier
+            for (var j = 0; j < data.t[i].length; j++) {
+                var r1 = data.compass(data.t[i][j]);
+            }
+            data.t[i] = r0;
+        }
+    },
+    "compass": function(i0) {
+        // return news expansion of index
+        var r0 = [];
+        var row0 = (i0 / data.nx) >>> 0;
+        var row1 = (row0 * data.nx) >>> 0;
+        var row2 = (row1 + data.nx) >>> 0;
+        var r1 = i0 - data.nx;
+        r0[0] = (r1 > 0) ? r1 : null;
+        var r2 = i0 + 1;
+        r0[0] = (r2 < row2) ? r2 : null;
+
+        return r0;
+    }
 }
 // layout
 var lay = {
