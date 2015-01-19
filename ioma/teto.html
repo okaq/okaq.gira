@@ -26,11 +26,25 @@ var g = {
         g.subs = [dom, data, lay, cells, timer];
         g.subs.forEach(function(el){el.init();});
 
-        g.frame();
+        g.id = window.setInterval(g.frame, 1000);
     },
     "frame": function() {
-        ren.white();
-        ren.data();
+        // console.log(data.t);
+        var b0 = false; // done when expansion set is empty
+        for (var i = 0; i < data.t.length; i++) {
+            if (data.t[i].length > 0) {
+                b0 = true;
+                break;
+            }
+        }
+        if (b0) {
+            data.flood();
+            ren.white();
+            ren.data();
+        } else {
+            console.log("expansion finished!");
+            window.clearInterval(g.id);
+        }
     }
 }
 // data
@@ -55,24 +69,35 @@ var data = {
     "seed": function() {
         // random initial data
         for (var i = 0; i < data.nt; i++) {
+            // setting hue = 0 as white, rand range 1-359
             data.p[i] = 0;
         }
         for (var i = 0; i < data.q; i++) {
             var i0 = (Math.random() * data.nt) >>> 0;
             data.r[i] = i0;
-            data.s[i] = rgb.rb();
+            data.s[i] = ((Math.random() * 358) + 1) >>> 0;
             data.p[i0] = data.s[i];
         }
         for (var i = 0; i < data.q; i++) {
             data.t[i] = [data.r[i]];
         }
-    }
+    },
     "flood": function() {
         // obtain compass indicies
-        for (var i = 0; i < data.t.length) {
+        for (var i = 0; i < data.t.length; i++) {
             var r0 = []; // new frontier
             for (var j = 0; j < data.t[i].length; j++) {
                 var r1 = data.compass(data.t[i][j]);
+                // console.log(r1);
+                for (var k = 0; k < r1.length; k++) {
+                    var i0 = r1[k];
+                    var hue0 = data.p[i0];
+                    if (hue0 == 0) {
+                        // expand
+                        data.p[i0] = data.s[i];
+                        r0.push(i0);
+                    }
+                }
             }
             data.t[i] = r0;
         }
@@ -86,7 +111,11 @@ var data = {
         var r1 = i0 - data.nx;
         r0[0] = (r1 > 0) ? r1 : null;
         var r2 = i0 + 1;
-        r0[0] = (r2 < row2) ? r2 : null;
+        r0[1] = (r2 < row2) ? r2 : null;
+        var r3 = i0 + data.nx;
+        r0[2] = (r3 > data.nt) ? null : r3;
+        var r4 = i0 - 1;
+        r0[3] = (r4 < row1) ? null : r4;
 
         return r0;
     }
