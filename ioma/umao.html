@@ -24,9 +24,39 @@ var g = {
         console.log(e);
 
         // subsystems
-        g.subs = [dom];
+        g.subs = [dom,data,lay,cells];
         g.subs.forEach(function(el){el.init();});
+
+        // render test
+        ren.white();
+        ren.data();
      }
+}
+// data
+var data = {
+    "init": function() {
+        data.w = 1920; // page size
+        data.h = 1080;
+        data.cw = 64; // cell size
+        data.ch = 64;
+        data.nx = (data.w / data.cw) >>> 0; // cell counts
+        data.ny = (data.h / data.ch) >>> 0;
+        data.nt = (data.nx * data.ny) >>> 0;
+        data.p = []; // rgba value at each grid point
+        data.q = 64; // number of initial seeds
+
+        data.seed();
+    },
+    "seed": function() {
+        // random initial data
+        for (var i = 0; i < data.nt; i++) {
+            data.p[i] = [0,0,0,0];
+        }
+        for (var i = 0; i < data.q; i++) {
+            var i0 = (Math.random() * data.nt) >>> 0;
+            data.p[i0] = rgb.rand();
+        }
+    }
 }
 // dom
 var dom = {
@@ -50,6 +80,46 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.r = [];
+        for (var y = 0; y < data.ny; y++) {
+            for (var x = 0; x < data.nx; x++) {
+                var i0 = ((y * data.nx) + x) >>> 0;
+                var x0 = (x * data.cw) >>> 0;
+                var y0 = (y * data.ch);
+                lay.r[i0] = [data.cw, data.ch, x0, y0];
+            }
+        }
+    }
+}
+// canvas
+var cells = {
+    "init": function() {
+        cells.c = [];
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i] = dom.canvas(lay.r[i]);
+            dom.add(cells.c[i]);
+        }
+    }
+}
+// render
+var ren = {
+    "white": function() {
+        var rgba0 = rgb.css([255,255,255,1.0]);
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i].con.fillStyle = rgba0;
+            cells.c[i].con.fillRect(0,0,data.cw,data.ch);
+        }
+    },
+    "data": function() {
+        for (var i = 0; i < data.nt; i++) {
+            cells.c[i].con.fillStyle = rgb.css(data.p[i]);
+            cells.c[i].con.fillRect(0,0,data.cw,data.ch);
+        }
     }
 }
 // color
