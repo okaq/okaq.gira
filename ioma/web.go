@@ -10,11 +10,12 @@ import (
 const (
     // HTML = "index.html"
     // SHIN = "shin.html" // new
-    TETO = "teto.html" // 1fps diffusion
+    // TETO = "teto.html" // 1fps diffusion
+    UMAO = "umao.html" // voronoise
 )
 
 func SelectorHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, TETO)
+    http.ServeFile(w, req, UMAO)
 }
 
 func init() {
