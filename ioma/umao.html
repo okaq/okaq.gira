@@ -32,15 +32,20 @@ var g = {
         // ren.data();
 
         g.state = 0;
+        g.tick = 0;
         g.id = window.setInterval(g.frame, 1000);
     },
     "frame": function() {
-        console.log(g.id);
+        g.tick++;
+        console.log("frame #: " + g.tick);
         // data.nucleate();
         data.origin();
         ren.white();
         ren.data();
         // window.clearInterval(g.id);
+    },
+    "grow": function() {
+        window.clearInterval(g.id);
     }
 }
 // data
@@ -86,9 +91,26 @@ var data = {
         }
     },
     "origin": function() {
+        if (data.s.length == 0) {
+            console.log("originated!");
+            g.grow();
+        }
         for (var i = 0; i < data.s.length; i++) {
             var i0 = data.s[i];
-            var g0 = rgb.walk(data.p[i0], data.r[i0]);
+            var c0 = data.p[i0];
+            var c1 = data.r[i0];
+            var c2 = rgb.compare(c0, c1);
+            if (c2) {
+                console.log("nucleated: " + i0);
+                data.s.splice(i, 1);
+                // i = i - 1;
+                console.log(data.s.length + " seeds left");
+                continue;
+            }
+            if (data.s.length == 1) {
+                console.log("one remaining: " + i0 + " " + c0 + " " + c1 + " " + c2);
+            }
+            var g0 = rgb.walk(c0, c1);
             data.p[i0] = g0;
         }
         // alpha effect, at full opacity ;)
@@ -206,12 +228,42 @@ var rgb = {
          */
         // linear walk results in grey scales
         // pick one channel at random
-        var i0 = (Math.random() * 3) >>> 0;
-        c2[i0] = rgb.step(c0[i0], c1[i0]);
+        var b0 = true;
+        var c3 = 0;
+        var i0 = 0;
+        while (b0) {
+            i0 = (Math.random() * 3) >>> 0;
+            c3 = rgb.step(c0[i0], c1[i0]);
+            if (c3 != 0) {
+                b0 = false;
+            }
+        }
+        c2[i0] = c3;
         // console.log(c0,c1,c2);
         return c2;
     },
     "step": function(c0, c1) {
+        var f0 = 64;
+        var d0 = c0 - c1;
+        if (d0 == 0) {
+            return c0;
+        }
+        if (d0 > 0) {
+            if (d0 < f0) {
+                return c0 - d0;
+            } else {
+                return c0 - f0;
+            }
+        }
+        if (d0 < 0) {
+            if (d0 < f0) {
+                return c0 + d0;
+            } else {
+                return c0 + f0;
+            }
+        }
+
+        /*
         if (c0 == c1) {
             return c0;
         }
@@ -220,7 +272,9 @@ var rgb = {
         }
         if (c0 > c1) {
             return c0 - 1;
-        }
+            }
+         */
+
     }
 }
         </script>
