@@ -36,7 +36,8 @@ var g = {
     },
     "frame": function() {
         console.log(g.id);
-        data.nucleate();
+        // data.nucleate();
+        data.origin();
         ren.white();
         ren.data();
         // window.clearInterval(g.id);
@@ -55,6 +56,7 @@ var data = {
         data.p = []; // rgba value at each grid point
         data.q = 64; // number of initial seeds
         data.r = []; // goal rgba value
+        data.s = []; // nucleate indicies
         // function transform
 
         data.seed();
@@ -69,6 +71,7 @@ var data = {
             var i0 = (Math.random() * data.nt) >>> 0;
             data.r[i0] = rgb.rand();
             // keep track of indicies
+            data.s.push(i0);
         }
     },
     "nucleate": function() {
@@ -81,6 +84,14 @@ var data = {
             data.p[i] = g0;
             // console.log(i, g0);
         }
+    },
+    "origin": function() {
+        for (var i = 0; i < data.s.length; i++) {
+            var i0 = data.s[i];
+            var g0 = rgb.walk(data.p[i0], data.r[i0]);
+            data.p[i0] = g0;
+        }
+        // alpha effect, at full opacity ;)
     }
     // phase 1: seed nucleation
     // phase 2: growth
@@ -187,10 +198,17 @@ var rgb = {
     },
     "walk": function(c0, c1) {
         // one step from now to destination
-        var c2 = [0,0,0,1.0];
+        var c2 = [c0[0],c0[1],c0[2],1.0];
+        /*
         for (var i = 0; i < 3; i++) {
             c2[i] = rgb.step(c0[i], c1[i]);
-        }
+            }
+         */
+        // linear walk results in grey scales
+        // pick one channel at random
+        var i0 = (Math.random() * 3) >>> 0;
+        c2[i0] = rgb.step(c0[i0], c1[i0]);
+        // console.log(c0,c1,c2);
         return c2;
     },
     "step": function(c0, c1) {
@@ -198,10 +216,10 @@ var rgb = {
             return c0;
         }
         if (c0 < c1) {
-            return c0++;
+            return c0 + 1;
         }
         if (c0 > c1) {
-            return c0--;
+            return c0 - 1;
         }
     }
 }
