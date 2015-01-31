@@ -234,8 +234,15 @@ var rgb = {
         while (b0) {
             i0 = (Math.random() * 3) >>> 0;
             c3 = rgb.step(c0[i0], c1[i0]);
-            if (c3 != 0) {
+            /*
+            if (data.s.length == 1) {
+                console.log("c3: " + c3);
+                }
+                */
+            // bug: check goal channel zero
+            if (c3 != 0 || c1[i0] == 0) {
                 b0 = false;
+                break;
             }
         }
         c2[i0] = c3;
@@ -243,8 +250,13 @@ var rgb = {
         return c2;
     },
     "step": function(c0, c1) {
-        var f0 = 64;
+        var f0 = 1;
         var d0 = c0 - c1;
+        /*
+        if (data.s.length == 1) {
+            console.log("d0: " + d0);
+            }
+            */
         if (d0 == 0) {
             return c0;
         }
@@ -256,11 +268,14 @@ var rgb = {
             }
         }
         if (d0 < 0) {
+            return c1;
+            /*
             if (d0 < f0) {
                 return c0 + d0;
             } else {
                 return c0 + f0;
-            }
+                }
+                */
         }
 
         /*
