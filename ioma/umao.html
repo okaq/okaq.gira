@@ -46,6 +46,17 @@ var g = {
     },
     "grow": function() {
         window.clearInterval(g.id);
+        // kernel blur
+        g.state = 1;
+        g.tick = 0;
+        g.id = window.setInterval(g.blur, 1000);
+    },
+    "blur": function() {
+        g.tick++;
+        console.log("blur #: " + g.tick);
+        data.kernel();
+        ren.white();
+        ren.data();
     }
 }
 // data
@@ -114,6 +125,10 @@ var data = {
             data.p[i0] = g0;
         }
         // alpha effect, at full opacity ;)
+    },
+    "kernel": function() {
+        // 9x9 weighted avg blur
+        // cache compass neighbors 
     }
     // phase 1: seed nucleation
     // phase 2: growth
@@ -250,7 +265,7 @@ var rgb = {
         return c2;
     },
     "step": function(c0, c1) {
-        var f0 = 1;
+        var f0 = 64;
         var d0 = c0 - c1;
         /*
         if (data.s.length == 1) {
