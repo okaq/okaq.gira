@@ -49,6 +49,8 @@ var g = {
         // kernel blur
         g.state = 1;
         g.tick = 0;
+        data.cache();
+        console.log(data.t);
         g.id = window.setInterval(g.blur, 1000);
     },
     "blur": function() {
@@ -73,6 +75,7 @@ var data = {
         data.q = 64; // number of initial seeds
         data.r = []; // goal rgba value
         data.s = []; // nucleate indicies
+        data.t = []; // neighbors cache
         // function transform
 
         data.seed();
@@ -129,6 +132,41 @@ var data = {
     "kernel": function() {
         // 9x9 weighted avg blur
         // cache compass neighbors 
+    },
+    "cache": function() {
+        for (var i = 0; i < data.nt; i++) {
+            var c0 = [
+                i-data.nx-1,i-data.nx,i-data.nx+1,
+                i-1,i,i+1,
+                i+data.nx-1,i+data.nx,i+data.nx+1,
+                ];
+            // edge removal
+            // top
+            if (i < data.nx) {
+                c0[0] = null;
+                c0[1] = null;
+                c0[2] = null;
+            }
+            // bottom
+            if (i >= (data.nt - data.nx)) {
+                c0[6] = null;
+                c0[7] = null;
+                c0[8] = null;
+            }
+            // left
+            if (i % data.nx == 0) {
+                c0[0] = null;
+                c0[3] = null;
+                c0[6] = null;
+            }
+            // right
+            if ((i % data.nx) == (data.nx - 1)) {
+                c0[2] = null;
+                c0[5] = null;
+                c0[8] = null;
+            }
+            data.t[i] = c0;
+        }
     }
     // phase 1: seed nucleation
     // phase 2: growth
