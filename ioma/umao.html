@@ -50,7 +50,7 @@ var g = {
         g.state = 1;
         g.tick = 0;
         data.cache();
-        console.log(data.t);
+        // console.log(data.t);
         g.id = window.setInterval(g.blur, 1000);
     },
     "blur": function() {
@@ -59,9 +59,10 @@ var g = {
         data.kernel();
         ren.white();
         ren.data();
-        if (g.tick == 8) {
+        if (g.tick == 16) {
             window.clearInterval(g.id);
-            console.log(data.p);
+            // console.log(data.p);
+            console.log("finished!");
         }
     }
 }
@@ -70,8 +71,8 @@ var data = {
     "init": function() {
         data.w = 1920; // page size
         data.h = 1080;
-        data.cw = 64; // cell size
-        data.ch = 64;
+        data.cw = 60; // cell size
+        data.ch = 60;
         data.nx = (data.w / data.cw) >>> 0; // cell counts
         data.ny = (data.h / data.ch) >>> 0;
         data.nt = (data.nx * data.ny) >>> 0;
@@ -136,7 +137,9 @@ var data = {
     "kernel": function() {
         // 9x9 weighted avg blur
         // cache compass neighbors 
-        var w0 = [0.005,0.010,0.005,0.010,0.94,0.010,0.005,0.010,0.005]; // weight matrix
+        // var w0 = [0.005,0.010,0.005,0.010,0.94,0.010,0.005,0.010,0.005]; // weight matrix
+        var w0 = [0.025,0.075,0.025,0.075,0.6,0.075,0.025,0.075,0.025]; // weight matrix
+        // var w0 = [0.075,0.125,0.075,0.125,0.2,0.125,0.075,0.125,0.075]; // weight matrix
         // must add up to 1.0, even with variable components
         for (var i = 0; i < data.nt; i++) {
             var w1 = 0.0;
@@ -152,6 +155,7 @@ var data = {
                 }
                 // weight depends on position
                 var c0 = data.p[i0];
+                // diff feedback, instead of weighted avg
                 r0 = r0 + (c0[0] * w0[j]);
                 g0 = g0 + (c0[1] * w0[j]);
                 b0 = b0 + (c0[2] * w0[j]);
