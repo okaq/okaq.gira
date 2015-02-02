@@ -11,13 +11,20 @@ const (
     // HTML = "index.html"
     // SHIN = "shin.html" // new
     // TETO = "teto.html" // 1fps diffusion
-    UMAO = "umao.html" // voronoise
+    // UMAO = "umao.html" // voronoise
+    VANI = "vani.html" // peerjs test
+    PEERJS = "peer.min.js" // PeerJS
 )
 
 func SelectorHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, UMAO)
+    http.ServeFile(w, req, VANI)
+}
+
+func PeerJSHandler(w http.ResponseWriter, req *http.Request) {
+    http.ServeFile(w, req, PEERJS)
 }
 
 func init() {
     http.HandleFunc("/", SelectorHandler)
+    http.HandleFunc("/peer.min.js", PeerJSHandler)
 }

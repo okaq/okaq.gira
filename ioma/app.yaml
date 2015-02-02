@@ -9,6 +9,11 @@ handlers:
       application_readable: true
       upload: .*\.html$
 
+    - url: /(.*\.js$)
+      static_files: \1
+      application_readable: true
+      upload: .*\.js$
+
     - url: /.*
       script: _go_app
 
