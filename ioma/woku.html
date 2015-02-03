@@ -24,6 +24,7 @@ var g = {
     "init": function(e) {
         console.log(e);
         data.init();
+        dom.init();
     }
 }
 // data
@@ -61,6 +62,77 @@ var data = {
         return r0;
     }
 }
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    }
+}
+// color
+var rgb = {
+    "rand": function() {
+        return [rgb.rb(),rgb.rb(),rgb.rb(),1.0];
+    },
+    "rb": function() {
+        return (Math.random() * 255) >>> 0;
+    },
+    "css": function(c0) {
+        var s0 = "rgba(";
+        s0 += c0.join(",");
+        s0 += ")";
+        return s0;
+    },
+    "rc": function() {
+        return rgb.css(rgb.rand());
+    },
+    "compare": function(rgba0, rgba1) {
+        for (var i = 0; i < rgba0.length; i++) {
+            if (rgba0[i] != rgba1[i]) {
+                return false;
+            }
+        }
+        return true;
+    },
+    "highc": function() {
+        // return random light/dark pair
+        var c0 = [
+                rgb.range(185,255),
+                rgb.range(185,255),
+                rgb.range(185,255),
+                1.0
+            ];
+        var c1 = [
+                rgb.range(8,96),
+                rgb.range(8,96),
+                rgb.range(8,96),
+                1.0
+            ];
+        return [c0,c1];
+    },
+    "range": function(lo, hi) {
+        // return random value within range
+        var d0 = hi - lo;
+        return ((Math.random() * d0) + lo) >>> 0;
+    }
+} 
 // oxy
 var oxy = {
       oxy_0:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4AAAD/AAAA44AAAcfAAAHHwAABh8AAA47AAAOMwAADjOAAA5jgAAOY4AADmMAAA7DAAAGxwAAB8cAAAeOAAAD3gAAAfwAAAD4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
