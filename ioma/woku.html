@@ -23,14 +23,25 @@
 var g = {
     "init": function(e) {
         console.log(e);
+        var now = window.performance.now();
+
+        // subsystems
         data.init();
         dom.init();
+        lay.init();
+
+        // render scene
+        ren.data();
+
+        // stats
+        var done = window.performance.now();
+        console.log("total run time: " + (done - now) + "ms.");
     }
 }
 // data
 var data = {
     "init": function() {
-        data.words = {}; // key, posX, posY, size
+        data.words = {}; // key, posX, posY, size (Nx32)
         data.words["okaq"] = [1000, 500, 128];
 
         data.bmp = {}; // pre-decode all entries (32x32 bitmaps)
@@ -38,6 +49,7 @@ var data = {
         console.log(data.bmp);
 
         data.rgb = {}; // color pairs - light & dark
+        data.color();
     },
     "dec": function() {
         for (var k in oxy) {
@@ -60,6 +72,24 @@ var data = {
             }
         }
         return r0;
+    },
+    "color": function() {
+        // pre-compute high contrast pairs
+        for (var k in data.words) {
+            data.rgb[k] = rgb.highc();
+        }
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+    }
+}
+// render
+var ren = {
+    "white": function() {
+    },
+    "data": function() {
     }
 }
 // dom
