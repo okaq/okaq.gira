@@ -49,6 +49,27 @@ var data = {
         data.words["nothing"] = null;
         data.words["void"] = null;
         data.words["empty"] = null;
+        data.words["isolated"] = null;
+        data.words["outlandish"] = null;
+        data.words["incomprehensible"] = null;
+        data.words["disquiparant"] = null;
+        data.words["unallied"] = null;
+        data.words["cipher"] = null;
+        data.words["nascent"] = null;
+        data.words["renovation"] = null;
+        data.words["rejuvenation"] = null;
+        data.words["primogenial"] = null;
+        data.words["bursting"] = null;
+        data.words["formation"] = null;
+        data.words["ardent"] = null;
+        data.words["rapturous"] = null;
+        data.words["superinducing"] = null;
+        data.words["renewal"] = null;
+        data.words["incessant"] = null;
+        data.words["everlasting"] = null;
+        data.words["cosmic"] = null;
+        data.words["diaconicum"] = null;
+        data.words["sanctuary"] = null;
         data.words["space"] = null;
         data.words["eternity"] = null;
         data.words["light"] = null;
@@ -116,13 +137,15 @@ var lay = {
         // determined by string length, cell size
         lay.dx = 1920; // document size
         lay.dy = 1080;
-        lay.my = 16; // margin top
+        lay.my = 2; // margin top
         lay.sx = 32; // cell size
         lay.sy = 32;
         lay.px = 2; // padding
         lay.py = 2;
         lay.bx = (lay.sx + (2 * lay.px)) >>> 0; // block size
         lay.by = (lay.sy + (2 * lay.py)) >>> 0;
+        lay.gx = (lay.sx / 32) >>> 0; // glyph point size in bmp
+        lay.gy = (lay.sy / 32) >>> 0;
 
         var y0 = lay.my; // accumulator
         for (var k in data.words) {
@@ -146,12 +169,45 @@ var ren = {
         for (var k in data.c) {
             var c0 = data.c[k];
             for (var i = 0; i < c0.length; i++) {
-                c0[i].con.fillStyle = rgb.css([255,255,25,1.0]);
+                c0[i].con.fillStyle = rgb.css([255,255,255,1.0]);
                 c0[i].con.fillRect(0,0,lay.sx,lay.sy);
             }
         }
     },
     "data": function() {
+        for (var k in data.c) {
+            var c0 = data.c[k];
+            var rgb0 = data.rgb[k][0];
+            var rgb1 = data.rgb[k][1];
+            for (var i = 0; i < c0.length; i++) {
+                // bkgd
+                c0[i].con.fillStyle = rgb.css(rgb1);
+                c0[i].con.fillRect(0,0,lay.sx,lay.sy);
+                // fore
+                // c0[i].con.fillStyle = rgb.css(rgb0);
+                // c0[i].con.fillRect(6,6,lay.sx-12,lay.sy-12);
+                var s0 = c0[i].can.dataset.x;
+                var bmp0 = data.bmp[s0];
+                ren.bmp(c0[i], bmp0, rgb1, rgb0);
+            }
+        }
+    },
+    "bmp": function(c0, bmp0, rgb1, rgb0) {
+        // render bmp in canvas
+        for (var y = 0; y < 32; y++) {
+            for (var x = 0; x < 32; x++) {
+                var y0 = (lay.gy * y) >>> 0;
+                var x0 = (lay.gx * x) >>> 0;
+                var i0 = ((y * 32) + x) >>> 0;
+                var f0 = bmp0[i0];
+                if (f0 == 0) {
+                    c0.con.fillStyle = rgb.css(rgb1);
+                } else {
+                    c0.con.fillStyle = rgb.css(rgb0);
+                }
+                c0.con.fillRect(x0, y0, lay.gx, lay.gy);
+            }
+        }
     }
 }
 // dom
