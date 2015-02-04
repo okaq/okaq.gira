@@ -29,8 +29,10 @@ var g = {
         data.init();
         dom.init();
         lay.init();
+        console.log(data);
 
         // render scene
+        ren.white();
         ren.data();
 
         // stats
@@ -42,14 +44,23 @@ var g = {
 var data = {
     "init": function() {
         data.words = {}; // key, posX, posY, size (Nx32)
-        data.words["okaq"] = [1000, 500, 128];
+        // data.words["okaq"] = [1000, 500, 128];
+        data.words["okaq"] = null;
+        data.words["nothing"] = null;
+        data.words["void"] = null;
+        data.words["empty"] = null;
+        data.words["space"] = null;
+        data.words["eternity"] = null;
+        data.words["light"] = null;
+        data.words["everything"] = null;
 
         data.bmp = {}; // pre-decode all entries (32x32 bitmaps)
         data.dec();
-        console.log(data.bmp);
 
         data.rgb = {}; // color pairs - light & dark
         data.color();
+
+        data.c = {}; // canvas objects
     },
     "dec": function() {
         for (var k in oxy) {
@@ -78,16 +89,67 @@ var data = {
         for (var k in data.words) {
             data.rgb[k] = rgb.highc();
         }
+    },
+    "canvas": function() {
+        for (var k in data.words) {
+            var s0 = k;
+            var s1 = s0.length;
+            var d0 = data.words[k];
+            data.c[k] = [];
+            for (var i = 0; i < s1; i++) {
+                var x0 = d0[0];
+                var y0 = d0[1];
+                var y1 = (y0 + lay.py) >>> 0;
+                var x1 = (x0 + (i * lay.bx) + lay.px) >>> 0;
+                var c0 = dom.canvas([lay.sx, lay.sy, x1, y1]);
+                dom.add(c0);
+                c0.can.dataset.x = k[i];
+                data.c[k].push(c0);
+            }
+        }
     }
 }
 // layout
 var lay = {
     "init": function() {
+        // centered, vertical scroll
+        // determined by string length, cell size
+        lay.dx = 1920; // document size
+        lay.dy = 1080;
+        lay.my = 16; // margin top
+        lay.sx = 32; // cell size
+        lay.sy = 32;
+        lay.px = 2; // padding
+        lay.py = 2;
+        lay.bx = (lay.sx + (2 * lay.px)) >>> 0; // block size
+        lay.by = (lay.sy + (2 * lay.py)) >>> 0;
+
+        var y0 = lay.my; // accumulator
+        for (var k in data.words) {
+            y0 = y0 + lay.by;
+            data.words[k] = lay.pos(k, y0);
+        }
+        data.canvas();
+    },
+    "pos": function(k, y0) {
+        // return element position, horizontally centered
+        var s0 = k;
+        var s1 = s0.length;
+        var x0 = (s1 * lay.bx) >>> 0;
+        var x1 = ((1920 / 2) - (x0 / 2)) >>> 0;
+        return [x1, y0];
     }
 }
 // render
 var ren = {
     "white": function() {
+        for (var k in data.c) {
+            var c0 = data.c[k];
+            for (var i = 0; i < c0.length; i++) {
+                c0[i].con.fillStyle = rgb.css([255,255,25,1.0]);
+                c0[i].con.fillRect(0,0,lay.sx,lay.sy);
+            }
+        }
     },
     "data": function() {
     }
