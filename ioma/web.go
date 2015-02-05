@@ -13,12 +13,13 @@ const (
     // TETO = "teto.html" // 1fps diffusion
     // UMAO = "umao.html" // voronoise
     // VANI = "vani.html" // peerjs test
-    WOKU = "woku.html" // bitmap oxy font layout and render
+    // WOKU = "woku.html" // bitmap oxy font layout and render
+    YOMI = "yomi.html" // server side peer id distribution
     PEERJS = "peer.min.js" // PeerJS
 )
 
 func SelectorHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, WOKU)
+    http.ServeFile(w, req, YOMI)
 }
 
 func PeerJSHandler(w http.ResponseWriter, req *http.Request) {
