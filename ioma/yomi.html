@@ -25,9 +25,21 @@ var g = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        g.subs = [net];
+        g.subs.forEach(function(el){el.init();});
+
         // stats
         var done = window.performance.now();
         console.log("total run time: " + (done - now) + "ms.");
+    }
+}
+// peerjs
+var net = {
+    "init": function() {
+        net.peer = new Peer("okaq-peer-01", {key:"mrldpk6ryr0e8kt9"});
+        console.log(net.peer);
+        // get id, key from server json call
     }
 }
 </script>
