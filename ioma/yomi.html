@@ -44,6 +44,20 @@ var net = {
         net.xhr = new XMLHttpRequest();
         console.log(net.xhr);
         // get id, key from server json call
+        net.xhr.addEventListener("load", net.load, false);
+        net.urls = [
+            "http://localhost:8080/peer"
+            ];
+        net.open();
+    },
+    "load": function(e) {
+        console.log(e);
+        console.log(net.xhr.response);
+    },
+    "open": function() {
+        net.xhr.open("GET", net.urls[0], true);
+        net.xhr.requestType = "json";
+        net.xhr.send();
     }
 }
 </script>
