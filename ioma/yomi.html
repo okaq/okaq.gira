@@ -26,12 +26,36 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [net];
+        g.subs = [net,stats];
         g.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         console.log("total run time: " + (done - now) + "ms.");
+    }
+}
+// stats
+var stats = {
+    "init": function() {
+        stats.perf = {};
+    },
+    "set": function(k0) {
+        stats.perf[k0] = [];
+    },
+    "start": function(k0) {
+        stats.perf[k0][0] = window.performance.now();
+    },
+    "split": function(k0) {
+        stats.perf[k0].push(window.performance.now());
+        var d0 = stats.perf[k0].length;
+        var d1 = stats.perf[k0][d0-1] - stats.perf[k0][d0-2];
+        return d1;
+    },
+    "end": function(k0) {
+        var d0 = stats.split(k0);
+        var d1 = stats.perf[k0].length;
+        var d2 = stats.perf[k0][d1] - stats.perf[k0][0];
+        return [d0, d2];
     }
 }
 // peerjs
@@ -74,6 +98,8 @@ var net = {
     },
     "connect": function() {
         console.log("Initiating connection");
+        // time, stats for all conn events
+        // performance map, splits, perf["conn_0"] = [now(),...]
     }
 }
 </script>
