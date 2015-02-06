@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [net,stats];
+        g.subs = [stats,net];
         g.subs.forEach(function(el){el.init();});
 
         // stats
@@ -53,7 +53,7 @@ var stats = {
     },
     "end": function(k0) {
         var d0 = stats.split(k0);
-        var d1 = stats.perf[k0].length;
+        var d1 = stats.perf[k0].length-1;
         var d2 = stats.perf[k0][d1] - stats.perf[k0][0];
         return [d0, d2];
     }
@@ -61,10 +61,16 @@ var stats = {
 // peerjs
 var net = {
     "init": function() {
+        stats.set("peer");
+        stats.start("peer");
         // peerjs
         net.peer = new Peer("okaq-peer-01", {key:"mrldpk6ryr0e8kt9"});
         console.log(net.peer);
+        var t0 = stats.end("peer");
+        console.log("Peer init time: " + t0[1]);
         // xhr
+        stats.set("xhr");
+        stats.start("xhr");
         net.xhr = new XMLHttpRequest();
         console.log(net.xhr);
         // get id, key from server json call
@@ -73,6 +79,8 @@ var net = {
             "http://localhost:8080/peer"
             ];
         net.open();
+        t0 = stats.end("xhr");
+        console.log("Xhr init time: " + t0[1]);
     },
     "load": function(e) {
         console.log(e);
