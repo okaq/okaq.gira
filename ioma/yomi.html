@@ -52,12 +52,28 @@ var net = {
     },
     "load": function(e) {
         console.log(e);
-        console.log(net.xhr.response);
+        // console.log(net.xhr.response);
+        net.id = JSON.parse(net.xhr.response);
+        console.log(net.id.Id,net.id.Key,net.id.Conn);
+        net.pid = net.id.Id; // peer id
+        if (net.id.Conn) {
+            net.pid = net.pid - 1;
+            net.connect();
+        } else {
+            net.pid = net.pid + 1;
+            net.wait();
+        }
     },
     "open": function() {
         net.xhr.open("GET", net.urls[0], true);
         net.xhr.requestType = "json";
         net.xhr.send();
+    },
+    "wait": function() {
+        console.log("Waiting for peer to initiate connection");
+    },
+    "connect": function() {
+        console.log("Initiating connection");
     }
 }
 </script>

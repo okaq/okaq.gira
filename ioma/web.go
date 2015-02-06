@@ -29,12 +29,14 @@ var (
 
 type Counter struct {
     Id int
+    Conn bool
     sync.Mutex
 }
 
 func NewCounter() *Counter {
     C := new(Counter)
     C.Id = 0
+    C.Conn = true
     return C
 }
 
@@ -42,11 +44,13 @@ func (c *Counter) Increment() {
     c.Lock()
     defer c.Unlock()
     c.Id = c.Id + 1
+    c.Conn = !c.Conn
 }
 
 type Peer struct {
     Id int
     Key string
+    Conn bool
 }
 
 // struct RWLock peerid counter, cycles from (0-31)
@@ -70,6 +74,7 @@ func PeerHandler(w http.ResponseWriter, req *http.Request) {
     p0 := Peer{
         Id: C.Id,
         Key: APIKEY,
+        Conn: C.Conn,
     }
     b0, err := json.Marshal(p0)
     if err != nil {
