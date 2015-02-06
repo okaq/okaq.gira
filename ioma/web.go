@@ -4,6 +4,7 @@
 package main
 
 import (
+    "encoding/json"
     "fmt"
     "net/http"
     "sync"
@@ -19,6 +20,7 @@ const (
     YOMI = "yomi.html" // server side peer id distribution
     PEERJS = "peer.min.js" // PeerJS
     // apiKey
+    APIKEY = "mrldpk6ryr0e8kt9"
 )
 
 var (
@@ -42,6 +44,11 @@ func (c *Counter) Increment() {
     c.Id = c.Id + 1
 }
 
+type Peer struct {
+    Id int
+    Key string
+}
+
 // struct RWLock peerid counter, cycles from (0-31)
 // client can merely try to connect to [id-1,id+1]
 // json struct, {apiKey,peerId}
@@ -58,6 +65,22 @@ func CountHandler(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte(s0))
 }
 
+func PeerHandler(w http.ResponseWriter, req *http.Request) {
+    C.Increment()
+    p0 := Peer{
+        Id: C.Id,
+        Key: APIKEY,
+    }
+    b0, err := json.Marshal(p0)
+    if err != nil {
+        s0 := fmt.Sprintf("error: %s\n", err)
+        w.Write([]byte(s0))
+        return
+    }
+    w.Header().Set("Content-Type", "application/json")
+    w.Write(b0)
+}
+
 func PeerJSHandler(w http.ResponseWriter, req *http.Request) {
     http.ServeFile(w, req, PEERJS)
 }
@@ -65,6 +88,7 @@ func PeerJSHandler(w http.ResponseWriter, req *http.Request) {
 func init() {
     C = NewCounter()
     http.HandleFunc("/", SelectorHandler)
-    http.HandleFunc("/count", CountHandler);
+    http.HandleFunc("/count", CountHandler)
+    http.HandleFunc("/peer", PeerHandler)
     http.HandleFunc("/peer.min.js", PeerJSHandler)
 }

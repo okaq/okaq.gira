@@ -37,8 +37,12 @@ var g = {
 // peerjs
 var net = {
     "init": function() {
+        // peerjs
         net.peer = new Peer("okaq-peer-01", {key:"mrldpk6ryr0e8kt9"});
         console.log(net.peer);
+        // xhr
+        net.xhr = new XMLHttpRequest();
+        console.log(net.xhr);
         // get id, key from server json call
     }
 }
