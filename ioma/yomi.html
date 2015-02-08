@@ -93,6 +93,7 @@ var net = {
         // get id, key from server json call
         net.xhr.addEventListener("load", net.load, false);
         net.urls = [
+            "http://localhost:8080/key",
             "http://localhost:8080/peer"
             ];
         net.open();

@@ -25,6 +25,7 @@ const (
 
 var (
     C *Counter
+    PC *PeerCache
 )
 
 type Counter struct {
@@ -34,10 +35,10 @@ type Counter struct {
 }
 
 func NewCounter() *Counter {
-    C := new(Counter)
-    C.Id = 0
-    C.Conn = true
-    return C
+    c0 := new(Counter)
+    c0.Id = 0
+    c0.Conn = true
+    return c0
 }
 
 func (c *Counter) Increment() {
@@ -51,6 +52,32 @@ type Peer struct {
     Id int
     Key string
     Conn bool
+}
+
+type PeerCache struct {
+    Ids []string
+    Index int
+    Users int
+    sync.Mutex
+}
+
+func NewPeerCache() *PeerCache {
+    pc0 := new(PeerCache)
+    pc0.Users = 10
+    pc0.Ids = make([]string, pc0.Users)
+    pc0.Index = 0
+    return pc0
+}
+
+func (pc *PeerCache) Add(s0 string) {
+    pc.Lock()
+    defer pc.Unlock()
+    pc.Ids[pc.Index] = s0
+    if (pc.Index == pc.Users - 1) {
+        pc.Index = pc.Index + 1
+    } else {
+        pc.Index = 0
+    }
 }
 
 // struct RWLock peerid counter, cycles from (0-31)
@@ -77,6 +104,9 @@ func CountHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func PeerHandler(w http.ResponseWriter, req *http.Request) {
+}
+
+func KeyHandler(w http.ResponseWriter, req *http.Request) {
     C.Increment()
     p0 := Peer{
         Id: C.Id,
@@ -99,8 +129,10 @@ func PeerJSHandler(w http.ResponseWriter, req *http.Request) {
 
 func init() {
     C = NewCounter()
+    PC = NewPeerCache()
     http.HandleFunc("/", SelectorHandler)
     http.HandleFunc("/count", CountHandler)
+    http.HandleFunc("/key", KeyHandler)
     http.HandleFunc("/peer", PeerHandler)
     http.HandleFunc("/peer.min.js", PeerJSHandler)
 }
