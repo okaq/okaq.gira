@@ -4,6 +4,7 @@
 package main
 
 import (
+    "bytes"
     "encoding/json"
     "fmt"
     "net/http"
@@ -104,6 +105,11 @@ func CountHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func PeerHandler(w http.ResponseWriter, req *http.Request) {
+    b0 := new(bytes.Buffer)
+    b0.ReadFrom(req.Body)
+    s1 := string(b0.Bytes())
+    s0 := fmt.Sprintf("Number of peers: %d\nAnd you claimed your id was: %s\n", PC.Users, s1)
+    w.Write([]byte(s0))
 }
 
 func KeyHandler(w http.ResponseWriter, req *http.Request) {

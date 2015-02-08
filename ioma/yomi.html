@@ -75,10 +75,7 @@ var net = {
         // net.peer = new Peer({key: 'wrcrx9bkcwlpiudi'});
         net.peer = new Peer({key:net.id.Key,debug:3});
         net.peer.on("error", net.error);
-        net.peer.on("open", function(id){
-                console.log(id);
-                net.id = id;
-            });
+        net.peer.on("open", net.cache); 
         console.log(net.peer);
         net.route();
         // var t0 = stats.end("peer");
@@ -107,6 +104,7 @@ var net = {
         console.log(net.id.Id,net.id.Key,net.id.Conn);
         // net.pid = net.id.Id; // peer id
         // net.route();
+        net.xhr.removeEventListener("load", net.load, false);
         net.peerInit();
     },
     "route": function() {
@@ -136,6 +134,22 @@ var net = {
         // performance map, splits, perf["conn_0"] = [now(),...]
         net.pc = net.peer.connect(net.pid);
         console.log(net.pc);
+    },
+    "cache": function(id) {
+        console.log("id: " + id);
+        net.id = id;
+        net.save();
+    },
+    "save": function() {
+        // save peerjs id to server peer cache
+        net.xhr.addEventListener("load", net.pids, false);
+        net.xhr.open("POST", net.urls[1], true);
+        net.xhr.requestType = "text";
+        net.xhr.send(net.id);
+    },
+    "pids": function() {
+        // store peer ids from server locally
+        console.log(net.xhr.response);
     },
     "error": function(err) {
         console.log(err);
