@@ -74,7 +74,7 @@ func (pc *PeerCache) Add(s0 string) {
     pc.Lock()
     defer pc.Unlock()
     pc.Ids[pc.Index] = s0
-    if (pc.Index == pc.Users - 1) {
+    if pc.Index < (pc.Users - 1) {
         pc.Index = pc.Index + 1
     } else {
         pc.Index = 0
@@ -108,8 +108,20 @@ func PeerHandler(w http.ResponseWriter, req *http.Request) {
     b0 := new(bytes.Buffer)
     b0.ReadFrom(req.Body)
     s1 := string(b0.Bytes())
-    s0 := fmt.Sprintf("Number of peers: %d\nAnd you claimed your id was: %s\n", PC.Users, s1)
-    w.Write([]byte(s0))
+    PC.Add(s1)
+    // s0 := fmt.Sprintf("Number of peers: %d\nAnd you claimed your id was: %s\n", PC.Users, s1)
+    // w.Write([]byte(s0))
+    PC.Lock()
+    b1, err := json.Marshal(PC)
+    if err != nil {
+        s0 := fmt.Sprintf("error: %s\n", err)
+        w.Write([]byte(s0))
+        PC.Unlock()
+        return
+    }
+    PC.Unlock()
+    w.Header().Set("Content-Type", "application/json")
+    w.Write(b1)
 }
 
 func KeyHandler(w http.ResponseWriter, req *http.Request) {
