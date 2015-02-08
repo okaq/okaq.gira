@@ -62,18 +62,21 @@ var stats = {
 var net = {
     "init": function() {
         net.xhrInit();
-        net.peerInit();
+        // net.peerInit();
     },
     "peerInit": function() {
-        // stats.set("peer");
-        // stats.start("peer");
+        stats.set("peer");
+        stats.start("peer");
         // peerjs
         // id is assigned at creation
         // get id from server first, then connect peers
         // use net.pid as id, net.pkey as key
-        // net.peer = new Peer("okaq-peer-01", {key:"mrldpk6ryr0e8kt9",debug:3});
-        // net.peer.on("error", net.error);
-        // console.log(net.peer);
+        // net.peer = new Peer(net.id, {key:net.id.Key,debug:3});
+        net.peer = new Peer({key: 'wrcrx9bkcwlpiudi'});
+        net.peer.on("error", net.error);
+        net.peer.on("open", function(id){console.log(id)});
+        console.log(net.peer);
+        net.route();
         // var t0 = stats.end("peer");
         // console.log("Peer init time: " + t0[1]);
     },
@@ -98,7 +101,8 @@ var net = {
         net.id = JSON.parse(net.xhr.response);
         console.log(net.id.Id,net.id.Key,net.id.Conn);
         net.pid = net.id.Id; // peer id
-        net.route();
+        // net.route();
+        net.peerInit();
     },
     "route": function() {
         if (net.id.Conn) {
@@ -121,7 +125,8 @@ var net = {
         console.log("Initiating connection");
         // time, stats for all conn events
         // performance map, splits, perf["conn_0"] = [now(),...]
-        net.peer.connect(net.pid);
+        net.pc = net.peer.connect(net.pid);
+        console.log(net.pc);
     },
     "error": function(err) {
         console.log(err);
