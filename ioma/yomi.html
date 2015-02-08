@@ -72,9 +72,13 @@ var net = {
         // get id from server first, then connect peers
         // use net.pid as id, net.pkey as key
         // net.peer = new Peer(net.id, {key:net.id.Key,debug:3});
-        net.peer = new Peer({key: 'wrcrx9bkcwlpiudi'});
+        // net.peer = new Peer({key: 'wrcrx9bkcwlpiudi'});
+        net.peer = new Peer({key:net.id.Key,debug:3});
         net.peer.on("error", net.error);
-        net.peer.on("open", function(id){console.log(id)});
+        net.peer.on("open", function(id){
+                console.log(id);
+                net.id = id;
+            });
         console.log(net.peer);
         net.route();
         // var t0 = stats.end("peer");
@@ -100,18 +104,22 @@ var net = {
         // console.log(net.xhr.response);
         net.id = JSON.parse(net.xhr.response);
         console.log(net.id.Id,net.id.Key,net.id.Conn);
-        net.pid = net.id.Id; // peer id
+        // net.pid = net.id.Id; // peer id
         // net.route();
         net.peerInit();
     },
     "route": function() {
+        /*
         if (net.id.Conn) {
             net.pid = net.pid - 1;
             net.connect();
         } else {
             net.pid = net.pid + 1;
             net.wait();
-        }
+            }
+        */
+        // get peer ids list from server
+
     },
     "open": function() {
         net.xhr.open("GET", net.urls[0], true);
