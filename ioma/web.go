@@ -57,6 +57,13 @@ type Peer struct {
 // client can merely try to connect to [id-1,id+1]
 // json struct, {apiKey,peerId}
 
+// cache of peer ids
+// represented by a slice and a pointer
+// each game request, generate id (increment counter)
+// store in cache at pointer location, advance pointer
+// return json object with cache
+// cycle when pointer reaches end, overwriting
+
 func SelectorHandler(w http.ResponseWriter, req *http.Request) {
     // C.Increment()
     // fmt.Printf("Web Count: %d\n", C.Id)
