@@ -29,6 +29,9 @@ var g = {
         g.subs = [stats,net];
         g.subs.forEach(function(el){el.init();});
 
+        // ping
+        window.setTimeout(net.hello, 10000);
+
         // stats
         var done = window.performance.now();
         console.log("total run time: " + (done - now) + "ms.");
@@ -183,8 +186,11 @@ var net = {
         if (net.pid.Peers.length > 0) {
             net.dc = net.peer.connect(net.pid.Peers[0]);
             console.log(net.dc);
-            net.dc.on("open", net.connection);
+            // net.dc.on("open", net.connection);
+            net.dc.on("data", net.connection2);
+            net.wait = false;
         } else {
+            net.wait = true;
             console.log("waiting for a connection...");
         }
         /*
@@ -201,6 +207,21 @@ var net = {
     "connection": function(dc) {
         // data connection event handler
         console.log(dc);
+        net.dc = dc;
+        net.dc.on("data", net.connection2);
+        // net.hello();
+    },
+    "connection2": function(data) {
+        console.log(data);
+    },
+    "hello": function() {
+        if (net.wait) {
+            var s0 = "hello!";
+            console.log("sending " + s0);
+            net.dc.send(s0);
+        }
+        // separate peers into two types
+        // connectors and recievers
     },
     "error": function(err) {
         console.log(err);
