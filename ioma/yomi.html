@@ -153,8 +153,8 @@ var net = {
         // console.log(net.xhr.response);
         net.pid = JSON.parse(net.xhr.response);
         net.pid.Id = net.parseId();
-        net.pid.PeerId = net.getPeer();
-        console.log(net.pid.Ids,net.pid.Users,net.pid.Index);
+        net.pid.Peers = net.getPeers();
+        console.log(net.pid.Ids,net.pid.Users,net.pid.Index,net.pid.Id,net.pid.Peers);
         // ping pong a bitmap back and forth
         net.ping();
     },
@@ -165,7 +165,17 @@ var net = {
             return net.pid.Ids[net.pid.Users-1]; // index at 0, beginning of fresh cycle, return last member
         }
     },
-    "getPeer": function() {
+    "getPeers": function() {
+        // peers collection
+        var r0 = [];
+        for (var i = 0; i < net.pid.Ids.length; i++) {
+            var id0 = net.pid.Ids[i];
+            var id1 = net.pid.Id;
+            if ((id0 != id1) && (id0 != "")) {
+                r0.push(id0);
+            }
+        }
+        return r0;
     },
     "ping": function() {
         // ping peer and connect
@@ -173,8 +183,8 @@ var net = {
             console.log("Waiting for remote peer to initiate connection.");
             return;
         } else {
-            var id0 = 
-            net.conn = net.peer.connect(
+            // var id0 = 
+            // net.conn = net.peer.connect(
         }
 
         // elect a leader?
