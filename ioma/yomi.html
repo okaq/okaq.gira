@@ -164,6 +164,7 @@ var net = {
         } else {
             return net.pid.Ids[net.pid.Users-1]; // index at 0, beginning of fresh cycle, return last member
         }
+        // alternative: return index into peers list
     },
     "getPeers": function() {
         // peers collection
@@ -179,6 +180,14 @@ var net = {
     },
     "ping": function() {
         // ping peer and connect
+        if (net.pid.Peers.length > 0) {
+            net.dc = net.peer.connect(net.pid.Peers[0]);
+            console.log(net.dc);
+            net.dc.on("open", net.connection);
+        } else {
+            console.log("waiting for a connection...");
+        }
+        /*
         if (net.pid.Index == 1 && net.pid.Ids[1] == "") {
             console.log("Waiting for remote peer to initiate connection.");
             return;
@@ -186,7 +195,7 @@ var net = {
             // var id0 = 
             // net.conn = net.peer.connect(
         }
-
+        */
         // elect a leader?
     },
     "connection": function(dc) {
