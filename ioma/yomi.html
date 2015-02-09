@@ -76,6 +76,7 @@ var net = {
         net.peer = new Peer({key:net.id.Key,debug:3});
         net.peer.on("error", net.error);
         net.peer.on("open", net.cache); 
+        net.peer.on("connection", net.connection);
         console.log(net.peer);
         net.route();
         // var t0 = stats.end("peer");
@@ -91,7 +92,7 @@ var net = {
         net.xhr.addEventListener("load", net.load, false);
         net.urls = [
             "http://localhost:8080/key",
-            "http://localhost:8080/peer"
+            "http://localhost:8080/peer"    
             ];
         net.open();
         t0 = stats.end("xhr");
@@ -149,7 +150,38 @@ var net = {
     },
     "pids": function() {
         // store peer ids from server locally
-        console.log(net.xhr.response);
+        // console.log(net.xhr.response);
+        net.pid = JSON.parse(net.xhr.response);
+        net.pid.Id = net.parseId();
+        net.pid.PeerId = net.getPeer();
+        console.log(net.pid.Ids,net.pid.Users,net.pid.Index);
+        // ping pong a bitmap back and forth
+        net.ping();
+    },
+    "parseId": function() {
+        if (net.pid.Index >= 1) {
+            return net.pid.Ids[net.pid.Index-1];
+        } else {
+            return net.pid.Ids[net.pid.Users-1]; // index at 0, beginning of fresh cycle, return last member
+        }
+    },
+    "getPeer": function() {
+    },
+    "ping": function() {
+        // ping peer and connect
+        if (net.pid.Index == 1 && net.pid.Ids[1] == "") {
+            console.log("Waiting for remote peer to initiate connection.");
+            return;
+        } else {
+            var id0 = 
+            net.conn = net.peer.connect(
+        }
+
+        // elect a leader?
+    },
+    "connection": function(dc) {
+        // data connection event handler
+        console.log(dc);
     },
     "error": function(err) {
         console.log(err);
