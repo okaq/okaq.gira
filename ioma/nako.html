@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,lay,bmp,ren];
+        g.subs = [dom,bmp,lay,ren];
         g.subs.forEach(function(el){el.init();});
 
         // stats
@@ -37,10 +37,12 @@ var g = {
 // layout canvas objects
 var lay = {
     "init": function() {
-        lay.pw = 2; // pixel dimensions in rendered bmp
-        lay.ph = 2;
-        lay.give = dom.canvas([32,32,0,0]); // home generated bmp
-        lay.rec = dom.canvas([32,32,32,0]); // data transfer bmp
+        lay.pw = 32; // pixel dimensions in rendered bmp
+        lay.ph = 32;
+        lay.w = (bmp.w * lay.pw) >>> 0; // canvas size
+        lay.h = (bmp.h * lay.ph) >>> 0;
+        lay.give = dom.canvas([lay.w,lay.h,0,0]); // home generated bmp
+        lay.rec = dom.canvas([lay.w,lay.h,lay.w,0]); // data transfer bmp
         dom.add(lay.give);
         dom.add(lay.rec);
     }
@@ -90,7 +92,7 @@ var ren = {
             var y0 = (i / bmp.w) >>> 0;
             var x1 = (x0 * lay.pw) >>> 0;
             var y1 = (y0 * lay.ph) >>> 0;
-            // console.log(s0.length, x0, y0, x1, y1);
+            console.log(s0.length, s0[i], x0, y0, x1, y1);
             if (s0[i] == "0") {
                 lay0.con.fillStyle = rgb0;
             } else {
@@ -133,6 +135,18 @@ var bmp = {
         var s0 = "";
         for (var i = 0; i < bmp0.length; i++) {
             var s1 = bmp0[i].toString(2);
+            // zero paddding
+            var s2 = s1[s1.length-1];
+            for (var j = 1; j < 8; j++) {
+                var s3 = s1[s1.length-j];
+                // console.log(j, s3);
+                if (s3 != null) {
+                    s2 = s1[j] + s2;
+                } else {
+                    s2 = "0" + s2;
+                }
+            }
+            // console.log(bmp0[i], s1, s2);
             /* infinite loop
             // zer0-padding
             if (s1.length < 8) {
@@ -145,7 +159,7 @@ var bmp = {
                 s1 = s2 + s1;
                 }
                 */
-            s0 = s1 + s0;
+            s0 = s0 + s2;
         }
         // console.log(s0);
         return s0;
