@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,lay,bmp];
+        g.subs = [dom,lay,bmp,ren];
         g.subs.forEach(function(el){el.init();});
 
         // stats
@@ -37,8 +37,12 @@ var g = {
 // layout canvas objects
 var lay = {
     "init": function() {
-        lay.give = {}; // home generated bmp
-        lay.rec = {}; // data transfer bmp
+        lay.pw = 2; // pixel dimensions in rendered bmp
+        lay.ph = 2;
+        lay.give = dom.canvas([32,32,0,0]); // home generated bmp
+        lay.rec = dom.canvas([32,32,32,0]); // data transfer bmp
+        dom.add(lay.give);
+        dom.add(lay.rec);
     }
 }
 // dom
@@ -46,8 +50,55 @@ var dom = {
     "init": function() {
         dom.alpha = document.getElementById("alpha");
         console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
     }
-
+}
+// render
+var ren = {
+    "init": function() {
+        ren.rand(lay.give);
+        ren.rand(lay.rec);
+        ren.bmp(bmp.give, lay.give);
+    },
+    "rand": function(lay0) {
+        lay0.con.fillStyle = rgba.css(rgba.rc());
+        lay0.con.fillRect(0,0,lay0.can.width,lay0.can.height);
+    },
+    "bmp": function(bmp0, lay0) {
+        // render bmp in layout canvas object
+        var s0 = bmp.bins(bmp0);
+        var rgb0 = rgba.css(rgba.rc()); // bkgd
+        var rgb1 = rgba.css(rgba.rc());
+        for (var i = 0; i < s0.length; i++) {
+            var x0 = i % bmp.w;
+            var y0 = (i / bmp.w) >>> 0;
+            var x1 = (x0 * lay.pw) >>> 0;
+            var y1 = (y0 * lay.ph) >>> 0;
+            // console.log(s0.length, x0, y0, x1, y1);
+            if (s0[i] == "0") {
+                lay0.con.fillStyle = rgb0;
+            } else {
+                lay0.con.fillStyle = rgb1;
+            }
+            lay0.con.fillRect(x1, y1, lay.pw, lay.ph);
+        }
+    }
 }
 // bitmap format
 var bmp = {
@@ -66,7 +117,8 @@ var bmp = {
         bmp.give = bmp.create();
         bmp.rec = null; // to be recieved
 
-        console.log(bmp.give, bmp.rec);
+        // console.log(bmp.give, bmp.rec);
+        // console.log(bmp.bins(bmp.give));
     },
     "create": function() {
         var size0 = (bmp.t / 8) >>> 0; // 8-bits per byte
@@ -75,6 +127,28 @@ var bmp = {
         var rba0 = rgba.rba(size0);
         uint0.set(rba0, 0);
         return uint0;
+    },
+    "bins": function(bmp0) {
+        // return binary string of bmp data
+        var s0 = "";
+        for (var i = 0; i < bmp0.length; i++) {
+            var s1 = bmp0[i].toString(2);
+            /* infinite loop
+            // zer0-padding
+            if (s1.length < 8) {
+                var s2 = "";
+                var n0 = 8 - s1.length;
+                console.log(n0);
+                for (var i = 0; i < n0; i++) {
+                    s2 = s2 + "0";
+                }
+                s1 = s2 + s1;
+                }
+                */
+            s0 = s1 + s0;
+        }
+        // console.log(s0);
+        return s0;
     }
 }
 // colors
