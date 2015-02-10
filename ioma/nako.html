@@ -25,9 +25,59 @@ var g = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        g.subs = [dom,lay,bmp];
+        g.subs.forEach(function(el){el.init();});
+
         // stats
         var done = window.performance.now();
         console.log("total run time: " + (done - now) + "ms.");
+    }
+}
+// layout canvas objects
+var lay = {
+    "init": function() {
+        lay.give = {}; // home generated bmp
+        lay.rec = {}; // data transfer bmp
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    }
+
+}
+// bitmap format
+var bmp = {
+    "init": function() {
+        // define sparse bmp format from typed array
+        // nako bmp is size: 2^N, binary [0,1,1,0]
+        bmp.w = 16;
+        bmp.h = 16;
+        bmp.t = (bmp.w * bmp.h) >>> 0;
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
     }
 }
 </script>
