@@ -57,6 +57,24 @@ var bmp = {
         bmp.w = 16;
         bmp.h = 16;
         bmp.t = (bmp.w * bmp.h) >>> 0;
+        // 16x16 fits in uit8array
+
+        bmp.data();
+    },
+    "data": function() {
+        // init data
+        bmp.give = bmp.create();
+        bmp.rec = null; // to be recieved
+
+        console.log(bmp.give, bmp.rec);
+    },
+    "create": function() {
+        var size0 = (bmp.t / 8) >>> 0; // 8-bits per byte
+        var ab0 = new ArrayBuffer(size0);
+        var uint0 = new Uint8Array(ab0);
+        var rba0 = rgba.rba(size0);
+        uint0.set(rba0, 0);
+        return uint0;
     }
 }
 // colors
@@ -78,6 +96,14 @@ var rgba = {
     "rb": function() {
         // random byte
         return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
     }
 }
 </script>
