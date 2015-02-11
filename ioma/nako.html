@@ -26,12 +26,42 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,bmp,lay,ren,xhr,peer];
+        g.subs = [dom,bmp,lay,ren,xhr,peer,conn];
         g.subs.forEach(function(el){el.init();});
+
+        // start
+        g.id = window.setTimeout(conn.connect, 2500);
 
         // stats
         var done = window.performance.now();
         console.log("total run time: " + (done - now) + "ms.");
+    }
+}
+// data connection
+var conn = {
+    "init": function() {
+        conn.attempts = 0;
+        conn.max = 4;
+    },
+    "connect": function() {
+        if (!peer.q) {
+            conn.attempts = conn.attempts + 1;
+            if (conn.attempts < con.max) {
+                g.id = window.setTimeout(conn.connect, 2500);
+            } else {
+                console.log("connection attempts made: " + conn.max + ". timed out!");
+            }
+            return;
+        } else {
+            window.clearTimeout(g.id);
+        }
+        // connection structure is linked list
+        // determine if head, body, tail
+        if (peer.q.Index == 1) {
+            // head
+            console.log("please wait for peer to init conn!");
+            return;
+        }
     }
 }
 // peerjs
@@ -67,6 +97,7 @@ var xhr = {
     },
     "load": function(e) {
         console.log(xhr.req.response);
+        peer.q = JSON.parse(xhr.req.response);
     }
 }
 // layout canvas objects
