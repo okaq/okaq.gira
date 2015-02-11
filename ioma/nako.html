@@ -26,12 +26,24 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,bmp,lay,ren,xhr];
+        g.subs = [dom,bmp,lay,ren,xhr,peer];
         g.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         console.log("total run time: " + (done - now) + "ms.");
+    }
+}
+// peerjs
+var peer = {
+    "init": function() {
+        peer.key = "wrcrx9bkcwlpiudi"; // peerjs cloud api key
+        peer.p = new Peer({key:peer.key,debug:3});
+        peer.p.on("open", peer.open);
+    },
+    "open": function(id) {
+        peer.id = id;
+        console.log(peer);
     }
 }
 // xhr
