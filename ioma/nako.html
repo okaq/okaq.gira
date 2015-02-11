@@ -39,11 +39,16 @@ var peer = {
     "init": function() {
         peer.key = "wrcrx9bkcwlpiudi"; // peerjs cloud api key
         peer.p = new Peer({key:peer.key,debug:3});
+        peer.p.on("error", peer.error);
         peer.p.on("open", peer.open);
     },
     "open": function(id) {
         peer.id = id;
         console.log(peer);
+        xhr.peer();
+    },
+    "error": function(err) {
+        console.log(err);
     }
 }
 // xhr
@@ -52,13 +57,13 @@ var xhr = {
         xhr.req = new XMLHttpRequest();
         xhr.req.addEventListener("load", xhr.load, false);
         xhr.urls = [
-            "http://192.168.1.2:8080/peer"
+            "http://192.168.1.2:8080/peers"
             ];
     },
-    "peer": function(id) {
+    "peer": function() {
         xhr.req.open("POST", xhr.urls[0], true);
         xhr.req.requestType = "text";
-        xhr.req.send(id);
+        xhr.req.send(peer.id);
     },
     "load": function(e) {
         console.log(xhr.req.response);
@@ -234,5 +239,8 @@ var rgba = {
 random bitmap ping pong test
 chain connections in order of okaq.com
 server request - looks like linked list
+
+each new node propagates 
+the list down the chain
 -->
 
