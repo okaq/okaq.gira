@@ -69,12 +69,15 @@ var conn = {
         g.id = window.setTimeout(conn.send, 2500);
     },
     "send": function() {
-        conn.dc.send(peer.q);
+        // conn.dc.send(peer.q);
+        conn.dc.send(bmp.give);
     },
     "add": function(dc) {
         dc.on("data", function(data) {
                 console.log(dc);
-                console.log(data);
+                var u0 = new Uint8Array(data);
+                console.log(u0.length);
+                ren.bmp(u0, lay.rec);
                 });
         conn.r.push(dc);
     }
