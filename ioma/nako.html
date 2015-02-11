@@ -42,6 +42,8 @@ var conn = {
     "init": function() {
         conn.attempts = 0;
         conn.max = 4;
+        conn.r = []; // recievers
+        conn.s = []; // senders
     },
     "connect": function() {
         if (!peer.q) {
@@ -62,6 +64,19 @@ var conn = {
             console.log("please wait for peer to init conn!");
             return;
         }
+        conn.pid = peer.q.Ids[peer.q.Index-2];
+        conn.dc = peer.p.connect(conn.pid);
+        g.id = window.setTimeout(conn.send, 2500);
+    },
+    "send": function() {
+        conn.dc.send(peer.q);
+    },
+    "add": function(dc) {
+        dc.on("data", function(data) {
+                console.log(dc);
+                console.log(data);
+                });
+        conn.r.push(dc);
     }
 }
 // peerjs
@@ -71,6 +86,7 @@ var peer = {
         peer.p = new Peer({key:peer.key,debug:3});
         peer.p.on("error", peer.error);
         peer.p.on("open", peer.open);
+        peer.p.on("connection", peer.connection);
     },
     "open": function(id) {
         peer.id = id;
@@ -79,6 +95,9 @@ var peer = {
     },
     "error": function(err) {
         console.log(err);
+    },
+    "connection": function(dc) {
+        conn.add(dc);
     }
 }
 // xhr
