@@ -26,12 +26,30 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,bmp,lay,ren];
+        g.subs = [dom,bmp,lay,ren,xhr];
         g.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         console.log("total run time: " + (done - now) + "ms.");
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.req = new XMLHttpRequest();
+        xhr.req.addEventListener("load", xhr.load, false);
+        xhr.urls = [
+            "http://192.168.1.2:8080/peer"
+            ];
+    },
+    "peer": function(id) {
+        xhr.req.open("POST", xhr.urls[0], true);
+        xhr.req.requestType = "text";
+        xhr.req.send(id);
+    },
+    "load": function(e) {
+        console.log(xhr.req.response);
     }
 }
 // layout canvas objects
@@ -92,7 +110,7 @@ var ren = {
             var y0 = (i / bmp.w) >>> 0;
             var x1 = (x0 * lay.pw) >>> 0;
             var y1 = (y0 * lay.ph) >>> 0;
-            console.log(s0.length, s0[i], x0, y0, x1, y1);
+            // console.log(s0.length, s0[i], x0, y0, x1, y1);
             if (s0[i] == "0") {
                 lay0.con.fillStyle = rgb0;
             } else {
