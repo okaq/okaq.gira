@@ -14,6 +14,22 @@
         <script type="text/javascript">
             // ok
         console.log("okaq gira ioma otoh 1fps binary bitmap anim!");
+        // async
+        (function() {
+         window.addEventListener("load",function(e){g.init(e);},false);
+         })();
+// game
+var g = {
+    "init": function(e) {
+        console.log(e);
+        var now = window.performance.now();
+
+        // stats
+        var done = window.performance.now();
+        var total = done - now;
+        console.log("total running time " + total + "ms");
+    }
+}
         </script>
     </head>
     <body id="alpha">
