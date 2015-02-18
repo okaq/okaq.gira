@@ -29,6 +29,9 @@ var g = {
         g.subs = [dom,bmp,lay,ren,xhr,peer,conn];
         g.subs.forEach(function(el){el.init();});
 
+        // IP
+        g.IP = "192.168.1.6"; // obtain from ifconfig
+
         // start
         g.id = window.setTimeout(conn.connect, 2500);
 
@@ -109,7 +112,7 @@ var xhr = {
         xhr.req = new XMLHttpRequest();
         xhr.req.addEventListener("load", xhr.load, false);
         xhr.urls = [
-            "http://192.168.1.2:8080/peers"
+            "http://192.168.1.6:8080/peers"
             ];
     },
     "peer": function() {
