@@ -55,6 +55,12 @@ var bmp = {
         for (var i = 0; i < 3; i++) {
             bmp.b[i] = bmp.create();
         }
+        // string representation
+        bmp.s = [];
+        for (var i = 0; i < 3; i++) {
+            var a0 = bmp.bins(bmp.b[i]);
+            bmp.s[i] = bmp.flat(a0);
+        }
     },
     "create": function() {
         var size0 = (bmp.nt / 8) >>> 0; // 8-bits per byte
@@ -63,6 +69,45 @@ var bmp = {
         var rba0 = rgba.rba(size0);
         uint0.set(rba0, 0);
         return uint0;
+    },
+    "bins": function(a0) {
+        // input a typed array, output binary string
+        var s0 = [];
+        for (var i = 0; i < a0.length; i++) {
+            // console.log(a0[i]);
+            var s1 = bmp.pads(a0[i]);
+            // console.log(s1);
+            s0.push(s1);
+        }
+        return s0;
+    },
+    "pads": function(b0) {
+        var s0 = [];
+        // input byte, output zero-padded binary string
+        var s1 = b0.toString(2);
+        var l1 = s1.length;
+        // fill what we have
+        for (var i = 0; i < l1; i++) {
+            s0[i] = s1[i];
+        }
+        var l2 = 8 - l1;
+        if (l2 > 0) {
+            for (var i = 0; i < l2; i++) {
+                s0.splice(0,0,"0");
+            }
+        }
+        return s0;
+    },
+    "flat": function(a0) {
+        // flatten a0, return single array
+        var a1 = [];
+        for (var i = 0; i < a0.length; i++) {
+            var a2 = a0[i];
+            for (var j = 0; j < a2.length; j++) {
+                a1.push(a2[j]);
+            }
+        }
+        return a1;
     }
 }
 // layout
