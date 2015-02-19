@@ -24,10 +24,49 @@ var g = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        g.subs = [bmp, dom, lay];
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.px = 20; // pixel size
+        bmp.py = 20;
+        bmp.nx = 32; // stride
+        bmp.ny = 32;
+        bmp.w = (bmp.px * bmp.nx) >>> 0; // bmp size
+        bmp.h = (bmp.py * bmp.ny) >>> 0;
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.my = 220;
+        // bitmap represented as a grid of canvii
+        lay.bmp = [];
+        lay.c = [];
+        for (var i = 0; i < 3; i++) {
+            lay.bmp[i] = [bmp.w,bmp.h,(bmp.w*i)>>>0,lay.my];
+            lay.c[i] = dom.bmp(lay.bmp[i]);
+        }
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function() {
+    },
+    "bmp": function(r0) {
+        // list of canvii, with bmp stride, fit into input [w,h,x,y]
     }
 }
         </script>
