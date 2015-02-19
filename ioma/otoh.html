@@ -29,6 +29,8 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         console.log(lay);
+        bmp.data();
+        console.log(bmp);
 
         // stats
         var done = window.performance.now();
@@ -43,11 +45,24 @@ var bmp = {
         bmp.py = 20;
         bmp.nx = 32; // stride
         bmp.ny = 32;
+        bmp.nt = (bmp.nx * bmp.ny) >>> 0;
         bmp.w = (bmp.px * bmp.nx) >>> 0; // bmp size
         bmp.h = (bmp.py * bmp.ny) >>> 0;
     },
     "data": function() {
         // binary bitmaps from uint8 typed arrays
+        bmp.b = [];
+        for (var i = 0; i < 3; i++) {
+            bmp.b[i] = bmp.create();
+        }
+    },
+    "create": function() {
+        var size0 = (bmp.nt / 8) >>> 0; // 8-bits per byte
+        var ab0 = new ArrayBuffer(size0);
+        var uint0 = new Uint8Array(ab0);
+        var rba0 = rgba.rba(size0);
+        uint0.set(rba0, 0);
+        return uint0;
     }
 }
 // layout
