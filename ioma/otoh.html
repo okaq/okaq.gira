@@ -26,6 +26,9 @@ var g = {
 
         // subsystems
         g.subs = [bmp, dom, lay];
+        g.subs.forEach(function(el){el.init();});
+
+        console.log(lay);
 
         // stats
         var done = window.performance.now();
@@ -54,6 +57,10 @@ var lay = {
         for (var i = 0; i < 3; i++) {
             lay.bmp[i] = [bmp.w,bmp.h,(bmp.w*i)>>>0,lay.my];
             lay.c[i] = dom.bmp(lay.bmp[i]);
+            for (var j = 0; j < lay.c[i].length; j++) {
+                lay.c[i][j].can.dataset.x = "bmp_" + i + "_" + j;
+                dom.add(lay.c[i][j]);
+            }
         }
     }
 }
@@ -63,10 +70,37 @@ var dom = {
         dom.alpha = document.getElementById("alpha");
         console.log(dom.alpha);
     },
-    "canvas": function() {
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
     },
     "bmp": function(r0) {
+        var c0 = [];
         // list of canvii, with bmp stride, fit into input [w,h,x,y]
+        for (var y = 0; y < bmp.ny; y++) {
+            for (var x = 0; x < bmp.nx; x++) {
+                var i0 = ((y * bmp.nx) + x) >>> 0;
+                var x0 = (r0[2] + (x * bmp.px)) >>> 0;
+                var y0 = (r0[3] + (y * bmp.py)) >>> 0;
+                var r1 = [bmp.px, bmp.py, x0, y0];
+                var c1 = dom.canvas(r1);
+                c0[i0] = c1;
+            }
+        }
+        return c0;
     }
 }
         </script>
