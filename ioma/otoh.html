@@ -33,10 +33,24 @@ var g = {
         console.log(bmp);
         ren.rand();
 
+        // tick
+        g.tick = 0;
+        g.id = window.setInterval(g.frame, 1000);
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    },
+    "frame": function() {
+        g.tick = g.tick + 1;
+        if (g.tick >= 120) {
+            console.log("done");
+            window.clearInterval(g.id);
+            return;
+        }
+        bmp.flip();
+        ren.scene();
     }
 }
 // bitmap
@@ -61,6 +75,11 @@ var bmp = {
         for (var i = 0; i < 3; i++) {
             var a0 = bmp.bins(bmp.b[i]);
             bmp.s[i] = bmp.flat(a0);
+        }
+        // colors
+        bmp.c = [];
+        for (var i = 0; i < 6; i++) {
+            bmp.c[i] = rgba.rc();
         }
     },
     "create": function() {
@@ -114,13 +133,14 @@ var bmp = {
         // flip a single random bit
         var bmp0 = (Math.random() * 3) >>> 0;
         var i0 = (Math.random() * bmp.s[bmp0].length) >>> 0;
-        bmp.s[i0] = bmp.s[i0] == "0" ? "1" : "0";
+        bmp.s[bmp0][i0] = (bmp.s[bmp0][i0] == "0") ? "1" : "0";
     }
 }
 // render
 var ren = {
     "scene": function() {
         ren.white();
+        ren.bmp();
     },
     "rand": function() {
         for (var i = 0; i < 3; i++) {
@@ -133,8 +153,30 @@ var ren = {
         }
     },
     "white": function() {
+        for (var i = 0; i < 3; i++) {
+            var c0 = lay.c[i];
+            var rgb0 = rgba.css([255,255,255,1.0]);
+            for (var j = 0; j < c0.length; j++) {
+                c0[j].con.fillStyle = rgb0;
+                c0[j].con.fillRect(0,0,c0[j].can.width,c0[j].can.height);
+            }
+        }
     },
-    "bmp": function(bmp0, lay0) {
+    "bmp": function() {
+        for (var i = 0; i < 3; i++) {
+            var c0 = lay.c[i];
+            var bmp0 = bmp.s[i];
+            var rgb0 = bmp.c[i*2];
+            var rgb1 = bmp.c[i*2+1];
+            for (var j = 0; j < c0.length; j++) {
+                if (bmp0[j] == "0") {
+                    c0[j].con.fillStyle = rgba.css(rgb0);
+                } else {
+                    c0[j].con.fillStyle = rgba.css(rgb1);
+                }
+                c0[j].con.fillRect(0,0,c0[j].can.width,c0[j].can.height);
+            }
+        }
     }
 }
 // layout
