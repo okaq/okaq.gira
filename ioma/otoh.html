@@ -31,6 +31,7 @@ var g = {
         console.log(lay);
         bmp.data();
         console.log(bmp);
+        ren.rand();
 
         // stats
         var done = window.performance.now();
@@ -108,6 +109,32 @@ var bmp = {
             }
         }
         return a1;
+    },
+    "flip": function() {
+        // flip a single random bit
+        var bmp0 = (Math.random() * 3) >>> 0;
+        var i0 = (Math.random() * bmp.s[bmp0].length) >>> 0;
+        bmp.s[i0] = bmp.s[i0] == "0" ? "1" : "0";
+    }
+}
+// render
+var ren = {
+    "scene": function() {
+        ren.white();
+    },
+    "rand": function() {
+        for (var i = 0; i < 3; i++) {
+            var c0 = lay.c[i];
+            var rgb0 = rgba.css(rgba.rc());
+            for (var j = 0; j < c0.length; j++) {
+                c0[j].con.fillStyle = rgb0;
+                c0[j].con.fillRect(0,0,c0[j].can.width,c0[j].can.height);
+            }
+        }
+    },
+    "white": function() {
+    },
+    "bmp": function(bmp0, lay0) {
     }
 }
 // layout
