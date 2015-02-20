@@ -16,6 +16,7 @@ import (
 const (
     NAKO = "nako.html" // bmp ping pong
     OTOH = "otoh.html" // 1fps binary bitmap anim
+    RUKI = "ruki.html" // bezier curve alpha
 )
 
 var (
@@ -59,7 +60,7 @@ func (p *Peers) Json() ([]byte, error) {
 // root static html handle
 // single client html5 web app for xhr, net, conn
 func RootHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, OTOH)
+    http.ServeFile(w, req, RUKI)
 }
 
 // peers cache ajax response
