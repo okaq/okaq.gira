@@ -24,10 +24,71 @@ var g = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        g.subs = [dom, lay];
+        g.subs.forEach(function(el){el.init();});
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.f = {}; // field
+        lay.f.nx = 4;
+        lay.f.ny = 4;
+        lay.f.nt = 16;
+        lay.f.a = []; // rects
+        lay.f.c = []; // canvii
+    },
+    "grid": function(r0, nx, ny, mx, my) {
+        // input bounding rect, count, margin
+        // output rect list
+        var r1 = [];
+        var bw = (r0[0] / nx) >>> 0; // block size
+        var bh = (r0[1] / ny) >>> 0;
+        var cw = (bw - (2 * mx)) >>> 0; // canvas width
+        var ch = (bh - (2 * my)) >>> 0;
+        for (var y = 0; y < ny; y++) {
+            for (var x = 0; x < nx; x++) {
+                var x0 = ((x * bw) + mx) >>> 0;
+                var y0 = ((y * bh) + my) >>> 0;
+                var r2 = [];
+                r2[0] = cw;
+                r2[1] = ch;
+                r2[2] = x0;
+                r2[3] = y0;
+                r1.push(r2);
+            }
+        }
+        return r1;
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
     }
 }
         </script>
