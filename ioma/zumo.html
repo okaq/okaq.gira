@@ -28,6 +28,9 @@ var g = {
         g.subs = [dom, lay];
         g.subs.forEach(function(el){el.init();});
 
+        console.log(lay);
+        ren.field();
+
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -38,11 +41,16 @@ var g = {
 var lay = {
     "init": function() {
         lay.f = {}; // field
-        lay.f.nx = 4;
+        lay.f.nx = 4; // grid count
         lay.f.ny = 4;
         lay.f.nt = 16;
-        lay.f.a = []; // rects
+        lay.f.b = [1024,1024,128,0]; // bounding rect
+        lay.f.a = lay.grid(lay.f.b, lay.f.nx, lay.f.ny, 4, 4); // rects
         lay.f.c = []; // canvii
+        for (var i = 0; i < lay.f.nt; i++) {
+            lay.f.c[i] = dom.canvas(lay.f.a[i]);
+            dom.add(lay.f.c[i]);
+        }
     },
     "grid": function(r0, nx, ny, mx, my) {
         // input bounding rect, count, margin
@@ -54,8 +62,8 @@ var lay = {
         var ch = (bh - (2 * my)) >>> 0;
         for (var y = 0; y < ny; y++) {
             for (var x = 0; x < nx; x++) {
-                var x0 = ((x * bw) + mx) >>> 0;
-                var y0 = ((y * bh) + my) >>> 0;
+                var x0 = ((x * bw) + mx + r0[2]) >>> 0;
+                var y0 = ((y * bh) + my + r0[3]) >>> 0;
                 var r2 = [];
                 r2[0] = cw;
                 r2[1] = ch;
@@ -91,6 +99,45 @@ var dom = {
         dom.alpha.removeChild(c0.can);
     }
 }
+// render
+var ren = {
+    "field": function() {
+        for (var i = 0; i < lay.f.nt; i++) {
+            lay.f.c[i].con.fillStyle = rgba.css(rgba.rc());
+            lay.f.c[i].con.fillRect(0,0,lay.f.c[i].can.width,lay.f.c[i].can.height);
+        }
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    }
+}
+
         </script>
     </head>
     <body id="alpha">
