@@ -43,6 +43,12 @@ var data = {
         data.rgb = [15,200,5,0.5]; // green
         data.a = []; // bezier point data
         data.a[0] = [data.o[0]+15,data.o[1]-15,data.o[0]+50,data.o[1]+25,data.o[0]+75,data.o[1]+5]; // control points
+    },
+    "step": function() {
+        // step in random walk
+        // each block of potential positions is a quad
+        // block [128,128,0,0] quad0 [64,64,0,0]
+        // position order is origin, cp1, cp2, point
     }
 }
 // layout
