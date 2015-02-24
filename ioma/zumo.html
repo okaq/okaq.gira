@@ -47,8 +47,14 @@ var lay = {
         lay.f.b = [1024,1024,128,0]; // bounding rect
         lay.f.a = lay.grid(lay.f.b, lay.f.nx, lay.f.ny, 4, 4); // rects
         lay.f.c = []; // canvii
+        lay.f.click = function(e) {
+            console.log(e);
+            console.log("clicked target: " + e.target.dataset.x);
+        }
         for (var i = 0; i < lay.f.nt; i++) {
             lay.f.c[i] = dom.canvas(lay.f.a[i]);
+            lay.f.c[i].can.dataset.x = i.toString();
+            lay.f.c[i].can.addEventListener("click", lay.f.click, false);
             dom.add(lay.f.c[i]);
         }
     },
