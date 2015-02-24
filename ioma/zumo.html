@@ -25,7 +25,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom, lay];
+        g.subs = [dom, lay, peer, xhr];
         g.subs.forEach(function(el){el.init();});
 
         console.log(lay);
@@ -37,13 +37,23 @@ var g = {
         console.log("total running time " + total + "ms");
     }
 }
+// peer
+var peer = {
+    "init": function() {
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+    }
+}
 // layout
 var lay = {
     "init": function() {
         lay.f = {}; // field
-        lay.f.nx = 4; // grid count
-        lay.f.ny = 4;
-        lay.f.nt = 16;
+        lay.f.nx = 8; // grid count
+        lay.f.ny = 8;
+        lay.f.nt = (lay.f.nx * lay.f.ny) >>> 0;
         lay.f.b = [1024,1024,128,0]; // bounding rect
         lay.f.a = lay.grid(lay.f.b, lay.f.nx, lay.f.ny, 4, 4); // rects
         lay.f.c = []; // canvii
