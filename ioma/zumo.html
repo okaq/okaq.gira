@@ -97,6 +97,13 @@ var lay = {
             }
         }
         return r1;
+    },
+    "tree": function() {
+        // divide page into non-intersecting random rects
+        // random seed points
+        lay.points = [];
+        // generate tree and walk to obtain rects
+        lay.rects = [];
     }
 }
 // dom
