@@ -104,6 +104,11 @@ var lay = {
         lay.points = [];
         // generate tree and walk to obtain rects
         lay.rects = [];
+        // gauss square test
+        for (var i = 0; i < 100; i++) {
+            var r0 = [];
+
+        }
     }
 }
 // dom
@@ -128,6 +133,27 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// normal distribution
+var gauss = {
+    "rand": function() {
+        // Math.random has uniform distribution over [0.0,1.0)
+        // gauss rand returns normally distributed values given mean
+        var stdev = 1.0;
+        var mean = 0.0;
+        var r0 = 0.0;
+        for (var i = 0; i < 3; i++) {
+            r0 += gauss.comp();
+        }
+        var r1 = (r0 * stdev) + mean;
+        return r1;
+    },
+    "comp": function() {
+        // normal distribution approximated
+        // by summing three uniform components
+        // with mean of zero
+        return ((Math.random() * 2.0) - 1.0);
     }
 }
 // render
