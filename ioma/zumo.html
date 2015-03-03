@@ -29,7 +29,8 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         console.log(lay);
-        ren.field();
+        // ren.field();
+        ren.page();
 
         // stats
         var done = window.performance.now();
@@ -75,6 +76,8 @@ var lay = {
             lay.f.c[i].can.addEventListener("click", lay.f.click, false);
             dom.add(lay.f.c[i]);
         }
+        lay.p = dom.canvas([1920,1080,0,0]); // page
+        dom.add(lay.p);
     },
     "grid": function(r0, nx, ny, mx, my) {
         // input bounding rect, count, margin
@@ -105,9 +108,13 @@ var lay = {
         // generate tree and walk to obtain rects
         lay.rects = [];
         // gauss square test
+        var h0 = 1080 / 2;
+        var h1 = h0 / 3;
         for (var i = 0; i < 100; i++) {
             var r0 = [];
-
+            var g0 = gauss.rand();
+            var h2 = (g0 * h1) + h1;
+            lay.rects.push(h2);
         }
     }
 }
@@ -163,6 +170,10 @@ var ren = {
             lay.f.c[i].con.fillStyle = rgba.css(rgba.rc());
             lay.f.c[i].con.fillRect(0,0,lay.f.c[i].can.width,lay.f.c[i].can.height);
         }
+    },
+    "page": function() {
+        lay.p.con.fillStyle = rgba.css(rgba.rc());
+        lay.p.con.fillRect(0,0,lay.p.can.width,lay.p.can.height);
     }
 }
 // colors
