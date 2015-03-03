@@ -28,11 +28,15 @@ var g = {
         g.subs = [dom, lay, peer, xhr];
         g.subs.forEach(function(el){el.init();});
 
-        console.log(lay);
         // ren.field();
-        lay.tree();
+        // lay.tree();
+        lay.trees();
+        console.log(lay);
         ren.page();
-        ren.tree();
+        // ren.tree();
+        ren.trees();
+
+        // create variable distributions
 
         // stats
         var done = window.performance.now();
@@ -127,6 +131,36 @@ var lay = {
             r0[3] = h5;
             lay.rects.push(r0);
         }
+    },
+    "trees": function() {
+        // subdivide recursively
+        lay.r = [];
+        lay.r[0] = lay.sub([1920,1080,0,0]);
+        // fill each rect with normal squares
+    },
+    "sub": function(r0) {
+        // subdivide rect [w,h,x,y]
+        // return 4 quads
+        // get random point
+        var g0 = [];
+        g0[0] = gauss.randn();
+        g0[1] = gauss.randn();
+        // calc new dimensions
+        var d0 = [];
+        d0[0] = (r0[0] * g0[0]);
+        d0[1] = r0[0] - d0[0];
+        d0[2] = (r0[1] * g0[1]);
+        d0[3] = r0[1] - d0[2];
+        // obtain new origin
+        var p0 = [];
+        p0[0] = d0[0] + r0[2];
+        p0[1] = d0[2] + r0[3];
+        var r1 = [];
+        r1[0] = [d0[0],d0[2],r0[2],r0[3]];
+        r1[1] = [d0[1],d0[2],p0[0],r0[3]];
+        r1[2] = [d0[0],d0[3],r0[2],p0[1]];
+        r1[3] = [d0[1],d0[3],p0[0],p0[1]];
+        return r1;
     }
 }
 // dom
@@ -158,6 +192,7 @@ var gauss = {
     "rand": function() {
         // Math.random has uniform distribution over [0.0,1.0)
         // gauss rand returns normally distributed values given mean
+        // return interval: [-3,3]
         var stdev = 1.0;
         var mean = 0.0;
         var r0 = 0.0;
@@ -172,6 +207,12 @@ var gauss = {
         // by summing three uniform components
         // with mean of zero
         return ((Math.random() * 2.0) - 1.0);
+    },
+    "randn": function() {
+        // rand normalized to [0,1]
+        var g0 = gauss.rand();
+        var g1 = (g0 + 3) / 6;
+        return g1;
     }
 }
 // render
@@ -193,6 +234,13 @@ var ren = {
             var r0 = lay.rects[i];
             // lay.p.con.fillRect(x0,lay.rects[i],2,2);
             lay.p.con.strokeRect(r0[0], r0[1], r0[2], r0[3]);
+        }
+    },
+    "trees": function() {
+        for (var i = 0; i < lay.r[0].length; i++) {
+            var r0 = lay.r[0][i];
+            lay.p.con.fillStyle = rgba.css(rgba.rc());
+            lay.p.con.fillRect(r0[2],r0[3],r0[0],r0[1]);
         }
     }
 }
