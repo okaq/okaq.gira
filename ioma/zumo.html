@@ -30,7 +30,9 @@ var g = {
 
         console.log(lay);
         // ren.field();
+        lay.tree();
         ren.page();
+        ren.tree();
 
         // stats
         var done = window.performance.now();
@@ -109,12 +111,21 @@ var lay = {
         lay.rects = [];
         // gauss square test
         var h0 = 1080 / 2;
-        var h1 = h0 / 3;
-        for (var i = 0; i < 100; i++) {
+        var h1 = h0 / 2;
+        var h2 = h0 / 6;
+        var mx = (1920 - 1080) / 2;
+        for (var i = 0; i < 128; i++) {
             var r0 = [];
             var g0 = gauss.rand();
-            var h2 = (g0 * h1) + h1;
-            lay.rects.push(h2);
+            var h3 = (g0 * h2) + h1;
+            var h4 = h0 - h3;
+            var h5 = h4 * 2;
+            // lay.rects.push(h3);
+            r0[0] = mx + h3;
+            r0[1] = h3;
+            r0[2] = h5;
+            r0[3] = h5;
+            lay.rects.push(r0);
         }
     }
 }
@@ -174,6 +185,15 @@ var ren = {
     "page": function() {
         lay.p.con.fillStyle = rgba.css(rgba.rc());
         lay.p.con.fillRect(0,0,lay.p.can.width,lay.p.can.height);
+    },
+    "tree": function() {
+        lay.p.con.strokeStyle = rgba.css(rgba.rc());
+        var x0 = 1920 / 2;
+        for (var i = 0; i < lay.rects.length; i++) {
+            var r0 = lay.rects[i];
+            // lay.p.con.fillRect(x0,lay.rects[i],2,2);
+            lay.p.con.strokeRect(r0[0], r0[1], r0[2], r0[3]);
+        }
     }
 }
 // colors
