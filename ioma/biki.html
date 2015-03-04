@@ -24,13 +24,111 @@ var g = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        // scene, transition, layout, gauss
+        g.subs = [sce,lay,dom];
+        g.subs.forEach(function(el){el.init();});
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
     }
 }
-
+// scene graph
+var sce = {
+    "init": function() {
+        // scene transitions
+        // each scene maps to an index in a layout stack
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // layout generators
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    }
+}
+// normal distribution
+var gauss = {
+    "rand": function() {
+        // Math.random has uniform distribution over [0.0,1.0)
+        // gauss rand returns normally distributed values given mean
+        // return interval: [-3,3]
+        var stdev = 1.0;
+        var mean = 0.0;
+        var r0 = 0.0;
+        for (var i = 0; i < 3; i++) {
+            r0 += gauss.comp();
+        }
+        var r1 = (r0 * stdev) + mean;
+        return r1;
+    },
+    "comp": function() {
+        // normal distribution approximated
+        // by summing three uniform components
+        // with mean of zero
+        return ((Math.random() * 2.0) - 1.0);
+    },
+    "randn": function() {
+        // rand normalized to [0,1]
+        var g0 = gauss.rand();
+        var g1 = (g0 + 3) / 6;
+        return g1;
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    }
+}
         </script>
     </head>
     <body id="alpha">
