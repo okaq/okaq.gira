@@ -31,10 +31,12 @@ var g = {
         // ren.field();
         // lay.tree();
         lay.trees();
+        lay.squares();
         console.log(lay);
         ren.page();
         // ren.tree();
         ren.trees();
+        ren.squares();
 
         // create variable distributions
 
@@ -137,6 +139,15 @@ var lay = {
         lay.r = [];
         lay.r[0] = lay.sub([1920,1080,0,0]);
         // fill each rect with normal squares
+        var r0 = [];
+        for (var i = 0; i < lay.r[0].length; i++) {
+            var r1 = lay.sub(lay.r[0][i]);
+            for (var j = 0; j < r1.length; j++) {
+                r0.push(r1[j]);
+            }
+        }
+        lay.r = r0;
+        lay.s = []; // squares
     },
     "sub": function(r0) {
         // subdivide rect [w,h,x,y]
@@ -161,6 +172,37 @@ var lay = {
         r1[2] = [d0[0],d0[3],r0[2],p0[1]];
         r1[3] = [d0[1],d0[3],p0[0],p0[1]];
         return r1;
+    },
+    "squares": function() {
+        for (var i = 0; i < lay.r.length; i++) {
+            var r0 = lay.r[i];
+            lay.s[i] = [];
+            for (var j = 0; j < 16; j++) {
+                var g0 = gauss.randn();
+                var r1 = [];
+                if (r0[0] > r0[1]) {
+                    var d0 = r0[1] / 2;
+                    var d1 = d0 * g0;
+                    var d2 = (d0 - d1) * 2;
+                    var m0 = (r0[0] - r0[1]) / 2;
+                    r1[0] = d2;
+                    r1[1] = d2;
+                    r1[2] = r0[2] + m0 + d1;
+                    r1[3] = r0[3] + d1;
+                } else {
+                    var d0 = r0[0] / 2;
+                    var d1 = d0 * g0;
+                    var m0 = (r0[1] - r0[0]) / 2;
+                    var d2 = (d0 - d1) * 2;
+                    r1[0] = d2;
+                    r1[1] = d2;
+                    r1[2] = r0[2] + d1;
+                    r1[3] = r0[3] + m0 + d1;
+                }
+                lay.s[i].push(r1);
+            }
+            // loop over set quantity for each rect (128)
+        }
     }
 }
 // dom
@@ -237,10 +279,21 @@ var ren = {
         }
     },
     "trees": function() {
-        for (var i = 0; i < lay.r[0].length; i++) {
-            var r0 = lay.r[0][i];
+        for (var i = 0; i < lay.r.length; i++) {
+            var r0 = lay.r[i];
             lay.p.con.fillStyle = rgba.css(rgba.rc());
             lay.p.con.fillRect(r0[2],r0[3],r0[0],r0[1]);
+        }
+    },
+    "squares": function() {
+        // lay.p.con.strokeStyle = rgba.css(rgba.rc());
+        for (var i = 0; i < lay.s.length; i++) {
+            var s0 = lay.s[i];
+            lay.p.con.strokeStyle = rgba.css(rgba.rc());
+            for (var j = 0; j < s0.length; j++) {
+                var s1 = s0[j];
+                lay.p.con.strokeRect(s1[2], s1[3], s1[0], s1[1]);
+            }
         }
     }
 }
