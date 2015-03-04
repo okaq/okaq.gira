@@ -18,6 +18,7 @@ const (
     OTOH = "otoh.html" // 1fps binary bitmap anim
     RUKI = "ruki.html" // bezier curve alpha
     ZUMO = "zumo.html" // partizan test
+    BIKI = "biki.html" // bitmap union
 )
 
 var (
@@ -29,6 +30,7 @@ type Peers struct {
     Users int
     Index int
     sync.Mutex
+    // sync.RWMutex
 }
 
 func NewPeers() *Peers {
@@ -61,7 +63,7 @@ func (p *Peers) Json() ([]byte, error) {
 // root static html handle
 // single client html5 web app for xhr, net, conn
 func RootHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, ZUMO)
+    http.ServeFile(w, req, BIKI)
 }
 
 // peers cache ajax response
