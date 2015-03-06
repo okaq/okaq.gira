@@ -26,8 +26,10 @@ var g = {
 
         // subsystems
         // scene, transition, layout, gauss
-        g.subs = [sce,lay,dom];
+        g.subs = [lay,dom,sce];
         g.subs.forEach(function(el){el.init();});
+
+        console.log(sce);
 
         // stats
         var done = window.performance.now();
@@ -41,6 +43,13 @@ var sce = {
         // scene transitions
         // each scene maps to an index in a layout stack
         sce.a = [];
+        sce.nt = 16; // scene count
+        sce.gen();
+    },
+    "gen": function() {
+        for (var i = 0; i < sce.nt; i++) {
+            sce.a[i] = lay.rand();
+        }
     }
 }
 // layout
@@ -48,6 +57,28 @@ var lay = {
     "init": function() {
         // layout generators
         lay.a = []; // stack
+        // layout globals
+        lay.w = 1920; // page size
+        lay.h = 1080;
+        lay.w2 = lay.w / 2;
+        lay.h2 = lay.h / 2;
+    },
+    "rand": function() {
+        // return random page layout
+        // intersections ok
+        var r0 = [];
+        for (var i = 0; i < 4; i++) {
+            r0[i] = lay.sqr();
+        }
+        return r0;
+    },
+    "sqr": function() {
+        // return random square
+        var g0 = gauss.randa(3);
+        var s0 = (lay.h2 * g0[0]) >>> 0;
+        var x0 = ((lay.w - s0) * g0[1]) >>> 0;
+        var y0 = ((lay.h - s0) * g0[2]) >>> 0;
+        return [s0, s0, x0, y0];
     }
 }
 // dom
@@ -100,6 +131,14 @@ var gauss = {
         var g0 = gauss.rand();
         var g1 = (g0 + 3) / 6;
         return g1;
+    },
+    "randa": function(n0) {
+        // return array of normalized randn's
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0[i] = gauss.randn();
+        }
+        return r0;
     }
 }
 // colors
