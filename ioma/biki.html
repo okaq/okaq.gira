@@ -30,7 +30,10 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         console.log(sce);
+        console.log(lay);
         ren.bkgd();
+
+        document.addEventListener("click", sce.next, false);
 
         // stats
         var done = window.performance.now();
@@ -49,14 +52,21 @@ var sce = {
     },
     "gen": function() {
         for (var i = 0; i < sce.nt; i++) {
-            sce.a[i] = lay.rand();
+            lay.a[i] = lay.rand();
+            lay.ac[i] = lay.canvas(lay.a[i]);
         }
     },
-    "next": function() {
+    "next": function(e) {
+        console.log(e);
         if (!sce.index) {
             sce.index = 0;
         }
         // click handler to cycle through scenes
+        sce.index = sce.index + 1;
+        if (sce.index >= sce.nt) {
+            sce.index = 0;
+        }
+        ren.scene();
     }
 }
 // layout
@@ -64,6 +74,7 @@ var lay = {
     "init": function() {
         // layout generators
         lay.a = []; // stack
+        lay.ac = [];
         // layout globals
         lay.w = 1920; // page size
         lay.h = 1080;
@@ -95,6 +106,17 @@ var lay = {
         // subdivide rects recursively
         // down to depth limit d0
         // if f0, recurse, else add centered square canvas
+    },
+    "canvas": function(r0) {
+        // create dom canvas objects from rect list
+        // add to dom
+        r1 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var c0 = dom.canvas(r0[i]);
+            dom.add(c0);
+            r1.push(c0);
+        }
+        return r1;
     }
 }
 // render
@@ -102,6 +124,17 @@ var ren = {
     "bkgd": function() {
         lay.bc.con.fillStyle = rgba.css(rgba.rc());
         lay.bc.con.fillRect(0,0,lay.w,lay.h);
+    },
+    "scene": function() {
+        ren.bkgd();
+        var c0 = lay.ac[sce.index]; // canvas list
+        for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i]; // canvas iter
+            c1.con.lineWidth = 8;
+            c1.con.strokeStyle = rgba.css(rgba.rc());
+            c1.con.strokeRect(0,0,c1.can.width,c1.can.height);
+        }
+        // renders scenes on top of each other
     }
 }
 // dom
