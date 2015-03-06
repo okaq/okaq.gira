@@ -26,10 +26,11 @@ var g = {
 
         // subsystems
         // scene, transition, layout, gauss
-        g.subs = [lay,dom,sce];
+        g.subs = [dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
 
         console.log(sce);
+        ren.bkgd();
 
         // stats
         var done = window.performance.now();
@@ -50,6 +51,12 @@ var sce = {
         for (var i = 0; i < sce.nt; i++) {
             sce.a[i] = lay.rand();
         }
+    },
+    "next": function() {
+        if (!sce.index) {
+            sce.index = 0;
+        }
+        // click handler to cycle through scenes
     }
 }
 // layout
@@ -62,6 +69,10 @@ var lay = {
         lay.h = 1080;
         lay.w2 = lay.w / 2;
         lay.h2 = lay.h / 2;
+        // master
+        lay.b = [lay.w,lay.h,0,0];
+        lay.bc = dom.canvas(lay.b);
+        dom.add(lay.bc);
     },
     "rand": function() {
         // return random page layout
@@ -79,6 +90,18 @@ var lay = {
         var x0 = ((lay.w - s0) * g0[1]) >>> 0;
         var y0 = ((lay.h - s0) * g0[2]) >>> 0;
         return [s0, s0, x0, y0];
+    },
+    "sub": function() {
+        // subdivide rects recursively
+        // down to depth limit d0
+        // if f0, recurse, else add centered square canvas
+    }
+}
+// render
+var ren = {
+    "bkgd": function() {
+        lay.bc.con.fillStyle = rgba.css(rgba.rc());
+        lay.bc.con.fillRect(0,0,lay.w,lay.h);
     }
 }
 // dom
