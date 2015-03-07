@@ -29,6 +29,7 @@ var g = {
         g.subs = [dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
 
+        sce.gen2();
         console.log(sce);
         console.log(lay);
         ren.bkgd();
@@ -48,13 +49,15 @@ var sce = {
         // each scene maps to an index in a layout stack
         sce.a = [];
         sce.nt = 16; // scene count
-        sce.gen();
     },
     "gen": function() {
         for (var i = 0; i < sce.nt; i++) {
             lay.a[i] = lay.rand();
             lay.ac[i] = lay.canvas(lay.a[i]);
         }
+    },
+    "gen2": function() {
+        lay.sub();
     },
     "next": function(e) {
         console.log(e);
@@ -106,6 +109,8 @@ var lay = {
         // subdivide rects recursively
         // down to depth limit d0
         // if f0, recurse, else add centered square canvas
+        lay.depth = 3; // depth limit
+        lay.a[0] = lay.b.slice(0);
     },
     "canvas": function(r0) {
         // create dom canvas objects from rect list
