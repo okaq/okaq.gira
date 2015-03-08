@@ -111,17 +111,27 @@ var lay = {
         // if f0, recurse, else add centered square canvas
         lay.depth = 3; // depth limit
         lay.a[0] = lay.b.slice(0);
-        lay.quad(lay.a[0]);
+        lay.a[1] = lay.quad(lay.a[0]);
     },
     "quad": function(r0) {
         // random subdivision of rect
         // return four quads list
+        var r1 = [];
         var g0 = gauss.randn();
         var g1 = gauss.randn();
-        var w0 = r0[0] * g0;
+        var w0 = (r0[0] * g0) >>> 0;
         var w1 = r0[0] - w0;
-        var h0 = r0[1] * g1;
+        var h0 = (r0[1] * g1) >>> 0;
         var h1 = r0[1] - h0;
+        var x0 = r0[2];
+        var x1 = x0 + w0;
+        var y0 = r0[3];
+        var y1 = y0 + h0;
+        r1[0] = [w0,h0,x0,y0];
+        r1[1] = [w1,h0,x1,y0];
+        r1[2] = [w0,h1,x0,y1];
+        r1[3] = [w1,h1,x1,y1];
+        return r1;
     },
     "canvas": function(r0) {
         // create dom canvas objects from rect list
