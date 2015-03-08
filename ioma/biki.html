@@ -112,6 +112,17 @@ var lay = {
         lay.depth = 3; // depth limit
         lay.a[0] = lay.b.slice(0);
         lay.a[1] = lay.quad(lay.a[0]);
+        lay.a[2] = [];
+        for (var i = 0; i < lay.a[1].length; i++) {
+            var f0 = Math.random();
+            if (f0 > 0.5) {
+                lay.a[2].push(lay.a[1][i]);
+            } else {
+                var r0 = lay.quad(lay.a[1][i]);
+                r0.forEach(function(el){lay.a[2].push(el);});
+            }
+        }
+        // iterative method
     },
     "quad": function(r0) {
         // random subdivision of rect
