@@ -33,6 +33,7 @@ var g = {
         console.log(sce);
         console.log(lay);
         ren.bkgd();
+        ren.quad();
 
         document.addEventListener("click", sce.next, false);
 
@@ -58,6 +59,7 @@ var sce = {
     },
     "gen2": function() {
         lay.sub();
+        lay.ac = lay.canvas(lay.a[2]);
     },
     "next": function(e) {
         console.log(e);
@@ -172,6 +174,12 @@ var ren = {
             c1.con.strokeRect(0,0,c1.can.width,c1.can.height);
         }
         // renders scenes on top of each other
+    },
+    "quad": function() {
+        for (var i = 0; i < lay.ac.length; i++) {
+            lay.ac[i].con.fillStyle = rgba.css(rgba.rc());
+            lay.ac[i].con.fillRect(0,0,lay.ac[i].can.width,lay.ac[i].can.height);
+        }
     }
 }
 // dom
