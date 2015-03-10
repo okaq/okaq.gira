@@ -19,6 +19,7 @@ const (
     RUKI = "ruki.html" // bezier curve alpha
     ZUMO = "zumo.html" // partizan test
     BIKI = "biki.html" // bitmap union
+    CATU = "catu.html" // data bitmaps
 )
 
 var (
@@ -63,7 +64,7 @@ func (p *Peers) Json() ([]byte, error) {
 // root static html handle
 // single client html5 web app for xhr, net, conn
 func RootHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, BIKI)
+    http.ServeFile(w, req, CATU)
 }
 
 // peers cache ajax response
