@@ -28,10 +28,27 @@ var g = {
         g.subs = [dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
 
+        // bitmaps from buffers
+        buf.dev();
+        console.log(buf);
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// buffers
+var buf = {
+    "dev": function() {
+        // derive a buffer of bitmap data
+        // from a mathematical function
+        // buffer size = 4 * numPixels bytes
+        buf.a = {};
+        buf.a.nx = 32;
+        buf.a.ny = 32;
+        buf.a.nt = (buf.a.nx * buf.a.ny) >>> 0;
+        buf.a.data = new ArrayBuffer(buf.a.nt);
     }
 }
 // scene graph
