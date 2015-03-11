@@ -47,8 +47,29 @@ var buf = {
         buf.a = {};
         buf.a.nx = 32;
         buf.a.ny = 32;
-        buf.a.nt = (buf.a.nx * buf.a.ny) >>> 0;
-        buf.a.data = new ArrayBuffer(buf.a.nt);
+        buf.a.nt = (buf.a.nx * buf.a.ny) >>> 0; // pixels
+        buf.a.s = (buf.a.nt * 4); // bytes
+        buf.a.data = new ArrayBuffer(buf.a.s);
+
+        buf.gradx();
+    },
+    "gradx": function() {
+        // pixel data gradient in x
+        var x0 = (255 / (buf.a.nx - 1)) >>> 0;
+        var g0 = []; // LUT
+        for (var i = 0; i < buf.a.nx; i++) {
+            var x1 = (x0 * i) >>> 0;
+            g0.push(x1);
+        }
+        for (var i = 0; i < buf.a.nt; i++) {
+            var i0 = (i * 4) >>> 0;
+            var x0 = i % buf.a.nx;
+            buf.a.data[i0+0] = g0[x0];
+            buf.a.data[i0+1] = g0[x0];
+            buf.a.data[i0+2] = g0[x0];
+            buf.a.data[i0+3] = 255;
+
+        }
     }
 }
 // scene graph
