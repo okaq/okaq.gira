@@ -35,10 +35,17 @@ var g = {
         ren.bkgd();
         ren.pixel();
 
+        // click events
+        document.addEventListener("click", g.click, false);
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    },
+    "click": function(e) {
+        console.log(e);
+        sce.jump();
     }
 }
 // buffers
@@ -79,10 +86,16 @@ var buf = {
 var sce = {
     "init": function() {
         sce.list = [];
+        sce.pos = 0; // pointer into list
     },
     "pop": function() {
         // scene is a collection of layout rect, canvii
         sce.list[0] = lay.gen();
+    },
+    "jump": function() {
+        // move to uniform random scene
+        sce.pos = (Math.random() * sce.list.length);
+        // ren.scene();
     }
 }
 // layout
