@@ -31,6 +31,7 @@ var g = {
         // bitmaps from buffers
         buf.dev();
         console.log(buf);
+        sce.pop();
 
         // stats
         var done = window.performance.now();
@@ -75,11 +76,21 @@ var buf = {
 // scene graph
 var sce = {
     "init": function() {
+        sce.list = [];
+    },
+    "pop": function() {
+        // scene is a collection of layout rect, canvii
+        sce.list[0] = lay.gen();
     }
 }
 // layout
 var lay = {
     "init": function() {
+        // scene index corresponds to layout collection (rects, canvii)
+        // scene graph implements nodes which handle transitions between scenes
+        // but within scenes, requires another class to handle how data is represented
+        // in the layout rects - game data rules engine
+        lay.list = [];
     }
 }
 // dom
