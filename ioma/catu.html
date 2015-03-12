@@ -33,6 +33,7 @@ var g = {
         console.log(buf);
         sce.pop();
         ren.bkgd();
+        ren.pixel();
 
         // stats
         var done = window.performance.now();
@@ -103,12 +104,21 @@ var lay = {
         dom.add(lay.bc);
     },
     "gen": function() {
-        var s0 = 32;
+        var s0 = 8;
         var x0 = 64;
         var y0 = 64;
         lay.a = [];
+        lay.ac = [];
         for (var y = 0; y < buf.a.ny; y++) {
             for (var x = 0; x < buf.a.nx; x++) {
+                var i = ((y * buf.a.nx) + x) >>> 0;
+                var x1 = (x0 + (s0 * x)) >>> 0;
+                var y1 = (y0 + (s0 * y)) >>> 0;
+                var r0 = [s0, s0, x1, y1];
+                lay.a.push(r0);
+                var c0 = dom.canvas(r0);
+                dom.add(c0);
+                lay.ac.push(c0);
             }
         }
     }
@@ -142,6 +152,20 @@ var ren = {
     "bkgd": function() {
         lay.bc.con.fillStyle = rgba.css(rgba.rc());
         lay.bc.con.fillRect(0,0,lay.w,lay.h);
+    },
+    "pixel": function() {
+        for (var i = 0; i < buf.a.nt; i++) {
+            var i0 = (i * 4) >>> 0;
+            var rgb0 = [];
+            rgb0[0] = buf.a.data[i0+0];
+            rgb0[1] = buf.a.data[i0+1];
+            rgb0[2] = buf.a.data[i0+2];
+            rgb0[3] = (buf.a.data[i0+3] / 255);
+            var rgb1 = rgba.css(rgb0);
+            var c0 = lay.ac[i];
+            c0.con.fillStyle = rgb1;
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
     }
 }
 // normal distribution
