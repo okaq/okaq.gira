@@ -32,6 +32,7 @@ var g = {
         buf.dev();
         console.log(buf);
         sce.pop();
+        ren.bkgd();
 
         // stats
         var done = window.performance.now();
@@ -91,6 +92,25 @@ var lay = {
         // but within scenes, requires another class to handle how data is represented
         // in the layout rects - game data rules engine
         lay.list = [];
+        // layout globals
+        lay.w = 1920; // page size
+        lay.h = 1080;
+        lay.w2 = lay.w / 2;
+        lay.h2 = lay.h / 2;
+        // master
+        lay.b = [lay.w,lay.h,0,0];
+        lay.bc = dom.canvas(lay.b);
+        dom.add(lay.bc);
+    },
+    "gen": function() {
+        var s0 = 32;
+        var x0 = 64;
+        var y0 = 64;
+        lay.a = [];
+        for (var y = 0; y < buf.a.ny; y++) {
+            for (var x = 0; x < buf.a.nx; x++) {
+            }
+        }
     }
 }
 // dom
@@ -115,6 +135,13 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "bkgd": function() {
+        lay.bc.con.fillStyle = rgba.css(rgba.rc());
+        lay.bc.con.fillRect(0,0,lay.w,lay.h);
     }
 }
 // normal distribution
