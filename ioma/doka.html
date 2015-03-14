@@ -31,6 +31,8 @@ var g = {
         console.log(gauss.randn());
         document.addEventListener("click", g.click, false);
 
+        ren.bkgd();
+
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -60,9 +62,30 @@ var sce = {
 var lay = {
     "init": function() {
         lay.a = [];
+        lay.w = 1920;
+        lay.h = 1080;
+        lay.b = [lay.w,lay.h,0,0]; // master
+        lay.bc = dom.canvas(lay.b);
+        dom.add(lay.bc);
+        lay.c = {}; // bmp test
+        lay.c.r = [128,128,64,64]; // rect
+        lay.c.n = 8; // stride
+        lay.c.g = lay.grid(lay.c.r); // grid
+        // canvii
     },
     "grid": function(r0, n0) {
         // square grid (bmp) at r0
+        var r1 = [];
+        var nt = (n0 * n0) >>> 0;
+        var s0 = (r0[0] / n0) >>> 0;
+        for (var i = 0; i < nt; i++) {
+            var x0 = i % n0;
+            var x1 = ((x0 * s0) + r0[2]) >>> 0;
+            var y0 = (i / n0) >>> 0;
+            var y1 = ((y0 * s0) + r0[3]) >>> 0;
+            r1.push([s0,s0,x1,y1]);
+        }
+        return r1;
     }
 }
 // dom
@@ -87,6 +110,13 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "bkgd": function() {
+        lay.bc.con.fillStyle = rgba.css(rgba.rc());
+        lay.bc.con.fillRect(0,0,lay.bc.can.width,lay.bc.can.height);
     }
 }
 // normal distribution
