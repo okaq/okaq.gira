@@ -25,15 +25,44 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom];
+        g.subs = [dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
 
         console.log(gauss.randn());
+        document.addEventListener("click", g.click, false);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    },
+    "click": function(e) {
+        console.log(e);
+        sce.step();
+    }
+}
+// scene graph
+var sce = {
+    "init": function() {
+        sce.a = []; 
+        sce.x = 0; // point
+
+    },
+    "step": function() {
+        sce.x = sce.x + 1;
+        if (sce.x >= sce.a.length) {
+            sce.x = 0;
+        }
+        console.log("point: " + sce.x);
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.a = [];
+    },
+    "grid": function(r0, n0) {
+        // square grid (bmp) at r0
     }
 }
 // dom
