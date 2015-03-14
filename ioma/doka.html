@@ -32,6 +32,7 @@ var g = {
         document.addEventListener("click", g.click, false);
 
         ren.bkgd();
+        ren.grid(lay.c);
 
         // stats
         var done = window.performance.now();
@@ -70,8 +71,15 @@ var lay = {
         lay.c = {}; // bmp test
         lay.c.r = [128,128,64,64]; // rect
         lay.c.n = 8; // stride
-        lay.c.g = lay.grid(lay.c.r); // grid
+        lay.c.g = lay.grid(lay.c.r, lay.c.n); // grid
         // canvii
+        lay.c.c = [];
+        for (var i = 0; i < lay.c.g.length; i++) {
+            var r0 = lay.c.g[i];
+            var c0 = dom.canvas(r0);
+            dom.add(c0);
+            lay.c.c[i] = c0;
+        }
     },
     "grid": function(r0, n0) {
         // square grid (bmp) at r0
@@ -117,6 +125,13 @@ var ren = {
     "bkgd": function() {
         lay.bc.con.fillStyle = rgba.css(rgba.rc());
         lay.bc.con.fillRect(0,0,lay.bc.can.width,lay.bc.can.height);
+    },
+    "grid": function(g0) {
+        for (var i = 0; i < g0.c.length; i++) {
+            var c0 = g0.c[i];
+            c0.con.fillStyle = rgba.css(rgba.rc());
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
     }
 }
 // normal distribution
