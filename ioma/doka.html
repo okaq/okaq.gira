@@ -49,7 +49,7 @@ var sce = {
     "init": function() {
         sce.a = []; 
         sce.x = 0; // point
-
+        sce.gen(16); 
     },
     "step": function() {
         sce.x = sce.x + 1;
@@ -57,6 +57,10 @@ var sce = {
             sce.x = 0;
         }
         console.log("point: " + sce.x);
+    },
+    "gen": function(n0) {
+        // generate n0 layouts
+        // linearly linked for now
     }
 }
 // layout
@@ -93,6 +97,27 @@ var lay = {
             var y1 = ((y0 * s0) + r0[3]) >>> 0;
             r1.push([s0,s0,x1,y1]);
         }
+        return r1;
+    },
+    "sub": function(r0) {
+        // subdivide rect into four quads
+        var r1 = [];
+        var w0 = r0[0];
+        var h0 = r0[1];
+        var x0 = r0[2];
+        var y0 = r0[3];
+        var g0 = gauss.randn();
+        var g1 = gauss.randn();
+        var w1 = (w0 * g0) >>> 0;
+        var w2 = (w0 - w1) >>> 0;
+        var h1 = (h0 * g1) >>> 0;
+        var h2 = (h0 - h1) >>> 0;
+        var x1 = (x0 + w1) >>> 0;
+        var y1 = (y0 + h1) >>> 0;
+        r1[0] = [w1, h1, x0, y0];
+        r1[1] = [w2, h1, x1, y0];
+        r1[2] = [w1, h2, x0, y1];
+        r1[3] = [w2, h2, x1, y1];
         return r1;
     }
 }
