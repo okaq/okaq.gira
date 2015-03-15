@@ -32,7 +32,8 @@ var g = {
         document.addEventListener("click", g.click, false);
 
         ren.bkgd();
-        ren.grid(lay.c);
+        // ren.grid(lay.c);
+        ren.grid(sce.a[0]);
 
         // stats
         var done = window.performance.now();
@@ -49,7 +50,8 @@ var sce = {
     "init": function() {
         sce.a = []; 
         sce.x = 0; // point
-        sce.gen(16); 
+        sce.y = 16; // scene count
+        sce.gen(sce.y); 
     },
     "step": function() {
         sce.x = sce.x + 1;
@@ -57,10 +59,16 @@ var sce = {
             sce.x = 0;
         }
         console.log("point: " + sce.x);
+        ren.grid(sce.a[sce.x]);
     },
     "gen": function(n0) {
         // generate n0 layouts
         // linearly linked for now
+        for (var i = 0; i < n0; i++) {
+            sce.a[i] = {};
+            sce.a[i].lay = lay.sub([lay.w,lay.h,0,0]);
+            sce.a[i].c = lay.canvas(sce.a[i].lay);
+        }
     }
 }
 // layout
@@ -72,6 +80,8 @@ var lay = {
         lay.b = [lay.w,lay.h,0,0]; // master
         lay.bc = dom.canvas(lay.b);
         dom.add(lay.bc);
+    },
+    "bmp": function() {
         lay.c = {}; // bmp test
         lay.c.r = [128,128,64,64]; // rect
         lay.c.n = 8; // stride
@@ -84,6 +94,18 @@ var lay = {
             dom.add(c0);
             lay.c.c[i] = c0;
         }
+    },
+    "canvas": function(r0) {
+        // input rect list
+        // output canvii objects list
+        var c0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var r1 = r0[i];
+            var c1 = dom.canvas(r1);
+            dom.add(c1);
+            c0.push(c1);
+        }
+        return c0;
     },
     "grid": function(r0, n0) {
         // square grid (bmp) at r0
