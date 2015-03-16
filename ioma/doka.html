@@ -60,6 +60,7 @@ var sce = {
         }
         console.log("point: " + sce.x);
         ren.grid(sce.a[sce.x]);
+        ren.woo(sce.a[sce.x]);
     },
     "gen": function(n0) {
         // generate n0 layouts
@@ -178,6 +179,27 @@ var ren = {
             var c0 = g0.c[i];
             c0.con.fillStyle = rgba.css(rgba.rc());
             c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
+    },
+    "woo": function(g0) {
+        for (var i = 0; i < g0.c.length; i++) {
+            var c0 = g0.c[i];
+            var r0 = g0.lay[i];
+            var w0 = r0[0];
+            var h0 = r0[1];
+            var x0 = 0; // r0[2];
+            var y0 = 0; // r0[3];
+            var w1 = (w0 / 2) >>> 0;
+            var h1 = (h0 / 2) >>> 0;
+            var x1 = x0 + w1;
+            var y1 = y0 + h1;
+            var d0 = 4;
+            c0.con.lineWidth = 2;
+            c0.con.strokeStyle = rgba.css(rgba.rc());
+            c0.con.beginPath();
+            c0.con.moveTo(x1,y0+d0);
+            c0.con.quadraticCurveTo(x0+w0,y1+d0,x0+w0,y0);
+            c0.con.stroke();
         }
     }
 }
