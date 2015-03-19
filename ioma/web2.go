@@ -49,7 +49,10 @@ func (p *Peers) Add(s0 string) {
     defer p.Unlock()
     if p.Index <= (p.Users - 1) {
         p.Ids[p.Index] = s0
-        p.Index = p.Index + 1
+        // only add if s0 is not empty
+        if (len(s0) > 0) {
+            p.Index = p.Index + 1
+        }
     }
 }
 

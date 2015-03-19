@@ -48,10 +48,13 @@ var peer = {
         console.log("Per conn open. Id recieved: " + id);
         peer.p.id = id;
         console.log(peer.p);
+        // delay event
     },
     "error": function(err) {
+        console.log(err);
     },
     "connection": function(dc) {
+        console.log(dc);
     }
 }
         </script>
