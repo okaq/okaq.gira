@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [peer];
+        g.subs = [peer,xhr];
         g.subs.forEach(function(el){el.init();});
 
         // stats
@@ -45,7 +45,7 @@ var peer = {
         peer.p.on("connection", peer.connection);
     },
     "open": function(id) {
-        console.log("Per conn open. Id recieved: " + id);
+        console.log("Peer conn open. Id recieved: " + id);
         peer.p.id = id;
         console.log(peer.p);
         // delay event
@@ -55,6 +55,16 @@ var peer = {
     },
     "connection": function(dc) {
         console.log(dc);
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.req = new XMLHttpRequest();
+        xhr.req.addEventListener("load", xhr.load, false);
+        xhr.urls = ["192.168.0.7:8080/peers];
+    },
+    "load": function(e) {
     }
 }
         </script>
