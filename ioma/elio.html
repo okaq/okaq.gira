@@ -49,6 +49,7 @@ var peer = {
         peer.p.id = id;
         console.log(peer.p);
         // delay event
+        window.setTimeout(xhr.open, 2500);
     },
     "error": function(err) {
         console.log(err);
@@ -62,9 +63,17 @@ var xhr = {
     "init": function() {
         xhr.req = new XMLHttpRequest();
         xhr.req.addEventListener("load", xhr.load, false);
-        xhr.urls = ["192.168.0.7:8080/peers];
+        xhr.urls = ["http://192.168.1.7:8080/peers"];
+    },
+    "open": function() {
+        console.log("posting peer id to web server");
+        xhr.req.open("POST", xhr.urls[0], true); // POST, text data
+        xhr.req.requestType = "text";
+        xhr.req.send(peer.id);
     },
     "load": function(e) {
+        peer.q = JSON.parse(xhr.req.response);
+        console.log(peer.q);
     }
 }
         </script>
