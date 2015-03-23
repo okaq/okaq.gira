@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [peer,xhr];
+        g.subs = [dom,lay,peer,xhr];
         g.subs.forEach(function(el){el.init();});
 
         // stats
@@ -75,6 +75,20 @@ var xhr = {
         peer.q = JSON.parse(xhr.req.response);
         console.log(peer.q);
     }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.a = [];
+    },
+    "grid": function() {
+    }
+}
+// scene
+var sce = {
+}
+// bitmap
+var bmp = {
 }
 // dom
 var dom = {
