@@ -29,6 +29,8 @@ var g = {
         g.subs = [dom,lay,peer,xhr];
         g.subs.forEach(function(el){el.init();});
 
+        ren.bkgd();
+
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -70,6 +72,7 @@ var xhr = {
         xhr.req.open("POST", xhr.urls[0], true); // POST, text data
         xhr.req.requestType = "text";
         xhr.req.send(peer.id);
+
     },
     "load": function(e) {
         peer.q = JSON.parse(xhr.req.response);
@@ -79,13 +82,27 @@ var xhr = {
 // layout
 var lay = {
     "init": function() {
-        lay.a = [];
+        lay.w = 1920;
+        lay.h = 1080;
+        
+        lay.a = [lay.w,lay.h,0,0]; // bkgd
+        lay.ac = dom.canvas(lay.a);
+        dom.add(lay.ac);
+
+        lay.b = []; // bmp field
     },
     "grid": function() {
     }
 }
 // scene
 var sce = {
+}
+// render
+var ren = {
+    "bkgd": function() {
+        lay.ac.con.fillStyle = rgba.css(rgba.rc());
+        lay.ac.con.fillRect(0,0,lay.ac.can.width,lay.ac.can.height);
+    }
 }
 // bitmap
 var bmp = {
