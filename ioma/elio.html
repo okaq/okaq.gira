@@ -90,6 +90,9 @@ var lay = {
         dom.add(lay.ac);
 
         lay.b = []; // bmp field
+        for (var i = 0; i < 16; i++) {
+            // lay.b[i] = {};
+        }
     },
     "grid": function() {
     }
@@ -106,6 +109,9 @@ var ren = {
 }
 // bitmap
 var bmp = {
+    "rand": function(n0) {
+        return rgba.rca(n0);
+    }
 }
 // dom
 var dom = {
@@ -178,6 +184,14 @@ var rgba = {
             1.0
             ];
         return c0;
+    },
+    "rca": function(n0) {
+        // return array of rand rgba values
+        var rgb0 = [];
+        for (var i = 0; i < n0; i++) {
+            rgb0[i] = rgba.rc();
+        }
+        return rgb0;
     },
     "css": function(c0) {
         // return css string
