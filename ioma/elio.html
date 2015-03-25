@@ -31,10 +31,26 @@ var g = {
 
         ren.bkgd();
 
+        // guess
+        console.log("Guess a number between 1 and 100!");
+        var g0 = (gauss.randn() * 100) >>> 0;
+        console.log("It's " + g0);
+
+        // click
+        g.wheel = [];
+        g.spoke = 0;
+        document.addEventListener("click", g.click, false);
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    },
+    "click": function(e) {
+        console.log(e);
+
+        var g0 = ((Math.random() * 5) >>> 0) - 2; // [-2,-1,0,1,2]
+        console.log(g0);
     }
 }
 // peerjs
@@ -142,14 +158,15 @@ var gauss = {
     "rand": function() {
         // Math.random has uniform distribution over [0.0,1.0)
         // gauss rand returns normally distributed values given mean
-        // return interval: [-3,3]
-        var stdev = 1.0;
-        var mean = 0.0;
+        // return interval: [-n,n]
+        gauss.stdev = 1.0;
+        gauss.mean = 0.0;
         var r0 = 0.0;
-        for (var i = 0; i < 3; i++) {
+        gauss.n0 = 3;
+        for (var i = 0; i < gauss.n0; i++) {
             r0 += gauss.comp();
         }
-        var r1 = (r0 * stdev) + mean;
+        var r1 = (r0 * gauss.stdev) + gauss.mean;
         return r1;
     },
     "comp": function() {
@@ -161,7 +178,8 @@ var gauss = {
     "randn": function() {
         // rand normalized to [0,1]
         var g0 = gauss.rand();
-        var g1 = (g0 + 3) / 6;
+        var n1 = (gauss.n0 * 2) >>> 0;
+        var g1 = (g0 + gauss.n0) / n1;
         return g1;
     },
     "randa": function(n0) {
