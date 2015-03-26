@@ -55,7 +55,7 @@ var g = {
         if (g.spoke < 0) {
             g.spoke = 0;
         }
-        g.wheel[g.spoke] = 0; // index to layout
+        g.wheel[g.spoke] = (Math.random() * lay.b.length) >>> 0; // index to layout
         console.log(g.wheel);
     }
 }
@@ -115,16 +115,44 @@ var lay = {
         lay.b = []; // bmp field
         for (var i = 0; i < 16; i++) {
             lay.b[i] = {};
-            lay.b[i].r = []; // rand rect
+            lay.b[i].r = lay.rr(); // rand rect
             lay.b[i].c = dom.canvas(lay.b[i].r);
             // dom add, delete on scene
         }
     },
-    "grid": function() {
+    "grid": function(w0,h0,x0,y0,nx,ny) {
+        // w0, h0, x0, y0, nx, ny
+        var g0 = {};
+        var nt = (nx * ny) >>> 0;
+        var w1 = (w0 / nx) >>> 0;
+        var h1 = (h0 / ny) >>> 0;
+        g0.r = [];
+        g0.c = [];
+        for (var i = 0; i < nt; i++) {
+            var x1 = i % nx;
+            var y1 = (i / nx) >>> 0;
+            var r0 = [];
+            r0[0] = w1;
+            r0[1] = h1;
+            r0[2] = ((w1 * x1) + x0) >>> 0;
+            r0[3] = ((h1 * y1) + y0) >>> 0;
+            g0.r[i] = r0;
+            g0.c[i] = dom.canvas(g0.r[i]);
+        }
+        return g0;
+    },
+    "rr": function() {
+        var r0 = [];
+        r0[0] = (Math.random() * lay.w) >>> 0;
+        r0[1] = (Math.random() * lay.h) >>> 0;
+        r0[2] = (Math.random() * lay.w) >>> 0;
+        r0[3] = (Math.random() * lay.h) >>> 0;
+        return r0;
     }
 }
 // scene
 var sce = {
+
 }
 // render
 var ren = {
