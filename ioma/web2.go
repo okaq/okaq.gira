@@ -22,6 +22,7 @@ const (
     CATU = "catu.html" // data bitmaps
     DOKA = "doka.html" // bitmap union webrtc
     ELIO = "elio.html" // webrtc bmp
+    FOPU = "fopu.html" // webrtc nano
 )
 
 var (
@@ -69,7 +70,7 @@ func (p *Peers) Json() ([]byte, error) {
 // root static html handle
 // single client html5 web app for xhr, net, conn
 func RootHandler(w http.ResponseWriter, req *http.Request) {
-    http.ServeFile(w, req, ELIO)
+    http.ServeFile(w, req, FOPU)
 }
 
 // peers cache ajax response
