@@ -25,13 +25,26 @@ var g = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        g.subs = [peer];
+        g.subs.forEach(function(el){el.init()});
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
     }
 }
-
+// peerjs
+var peer = {
+    "init": function() {
+        peer.key = "wrcrx9bkcwlpiudi"; // peerjs cloud api key
+        peer.p = new Peer({key:peer.key,debug:3});
+        console.log(peer.p);
+        // id obtain from peerjs cloud
+        // assign from okaq server
+    }
+}
         </script>
     </head>
     <body id="alpha">
