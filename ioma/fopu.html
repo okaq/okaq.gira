@@ -46,9 +46,24 @@ var peer = {
     "init": function() {
         peer.key = "wrcrx9bkcwlpiudi"; // peerjs cloud api key
         peer.p = new Peer({key:peer.key,debug:3});
-        console.log(peer.p);
+        // console.log(peer.p);
         // id obtain from peerjs cloud
         // assign from okaq server
+        peer.p.on("error", peer.error);
+        peer.p.on("open", peer.open);
+        peer.p.on("connection", peer.conn);
+        // additional events:
+        // call, close, disconnected
+        // call peer.p.destroy() to clean up
+    },
+    "open": function(id) {
+        console.log(id);
+    },
+    "error": function(err) {
+        console.log(err);
+    },
+    "conn": function(data) {
+        console.log(data);
     }
 }
 // xhr
