@@ -26,13 +26,19 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [peer];
+        g.subs = [peer,xhr];
         g.subs.forEach(function(el){el.init()});
+
+        // click handler
+        document.addEventListener("click", g.click, false);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    },
+    "click": function(e) {
+        console.log(e);
     }
 }
 // peerjs
@@ -43,6 +49,14 @@ var peer = {
         console.log(peer.p);
         // id obtain from peerjs cloud
         // assign from okaq server
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.urls = [];
+        xhr.req = new XMLHttpRequest();
+        console.log(xhr.req);
     }
 }
         </script>
