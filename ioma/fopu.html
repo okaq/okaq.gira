@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [peer,xhr];
+        g.subs = [peer,xhr,work];
         g.subs.forEach(function(el){el.init()});
 
         // click handler
@@ -58,6 +58,8 @@ var peer = {
     },
     "open": function(id) {
         console.log(id);
+        peer.p.id = id;
+        xhr.open();
     },
     "error": function(err) {
         console.log(err);
@@ -72,6 +74,29 @@ var xhr = {
         xhr.urls = [];
         xhr.req = new XMLHttpRequest();
         console.log(xhr.req);
+    },
+    "open": function() {
+    }
+}
+// worker
+var work = {
+    "init": function() {
+        work.js = 'onmessage=function(e){' +
+            'console.log(e);' +
+                'postMessage(Math.random());}';
+        work.jsa = [work.js];
+        work.blob = new Blob(work.jsa); // string to blob
+        work.url = window.URL.createObjectURL(work.blob); // blob to string
+        work.w = new Worker(work.url);
+        work.w.onmessage = function(e) {
+            console.log(e);
+            var f0 = Math.random();
+            console.log(" mine: " + f0 + " yours: " + e.data);
+            var f1 = f0 + e.data;
+            console.log(" sum: " + f1);
+        }
+        work.w.postMessage("ok");
+        console.log(work);
     }
 }
         </script>
