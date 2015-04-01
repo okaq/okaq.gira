@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [peer,xhr,work];
+        g.subs = [peer,xhr,work,async];
         g.subs.forEach(function(el){el.init()});
 
         // click handler
@@ -97,6 +97,29 @@ var work = {
         }
         work.w.postMessage("ok");
         console.log(work);
+    }
+}
+// async
+var async = {
+    "init": function() {
+        async.p = new Promise(async.res);
+        console.log(async.p);
+        async.p.then(async.rep,async.err);
+    },
+    "res": function(resolve, reject) {
+        // console.log(resolve, reject);
+        var f0 = Math.random();
+        if (f0 > 0.5) {
+            resolve("ok all good");
+        } else {
+            reject(Error("something wrong"));
+        }
+    },
+    "rep": function(response) {
+        console.log(response);
+    },
+    "err": function(error) {
+        console.log(error);
     }
 }
         </script>
