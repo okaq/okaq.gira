@@ -7,11 +7,10 @@
         <meta name="source" content="https://github.com/okaq/okaq.gira" />
         <meta name="creator" content="AQ<aq@okaq.com>" />
         <meta name="date" content="2015-04-04" />
-        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGJ51vKfgZaAiaamj1owasGoBaMWjFowasGoBaMWjFowasGoBVQEgAAAAP//6ncCrDkNKVcAAAAASUVORK5CYII=" />
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMElEQVR4nOzNQREAIAwDQYbBe2RTE81vT8DtS/5pdqt3AAAAAAAAAAAAsNgEAAD//48UAlAcOHAKAAAAAElFTkSuQmCC" />
         <style type="text/css">
             html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(255,255,255,1.0);}
         </style>
-        <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
         <script type="text/javascript">
             // ok
         console.log("okaq gira karu bade webrtc sampler!");
@@ -24,10 +23,22 @@ var g = {
     "init": function(e) {
         console.log(e);
         var now = window.performance.now();
+        
+        // subsystems
+        g.subs = [xhr];
+        g.subs.forEach(function(el){el.init();});
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.req = new XMLHttpRequest();
+        console.log(xhr.req);
     }
 }
          </script>
