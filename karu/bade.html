@@ -25,7 +25,7 @@ var g = {
         var now = window.performance.now();
         
         // subsystems
-        g.subs = [xhr];
+        g.subs = [xhr,log];
         g.subs.forEach(function(el){el.init();});
 
         // stats
@@ -39,6 +39,21 @@ var xhr = {
     "init": function() {
         xhr.req = new XMLHttpRequest();
         console.log(xhr.req);
+        xhr.urls = [
+            "http://192.168.1.7:8080/logs",
+            "http://192.168.1.7:8080/test"
+                ];
+        console.log(window.navigator);
+        console.log(window.screen);
+        console.log(window.performance);
+    }
+}
+// logger
+var log = {
+    "init": function() {
+        // log to server
+        // wrap state in json and post via xhr
+        // test: xhr, ws, peer
     }
 }
          </script>
