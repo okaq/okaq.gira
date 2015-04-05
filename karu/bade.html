@@ -84,13 +84,74 @@ var dom = {
 // layout
 var lay = {
     "init": function() {
+        lay.w = 1920;
+        lay.h = 1080;
+        lay.a = [];
+        lay.a[0] = {};
+        lay.a[0].r = [lay.w,lay.h,0,0];
+        lay.a[0].c = [dom.canvas(lay.a[0].r)];
+        dom.add(lay.a[0].c[0]);
     }
 }
 // scene
 var sce = {
     "init": function() {
+        // scene 0: welcome
+        // scene 1: test xhr to server (ws post)
+        sce.a = [];
+        sce.a[0] = {}; 
+        // compile stats about scenes, history, data
+        // transition possibilities
+        // begin welcome render
+        ren.scene(0);
+    },
+    "morph": function() {
+        // change from one scene to next
+        // supplied by args?
+        // dom add / remove canvas objects
     }
 }
+// render
+var ren = {
+    "scene": function(i0) {
+        // render
+        var c0 = lay.a[i0].c;
+        for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgba.css(rgba.rc());
+            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    }
+}
+
          </script>
     </head>
     <body id="alpha">
