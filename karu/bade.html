@@ -103,12 +103,16 @@ var sce = {
         // compile stats about scenes, history, data
         // transition possibilities
         // begin welcome render
-        ren.scene(0);
+        sce.curr = 0;
+        ren.scene(sce.curr);
     },
     "morph": function() {
         // change from one scene to next
         // supplied by args?
         // dom add / remove canvas objects
+    },
+    "step": function() {
+        // increment scene index
     }
 }
 // render
