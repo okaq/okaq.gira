@@ -28,6 +28,9 @@ var g = {
         g.subs = [xhr,log,dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
 
+        // run
+        xhr.test();
+
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -39,13 +42,22 @@ var xhr = {
     "init": function() {
         xhr.req = new XMLHttpRequest();
         console.log(xhr.req);
-        xhr.urls = [
-            "http://192.168.1.7:8080/logs",
-            "http://192.168.1.7:8080/test"
-                ];
+        xhr.urls = {
+            "log": "http://192.168.1.7:8080/logs",
+            "test": "http://192.168.1.7:8080/test"
+        };
+        xhr.req.addEventListener("load", xhr.load, false);
         console.log(window.navigator);
         console.log(window.screen);
         console.log(window.performance);
+    },
+    "test": function() {
+        xhr.req.open("GET", xhr.urls["test"], true);
+        xhr.req.send();
+    },
+    "load": function(e) {
+        console.log(e);
+        console.log(xhr.req.response);
     }
 }
 // logger
