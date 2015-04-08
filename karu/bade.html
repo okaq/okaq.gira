@@ -46,6 +46,7 @@ var xhr = {
             "log": "http://192.168.1.7:8080/logs",
             "test": "http://192.168.1.7:8080/test"
         };
+        xhr.msg = "okaq gira karu bade ok!";
         xhr.req.addEventListener("load", xhr.load, false);
         console.log(window.navigator);
         console.log(window.screen);
@@ -58,6 +59,12 @@ var xhr = {
     "load": function(e) {
         console.log(e);
         console.log(xhr.req.response);
+        if (xhr.msg == xhr.req.response) {
+            console.log("message test ok");
+            ren.scene(1);
+        } else {
+            console.log("message test fail");
+        }
     }
 }
 // logger
@@ -103,6 +110,10 @@ var lay = {
         lay.a[0].r = [lay.w,lay.h,0,0];
         lay.a[0].c = [dom.canvas(lay.a[0].r)];
         dom.add(lay.a[0].c[0]);
+        lay.a[1] = {};
+        lay.a[1].r = [512,512,256,256];
+        lay.a[1].c = [dom.canvas(lay.a[1].r)];
+        dom.add(lay.a[1].c[0]);
     }
 }
 // scene
