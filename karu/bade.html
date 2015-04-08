@@ -48,6 +48,10 @@ var xhr = {
         };
         xhr.msg = "okaq gira karu bade ok!";
         xhr.req.addEventListener("load", xhr.load, false);
+        // state oject to multiplex xhr object
+        // hold current url name handle
+        // attaches appropriate load event handlers
+        // binary data packing clss in its own module
         console.log(window.navigator);
         console.log(window.screen);
         console.log(window.performance);
@@ -55,6 +59,10 @@ var xhr = {
     "test": function() {
         xhr.req.open("GET", xhr.urls["test"], true);
         xhr.req.send();
+    },
+    "open": function(url0) {
+        xhr.req.open("GET", xhr.urls[url0], true);
+        // xhr.req.send();
     },
     "load": function(e) {
         console.log(e);
