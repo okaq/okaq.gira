@@ -10,6 +10,7 @@ import (
 
 const (
     BADE = "bade.html"
+    CAPI = "capi.html"
 )
 
 func init() {
@@ -17,7 +18,13 @@ func init() {
         http.ServeFile(w, r, BADE)
     })
     http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
-        w.Write([]byte("test ok if you can read this"))
+        w.Write([]byte("okaq gira karu bade ok!"))
+    })
+    http.HandleFunc("/logs", func(w http.ResponseWriter, r *http.Request) {
+        w.Write([]byte("req logged"))
+    })
+    http.HandleFunc("/gp", func(w http.ResponseWriter, r *http.Request) {
+        http.ServeFile(w, r, CAPI)
     })
 }
 
