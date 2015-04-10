@@ -13,6 +13,19 @@ const (
     CAPI = "capi.html"
 )
 
+// capi store
+type Capis struct {
+    // filename string
+    // *os.File
+    // sync.RWLock
+}
+
+func CapiHandler(w http.ResponseWriter, r *http.Request) {
+    http.ServeFile(w, r, CAPI)
+    // open file (rwlock'd)
+    // save init state
+}
+
 func init() {
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, BADE)
@@ -23,9 +36,10 @@ func init() {
     http.HandleFunc("/logs", func(w http.ResponseWriter, r *http.Request) {
         w.Write([]byte("req logged"))
     })
-    http.HandleFunc("/gp", func(w http.ResponseWriter, r *http.Request) {
+    http.HandleFunc("/capi", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, CAPI)
     })
+    http.HandleFunc("/capi/init", CapiHandler)
 }
 
 // may initially seed root request handler
