@@ -23,11 +23,37 @@ var g = {
     "init": function(e) {
         console.log(e);
         var now = window.performance.now();
+
+        // subsystems
+        g.subs = [xhr];
+        g.subs.forEach(function(el){el.init();});
+
+        // capi init test
+        xhr.open("init");
         
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.req = new XMLHttpRequest();
+        console.log(xhr.req);
+        xhr.urls = {
+            "init": "http://192.168.1.7:8080/capi/init"
+        };
+        xhr.req.addEventListener("load", xhr.load, false);
+    },
+    "open": function(url0) {
+        xhr.req.open("GET", xhr.urls[url0], true);
+        xhr.req.send();
+    },
+    "load": function(e) {
+        console.log(e);
+        console.log(xhr.req.response);
     }
 }
          </script>

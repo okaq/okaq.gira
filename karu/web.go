@@ -21,9 +21,10 @@ type Capis struct {
 }
 
 func CapiHandler(w http.ResponseWriter, r *http.Request) {
-    http.ServeFile(w, r, CAPI)
+    // http.ServeFile(w, r, CAPI)
     // open file (rwlock'd)
     // save init state
+    w.Write([]byte("capi xhr ok!"))
 }
 
 func init() {
