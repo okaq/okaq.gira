@@ -13,21 +13,37 @@ const (
     CAPI = "capi.html"
 )
 
+var (
+    CS *Capis
+)
+
 // capi store
+// if file not found create it
+// load it on first handle
+// write on change of state
+// format : streaming json encoding
 type Capis struct {
     // filename string
+    Name string
     // *os.File
     // sync.RWLock
+}
+
+func NewCapis() *Capis {
+    c0 := new(Capis)
+    c0.Name = "capic.json"
+    return c0
 }
 
 func CapiHandler(w http.ResponseWriter, r *http.Request) {
     // http.ServeFile(w, r, CAPI)
     // open file (rwlock'd)
     // save init state
-    w.Write([]byte("capi xhr ok!"))
+    w.Write([]byte(CS.Name))
 }
 
 func init() {
+    CS = NewCapis()
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, BADE)
     })
