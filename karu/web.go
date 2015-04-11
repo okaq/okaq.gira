@@ -6,6 +6,7 @@ package main
 
 import (
     "net/http"
+    "os"
 )
 
 const (
@@ -34,6 +35,17 @@ func NewCapis() *Capis {
     c0.Name = "capic.json"
     return c0
 }
+
+/*
+func (c *Capis) Exists() bool {
+    if _, err := os.Stat(c.Name); err != nil {
+        if os.IsNotExist(err) {
+            return false
+        }
+    }
+    return true
+}
+*/
 
 func CapiHandler(w http.ResponseWriter, r *http.Request) {
     // http.ServeFile(w, r, CAPI)
