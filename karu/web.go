@@ -27,16 +27,28 @@ type Capis struct {
     // filename string
     Name string
     // *os.File
+    File *os.File
     // sync.RWLock
 }
 
 func NewCapis() *Capis {
     c0 := new(Capis)
     c0.Name = "capic.json"
+    var err error
+    if (c0.Exists) {
+        c0.File, err = os.Open(c0.Name)
+        if err != nil {
+            panic()
+        }
+    } else {
+        c0.File, err = os.Create(c0.Name)
+        if err != nil {
+            panic()
+        }
+    }
     return c0
 }
 
-/*
 func (c *Capis) Exists() bool {
     if _, err := os.Stat(c.Name); err != nil {
         if os.IsNotExist(err) {
@@ -45,7 +57,8 @@ func (c *Capis) Exists() bool {
     }
     return true
 }
-*/
+
+// go-fsnotify for file notifications
 
 func CapiHandler(w http.ResponseWriter, r *http.Request) {
     // http.ServeFile(w, r, CAPI)
