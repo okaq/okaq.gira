@@ -33,17 +33,20 @@ type Capis struct {
 
 func NewCapis() *Capis {
     c0 := new(Capis)
-    c0.Name = "capic.json"
+    c0.Name = "dapi.json"
     var err error
-    if (c0.Exists) {
+    if (c0.Exists()) {
         c0.File, err = os.Open(c0.Name)
         if err != nil {
-            panic()
+            panic("cannot open file")
         }
     } else {
         c0.File, err = os.Create(c0.Name)
         if err != nil {
-            panic()
+            panic("cannot create file")
+            // always panics in app engine
+            // distributed filesystem
+            // does not allow file creation
         }
     }
     return c0
