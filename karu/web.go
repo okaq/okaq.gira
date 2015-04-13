@@ -12,6 +12,7 @@ import (
 const (
     BADE = "bade.html"
     CAPI = "capi.html"
+    ENKO = "enko.html"
 )
 
 var (
@@ -60,6 +61,9 @@ func (c *Capis) Exists() bool {
     }
     return true
 }
+// use blobstore api for large file upload
+// datastore for persistent sql
+// memcache for short lived globals memory
 
 // go-fsnotify for file notifications
 
@@ -83,6 +87,9 @@ func init() {
     })
     http.HandleFunc("/capi", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, CAPI)
+    })
+    http.HandleFunc("/enko", func(w http.ResponseWriter, r *http.Request) {
+        http.ServeFile(w, r, ENKO)
     })
     http.HandleFunc("/capi/init", CapiHandler)
 }
