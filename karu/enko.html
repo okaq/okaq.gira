@@ -23,11 +23,24 @@ var g = {
     "init": function(e) {
         console.log(e);
         var now = window.performance.now();
+
+        // subsystems
+        g.subs = [bmp];
+        g.subs.forEach(function(el){el.init();});
         
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// bmp
+var bmp = {
+    "init": function() {
+        bmp.nx = 8;
+        bmp.ny = 8;
+        bmp.nt = (bmp.nx * bmp.ny) >>> 0;
+        console.log("bitmap stride is: " + bmp.nt);
     }
 }
          </script>
