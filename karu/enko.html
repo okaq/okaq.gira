@@ -37,10 +37,26 @@ var g = {
 // bmp
 var bmp = {
     "init": function() {
-        bmp.nx = 8;
+        bmp.nx = 8; // block size
         bmp.ny = 8;
         bmp.nt = (bmp.nx * bmp.ny) >>> 0;
         console.log("bitmap stride is: " + bmp.nt);
+        bmp.px = 16;
+        bmp.py = 16;
+        bmp.w = (bmp.nx * bmp.px) >>> 0;
+        bmp.h = (bmp.ny * bmp.py) >>> 0;
+        console.log("bitmap resoultion area: " + (bmp.w*bmp.h));
+        bmp.data = [];
+    },
+    "grow": function() {
+        for (var i = 0; i < bmp.nt; i++) {
+            var p0 = 0;
+            var f0 = Math.random();
+            if (f0 < 0.5) {
+                p0 = 1;
+            }
+            bmp.data[i] = p0;
+        }
     }
 }
          </script>
