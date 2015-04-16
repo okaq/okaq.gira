@@ -29,7 +29,8 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         document.addEventListener("click", g.click, false);
-        bmp.grow();
+
+        ren.bmp();
         
         // stats
         var done = window.performance.now();
@@ -37,7 +38,35 @@ var g = {
         console.log("total running time " + total + "ms");
     },
     "click": function(e) {
-        console.log(e);   
+        console.log(e);
+        bmp.grow();
+        lay.grow();
+        lay.seed();
+        ren.bmp();
+    }
+}
+// render
+var ren = {
+    "bg": function() {
+        lay.b.c.con.fillStyle = rgba.css([255,255,255,1.0]);
+        lay.b.c.con.fillRect(0, 0, lay.b.c.can.width, lay.b.c.can.height);
+    },
+    "fg": function() {
+        var c0 = rgba.css(bmp.rgb);
+        for (var i = 0; i < bmp.data.length; i++) {
+            if (bmp.data[i] == 1) {
+                lay.a.c.con.fillStyle = c0;
+                var i0 = (i % bmp.nx);
+                var x0 = bmp.px * i0;
+                var y0 = bmp.py * i0;
+                lay.a.c.con.fillRect(x0, y0, bmp.px, bmp.py);
+                console.log(i, bmp.data[i], x0, y0, i0);
+            }
+        }
+    },
+    "bmp": function() {
+        // ren.bg();
+        ren.fg();
     }
 }
 // bmp
@@ -54,6 +83,7 @@ var bmp = {
         console.log("bitmap resoultion area: " + (bmp.w*bmp.h));
         bmp.data = [];
         bmp.rgb = rgba.rc();
+        bmp.grow();
     },
     "grow": function() {
         bmp.rgb = rgba.rc();
@@ -76,8 +106,12 @@ var lay = {
         lay.y = 0;
         lay.w = bmp.w;
         lay.h = bmp.h;
-        lay.a = {};
+        lay.a = {}; // bmp
         lay.seed();
+        lay.b = {}; // doc
+        lay.b.r = [lay.dw,lay.dh,0,0];
+        lay.b.c = dom.canvas(lay.b.r);
+        dom.add(lay.b.c);
     },
     "grow": function() {
         lay.x = (Math.random() * (lay.dw - lay.w)) >>> 0;
