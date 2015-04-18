@@ -57,8 +57,9 @@ var ren = {
             if (bmp.data[i] == 1) {
                 lay.a.c.con.fillStyle = c0;
                 var i0 = (i % bmp.nx);
+                var i1 = (i / bmp.nx) >>> 0;
                 var x0 = bmp.px * i0;
-                var y0 = bmp.py * i0;
+                var y0 = bmp.py * i1;
                 lay.a.c.con.fillRect(x0, y0, bmp.px, bmp.py);
                 console.log(i, bmp.data[i], x0, y0, i0);
             }
@@ -115,7 +116,7 @@ var lay = {
     },
     "grow": function() {
         lay.x = (Math.random() * (lay.dw - lay.w)) >>> 0;
-        lay.y = (Math.random() * (lay.dh * lay.h)) >>> 0;
+        lay.y = (Math.random() * (lay.dh - lay.h)) >>> 0;
     },
     "seed": function() {
         if (lay.a.c) {
