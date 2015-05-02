@@ -37,7 +37,18 @@ var g = {
 // scene
 var sce = {
     "init": function() {
+        sce.p = 0; // scene index
+        sce.q = []; // scene graph
+        for (var i = 0; i < lay.r.length; i++) {
+            sce.q[i] = []; // canvas list
+            for (var j = 0; j < lay.r[i].length; j++) {
+                sce.q[i][j] = dom.canvas(lay.r[i][j]);
+            }
+        }
     }
+    // scene cycle, rand steps
+    // remove all from current scene
+    // add all in jump scene
 }
 // layout
 var lay = {
