@@ -25,13 +25,18 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,lay];
+        g.subs = [dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
         
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// scene
+var sce = {
+    "init": function() {
     }
 }
 // layout
@@ -47,7 +52,14 @@ var lay = {
             var ny = (lay.h / s0) >>> 0;
             var nt = (nx * ny) >>> 0;
             console.log(i, s0, nx, ny, nt);
+            lay.r[i] = [];
+            for (var j = 0; j < nt; j++) {
+                var x0 = ((j % nx) * s0) >>> 0;
+                var y0 = ((j / nx) * s0) >>> 0;
+                lay.r[i][j] = [s0,s0,x0,y0];
+            }
         }
+        console.log(lay.r.length);
     }
 }
 // dom
