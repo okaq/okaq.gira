@@ -25,13 +25,29 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom];
+        g.subs = [dom,lay];
         g.subs.forEach(function(el){el.init();});
         
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.w = 1920; // page size
+        lay.h = 1080;
+        lay.d = [1,2,3,4,5,6,8,10,12,15,20,24,30,40,60,120]; // common divisors
+        lay.r = []; // rect sets
+        for (var i = 6; i < lay.d.length; i++) {
+            var s0 = lay.d[i];
+            var nx = (lay.w / s0) >>> 0;
+            var ny = (lay.h / s0) >>> 0;
+            var nt = (nx * ny) >>> 0;
+            console.log(i, s0, nx, ny, nt);
+        }
     }
 }
 // dom
