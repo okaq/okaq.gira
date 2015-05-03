@@ -57,17 +57,19 @@ var lay = {
         lay.h = 1080;
         lay.d = [1,2,3,4,5,6,8,10,12,15,20,24,30,40,60,120]; // common divisors
         lay.r = []; // rect sets
-        for (var i = 6; i < lay.d.length; i++) {
+        var start = 6;
+        for (var i = start; i < lay.d.length; i++) {
+            var i0 = i - start;
             var s0 = lay.d[i];
             var nx = (lay.w / s0) >>> 0;
             var ny = (lay.h / s0) >>> 0;
             var nt = (nx * ny) >>> 0;
-            console.log(i, s0, nx, ny, nt);
-            lay.r[i] = [];
+            console.log(i0, i, s0, nx, ny, nt);
+            lay.r[i0] = [];
             for (var j = 0; j < nt; j++) {
                 var x0 = ((j % nx) * s0) >>> 0;
                 var y0 = ((j / nx) * s0) >>> 0;
-                lay.r[i][j] = [s0,s0,x0,y0];
+                lay.r[i0][j] = [s0,s0,x0,y0];
             }
         }
         console.log(lay.r.length);
