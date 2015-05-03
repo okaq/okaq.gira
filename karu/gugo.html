@@ -27,6 +27,8 @@ var g = {
         // subsystems
         g.subs = [dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
+
+        ren.rand();
         
         // stats
         var done = window.performance.now();
@@ -45,10 +47,23 @@ var sce = {
                 sce.q[i][j] = dom.canvas(lay.r[i][j]);
             }
         }
+        sce.attach();
+        // scene cycle, rand steps
+        // remove all from current scene
+        // add all in jump scene
+    },
+    "attach": function() {
+        // add current index canvas objects to dom
+        for (var i = 0; i < sce.q[sce.p].length; i++) {
+            dom.add(sce.q[sce.p][i]);
+        }
+    },
+    "detach": function() {
+        // remove current index canvas objects from dom
+        for (var i = 0; i < sce.q[sce.p].length; i++) {
+            dom.remove(sce.q[sce.p][i]);
+        }
     }
-    // scene cycle, rand steps
-    // remove all from current scene
-    // add all in jump scene
 }
 // layout
 var lay = {
@@ -99,7 +114,12 @@ var dom = {
         dom.alpha.removeChild(c0.can);
     }
 }
- 
+// render
+var ren = {
+}
+// colors
+var rgba = {
+}
          </script>
     </head>
     <body id="alpha">
