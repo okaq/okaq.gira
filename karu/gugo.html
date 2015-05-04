@@ -34,6 +34,9 @@ var g = {
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+
+        // start
+        g.id = window.setInterval(sce.cycle, 2500);
     }
 }
 // scene
@@ -63,6 +66,15 @@ var sce = {
         for (var i = 0; i < sce.q[sce.p].length; i++) {
             dom.remove(sce.q[sce.p][i]);
         }
+    },
+    "cycle": function() {
+        sce.detach();
+        sce.p = sce.p + 1;
+        if (sce.p >= sce.q.length) {
+            sce.p = 0;
+        }
+        sce.attach();
+        ren.rand();
     }
 }
 // layout
@@ -83,7 +95,7 @@ var lay = {
             lay.r[i0] = [];
             for (var j = 0; j < nt; j++) {
                 var x0 = ((j % nx) * s0) >>> 0;
-                var y0 = ((j / nx) * s0) >>> 0;
+                var y0 = (((j / nx) >>> 0) * s0) >>> 0;
                 lay.r[i0][j] = [s0,s0,x0,y0];
             }
         }
