@@ -72,7 +72,7 @@ var lay = {
         lay.h = 1080;
         lay.d = [1,2,3,4,5,6,8,10,12,15,20,24,30,40,60,120]; // common divisors
         lay.r = []; // rect sets
-        var start = 6;
+        var start = 8;
         for (var i = start; i < lay.d.length; i++) {
             var i0 = i - start;
             var s0 = lay.d[i];
@@ -116,6 +116,13 @@ var dom = {
 }
 // render
 var ren = {
+    "rand": function() {
+        // render current scene with random colors
+        for (var i = 0; i < sce.q[sce.p].length; i++) {
+            sce.q[sce.p][i].con.fillStyle = rgba.css(rgba.rc());
+            sce.q[sce.p][i].con.fillRect(0,0,sce.q[sce.p][i].can.width,sce.q[sce.p][i].can.height);
+        }
+    }
 }
 // colors
 var rgba = {
