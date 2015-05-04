@@ -68,13 +68,36 @@ var sce = {
         }
     },
     "cycle": function() {
+        var begin = window.performance.now();
+
         sce.detach();
         sce.p = sce.p + 1;
         if (sce.p >= sce.q.length) {
-            sce.p = 0;
+            // sce.p = 0;
+            console.log("All tests finished!");
+            window.clearTimeout(g.id);
+            return;
         }
         sce.attach();
         ren.rand();
+
+        var end = window.performance.now();
+        var delta = end - begin;
+        console.log("Scene cycle time: " + delta + "ms.");
+        console.log("Number of DOM ops: " + sce.q[sce.p].length);
+        console.log("Average attach rate: " + (sce.q[sce.p].length / delta));
+        console.log("Rate per milisecond: " + (delta / sce.q[sce.p].length));
+        
+        // more DOM objects on page
+        // results in higher average add/remove times
+        // 10k canvas objects at 30 per milisecond
+        // 100 objects at 10 per milisecond
+        // total time for ~1k object is 30ms
+
+        // fast enough for most game scenes
+        // strategies include: pre-load offscreen rendering
+        // dynamic interstitial scene creation at run-time
+        // worker threads for heavy comp
     }
 }
 // layout
