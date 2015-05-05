@@ -15,6 +15,7 @@ const (
     ENKO = "enko.html"
     FAGO = "fago.html"
     GUGO = "gugo.html"
+    HOKA = "hoka.html"
 )
 
 var (
@@ -98,6 +99,9 @@ func init() {
     })
     http.HandleFunc("/gugo", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, GUGO)
+    })
+    http.HandleFunc("/hoka", func(w http.ResponseWriter, r *http.Request) {
+        http.ServeFile(w, r, HOKA)
     })
     http.HandleFunc("/capi/init", CapiHandler)
 }
