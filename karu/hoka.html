@@ -24,10 +24,92 @@ var g = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        g.subs = [dom,lay,sce];
+        g.subs.forEach(function(el){el.init();});
+
+        // dom debug console
+        // obtain screen resolution
+        ren.text();
+
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+var sce = {
+    "init": function() {
+        sce.g = []; // scene graph
+        sce.g[0] = [];
+        sce.g[0][0] = dom.canvas(lay.t);
+        dom.add(sce.g[0][0]);
+    }
+}
+var lay = {
+    "init": function() {
+        lay.s = []; // screen resolution
+        lay.t = [384,384,0,0]; // text box
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "text": function() {
+        sce.g[0][0].con.fillStyle = rgba.css([0,40,0,1.0]);
+        sce.g[0][0].con.fillRect(0,0,sce.g[0][0].can.width,sce.g[0][0].can.height);
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
     }
 }
          </script>
