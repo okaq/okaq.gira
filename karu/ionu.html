@@ -25,13 +25,35 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom];
+        g.subs = [dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
+
+        ren.bkgd();
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.b = dom.canvas(lay.b);
+        dom.add(sce.b);
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.w = 1920; // page dims
+        lay.h = 1080;
+
+        // igo board may have z-index layers
+        // bkgd, cells, pieces
+        // z-index accumulated via rendering order
+        
+        lay.b = [lay.w,lay.h,0,0]; // bkgd
     }
 }
 // dom
@@ -56,6 +78,48 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "bkgd": function() {
+        var c0 = rgba.rc();
+        var c1 = rgba.rc();
+        var rg0 = sce.b.con.createRadialGradient(lay.w/2,lay.h/2,4,lay.w/2,lay.h/2,lay.w/2);
+        rg0.addColorStop(0, rgba.css(c0));
+        rg0.addColorStop(1, rgba.css(c1));
+        sce.b.con.fillStyle = rg0;
+        sce.b.con.fillRect(0,0,sce.b.can.width,sce.b.can.height);
+        // radial gradient
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
     }
 }
          </script>
