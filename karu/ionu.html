@@ -83,11 +83,15 @@ var dom = {
 // render
 var ren = {
     "bkgd": function() {
-        var c0 = rgba.rc();
-        var c1 = rgba.rc();
-        var rg0 = sce.b.con.createRadialGradient(lay.w/2,lay.h/2,4,lay.w/2,lay.h/2,lay.w/2);
-        rg0.addColorStop(0, rgba.css(c0));
-        rg0.addColorStop(1, rgba.css(c1));
+        var n0 = 4;
+        // var c0 = rgba.rc();
+        // var c1 = rgba.rc();
+        var rg0 = sce.b.con.createRadialGradient(lay.w/2,lay.h/2,4,lay.w/2,lay.h/2,lay.w);
+        // rg0.addColorStop(0, rgba.css(c0));
+        // rg0.addColorStop(1, rgba.css(c1));
+        for (var i = 0; i < n0; i++) {
+            rg0.addColorStop(i/n0, rgba.css(rgba.rc()));
+        }
         sce.b.con.fillStyle = rg0;
         sce.b.con.fillRect(0,0,sce.b.can.width,sce.b.can.height);
         // radial gradient
