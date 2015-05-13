@@ -49,6 +49,9 @@ var board = {
         }
         console.log(board);
         // board layout and scene
+        // ui click handlers
+        lay.board();
+        sce.board();
     }
 }
 // scene
@@ -58,12 +61,20 @@ var sce = {
         dom.add(sce.b);
         sce.a = dom.canvas(lay.a);
         dom.add(sce.a);
- 
+        sce.a.can.style.zIndex = 1;
+        sce.c = [];
         // open clear board
         // select player (b/w)
         // communicate player to peer
         // handle turns / placements sync
         // typed array for data
+    },
+    "board": function() {
+        for (var i = 0; i < lay.c.length; i++) {
+            sce.c[i] = dom.canvas(lay.c[i]);
+            dom.add(sce.c[i]);
+            sce.c[i].can.style.zIndex = 2;
+        }
     }
 }
 // layout
@@ -78,8 +89,20 @@ var lay = {
         
         lay.b = [lay.w,lay.h,0,0]; // bkgd
 
-        lay.a = [500,500,300,300]; // board
+        lay.a = [500,500,300,300]; // board bkgd
         // grid collection of squares
+        lay.c = [];
+    },
+    "board": function() {
+        var w0 = (lay.a[0] / board.s) >>> 0;
+        var h0 = (lay.a[1] / board.s) >>> 0;
+        for (var i = 0; i < board.t; i++) {
+            var x0 = i % board.s;
+            var y0 = (i / board.s) >>> 0;
+            var x1 = ((x0 * w0) + lay.a[2]) >>> 0;
+            var y1 = ((y0 * h0) + lay.a[3]) >>> 0;
+            lay.c[i] = [w0-4,h0-4,x1+2,y1+2];
+        }
     }
 }
 // dom
@@ -125,6 +148,10 @@ var ren = {
     "board": function() {
         sce.a.con.fillStyle = rgba.css([255,255,255,1.0]);
         sce.a.con.fillRect(0,0,sce.a.can.width,sce.a.can.height);
+        for (var i = 0; i < sce.c.length; i++) {
+            sce.c[i].con.fillStyle = rgba.css([16,16,16,1.0]);
+            sce.c[i].con.fillRect(0,0,sce.c[i].can.width,sce.c[i].can.height);
+        }
     }
 }
 // colors
