@@ -29,6 +29,7 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         ren.bkgd();
+        ren.board();
 
         // stats
         var done = window.performance.now();
@@ -47,6 +48,7 @@ var board = {
             board.a[i] = 0;
         }
         console.log(board);
+        // board layout and scene
     }
 }
 // scene
@@ -54,6 +56,9 @@ var sce = {
     "init": function() {
         sce.b = dom.canvas(lay.b);
         dom.add(sce.b);
+        sce.a = dom.canvas(lay.a);
+        dom.add(sce.a);
+ 
         // open clear board
         // select player (b/w)
         // communicate player to peer
@@ -72,6 +77,9 @@ var lay = {
         // z-index accumulated via rendering order
         
         lay.b = [lay.w,lay.h,0,0]; // bkgd
+
+        lay.a = [500,500,300,300]; // board
+        // grid collection of squares
     }
 }
 // dom
@@ -113,6 +121,10 @@ var ren = {
         sce.b.con.fillStyle = rg0;
         sce.b.con.fillRect(0,0,sce.b.can.width,sce.b.can.height);
         // radial gradient
+    },
+    "board": function() {
+        sce.a.con.fillStyle = rgba.css([255,255,255,1.0]);
+        sce.a.con.fillRect(0,0,sce.a.can.width,sce.a.can.height);
     }
 }
 // colors
