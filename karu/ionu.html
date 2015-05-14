@@ -65,7 +65,21 @@ var board = {
         console.log("clicked: " + e.target.dataset.x);
         console.log("piece: " + parseInt(e.target.dataset.x.slice(6), 10));
         // alter board data - toggle color
+        board.select = parseInt(e.target.dataset.x.slice(6), 10);
+        board.toggle(board.select);
         // render board pieces data
+        ren.pieces();
+    },
+    "toggle": function(i0) {
+        if (board.a[i0] == 0) {
+            board.a[i0] = 1;
+            return;
+        }
+        if (board.a[i0] == 1) {
+            board.a[i0] = 2;
+        } else {
+            board.a[i0] = 1;
+        }
     }
 }
 // scene
@@ -165,6 +179,18 @@ var ren = {
         for (var i = 0; i < sce.c.length; i++) {
             sce.c[i].con.fillStyle = rgba.css([16,16,16,1.0]);
             sce.c[i].con.fillRect(0,0,sce.c[i].can.width,sce.c[i].can.height);
+        }
+    },
+    "pieces": function() {
+        ren.board();
+        var c0 = [];
+        for (var i = 0; i < 3; i++) {
+            c0[i] = rgba.rc();
+        }
+        for (var i = 0; i < board.a.length; i++) {
+            var c1 = c0[board.a[i]];
+            sce.c[i].con.fillStyle = rgba.css(c1);
+            sce.c[i].con.fillRect(4,4,sce.c[i].can.width-8,sce.c[i].can.height-8);
         }
     }
 }
