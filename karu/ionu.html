@@ -52,6 +52,20 @@ var board = {
         // ui click handlers
         lay.board();
         sce.board();
+        board.attach();
+    },
+    "attach": function() {
+        for (var i = 0; i < sce.c.length; i++) {
+            sce.c[i].can.addEventListener("click", board.click, false);
+            sce.c[i].can.dataset.x = "board_" + i;
+        }
+    },
+    "click": function(e) {
+        console.log(e);
+        console.log("clicked: " + e.target.dataset.x);
+        console.log("piece: " + parseInt(e.target.dataset.x.slice(6), 10));
+        // alter board data - toggle color
+        // render board pieces data
     }
 }
 // scene
