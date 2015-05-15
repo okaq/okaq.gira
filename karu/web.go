@@ -5,6 +5,7 @@
 package main
 
 import (
+    "fmt"
     "net/http"
     "os"
 )
@@ -82,8 +83,22 @@ func CapiHandler(w http.ResponseWriter, r *http.Request) {
 // response mime type "text/event-stream"
 func CapiSseHandler(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/event-stream")
-    w.Write([]byte("event: message\ndata: ok stream!\n\n"))
+    // w.Write([]byte("event: message\ndata: ok stream!\n\n"))
     // w.Write([]byte("data: ok stream!"))
+    if f, ok := w.(http.Flusher); ok {
+        // write seems to close the conn
+        // throwing a client side error
+        // if Flush is implemented
+        fmt.Fprintf(w, "event: message\n")
+        f.Flush()
+        for i := 0; i < 16; i++ {
+            fmt.Fprintf(w, "data: ok stream #%d\n", i)
+            f.Flush()
+        }
+        fmt.Fprintf(w, "data: transmission ended!\n\n")
+        f.Flush()
+        // sends it all at once
+    }
 }
 
 func init() {
