@@ -40,8 +40,21 @@ var g = {
 // server side events
 var sse = {
     "init": function() {
-        sse.ev = new window.EventSource("/"); // mime-type "text/event-stream" error
+        sse.ev = new window.EventSource("/capi/sse"); // mime-type "text/event-stream" error
         console.log(sse.ev);
+        sse.ev.onopen = sse.mes;
+        sse.ev.onerror = sse.mes;
+        sse.ev.onmessage = sse.mes;
+    },
+    "mes": function(e) {
+        console.log(e);
+        if (e.type == "error") {
+            console.log(e.target.readyState);
+            sse.ev.close();
+        }
+        // message recieved after proper format
+        // golang closes connections after write
+        // need keep-alive for open connections
     }
 }
 // board

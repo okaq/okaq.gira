@@ -78,6 +78,14 @@ func CapiHandler(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte(CS.Name))
 }
 
+// server side events streaming server
+// response mime type "text/event-stream"
+func CapiSseHandler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "text/event-stream")
+    w.Write([]byte("event: message\ndata: ok stream!\n\n"))
+    // w.Write([]byte("data: ok stream!"))
+}
+
 func init() {
     CS = NewCapis()
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -108,6 +116,7 @@ func init() {
         http.ServeFile(w, r, IONU)
     })
     http.HandleFunc("/capi/init", CapiHandler)
+    http.HandleFunc("/capi/sse", CapiSseHandler)
 }
 
 // may initially seed root request handler
