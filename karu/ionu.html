@@ -25,7 +25,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,lay,sce,board];
+        g.subs = [dom,lay,sce,board,sse];
         g.subs.forEach(function(el){el.init();});
 
         ren.bkgd();
@@ -35,6 +35,13 @@ var g = {
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// server side events
+var sse = {
+    "init": function() {
+        sse.ev = new window.EventSource("/"); // mime-type "text/event-stream" error
+        console.log(sse.ev);
     }
 }
 // board
@@ -81,6 +88,7 @@ var board = {
             board.a[i0] = 1;
         }
     }
+    // server side event notification
 }
 // scene
 var sce = {
