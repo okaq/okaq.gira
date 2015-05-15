@@ -92,12 +92,20 @@ func CapiSseHandler(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintf(w, "event: message\n")
         f.Flush()
         for i := 0; i < 16; i++ {
-            fmt.Fprintf(w, "data: ok stream #%d\n", i)
+            fmt.Fprintf(w, "data: ok stream #%d\n\n", i)
             f.Flush()
         }
+        // json format
+        // can also use golang encoder
+        fmt.Fprintf(w, "data: {\"msg\":\"okok\"}\n\n")
+        f.Flush()
         fmt.Fprintf(w, "data: transmission ended!\n\n")
         f.Flush()
         // sends it all at once
+        // double return sends sequential messages
+        // handler call end terminates conn
+        // maintain conn for life of function with
+        // select chan statement / loop
     }
 }
 
