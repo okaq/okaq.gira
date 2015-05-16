@@ -51,7 +51,10 @@ var sse = {
         if (e.type == "error") {
             console.log(e.target.readyState);
             sse.ev.close();
+            console.log(e.target.readyState);
         }
+        // EventSource.readyState
+        // {CONNECTING:0,OPEN:1,CLOSED:2}}
         // message recieved after proper format
         // golang closes connections after write
         // need keep-alive for open connections
