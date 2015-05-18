@@ -50,6 +50,15 @@ var db = {
         // get, set, key, remove, clear operations
         // no universal return for all keys
         // but can iterate oven key(n)
+
+        // persistance test (web counter)
+        var wc0 = db.ls.getItem("count");
+        var wc1 = "1";
+        if (wc0) {
+            wc1 = (parseInt(wc0, 10) + 1).toString();
+        }
+        db.ls.setItem("count", wc1);
+        console.log("number of visits: " + db.ls.getItem("count"));
     }
 }
 // dom
