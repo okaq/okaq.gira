@@ -25,13 +25,31 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom];
+        g.subs = [dom,db];
         g.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// data
+var db = {
+    "init": function() {
+        // local store of player id, stats, history
+        // test to see if html5 db is available
+        // otherwise per session js memory cache
+        // data model abstraction connects to backing store
+        db.data = {};
+        db.ls = window.localStorage;
+        console.log(db);
+        db.ls.setItem("test","this is only a test");
+        console.log(db.ls.key(0));
+        console.log(db.ls.getItem("test"));
+        // get, set, key, remove, clear operations
+        // no universal return for all keys
+        // but can iterate oven key(n)
     }
 }
 // dom
