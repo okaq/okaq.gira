@@ -41,6 +41,14 @@ var peer = {
         peer.key = "wrcrx9bkcwlpiudi"; // peerjs cloud api key
         peer.p = new Peer({key: peer.key, debug: 3});
         console.log(peer.p);
+        // event handlers
+        peer.p.on("open", peer.open);
+    },
+    "open": function(e) {
+        console.log(e);
+        peer.id = e;
+        // peer broker via server
+        // peer.conn = peer.p.connect("remote_id");
     }
 }
 // dom

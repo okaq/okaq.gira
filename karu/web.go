@@ -111,6 +111,12 @@ func CapiSseHandler(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func CapiPeerHandler(w http.ResponseWriter, r *http.Request) {
+    // collect peer ids
+    // write list to output stream
+    w.Write([]byte("ok peer!"))
+}
+
 func init() {
     CS = NewCapis()
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -148,6 +154,7 @@ func init() {
     })
     http.HandleFunc("/capi/init", CapiHandler)
     http.HandleFunc("/capi/sse", CapiSseHandler)
+    http.HandleFunc("/capi/peer", CapiPeerHandler)
 }
 
 // may initially seed root request handler
