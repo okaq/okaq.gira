@@ -11,6 +11,7 @@
         <style type="text/css">
             html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(255,255,255,1.0);}
         </style>
+        <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
         <script type="text/javascript">
             // ok
         console.log("okaq gira konu peerjs webrtc nano igo!");
@@ -25,13 +26,21 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom];
+        g.subs = [dom,peer];
         g.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// peerjs
+var peer = {
+    "init": function() {
+        peer.key = "wrcrx9bkcwlpiudi"; // peerjs cloud api key
+        peer.p = new Peer({key: peer.key, debug: 3});
+        console.log(peer.p);
     }
 }
 // dom
