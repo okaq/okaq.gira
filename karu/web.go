@@ -5,6 +5,7 @@
 package main
 
 import (
+    "bytes"
     "fmt"
     "net/http"
     "os"
@@ -114,10 +115,24 @@ func CapiSseHandler(w http.ResponseWriter, r *http.Request) {
 func CapiPeerHandler(w http.ResponseWriter, r *http.Request) {
     // collect peer ids
     // write list to output stream
-    w.Write([]byte("ok peer!"))
+    // w.Write([]byte(PEER_MOTD))
+    b0 := new(bytes.Buffer)
+    b0.ReadFrom(r.Body)
+    s0 := string(b0.Bytes())
+    P.Add(s0)
+    b1, err := P.Json()
+    if err != nil {
+        w.Header().Set("Content-Type", "text/plain")
+        s1 := fmt.Sprintf("error: %s\n", err)
+        w.Write([]byte(s1))
+        return
+    }
+    w.Header().Set("Content-Type", "application/json")
+    w.Write(b1)
 }
 
 func init() {
+    P = NewPeers()
     CS = NewCapis()
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, BADE)
