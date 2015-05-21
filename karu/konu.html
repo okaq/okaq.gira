@@ -26,13 +26,29 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,peer];
+        g.subs = [dom,peer,xhr];
         g.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.req = new XMLHttpRequest();
+        xhr.req.addEventListener("load", xhr.load, false);
+        xhr.url = "http://192.168.1.2:8080/capi/peer";
+    },
+    "peer": function() {
+        xhr.req.open("POST", xhr.url, true);
+        xhr.req.type = "text";
+        xhr.req.send(peer.id);
+    },
+    "load": function(e) {
+        console.log(e);
     }
 }
 // peerjs
@@ -43,12 +59,24 @@ var peer = {
         console.log(peer.p);
         // event handlers
         peer.p.on("open", peer.open);
+        peer.p.on("error", peer.error);
+        peer.p.on("connection", peer.conn);
     },
     "open": function(e) {
         console.log(e);
         peer.id = e;
         // peer broker via server
         // peer.conn = peer.p.connect("remote_id");
+        xhr.peer();
+    },
+    "error": function(e) {
+        console.log(e);
+    },
+    "conn": function(e) {
+        e.on("data", peer.data);
+    },
+    "data": function(e) {
+        console.log(e);
     }
 }
 // dom
