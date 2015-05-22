@@ -49,6 +49,9 @@ var xhr = {
     },
     "load": function(e) {
         console.log(e);
+        // cache id list to local storage
+        console.log(xhr.req.response);
+        peer.q = JSON.parse(xhr.req.response);
     }
 }
 // peerjs

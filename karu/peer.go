@@ -26,7 +26,7 @@ type Peers struct {
 func NewPeers() *Peers {
     p := new(Peers)
     p.Users = 8
-    p.Index = 0
+    p.Index = -1
     p.Ids = make([]string, p.Users)
     return p
 }
@@ -34,12 +34,11 @@ func NewPeers() *Peers {
 func (p *Peers) Add(s0 string) {
     p.Lock()
     defer p.Unlock()
-    if p.Index <= (p.Users - 1) {
-        p.Ids[p.Index] = s0
-        if (len(s0) > 0) {
-            p.Index = p.Index + 1
-        }
+    p.Index = p.Index + 1
+    if p.Index >= p.Users {
+        p.Index = 0
     }
+    p.Ids[p.Index] = s0
 }
 
 func (p *Peers) Json() ([]byte, error) {
