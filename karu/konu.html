@@ -51,7 +51,11 @@ var xhr = {
         console.log(e);
         // cache id list to local storage
         console.log(xhr.req.response);
-        peer.q = JSON.parse(xhr.req.response);
+        var q = JSON.parse(xhr.req.response);
+        console.log(q.Ids);
+        // on recieve, connect to peers
+        // visualize each connection 
+        peer.chain(q);
     }
 }
 // peerjs
@@ -64,6 +68,17 @@ var peer = {
         peer.p.on("open", peer.open);
         peer.p.on("error", peer.error);
         peer.p.on("connection", peer.conn);
+    },
+    "chain": function(q) {
+        peer.q = q;
+        if (peer.q.Index == 0) {
+            console.log("awaiting peer conn initiation");
+        } else {
+            peer.dc = peer.p.connect(peer.q.Ids[peer.q.Index-1]);
+            console.log(peer.dc);
+            // peer data handler
+            // peer.dc.on("data", function(data){console.log(data);});
+        }
     },
     "open": function(e) {
         console.log(e);
