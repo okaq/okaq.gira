@@ -97,6 +97,19 @@ var peer = {
         console.log(e);
     }
 }
+// layout
+var lay = {
+    "init": function() {
+        // visualize peer graph
+        // metadata peerid_init, peerid_rec
+        // upper third use metadata
+        // large format bmp render
+        // mid third daisy chain
+        lay.w = 1920;
+        lay.h = 1080;
+        lay.s = [lay.w/3,2*lay.w/3];
+    }
+}
 // dom
 var dom = {
     "init": function() {
