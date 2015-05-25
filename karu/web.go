@@ -175,3 +175,9 @@ func init() {
 // may initially seed root request handler
 // with template that emits server info, token
 
+// rate limit by ip, url path
+// cache request count using global var
+// with rwlock
+// write limit reached msg if limit hit
+
+
