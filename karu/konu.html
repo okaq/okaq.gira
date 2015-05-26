@@ -28,7 +28,6 @@ var g = {
         // subsystems
         g.subs = [dom,peer,xhr,lay,bmp];
         g.subs.forEach(function(el){el.init();});
-
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -103,6 +102,19 @@ var bmp = {
         bmp.w = 16;
         bmp.h = 16;
         bmp.t = (bmp.w * bmp.h) >>> 0;
+
+        // user bmp
+        bmp.a = bmp.rand(bmp.t);
+        console.log(bmp.a);
+    },
+    "rand": function(n0) {
+        // return random byte array of length n0
+        var b0 = new ArrayBuffer(n0);
+        var a0 = new Uint8Array(b0);
+        for (var i = 0; i < a0.length; i++) {
+            a0[i] = rgba.rb();
+        }
+        return a0;
     }
 }
 // layout
@@ -116,6 +128,11 @@ var lay = {
         lay.w = 1920;
         lay.h = 1080;
         lay.s = [lay.w/3,2*lay.w/3];
+
+        // meta panel
+        lay.a = [lay.w,lay.s[0],0,0];
+        // meta bmp
+        lay.b = [128,128,64,32];
     }
 }
 // dom
