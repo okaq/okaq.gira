@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,peer,xhr,lay,bmp];
+        g.subs = [dom,peer,xhr,lay,bmp,sce];
         g.subs.forEach(function(el){el.init();});
         // stats
         var done = window.performance.now();
@@ -133,6 +133,16 @@ var lay = {
         lay.a = [lay.w,lay.s[0],0,0];
         // meta bmp
         lay.b = [128,128,64,32];
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.a = dom.canvas(lay.a);
+        dom.add(sce.a);
+        sce.b = dom.canvas(lay.b);
+        dom.add(sce.b);
+        console.log(sce);
     }
 }
 // dom
