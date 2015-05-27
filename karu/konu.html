@@ -28,6 +28,9 @@ var g = {
         // subsystems
         g.subs = [dom,peer,xhr,lay,bmp,sce];
         g.subs.forEach(function(el){el.init();});
+
+        bmp.ren(bmp.a, sce.b);
+
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -117,18 +120,34 @@ var bmp = {
         return a0;
     },
     "ren": function(bmp0, sce0) {
+        // bkgd
+        sce0.con.fillStyle = rgba.css([0,0,0,1.0]);
+        sce0.con.fillRect(0,0,sce0.can.width,sce0.can.height);
         // canvas dims
         var w0 = sce0.can.width;
         var h0 = sce0.can.height;
         // bmp cell dims
         var w1 = (w0 / bmp.w) >>> 0;
-        var h1 = (h1 / bmp.h) >>> 0;
+        var h1 = (h0 / bmp.h) >>> 0;
         // monochrome channel
         var chan0 = (Math.random() * 3) >>> 0;
         for (var i = 0; i < bmp0.length; i++) {
             var x0 = i % bmp.w;
             var y0 = (i / bmp.w) >>> 0;
+            var x1 = (x0 * w1) >>> 0;
+            var y1 = (y0 * h1) >>> 0;
+            sce0.con.fillStyle = bmp.mono(chan0, bmp0[i]);
+            sce0.con.fillRect(x1,y1,w1,h1);
+            // console.log(chan0, bmp0[i], bmp.mono(chan0, bmp0[i])); 
+            // console.log(w0, h0, w1, h1, x0, y0, x1, y1);
         }
+    },
+    "mono": function(ch0, n0) {
+        // return monochrome css rgba 
+        // for given channel, value
+        var rgba0 = [0,0,0,1.0];
+        rgba0[ch0] = n0;
+        return rgba.css(rgba0);
     }
 }
 // layout
