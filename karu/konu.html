@@ -115,6 +115,20 @@ var bmp = {
             a0[i] = rgba.rb();
         }
         return a0;
+    },
+    "ren": function(bmp0, sce0) {
+        // canvas dims
+        var w0 = sce0.can.width;
+        var h0 = sce0.can.height;
+        // bmp cell dims
+        var w1 = (w0 / bmp.w) >>> 0;
+        var h1 = (h1 / bmp.h) >>> 0;
+        // monochrome channel
+        var chan0 = (Math.random() * 3) >>> 0;
+        for (var i = 0; i < bmp0.length; i++) {
+            var x0 = i % bmp.w;
+            var y0 = (i / bmp.w) >>> 0;
+        }
     }
 }
 // layout
