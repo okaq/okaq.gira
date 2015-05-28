@@ -107,8 +107,25 @@ var bmp = {
         bmp.t = (bmp.w * bmp.h) >>> 0;
 
         // user bmp
-        bmp.a = bmp.rand(bmp.t);
+        bmp.a = {};
+        bmp.a.p = bmp.rand(bmp.t); // pixel data
+        bmp.a.r = bmp.rm(); // rgba data
         console.log(bmp.a);
+    },
+    "rm": function() {
+        // random monochrome struct
+        var rgba0 = [0,0,0,1.0];
+        var chan0 = (Math.random() * 3) >>> 0;
+        for (var i = 0; i < 3; i++) {
+            if (i != chan0) {
+                var rb0 = rgba.rb();
+                if (rb0 == 0) {
+                    rb0 = 1;
+                }
+                rgba0[i] = rb0;
+            }
+        }
+        return rgba0;
     },
     "rand": function(n0) {
         // return random byte array of length n0
@@ -131,12 +148,14 @@ var bmp = {
         var h1 = (h0 / bmp.h) >>> 0;
         // monochrome channel
         var chan0 = (Math.random() * 3) >>> 0;
-        for (var i = 0; i < bmp0.length; i++) {
+        // include rb values for other two channels
+        for (var i = 0; i < bmp0.p.length; i++) {
             var x0 = i % bmp.w;
             var y0 = (i / bmp.w) >>> 0;
             var x1 = (x0 * w1) >>> 0;
             var y1 = (y0 * h1) >>> 0;
-            sce0.con.fillStyle = bmp.mono(chan0, bmp0[i]);
+            // sce0.con.fillStyle = bmp.mono(chan0, bmp0[i]);
+            sce0.con.fillStyle = bmp.mono2(bmp.a.r, bmp.a.p[i]);
             sce0.con.fillRect(x1,y1,w1,h1);
             // console.log(chan0, bmp0[i], bmp.mono(chan0, bmp0[i])); 
             // console.log(w0, h0, w1, h1, x0, y0, x1, y1);
@@ -148,6 +167,18 @@ var bmp = {
         var rgba0 = [0,0,0,1.0];
         rgba0[ch0] = n0;
         return rgba.css(rgba0);
+    },
+    "mono2": function(rgba0, c0) {
+        var rgba1 = rgba0.slice(0);
+        for (var i = 0; i < 3; i++) {
+            if (rgba0[i] == 0) {
+                rgba1[i] = c0;
+                break;
+            }
+        }
+        return rgba.css(rgba1);
+        // rgba colors with single channel var
+        // results in bi-chrome appearance
     }
 }
 // layout
@@ -166,6 +197,7 @@ var lay = {
         lay.a = [lay.w,lay.s[0],0,0];
         // meta bmp
         lay.b = [128,128,64,32];
+        // center layout
     }
 }
 // scene
