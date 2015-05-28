@@ -110,6 +110,11 @@ var bmp = {
         bmp.a = {};
         bmp.a.p = bmp.rand(bmp.t); // pixel data
         bmp.a.r = bmp.rm(); // rgba data
+        // first four bytes of array buffer
+        // contains bi-chrome rgba data
+        for (var i = 0; i < 4; i++) {
+            bmp.a.p[i] = bmp.a.r[i];
+        }
         console.log(bmp.a);
     },
     "rm": function() {
@@ -129,9 +134,9 @@ var bmp = {
     },
     "rand": function(n0) {
         // return random byte array of length n0
-        var b0 = new ArrayBuffer(n0);
+        var b0 = new ArrayBuffer(n0+4);
         var a0 = new Uint8Array(b0);
-        for (var i = 0; i < a0.length; i++) {
+        for (var i = 4; i < a0.length; i++) {
             a0[i] = rgba.rb();
         }
         return a0;
@@ -149,9 +154,10 @@ var bmp = {
         // monochrome channel
         var chan0 = (Math.random() * 3) >>> 0;
         // include rb values for other two channels
-        for (var i = 0; i < bmp0.p.length; i++) {
-            var x0 = i % bmp.w;
-            var y0 = (i / bmp.w) >>> 0;
+        for (var i = 4; i < bmp0.p.length; i++) {
+            var i0 = i - 4;
+            var x0 = i0 % bmp.w;
+            var y0 = (i0 / bmp.w) >>> 0;
             var x1 = (x0 * w1) >>> 0;
             var y1 = (y0 * h1) >>> 0;
             // sce0.con.fillStyle = bmp.mono(chan0, bmp0[i]);
