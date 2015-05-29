@@ -30,6 +30,7 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         bmp.ren(bmp.a, sce.b);
+        window.setTimeout(peer.hail, 5000);
 
         // stats
         var done = window.performance.now();
@@ -80,9 +81,11 @@ var peer = {
             console.log(peer.dc);
             // peer data handler
             // peer.dc.on("data", function(data){console.log(data);});
+            peer.dc.on("data", peer.data);
         }
     },
     "open": function(e) {
+        console.log("peer open event!");
         console.log(e);
         peer.id = e;
         // peer broker via server
@@ -90,12 +93,21 @@ var peer = {
         xhr.peer();
     },
     "error": function(e) {
+        console.log("peer error event!");
         console.log(e);
     },
     "conn": function(e) {
+        console.log("peer connection event!");
+        if (!peer.dc) {
+            peer.dc = e;
+        }
         e.on("data", peer.data);
     },
+    "hail": function() {
+        peer.dc.send("hail from: " + peer.id);
+    },
     "data": function(e) {
+        console.log("connection data event!");
         console.log(e);
     }
 }
