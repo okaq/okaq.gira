@@ -81,7 +81,8 @@ var peer = {
             console.log(peer.dc);
             // peer data handler
             // peer.dc.on("data", function(data){console.log(data);});
-            peer.dc.on("data", peer.data);
+            peer.dc.on("open", function(){peer.dc.on("data", peer.data)});
+            // need to assign handler once its open successfully
         }
     },
     "open": function(e) {
