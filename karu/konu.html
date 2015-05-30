@@ -30,7 +30,8 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         bmp.ren(bmp.a, sce.b);
-        window.setTimeout(peer.hail, 5000);
+        // window.setTimeout(peer.hail, 5000);
+        // window.setTimeout(peer.bmp, 7500);
 
         // stats
         var done = window.performance.now();
@@ -81,7 +82,11 @@ var peer = {
             console.log(peer.dc);
             // peer data handler
             // peer.dc.on("data", function(data){console.log(data);});
-            peer.dc.on("open", function(){peer.dc.on("data", peer.data)});
+            peer.dc.on("open", function(){
+                    peer.dc.on("data", peer.data);
+                    console.log("hailing...");
+                    window.setTimeout(peer.hail, 5000);
+                    });
             // need to assign handler once its open successfully
         }
     },
@@ -103,6 +108,8 @@ var peer = {
             peer.dc = e;
         }
         e.on("data", peer.data);
+        console.log("hailing...");
+        window.setTimeout(peer.hail, 5000);
     },
     "hail": function() {
         peer.dc.send("hail from: " + peer.id);
@@ -110,6 +117,9 @@ var peer = {
     "data": function(e) {
         console.log("connection data event!");
         console.log(e);
+    },
+    "bmp": function() {
+        // send the bmp array buffer
     }
 }
 // bitmap
