@@ -26,13 +26,54 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom];
+        g.subs = [dom,ev];
         g.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// events
+var ev = {
+    "init": function() {
+        console.log("event system init!");
+        // events
+        // g/window load
+        // peerjs open - conn to cloud peer server
+        // recieve peer id
+        // xhr open
+        // xhr send peer id
+        // xhr recieve peer net json
+        // peerjs start data connection
+        // peer.connect to init
+        // peer.on("connection") to recieve
+        // data connection success
+        // hail confirmation
+        // hail message can be pre-set bytes
+        ev.test();
+    },
+    "test": function() {
+        // data
+        ev.d = {
+            "detail": "unix_time_now_1433078877"
+        };
+        // custom event
+        ev.t = new CustomEvent("hello", ev.d);
+        // custom handler
+        ev.th = function(e) {
+            console.log("hello from custom hello event!");
+            console.log(e);
+        };
+        // attach event
+        window.addEventListener("hello", ev.th);
+        // dispatcher
+        ev.td = function() {
+            window.dispatchEvent(ev.t);
+        }
+        // async dispatch
+        window.setTimeout(ev.td, 3000);
     }
 }
 // dom
