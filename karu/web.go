@@ -21,6 +21,7 @@ const (
     IONU = "ionu.html"
     JONU = "jonu.html"
     KONU = "konu.html"
+    LONU = "lonu.html"
 )
 
 var (
@@ -166,6 +167,9 @@ func init() {
     })
     http.HandleFunc("/konu", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, KONU)
+    })
+    http.HandleFunc("/lonu", func(w http.ResponseWriter, r *http.Request) {
+        http.ServeFile(w, r, LONU)
     })
     http.HandleFunc("/capi/init", CapiHandler)
     http.HandleFunc("/capi/sse", CapiSseHandler)
