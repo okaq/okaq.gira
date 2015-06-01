@@ -83,11 +83,18 @@ var lay = {
         lay.a = [];
         // layout and scene graphs linked via index
         // events mark transition edges between states
+        // game load ok
+        lay.a[0] = [];
+        lay.a[0][0] = [512,512,704,32];
+        lay.a[0][1] = [512,128,704,600];
+        // test pattern - walk scene graph
+        // render rand color rects
     }
 }
 // scene
 var sce = {
     "init": function() {
+        sce.a = [];
     }
 }
 // dom
