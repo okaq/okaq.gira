@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,ev];
+        g.subs = [dom,lay,sce,ev];
         g.subs.forEach(function(el){el.init();});
 
         // stats
@@ -74,6 +74,20 @@ var ev = {
         }
         // async dispatch
         window.setTimeout(ev.td, 3000);
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // layout graph
+        lay.a = [];
+        // layout and scene graphs linked via index
+        // events mark transition edges between states
+    }
+}
+// scene
+var sce = {
+    "init": function() {
     }
 }
 // dom
