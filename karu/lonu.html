@@ -85,10 +85,18 @@ var lay = {
         lay.a = [];
         // layout and scene graphs linked via index
         // events mark transition edges between states
+
         // game load ok
         lay.a[0] = [];
         lay.a[0][0] = [512,512,704,32];
         lay.a[0][1] = [512,128,704,600];
+        // xhr conn
+        lay.a[1] = [];
+        lay.a[1][0] = [512,128,704,32];
+        lay.a[1][1] = [512,128,704,192];
+        lay.a[1][2] = [512,128,704,352];
+        lay.a[1][3] = [512,128,704,512];
+
         // test pattern - walk scene graph
         // render rand color rects
     }
@@ -104,6 +112,11 @@ var sce = {
                 dom.add(sce.a[i][j]);
             }
         }
+        // each scene contains bitmaps to render
+        // one canvas per bitmap
+        // or multiple, such as fonts
+        // sequenced frames of bitmaps
+        // constitute an animation set
     }
 }
 // dom
@@ -139,6 +152,7 @@ var ren = {
                 sce.a[i][j].con.fillRect(0,0,sce.a[i][j].can.width,sce.a[i][j].can.height);
             }
         }
+        // each draw call performed in 1fps animator
     }
 }
 // colors
