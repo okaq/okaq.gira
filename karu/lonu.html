@@ -29,6 +29,8 @@ var g = {
         g.subs = [dom,lay,sce,ev];
         g.subs.forEach(function(el){el.init();});
 
+        ren.test();
+
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -95,6 +97,13 @@ var lay = {
 var sce = {
     "init": function() {
         sce.a = [];
+        for (var i = 0; i < lay.a.length; i++) {
+            sce.a[i] = [];
+            for (var j = 0; j < lay.a[i].length; j++) {
+                sce.a[i][j] = dom.canvas(lay.a[i][j]);
+                dom.add(sce.a[i][j]);
+            }
+        }
     }
 }
 // dom
@@ -119,6 +128,17 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "test": function() {
+        for (var i = 0; i < sce.a.length; i++) {
+            for (var j = 0; j < sce.a[i].length; j++) {
+                sce.a[i][j].con.fillStyle = rgba.css(rgba.rc());
+                sce.a[i][j].con.fillRect(0,0,sce.a[i][j].can.width,sce.a[i][j].can.height);
+            }
+        }
     }
 }
 // colors
