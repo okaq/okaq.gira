@@ -120,10 +120,16 @@ var sce = {
     },
     "add": function(i0) {
         // add all scene canvases to DOM
+        for (var j = 0; j < lay.a[i0].length; j++) {
+                dom.add(sce.a[i0][j]);
+            }
     },
     "del": function(i0) {
         // remove scene canvases from DOM
         // alternatively, scene manager can handle "current" scene
+        for (var j = 0; j < lay.a[i0].length; j++) {
+            dom.remove(sce.a[i0][j]);
+        }
     }
 }
 // dom
@@ -164,10 +170,12 @@ var ren = {
         ren.clear(ren.anim.s);
         // not enough to clear
         // actually need to add/del from DOM
+        sce.del(ren.anim.s);
         ren.anim.s = ren.anim.s + 1;
         if (ren.anim.s >= ren.anim.t) {
             ren.anim.s = 0;
         }
+        sce.add(ren.anim.s);
         ren.rand(ren.anim.s);
     },
     "rand": function(i0) {
