@@ -146,13 +146,39 @@ var dom = {
 // render
 var ren = {
     "test": function() {
-        for (var i = 0; i < sce.a.length; i++) {
-            for (var j = 0; j < sce.a[i].length; j++) {
-                sce.a[i][j].con.fillStyle = rgba.css(rgba.rc());
-                sce.a[i][j].con.fillRect(0,0,sce.a[i][j].can.width,sce.a[i][j].can.height);
-            }
+        // render animatable struct
+        ren.anim = {};
+        ren.anim.s = 0; // current scene index
+        ren.anim.t = sce.a.length; // total scene count
+        ren.anim.a = null; // interval id
+        ren.anim.a = window.setInterval(ren.step, 1000);
+    },
+    "step": function() {
+        ren.clear(ren.anim.s);
+        // not enough to clear
+        // actually need to add/del from DOM
+        ren.anim.s = ren.anim.s + 1;
+        if (ren.anim.s >= ren.anim.t) {
+            ren.anim.s = 0;
+        }
+        ren.rand(ren.anim.s);
+    },
+    "rand": function(i0) {
+        // fill scene s0 canvases with rand rgba
+        for (var j = 0; j < sce.a[i0].length; j++) {
+            sce.a[i0][j].con.fillStyle = rgba.css(rgba.rc());
+            sce.a[i0][j].con.fillRect(0,0,sce.a[i0][j].can.width,sce.a[i0][j].can.height);
         }
         // each draw call performed in 1fps animator
+    },
+    "clear": function(i0) {
+        // fill scene s0 canvases to white
+        for (var j = 0; j < sce.a[i0].length; j++) {
+            sce.a[i0][j].con.fillStyle = rgba.css([255,255,255,1.0]);
+            sce.a[i0][j].con.fillRect(0,0,sce.a[i0][j].can.width,sce.a[i0][j].can.height);
+        }
+ 
+    
     }
 }
 // colors
