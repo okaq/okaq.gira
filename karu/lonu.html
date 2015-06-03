@@ -26,15 +26,39 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,lay,sce,ev];
+        g.subs = [dom,lay,sce,ev,bmp];
         g.subs.forEach(function(el){el.init();});
 
-        ren.test();
+        // ren.test();
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.ch();
+    },
+    "ch": function() {
+        // character data
+        bmp.c = "0123456789abcdefghijklmnopqrstuvwxyz";
+        console.log(bmp.c.length);
+        bmp.d = bmp.c.split(""); // char array data
+        console.log(bmp.d);
+        while (bmp.d.length >= 1) {
+            console.log(bmp.rc());
+        }
+    },
+    "rc": function() {
+        // return next random char
+        if (bmp.d.length == 0) {
+            bmp.ch();
+        }
+        var i0 = (Math.random() * bmp.d.length) >>> 0;
+        return bmp.d.splice(i0, 1);
     }
 }
 // events
