@@ -96,6 +96,20 @@ var lay = {
         lay.a[1][1] = [512,128,704,192];
         lay.a[1][2] = [512,128,704,352];
         lay.a[1][3] = [512,128,704,512];
+        // roboto bitmap font
+        // each char is 32x32 bitmap
+        lay.a[2] = [];
+        var s0 = 4; // pixel size
+        var w0 = (s0 * 32) >>> 0; // bmp width, same for height
+        var mx = ((1920 - (6 * w0)) / 2) >>> 0; // margins
+        var my = ((1080 - (6 * w0)) / 2) >>> 0;
+        for (var i = 0; i < 36; i++) {
+            var x0 = i % 6;
+            var y0 = (i / 6) >>> 0;
+            var x1 = ((x0 * w0) + mx) >>> 0;
+            var y1 = ((y0 * w0) + my) >>> 0;
+            lay.a[2][i] = [w0,w0,x1,y1];
+        }
 
         // test pattern - walk scene graph
         // render rand color rects
