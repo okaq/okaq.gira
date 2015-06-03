@@ -48,9 +48,34 @@ var bmp = {
         console.log(bmp.c.length);
         bmp.d = bmp.c.split(""); // char array data
         console.log(bmp.d);
+        /*
         while (bmp.d.length >= 1) {
             console.log(bmp.rc());
+            }
+        */
+        bmp.e = [];
+        bmp.f = [];
+        for (var i = 0; i < bmp.d.length; i++) {
+            var k0 = "robo_" + bmp.d[i];
+            bmp.e[i] = base64DecToArr(roboto[k0]);
+            bmp.f[i] = bmp.expand(bmp.e[i]);
         }
+        console.log(bmp.e);
+        console.log(bmp.f);
+    },
+    "expand": function(b0) {
+        // byte array to bit array
+        var r0 = [];
+        for (var i = 0; i < b0.length; i++) {
+            var b1 = b0[i];
+            var s0 = binStr(b1);
+            for (var j = 0; j < 8; j++) {
+                var s1 = s0.charAt(j);
+                var n0 = parseInt(s1, 10);
+                r0.push(n0);
+            }
+        }
+        return r0;
     },
     "rc": function() {
         // return next random char
