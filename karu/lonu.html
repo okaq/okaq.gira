@@ -30,6 +30,7 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         // ren.test();
+        ren.robo();
 
         // stats
         var done = window.performance.now();
@@ -45,23 +46,23 @@ var bmp = {
     "ch": function() {
         // character data
         bmp.c = "0123456789abcdefghijklmnopqrstuvwxyz";
-        console.log(bmp.c.length);
+        // console.log(bmp.c.length);
         bmp.d = bmp.c.split(""); // char array data
-        console.log(bmp.d);
+        // console.log(bmp.d);
         /*
         while (bmp.d.length >= 1) {
             console.log(bmp.rc());
             }
         */
-        bmp.e = [];
-        bmp.f = [];
+        bmp.e = {};
+        bmp.f = {};
         for (var i = 0; i < bmp.d.length; i++) {
             var k0 = "robo_" + bmp.d[i];
-            bmp.e[i] = base64DecToArr(roboto[k0]);
-            bmp.f[i] = bmp.expand(bmp.e[i]);
+            bmp.e[k0] = base64DecToArr(roboto[k0]);
+            bmp.f[k0] = bmp.expand(bmp.e[k0]);
         }
-        console.log(bmp.e);
-        console.log(bmp.f);
+        // console.log(bmp.e);
+        // console.log(bmp.f);
     },
     "expand": function(b0) {
         // byte array to bit array
@@ -255,8 +256,32 @@ var ren = {
             sce.a[i0][j].con.fillStyle = rgba.css([255,255,255,1.0]);
             sce.a[i0][j].con.fillRect(0,0,sce.a[i0][j].can.width,sce.a[i0][j].can.height);
         }
- 
-    
+    },
+    "robo": function() {
+        // render test for roboto bitmap font
+        for (var i = 0; i < sce.a[2].length; i++) {
+            // bkgd
+            sce.a[2][i].con.fillStyle = rgba.css(rgba.rc());
+            sce.a[2][i].con.fillRect(0,0,sce.a[2][i].can.width,sce.a[2][i].can.height);
+            // get next rand bmp
+            var k0 = bmp.rc();
+            var k1 = k0[0];
+            var k2 = "robo_" + k1;
+            var bmp0 = bmp.f[k2]; // 32*32 bit-array
+            sce.a[2][i].con.fillStyle = rgba.css(rgba.rc());
+            for (var j = 0; j < bmp0.length; j++) {
+                if (bmp0[j] == 0) {
+                    continue;
+                }
+                // layout pixel size
+                var s0 = 4;
+                var x0 = j % 32;
+                var y0 = (j / 32) >>> 0;
+                var x1 = (x0 * s0) >>> 0;
+                var y1 = (y0 * s0) >>> 0;
+                sce.a[2][i].con.fillRect(x1,y1,s0,s0);
+            }
+        }
     }
 }
 // colors
