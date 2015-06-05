@@ -30,6 +30,7 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         ren.bkgd();
+        ren.test();
 
         // stats
         var done = window.performance.now();
@@ -41,6 +42,13 @@ var g = {
 var lay = {
     "init": function() {
         lay.a = [1920,1080,0,0];
+        // establish xhr conn with server
+        // readyStates (0-4)
+        // dynamic text canvas
+        lay.b = [];
+        lay.b[0] = [];
+        lay.b[0][0] = [512,128,32,32];
+        lay.b[0][1] = [512,128,32,160];
     }
 }
 // scene
@@ -48,6 +56,14 @@ var sce = {
     "init": function() {
         sce.a = dom.canvas(lay.a);
         dom.add(sce.a);
+        sce.b = [];
+        for (var i = 0; i < lay.b.length; i++) {
+            sce.b[i] = [];
+            for (var j = 0; j < lay.b[i].length; j++) {
+                sce.b[i][j] = dom.canvas(lay.b[i][j]);
+                dom.add(sce.b[i][j]);
+            }
+        }
     }
 }
 // dom
@@ -79,6 +95,14 @@ var ren = {
     "bkgd": function() {
         sce.a.con.fillStyle = rgba.css(rgba.rc());
         sce.a.con.fillRect(0,0,sce.a.can.width,sce.a.can.height);
+    },
+    "test": function() {
+        for (var i = 0; i < sce.b.length; i++) {
+            for (var j = 0; j < sce.b[i].length; j++) {
+                sce.b[i][j].con.fillStyle = rgba.css(rgba.rc());
+                sce.b[i][j].con.fillRect(0,0,sce.b[i][j].can.width,sce.b[i][j].can.height);
+            }
+        }
     }
 }
 // colors
