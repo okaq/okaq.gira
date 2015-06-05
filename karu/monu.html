@@ -26,16 +26,46 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,lay,sce];
+        g.subs = [dom,lay,sce,xhr];
         g.subs.forEach(function(el){el.init();});
 
         ren.bkgd();
         ren.test();
+        // add bitmap font engine
+        // json base64 font data
+        // string view decoder
+        // layout manager
+        g.id = window.setTimeout(xhr.send, 2500);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.req = new XMLHttpRequest();
+        console.log(xhr.req);
+        xhr.req.onreadystatechange = xhr.state;
+        xhr.req.addEventListener("error", xhr.err, false);
+        xhr.req.addEventListener("load", xhr.load, false);
+        xhr.req.open("GET", "http://192.168.1.2:8080/dapi", true);
+    },
+    "state": function(e) {
+        // readyState change event handler
+        console.log(e);
+    },
+    "load": function(e) {
+        console.log(e);
+    },
+    "err": function(e) {
+        console.log(e);
+    },
+    "send": function() {
+        console.log("sending xhr greeting");
+        xhr.req.send();
     }
 }
 // layout
@@ -49,6 +79,10 @@ var lay = {
         lay.b[0] = [];
         lay.b[0][0] = [512,128,32,32];
         lay.b[0][1] = [512,128,32,160];
+    },
+    "text": function(s0, x0, y0) {
+        // insert string at position x0,y0
+        // each char is contained in canvas
     }
 }
 // scene
