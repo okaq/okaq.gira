@@ -117,6 +117,14 @@ var sce = {
                 dom.add(sce.b[i][j]);
             }
         }
+    },
+    "step": function(n0) {
+        // load scene at index n0
+        // remove current scene canvases from DOM tree
+        // add new scene canvases to DOM tree
+
+        // each canvas has a bmp stack associated with it
+
     }
 }
 // dom
@@ -156,6 +164,10 @@ var ren = {
                 sce.b[i][j].con.fillRect(0,0,sce.b[i][j].can.width,sce.b[i][j].can.height);
             }
         }
+        // 1 fps render animation
+        // scenes contain stack of bitmaps
+        // counter for tick clock
+        // deterministic rendering of bmp in canvas
     }
 }
 // normal distribution
