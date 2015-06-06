@@ -12,10 +12,15 @@ const (
     MONU = "monu.html"
 )
 
+func DapiHandler(w http.ResponseWriter, req *http.Request) {
+    w.Write([]byte("greetings xhr"))
+}
+
 func init() {
     http.HandleFunc("/monu", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, MONU)
     })
+    http.HandleFunc("/dapi", DapiHandler)
 }
 // connection / hub message pattern
 // channels to broadcast and receive
