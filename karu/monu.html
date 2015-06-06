@@ -85,17 +85,23 @@ var lay = {
         // scene class exposes change manager
         // mapping: event to bitmap change in scene canvas
         lay.c = [];
-        lay.c[0] = []; // page loaded
-        lay.c[1] = []; // xhr open
-        lay.c[2] = []; // peer id obtained
-        lay.c[3] = []; // register with server hub, sse open
-        lay.c[4] = []; // 4 peers registered, ready to init webrtc
-        lay.c[5] = []; // webrtc peer success
-        lay.c[6] = []; // network visualized
+        lay.c[0] = lay.quad(); // page loaded
+        lay.c[1] = lay.quad(); // xhr open
+        lay.c[2] = lay.quad(); // peer id obtained
+        lay.c[3] = lay.quad(); // register with server hub, sse open
+        lay.c[4] = lay.quad(); // 4 peers registered, ready to init webrtc
+        lay.c[5] = lay.quad(); // webrtc peer success
+        lay.c[6] = lay.quad(); // network visualized
     },
     "text": function(s0, x0, y0) {
         // insert string at position x0,y0
         // each char is contained in canvas
+    },
+    "quad": function() {
+        // split screen into 4 random quads
+        var g0 = gauss.randn();
+        console.log(g0);
+        return [g0];
     }
 }
 // scene
@@ -150,6 +156,34 @@ var ren = {
                 sce.b[i][j].con.fillRect(0,0,sce.b[i][j].can.width,sce.b[i][j].can.height);
             }
         }
+    }
+}
+// normal distribution
+var gauss = {
+    "rand": function() {
+        // Math.random has uniform distribution over [0.0,1.0)
+        // gauss rand returns normally distributed values given mean
+        // return interval: [-3,3]
+        var stdev = 1.0;
+        var mean = 0.0;
+        var r0 = 0.0;
+        for (var i = 0; i < 3; i++) {
+            r0 += gauss.comp();
+        }
+        var r1 = (r0 * stdev) + mean;
+        return r1;
+    },
+    "comp": function() {
+        // normal distribution approximated
+        // by summing three uniform components
+        // with mean of zero
+        return ((Math.random() * 2.0) - 1.0);
+    },
+    "randn": function() {
+        // rand normalized to [0,1]
+        var g0 = gauss.rand();
+        var g1 = (g0 + 3) / 6;
+        return g1;
     }
 }
 // colors
