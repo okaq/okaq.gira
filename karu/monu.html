@@ -29,13 +29,14 @@ var g = {
         g.subs = [dom,lay,sce,xhr];
         g.subs.forEach(function(el){el.init();});
 
-        ren.bkgd();
-        ren.test();
+        // ren.bkgd();
+        // ren.test();
         // add bitmap font engine
         // json base64 font data
         // string view decoder
         // layout manager
         g.id = window.setTimeout(xhr.send, 2500);
+        g.id2 = window.setInterval(ren.anim, 1000);
 
         // stats
         var done = window.performance.now();
@@ -67,6 +68,10 @@ var xhr = {
     "send": function() {
         console.log("sending xhr greeting");
         xhr.req.send();
+        // scene state updates
+        // and render calls 
+        // occur in event manager
+        // subscribe to events
     }
 }
 // layout
@@ -99,9 +104,19 @@ var lay = {
     },
     "quad": function() {
         // split screen into 4 random quads
+        /*
         var g0 = gauss.randn();
         console.log(g0);
         return [g0];
+         */
+        var x0 = (lay.a[0] * gauss.randn()) >>> 0;
+        var y0 = (lay.a[1] * gauss.randn()) >>> 0;
+        var q0 = [];
+        q0[0] = [x0,y0,0,0];
+        q0[1] = [lay.a[0]-x0,y0,x0,0];
+        q0[2] = [x0,lay.a[1]-y0,0,y0];
+        q0[3] = [lay.a[0]-x0,lay.a[1]-y0,x0,y0];
+        return q0;
     }
 }
 // scene
@@ -117,6 +132,15 @@ var sce = {
                 dom.add(sce.b[i][j]);
             }
         }
+        sce.c = [];
+        for (var i = 0; i < lay.c.length; i++) {
+            sce.c[i] = [];
+            for (var j = 0; j < lay.c[i].length; j++) {
+                sce.c[i][j] = dom.canvas(lay.c[i][j]);
+                dom.add(sce.c[i][j]);
+            }
+        }
+
     },
     "step": function(n0) {
         // load scene at index n0
@@ -168,6 +192,20 @@ var ren = {
         // scenes contain stack of bitmaps
         // counter for tick clock
         // deterministic rendering of bmp in canvas
+    },
+    "anim": function() {
+        if (!ren.clip) {
+            ren.clip = 0;
+        }
+        for (var i = 0; i < sce.c[ren.clip].length; i++) {
+            sce.c[ren.clip][i].con.fillStyle = rgba.css(rgba.rc());
+            sce.c[ren.clip][i].con.fillRect(0,0,sce.c[ren.clip][i].can.width,sce.c[ren.clip][i].can.height);
+        }
+        ren.clip = ren.clip + 1;
+        if (ren.clip >= sce.c.length) {
+            ren.clip = 0;
+        }
+        // scene canvas management required
     }
 }
 // normal distribution
