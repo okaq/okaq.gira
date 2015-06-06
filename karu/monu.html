@@ -59,6 +59,7 @@ var xhr = {
     },
     "load": function(e) {
         console.log(e);
+        console.log(xhr.req.response);
     },
     "err": function(e) {
         console.log(e);
@@ -79,6 +80,18 @@ var lay = {
         lay.b[0] = [];
         lay.b[0][0] = [512,128,32,32];
         lay.b[0][1] = [512,128,32,160];
+        // layout list of grids
+        // generate scenes
+        // scene class exposes change manager
+        // mapping: event to bitmap change in scene canvas
+        lay.c = [];
+        lay.c[0] = []; // page loaded
+        lay.c[1] = []; // xhr open
+        lay.c[2] = []; // peer id obtained
+        lay.c[3] = []; // register with server hub, sse open
+        lay.c[4] = []; // 4 peers registered, ready to init webrtc
+        lay.c[5] = []; // webrtc peer success
+        lay.c[6] = []; // network visualized
     },
     "text": function(s0, x0, y0) {
         // insert string at position x0,y0
