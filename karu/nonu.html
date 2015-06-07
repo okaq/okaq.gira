@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,evt,bmp];
+        g.subs = [dom,evt,bmp,lay];
         g.subs.forEach(function(el){el.init();});
 
         g.id = window.setTimeout(evt.nub, 2000);
@@ -35,6 +35,22 @@ var g = {
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.w = 1920;
+        lay.w2 = (lay.w / 2) >>> 0;
+        lay.h = 1080;
+        lay.h2 = (lay.h / 2) >>> 0;
+        // even quads
+        lay.a = [
+            [lay.w2,lay.h2,0,0],
+            [lay.w2,lay.h2,lay.w2,0],
+            [lay.w2,lay.h2,0,lay.h2],
+            [lay.w2,lay.h2,lay.w2,lay.h2]
+            ];
     }
 }
 // bitmap
