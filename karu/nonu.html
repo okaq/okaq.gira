@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,evt];
+        g.subs = [dom,evt,bmp];
         g.subs.forEach(function(el){el.init();});
 
         g.id = window.setTimeout(evt.nub, 2000);
@@ -35,6 +35,35 @@ var g = {
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        // bmp map {"bmp_0_0": {data,rgba,size}
+        // rgba is monochrome {255,0,255,1.0}, render zero'd channel
+
+        // begin with generated bmp data
+        bmp.g = []; // bmp graph
+        bmp.m = {}; // bmp map
+        bmp.d = 8; // bmp depth - num of scenes
+        bmp.e = 4; // num bmps per scene - fixed
+        bmp.mx = (1920 / 2) >>> 0; // max size
+        bmp.my = (1080 / 2) >>> 0;
+
+        bmp.gen();
+    },
+    "gen": function() {
+        for (var i  = 0; i < bmp.d; i++) {
+            bmp.g[i] = [];
+            for (var j = 0; j < bmp.e; j++) {
+                var s0 = "bmp_" + i.toString() + "_" + j.toString();
+                console.log(s0);
+                bmp.m[s0] = {};
+                bmp.g[i][j] = s0;
+            }
+        }
+        console.log(bmp);
     }
 }
 // events
