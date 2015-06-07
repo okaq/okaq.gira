@@ -26,13 +26,34 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom];
+        g.subs = [dom,evt];
         g.subs.forEach(function(el){el.init();});
+
+        g.id = window.setTimeout(evt.nub, 2000);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// events
+var evt = {
+    "init": function() {
+        evt.data = {"msg":"hi hub","bmp":0};
+        evt.pub();
+        // evt.hub = new CustomEvent("hub");
+        window.addEventListener("hub", evt.bub, false);
+    },
+    "bub": function(e) {
+        console.log("hub event handled!");
+        console.log(e);
+    },
+    "nub": function() {
+        window.dispatchEvent(evt.hub);
+    },
+    "pub": function() {
+        evt.hub = new CustomEvent("hub", {"detail":evt.data});
     }
 }
 // dom
