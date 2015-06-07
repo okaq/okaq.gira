@@ -59,11 +59,63 @@ var bmp = {
             for (var j = 0; j < bmp.e; j++) {
                 var s0 = "bmp_" + i.toString() + "_" + j.toString();
                 console.log(s0);
-                bmp.m[s0] = {};
+                bmp.m[s0] = bmp.img();
                 bmp.g[i][j] = s0;
             }
         }
         console.log(bmp);
+    },
+    "img": function() {
+        var bmp0 = {};
+        bmp0.x0 = (gauss.randn() * bmp.mx) >>> 0;
+        bmp0.y0 = (gauss.randn() * bmp.my) >>> 0;
+        var nt = (bmp0.x0 * bmp0.y0) >>> 0;
+        bmp0.c0 = bmp.mono();
+        bmp0.d0 = bmp.data(nt);
+        return bmp0;
+    },
+    "mono": function() {
+        // monochrome rgba struct
+        // 0 is the variable channel (0-255)
+        var c0 = (Math.random() * 7) >>> 0;
+        if (c0 == 0) {
+            return [0,1,1,1.0];
+        }
+        if (c0 == 1) {
+            return [1,0,1,1.0];
+        }
+        if (c0 == 2) {
+            return [1,1,0,1.0];
+        }
+        if (c0 == 3) {
+            return [0,0,1,1.0];
+        }
+        if (c0 == 4) {
+            return [1,0,0,1.0];
+        }
+        if (c0 == 5) {
+            return [0,1,0,1.0];
+        }
+        if (c0 == 6) {
+            var r0 = [2,2,2,1.0];
+            var i0 = (Math.random() * 3) >>> 0;
+            r0[i0] = 0;
+            for (var j = 0; j < 3; j++) {
+                if (j == i0) {
+                    continue;
+                }
+                r0[j] = rgba.rb();
+            }
+            return r0;
+        }
+    },
+    "data": function(n0) {
+        var ab0 = new ArrayBuffer(n0);
+        var d0 = new Uint8Array(ab0);
+        for (var i = 0; i < d0.length; i++) {
+            d0[i] = rgba.rb();
+        }
+        return d0;
     }
 }
 // events
@@ -107,6 +159,34 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// normal distribution
+var gauss = {
+    "rand": function() {
+        // Math.random has uniform distribution over [0.0,1.0)
+        // gauss rand returns normally distributed values given mean
+        // return interval: [-3,3]
+        var stdev = 1.0;
+        var mean = 0.0;
+        var r0 = 0.0;
+        for (var i = 0; i < 3; i++) {
+            r0 += gauss.comp();
+        }
+        var r1 = (r0 * stdev) + mean;
+        return r1;
+    },
+    "comp": function() {
+        // normal distribution approximated
+        // by summing three uniform components
+        // with mean of zero
+        return ((Math.random() * 2.0) - 1.0);
+    },
+    "randn": function() {
+        // rand normalized to [0,1]
+        var g0 = gauss.rand();
+        var g1 = (g0 + 3) / 6;
+        return g1;
     }
 }
 // colors
