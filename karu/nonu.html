@@ -50,7 +50,19 @@ var lay = {
             [lay.w2,lay.h2,lay.w2,0],
             [lay.w2,lay.h2,0,lay.h2],
             [lay.w2,lay.h2,lay.w2,lay.h2]
-            ];
+                ];
+        lay.b = [];
+        for (var i = 0; i < bmp.d; i++) {
+            lay.b[i] = [];
+            lay.b[i][0] = [];
+        }
+        // the norms rects will designate bkgds
+        // scene should designate render type (bkgd or bmp)
+        // so renderer will make calls in order
+
+        // key id of the form sce_0_0_0
+        // scene, canvas, bitmap (in sequence)
+        // event manager maps game state to bmp in scene
     }
 }
 // bitmap
