@@ -89,9 +89,19 @@ var sce = {
     "init": function() {
         // sce.a = sce.gen(lay.a);
         sce.b = sce.gen(lay.b);
+        // add to DOM only when rendered
     },
     "gen": function(lay0) {
+        // generator must mirror structure of layout
+        // recurse until rect [w0,h0,x0,y0] is found
+        // then add to scene
         var sce0 = [];
+        for (var i = 0; i < bmp.d; i++) {
+            sce0[i] = [];
+            var (j = 0; j < bmp.e; j++) {
+                sce0[i][j] = dom.canvas(lay.b[i][j]);
+            }
+        }
         return sce0;
     }
 }
