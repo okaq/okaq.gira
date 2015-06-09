@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // subsystems
-        g.subs = [dom,evt,bmp,lay];
+        g.subs = [dom,evt,bmp,lay,sce];
         g.subs.forEach(function(el){el.init();});
 
         g.id = window.setTimeout(evt.nub, 2000);
@@ -54,7 +54,15 @@ var lay = {
         lay.b = [];
         for (var i = 0; i < bmp.d; i++) {
             lay.b[i] = [];
+            for (var j = 0; j < bmp.e; j++) {
+                lay.b[i][j] = lay.bmp(i, j);
+            }
+            /*
             lay.b[i][0] = [];
+            lay.b[i][1] = [];
+            lay.b[i][2] = [];
+            lay.b[i][3] = [];
+            */
         }
         // the norms rects will designate bkgds
         // scene should designate render type (bkgd or bmp)
@@ -63,6 +71,28 @@ var lay = {
         // key id of the form sce_0_0_0
         // scene, canvas, bitmap (in sequence)
         // event manager maps game state to bmp in scene
+    },
+    "bmp": function(i0, j0) {
+        var r0 = [];
+        var k0 = "bmp_" + i0.toString() + "_" + j0.toString();
+        r0[0] = bmp.m[k0].x0;
+        r0[1] = bmp.m[k0].y0;
+        r0[2] = ((lay.a[j0][0] - bmp.m[k0].x0) / 2) >>> 0;
+        r0[2] = r0[2] + lay.a[j0][2];
+        r0[3] = ((lay.a[j0][1] - bmp.m[k0].y0) / 2) >>> 0;
+        r0[3] = r0[3] + lay.a[j0][3];
+        return r0;
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        // sce.a = sce.gen(lay.a);
+        sce.b = sce.gen(lay.b);
+    },
+    "gen": function(lay0) {
+        var sce0 = [];
+        return sce0;
     }
 }
 // bitmap
