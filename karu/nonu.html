@@ -103,6 +103,18 @@ var sce = {
             }
         }
         return sce0;
+    },
+    "add": function(i0) {
+        // add scene canvases to DOM   
+        for (var j = 0; j < sce.b[i0].length; j++) {
+            dom.add(sce.b[i0][j]);
+        }
+    },
+    "remove": function(i0) {
+        // remove scene canvases from DOM
+        for (var j = 0; j < sce.b[i0].length; j++) {
+            dom.remove(sce.b[i0][j]);
+        }
     }
 }
 // bitmap
