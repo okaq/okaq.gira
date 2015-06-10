@@ -30,11 +30,25 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         g.id = window.setTimeout(evt.nub, 2000);
+        g.pid = window.setInterval(g.frame, 5000);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    },
+    "frame": function() {
+        if (!g.ko) {
+            g.ko = 0;
+        } else {
+            sce.remove(g.ko);
+            g.ko = g.ko + 1;
+            if (g.ko >= bmp.d) {
+                g.ko = 0;
+            }
+        }
+            sce.add(g.ko);
+            ren.frame();
     }
 }
 // layout
@@ -98,7 +112,7 @@ var sce = {
         var sce0 = [];
         for (var i = 0; i < bmp.d; i++) {
             sce0[i] = [];
-            var (j = 0; j < bmp.e; j++) {
+            for (var j = 0; j < bmp.e; j++) {
                 sce0[i][j] = dom.canvas(lay.b[i][j]);
             }
         }
@@ -239,6 +253,15 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "frame": function() {
+        for (var j = 0; j < bmp.e; j++) {
+            sce.b[g.ko][j].con.fillStyle = rgba.css(rgba.rc());
+            sce.b[g.ko][j].con.fillRect(0,0,sce.b[g.ko][j].can.width,sce.b[g.ko][j].can.height);
+        }
     }
 }
 // normal distribution
