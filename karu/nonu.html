@@ -30,7 +30,8 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         g.id = window.setTimeout(evt.nub, 2000);
-        g.pid = window.setInterval(g.frame, 5000);
+        // g.pid = window.setInterval(g.frame, 5000);
+        g.pid = window.setInterval(g.frame, 3000);
 
         // stats
         var done = window.performance.now();
@@ -50,7 +51,8 @@ var g = {
         // !g.ko == true if g.ko = 0
         // console.log(!g.ko);
         sce.add(g.ko);
-        ren.frame();
+        // ren.frame();
+        ren.duo();
     }
 }
 // layout
@@ -268,6 +270,30 @@ var ren = {
             sce.b[g.ko][j].con.fillStyle = rgba.css(rgba.rc());
             sce.b[g.ko][j].con.fillRect(0,0,sce.b[g.ko][j].can.width,sce.b[g.ko][j].can.height);
         }
+    },
+    "duo": function() {
+        for (var j = 0; j < bmp.e; j++) {
+            var k0 = "bmp_" + g.ko.toString() + "_" + j.toString();
+            // console.log(k0);
+            // console.log(bmp.m[k0]);
+            // cycle over bitmap data
+            for (var i = 0; i < bmp.m[k0].d0.length; i++) {
+                var rgba0 = ren.rgba(k0, i);
+                var x0 = i % bmp.m[k0].x0;
+                var y0 = (i / bmp.m[k0].x0) >>> 0;
+                sce.b[g.ko][j].con.fillStyle = rgba.css(rgba0);
+                sce.b[g.ko][j].con.fillRect(x0,y0,1,1);
+            }
+        }
+    },
+    "rgba": function(k0, i0) {
+        var rgba0 = [0,0,0,1.0];
+        for (var i = 0; i < 3; i++) {
+            if (bmp.m[k0].c0[i] == 0) {
+                rgba0[i] = bmp.m[k0].d0[i0];
+            }
+        }
+        return rgba0;
     }
 }
 // normal distribution
