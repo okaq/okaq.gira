@@ -38,7 +38,7 @@ var g = {
         console.log("total running time " + total + "ms");
     },
     "frame": function() {
-        if (!g.ko) {
+        if (typeof g.ko === "undefined") {
             g.ko = 0;
         } else {
             sce.remove(g.ko);
@@ -47,8 +47,10 @@ var g = {
                 g.ko = 0;
             }
         }
-            sce.add(g.ko);
-            ren.frame();
+        // !g.ko == true if g.ko = 0
+        // console.log(!g.ko);
+        sce.add(g.ko);
+        ren.frame();
     }
 }
 // layout
@@ -161,8 +163,12 @@ var bmp = {
     },
     "img": function() {
         var bmp0 = {};
-        bmp0.x0 = (gauss.randn() * bmp.mx) >>> 0;
-        bmp0.y0 = (gauss.randn() * bmp.my) >>> 0;
+        // rect bmp
+        // bmp0.x0 = (gauss.randn() * bmp.mx) >>> 0;
+        // bmp0.y0 = (gauss.randn() * bmp.my) >>> 0;
+        // square bmp
+        bmp0.x0 = (gauss.randn() * bmp.my) >>> 0;
+        bmp0.y0 = bmp0.x0;
         var nt = (bmp0.x0 * bmp0.y0) >>> 0;
         bmp0.c0 = bmp.mono();
         bmp0.d0 = bmp.data(nt);
