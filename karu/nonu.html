@@ -52,7 +52,8 @@ var g = {
         // console.log(!g.ko);
         sce.add(g.ko);
         // ren.frame();
-        ren.duo();
+        // ren.duo();
+        ren.tres();
     }
 }
 // layout
@@ -156,12 +157,33 @@ var bmp = {
             bmp.g[i] = [];
             for (var j = 0; j < bmp.e; j++) {
                 var s0 = "bmp_" + i.toString() + "_" + j.toString();
-                console.log(s0);
-                bmp.m[s0] = bmp.img();
+                // console.log(s0);
+                // bmp.m[s0] = bmp.img();
+                bmp.m[s0] = bmp.pic();
                 bmp.g[i][j] = s0;
             }
         }
         console.log(bmp);
+    },
+    "pic": function() {
+        // variable pixel size
+        // build from ground up
+        // var ex0 = (Math.random() * 9) >>> 0;
+        var ex0 = ((Math.random() * 6) + 3) >>> 0;
+        var p0 = Math.pow(2, ex0); // pixel size
+        var p1 = (540 / p0) >>> 0; // max number
+        var p3 = (gauss.randn() * p1) >>> 0; // variable size
+        var p4 = (p3 * p0) >>> 0; // bmp size
+        var p5 = (p3 * p3) >>> 0; // data size
+        // bitmap
+        var bmp0 = {};
+        bmp0.p0 = p0;
+        bmp0.x0 = p4;
+        bmp0.y0 = bmp0.x0;
+        bmp0.c0 = bmp.mono();
+        bmp0.d0 = bmp.data(p5);
+        bmp0.s0 = p3; // stride
+        return bmp0;
     },
     "img": function() {
         var bmp0 = {};
@@ -283,6 +305,21 @@ var ren = {
                 var y0 = (i / bmp.m[k0].x0) >>> 0;
                 sce.b[g.ko][j].con.fillStyle = rgba.css(rgba0);
                 sce.b[g.ko][j].con.fillRect(x0,y0,1,1);
+            }
+        }
+    },
+    "tres": function() {
+        for (var j = 0; j < bmp.e; j++) {
+            var k0 = "bmp_" + g.ko.toString() + "_" + j.toString();
+            for (var i = 0; i < bmp.m[k0].d0.length; i++) {
+                var x0 = i % bmp.m[k0].s0;
+                var x1 = (x0 * bmp.m[k0].p0) >>> 0;
+                var y0 = (i / bmp.m[k0].s0) >>> 0;
+                var y1 = (y0 * bmp.m[k0].p0) >>> 0;
+                var rgba0 = ren.rgba(k0, i);
+                sce.b[g.ko][j].con.fillStyle = rgba.css(rgba0);
+                sce.b[g.ko][j].con.fillRect(x1,y1,bmp.m[k0].p0,bmp.m[k0].p0);
+                // console.log(k0, bmp.m[k0], rgba0);
             }
         }
     },
