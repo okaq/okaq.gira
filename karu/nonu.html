@@ -173,6 +173,10 @@ var bmp = {
         var p0 = Math.pow(2, ex0); // pixel size
         var p1 = (540 / p0) >>> 0; // max number
         var p3 = (gauss.randn() * p1) >>> 0; // variable size
+        // p3 may be zero
+        if (p3 == 0) {
+            p3 = 1;
+        }
         var p4 = (p3 * p0) >>> 0; // bmp size
         var p5 = (p3 * p3) >>> 0; // data size
         // bitmap
