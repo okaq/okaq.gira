@@ -33,6 +33,7 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         ren.bkgd();
+        ren.word();
 
         // stats
         var done = window.performance.now();
@@ -79,9 +80,25 @@ var sce = {
         sce.a = dom.canvas(lay.a);
         dom.add(sce.a);
         sce.b = sce.word(lay.b);
+        sce.add(sce.b);
     },
     "word": function(r0) {
         // list of rects
+        var c0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            c0[i] = dom.canvas(r0[i]);
+        }
+        return c0;
+    },
+    "add": function(s0) {
+        for (var i = 0; i < s0.length; i++) {
+            dom.add(s0[i]);
+        }
+    },
+    "remove": function() {
+        for (var i = 0; i < s0.length; i++) {
+            dom.remove(s0[i]);
+        }
     }
 }
 // dom
@@ -113,6 +130,12 @@ var ren = {
     "bkgd": function() {
         sce.a.con.fillStyle = rgba.css(rgba.rc());
         sce.a.con.fillRect(0,0,sce.a.can.width,sce.a.can.height);
+    },
+    "word": function() {
+        // render word bitmap in scene canvas
+        for (var i = 0; i < g.p.length; i++) {
+            console.log(g.p[i]);
+        }
     }
 }
 // colors
