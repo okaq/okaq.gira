@@ -25,6 +25,9 @@ var g = {
         console.log(e);
         var now = window.performance.now();
 
+        // const
+        g.p = "partizan";
+
         // subsystems
         g.subs = [dom,lay,sce];
         g.subs.forEach(function(el){el.init();});
@@ -40,11 +43,34 @@ var g = {
 // layout
 var lay = {
     "init": function() {
-        lay.a = [1920,1080,0,0]
+        lay.a = [1920,1080,0,0];
             // page one: splash
             // welcome to okaq partizan nano game
             // generating your id
             // web worker
+        lay.b = lay.word(g.p);
+    },
+    "word": function(s0) {
+        // imput string
+        // return a grid of squares for rendering chars
+        // fixed x0, y0
+        var x0 = 128;
+        var y0 = 128;
+        // fixed size
+        var w0 = 64;
+        var h0 = w0;
+        // margin
+        var m0 = 8;
+        // block
+        var w1 = (w0 + 2 * m0) >>> 0;
+        var h1 = (h0 + 2 * m0) >>> 0;
+        var r0 = [];
+        for (var i = 0; i < s0.length; i++) {
+            var x1 = ((w1 * i) + m0) >>> 0;
+            var y1 = (y0 + m0) >>> 0;
+            r0[i] = [w0,h0,x1,y1];
+        }
+        return r0;
     }
 }
 // scene
@@ -52,6 +78,10 @@ var sce = {
     "init": function() {
         sce.a = dom.canvas(lay.a);
         dom.add(sce.a);
+        sce.b = sce.word(lay.b);
+    },
+    "word": function(r0) {
+        // list of rects
     }
 }
 // dom
