@@ -29,7 +29,7 @@ var g = {
         g.p = "partizan";
 
         // subsystems
-        g.subs = [dom,lay,sce];
+        g.subs = [dom,lay,sce,bmp];
         g.subs.forEach(function(el){el.init();});
 
         ren.bkgd();
@@ -39,6 +39,33 @@ var g = {
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        // roboto decoded bitmap font
+        bmp.r = {};
+        for (var k0 in roboto) {
+            // console.log(k0);
+            var rob0 = base64DecToArr(roboto[k0]);
+            bmp.r[k0] = bmp.expand(rob0);
+        }
+        console.log(bmp);
+    },
+    "expand": function(b0) {
+        // byte array to bit array
+        var r0 = [];
+        for (var i = 0; i < b0.length; i++) {
+            var b1 = b0[i];
+            var s0 = binStr(b1);
+            for (var j = 0; j < 8; j++) {
+                var s1 = s0.charAt(j);
+                var n0 = parseInt(s1, 10);
+                r0.push(n0);
+            }
+        }
+        return r0;
     }
 }
 // layout
@@ -81,6 +108,8 @@ var sce = {
         dom.add(sce.a);
         sce.b = sce.word(lay.b);
         sce.add(sce.b);
+        // list of decoded bitmap font data
+        sce.c = [];
     },
     "word": function(r0) {
         // list of rects
