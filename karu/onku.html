@@ -67,7 +67,7 @@ var lay = {
         var h1 = (h0 + 2 * m0) >>> 0;
         var r0 = [];
         for (var i = 0; i < s0.length; i++) {
-            var x1 = ((w1 * i) + m0) >>> 0;
+            var x1 = ((w1 * i) + x0 + m0) >>> 0;
             var y1 = (y0 + m0) >>> 0;
             r0[i] = [w0,h0,x1,y1];
         }
@@ -134,7 +134,9 @@ var ren = {
     "word": function() {
         // render word bitmap in scene canvas
         for (var i = 0; i < g.p.length; i++) {
-            console.log(g.p[i]);
+            // console.log(g.p[i]);
+            sce.b[i].con.fillStyle = rgba.css(rgba.rc());
+            sce.b[i].con.fillRect(0,0,sce.b[i].can.width,sce.b[i].can.height);
         }
     }
 }
