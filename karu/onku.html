@@ -51,7 +51,10 @@ var bmp = {
             var rob0 = base64DecToArr(roboto[k0]);
             bmp.r[k0] = bmp.expand(rob0);
         }
-        console.log(bmp);
+        // console.log(bmp);
+        // roboto chars are 32x32 bits
+        // word layout blocks are 64x64
+        // each bit renders to 2x2 pixels
     },
     "expand": function(b0) {
         // byte array to bit array
@@ -164,8 +167,23 @@ var ren = {
         // render word bitmap in scene canvas
         for (var i = 0; i < g.p.length; i++) {
             // console.log(g.p[i]);
-            sce.b[i].con.fillStyle = rgba.css(rgba.rc());
-            sce.b[i].con.fillRect(0,0,sce.b[i].can.width,sce.b[i].can.height);
+            // sce.b[i].con.fillStyle = rgba.css(rgba.rc());
+            // sce.b[i].con.fillRect(0,0,sce.b[i].can.width,sce.b[i].can.height);
+            var k0 = "robo_" + g.p[i];
+            var c0 = rgba.rc();
+            var c1 = rgba.rc();
+            for (var j = 0; j < bmp.r[k0].length; j++) {
+                var x0 = j % 32;
+                var y0 = (j / 32) >>> 0;
+                var x1 = (x0 * 2) >>> 0;
+                var y1 = (y0 * 2) >>> 0;
+                if (bmp.r[k0][j] == 0) {
+                    sce.b[i].con.fillStyle = rgba.css(c0);
+                } else {
+                    sce.b[i].con.fillStyle = rgba.css(c1);
+                }
+                sce.b[i].con.fillRect(x1,y1,2,2);
+            }
         }
     }
 }
