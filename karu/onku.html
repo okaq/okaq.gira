@@ -201,6 +201,21 @@ var ren = {
         var len0 = g.flub.length; // string length
         var xm0 = (1920 / len0) >>> 0; // max dim
         var ym0 = (1080 - xm0) >>> 0;
+        var p0 = 3; // pixel size
+        var w0 = (32 * p0) >>> 0; // bmp size
+        var m0 = (xm0 - w0) >>> 0; // block margin
+        var x0 = 0;
+        var y0 = (Math.random() * ym0) >>> 0;
+        for (var i = 0; i < g.flub.length; i++) {
+            var c0 = rgba.rc();
+            var c1 = rgba.rc();
+            var k0 = "robo_" + g.flub[i];
+            x0 = (w0 * i) >>> 0;
+            var r0 = [w0, w0, x0, y0];
+            var can0 = dom.canvas(r0);
+            dom.add(can0);
+            ren.char(g.flub[i], can0);
+        }
     }
 }
 // code points
