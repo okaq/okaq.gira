@@ -33,10 +33,11 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         ren.bkgd();
-        ren.word();
+        // ren.word();
 
         g.flub = pts.rand(16, 97, 123);
         console.log(g.flub.join(""));
+        ren.flub();
 
         // stats
         var done = window.performance.now();
@@ -193,6 +194,13 @@ var ren = {
         // render bitmap font char 
         // in scene canvas object
         // determine pixel multiplier by canvas size
+    },
+    "flub": function() {
+        // random layout and render
+        // of unicode code points
+        var len0 = g.flub.length; // string length
+        var xm0 = (1920 / len0) >>> 0; // max dim
+        var ym0 = (1080 - xm0) >>> 0;
     }
 }
 // code points
