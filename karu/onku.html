@@ -194,6 +194,25 @@ var ren = {
         // render bitmap font char 
         // in scene canvas object
         // determine pixel multiplier by canvas size
+        var w0 = can0.can.width;
+        var w1 = (w0 / 32) >>> 0; // pixel size
+        var k0 = "robo_" + ch0;
+        // console.log(k0,bmp.r[k0]);
+        var rgba0 = rgba.rc();
+        var rgba1 = rgba.rc();
+        // console.log(rgba0, rgba1);
+        for (var i = 0; i < bmp.r[k0].length; i++) {
+            var x0 = i % 32;
+            var y0 = (i / 32) >>> 0;
+            var x1 = (x0 * w1) >>> 0;
+            var y1 = (y0 * w1) >>> 0;
+            if (bmp.r[k0][i] == 0) {
+                can0.con.fillStyle = rgba.css(rgba0);
+            } else {
+                can0.con.fillStyle = rgba.css(rgba1);
+            }
+            can0.con.fillRect(x1, y1, w1, w1);
+        }
     },
     "flub": function() {
         // random layout and render
@@ -203,14 +222,14 @@ var ren = {
         var ym0 = (1080 - xm0) >>> 0;
         var p0 = 3; // pixel size
         var w0 = (32 * p0) >>> 0; // bmp size
-        var m0 = (xm0 - w0) >>> 0; // block margin
+        var m0 = (xm0 - w0) / 2 >>> 0; // block margin
         var x0 = 0;
-        var y0 = (Math.random() * ym0) >>> 0;
+        var y0 = (Math.random() * ym0 + m0) >>> 0;
         for (var i = 0; i < g.flub.length; i++) {
             var c0 = rgba.rc();
             var c1 = rgba.rc();
             var k0 = "robo_" + g.flub[i];
-            x0 = (w0 * i) >>> 0;
+            x0 = (xm0 * i + m0) >>> 0;
             var r0 = [w0, w0, x0, y0];
             var can0 = dom.canvas(r0);
             dom.add(can0);
