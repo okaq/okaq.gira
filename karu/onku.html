@@ -35,6 +35,9 @@ var g = {
         ren.bkgd();
         ren.word();
 
+        g.flub = pts.rand(16, 97, 123);
+        console.log(g.flub.join(""));
+
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -185,6 +188,23 @@ var ren = {
                 sce.b[i].con.fillRect(x1,y1,2,2);
             }
         }
+    },
+    "char": function(ch0, can0) {
+        // render bitmap font char 
+        // in scene canvas object
+        // determine pixel multiplier by canvas size
+    }
+}
+// code points
+var pts = {
+    "rand": function(n0, low0, hi0) {
+        var s0 = [];
+        var d0 = hi0 - low0;
+        for (var i = 0; i < n0; i++) {
+            var s1 = ((Math.random() * d0) + low0) >>> 0;
+            s0[i] = String.fromCodePoint(s1);
+        }
+        return s0;
     }
 }
 // colors
