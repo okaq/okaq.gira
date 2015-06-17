@@ -106,6 +106,18 @@ var lay = {
             r0[i] = [w0,h0,x1,y1];
         }
         return r0;
+    },
+    "grid": function() {
+        // random subdivided grid, depth = 2
+        var r0 = [];
+        // outer rect 
+        var x0 = (Math.random() * 1920) >>> 0;
+        var y0 = (Math.random() * 1080) >>> 0;
+        var w0 = (Math.random() * (1920 - x0)) >>> 0;
+        var y0 = (Math.random() * (1080 - y0)) >>> 0;
+        // inner rects
+        // generalize formula above for input rect
+        return r0;
     }
 }
 // scene
