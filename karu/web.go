@@ -1,7 +1,7 @@
 // golang web server
 // gcloud dev env
 // AQ <aq@okaq.com>
-// 2015-06-12
+// 2015-06-18
 package main
 
 import (
@@ -9,11 +9,11 @@ import (
 )
 
 const (
-    ONKU = "onku.html"
+    SOGA = "soga.html"
 )
 
 func init() {
-    http.HandleFunc("/onku", func(w http.ResponseWriter, r *http.Request) {
-        http.ServeFile(w, r, ONKU)
+    http.HandleFunc("/soga", func(w http.ResponseWriter, r *http.Request) {
+        http.ServeFile(w, r, SOGA)
     })
 }
