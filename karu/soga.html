@@ -33,6 +33,7 @@ var g = {
         g.subs.forEach(function(el){el.init();});
 
         ren.rand(sce.a);
+        ren.rand2(sce.b);
 
         // stats
         var done = window.performance.now();
@@ -44,13 +45,60 @@ var g = {
 var lay = {
     "init": function() {
         lay.a = [1920,1080,0,0];
+        lay.b = lay.quad(lay.a);
+    },
+    "grid": function() {
+        // depth
+    },
+    "rand": function(r0) {
+        // return random rect subdivision
+    },
+    "quad": function(r0) {
+        // subdivide rect into four even rects
+        var r1 = [];
+        var w2 = (r0[0] / 2) >>> 0;
+        var h2 = (r0[1] / 2) >>> 0;
+        var x2 = (r0[2] + w2) >>> 0;
+        var y2 = (r0[3] + h2) >>> 0;
+        r1[0] = [w2,h2,r0[2],r0[3]];
+        r1[1] = [w2,h2,x2,r0[3]];
+        r1[2] = [w2,h2,r0[2],y2];
+        r1[3] = [w2,h2,x2,y2];
+        return r1;
     }
 }
 // scene
 var sce = {
     "init": function() {
         sce.a = dom.canvas(lay.a);
-        dom.add(sce.a);
+        // dom.add(sce.a);
+
+        sce.b = sce.list(lay.b);
+        sce.add(sce.b);
+        // define scene as flat (1D) list of canvas objects
+        // functional logic to add, remove, splice
+    },
+    "list": function(r0) {
+        // input flattened list of layout rects
+        // output list of canvas objects
+        var s0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            s0[i] = dom.canvas(r0[i]);
+        }
+        return s0;
+    },
+    "add": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            dom.add(c0[i]);
+        }
+        // alternatively, could have a single scene map object
+        // then call scene-level add, remove by index
+        // and individual canvas-level by two indicies
+    },
+    "remove": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            dom.remove(c0[i]);
+        }
     }
 }
 // dom
@@ -83,6 +131,13 @@ var ren = {
         // random rgba fill
         c0.con.fillStyle = rgba.css(rgba.rc());
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "rand2": function(c0) {
+        // input flat list of canvas objects
+        for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgba.css(rgba.rc());
+            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
     }
 }
 // colors
