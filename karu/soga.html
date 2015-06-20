@@ -36,6 +36,7 @@ var g = {
         ren.rand2(sce.f);
         g.ph = unic.rand(8, 97, 123);
         console.log(g.ph.join(""));
+        ren.word(g.ph, sce.g);
 
         // stats
         var done = window.performance.now();
@@ -53,6 +54,20 @@ var lay = {
         // console.log(lay.d);
         lay.e = [600,400,128,128];
         lay.f = lay.even(lay.e,6,4);
+        // lay.g roboto rand char render test
+        lay.g = lay.word(g.ph);
+    },
+    "word": function(s0) {
+        // min string layout 32x32 per char
+        // starts at page origin
+        // global index of current cursor position
+        var r0 = [];
+        for (var i = 0; i < s0.length; i++) {
+            var x0 = (i * 32) >>> 0;
+            var y0 = 0;
+            r0[i] = [32,32,x0,y0];
+        }
+        return r0;
     },
     "grid": function(r0) {
         // depth
