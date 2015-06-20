@@ -34,6 +34,8 @@ var g = {
 
         ren.rand(sce.a);
         ren.rand2(sce.d);
+        g.ph = unic.rand(8, 97, 123);
+        console.log(g.ph.join(""));
 
         // stats
         var done = window.performance.now();
@@ -255,6 +257,18 @@ var gauss = {
         var g0 = gauss.rand();
         var g1 = (g0 + 3) / 6;
         return g1;
+    }
+}
+// unicode
+var unic = {
+    "rand": function(n0, lo0, hi0) {
+        var s0 = [];
+        var d0 = hi0 - lo0;
+        for (var i = 0; i < n0; i++) {
+            var s1 = ((Math.random() * d0) + lo0) >>> 0;
+            s0[i] = String.fromCodePoint(s1);
+        }
+        return s0;
     }
 }
 // colors
