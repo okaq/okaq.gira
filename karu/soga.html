@@ -27,21 +27,53 @@ var g = {
 
         // const
         g.p = "partizan";
+        g.ph = unic.rand(8, 97, 123);
+        g.ok = " o k a q ";
 
         // subsystems
-        g.subs = [dom,lay,sce];
+        g.subs = [dom,lay,sce,bmp];
         g.subs.forEach(function(el){el.init();});
 
         ren.rand(sce.a);
         ren.rand2(sce.f);
-        g.ph = unic.rand(8, 97, 123);
-        console.log(g.ph.join(""));
+        // g.ph = unic.rand(8, 97, 123);
+        // console.log(g.ph.join(""));
         ren.word(g.ph, sce.g);
+        ren.word(g.p, sce.h);
+        ren.word(g.ok, sce.i);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        // roboto decoded bitmap font
+        bmp.r = {};
+        for (var k0 in roboto) {
+            var rob0 = base64DecToArr(roboto[k0]);
+            bmp.r[k0] = bmp.expand(rob0);
+        }
+        // roboto chars are 32x32 bits
+        // word layout blocks are 64x64
+        // each bit renders to 2x2 pixels
+    },
+    "expand": function(b0) {
+        // byte array to bit array
+        var r0 = [];
+        for (var i = 0; i < b0.length; i++) {
+            var b1 = b0[i];
+            var s0 = binStr(b1);
+            for (var j = 0; j < 8; j++) {
+                var s1 = s0.charAt(j);
+                var n0 = parseInt(s1, 10);
+                r0.push(n0);
+            }
+        }
+        return r0;
     }
 }
 // layout
@@ -55,7 +87,10 @@ var lay = {
         lay.e = [600,400,128,128];
         lay.f = lay.even(lay.e,6,4);
         // lay.g roboto rand char render test
+        lay.gi = 1; // offset by one from origin
         lay.g = lay.word(g.ph);
+        lay.h = lay.word(g.p);
+        lay.i = lay.word(g.ok);
     },
     "word": function(s0) {
         // min string layout 32x32 per char
@@ -63,10 +98,12 @@ var lay = {
         // global index of current cursor position
         var r0 = [];
         for (var i = 0; i < s0.length; i++) {
-            var x0 = (i * 32) >>> 0;
+            var x0 = (lay.gi * 32) >>> 0;
             var y0 = 0;
             r0[i] = [32,32,x0,y0];
+            lay.gi = lay.gi + 1;
         }
+        lay.gi = lay.gi + 1; // end space
         return r0;
     },
     "grid": function(r0) {
@@ -188,6 +225,14 @@ var sce = {
 
         sce.f = sce.list(lay.f);
         sce.add(sce.f);
+
+        sce.g = sce.list(lay.g);
+        sce.add(sce.g);
+        sce.h = sce.list(lay.h);
+        sce.add(sce.h);
+        sce.i = sce.list(lay.i);
+        sce.add(sce.i);
+ 
     },
     "list": function(r0) {
         // input flattened list of layout rects
@@ -248,6 +293,26 @@ var ren = {
         for (var i = 0; i < c0.length; i++) {
             c0[i].con.fillStyle = rgba.css(rgba.rc());
             c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
+    },
+    "word": function(s0, c0) {
+        var rgb0 = rgba.css(rgba.rc()); // fore css
+        var rgb1 = rgba.css(rgba.rc()); // bkgd css
+        for (var i = 0 ; i < s0.length; i++) {
+            if (s0[i] == " ") {
+                continue;
+            }
+            var k0 = "robo_" + s0[i];
+            for (var j = 0; j < bmp.r[k0].length; j++) {
+                var x0 = j % 32;
+                var y0 = (j / 32) >>> 0;
+                if (bmp.r[k0][j] == 0) {
+                    c0[i].con.fillStyle = rgb0;
+                } else {
+                    c0[i].con.fillStyle = rgb1;
+                }
+                c0[i].con.fillRect(x0,y0,1,1);
+            }
         }
     }
 }
