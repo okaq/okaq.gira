@@ -30,15 +30,21 @@ var g = {
         console.log(g.pi);
 
         // subsystems
-        g.subs = [dom,lay,sce];
+        g.subs = [dom,lay,sce,ev,bmp];
         g.subs.forEach(function(el){el.init();});
 
         ren.test(sce.a);
+
+        g.id = window.setTimeout(g.play, 1000);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total running time " + total + "ms");
+    },
+    "play": function(e) {
+        console.log(e);
+        window.dispatchEvent(ev.m);
     }
 }
 // events
@@ -50,6 +56,12 @@ var ev = {
         ev.states[1] = "xhr";
         ev.states[2] = "send";
         ev.states[3] = "json";
+        // master event
+        ev.m = new CustomEvent("master");
+        window.addEventListener("master", ev.listener, false);
+    },
+    "listener": function(e) {
+        console.log(e);
     }
 }
 // bitmap
