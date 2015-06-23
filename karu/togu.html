@@ -62,6 +62,8 @@ var ev = {
     },
     "listener": function(e) {
         console.log(e);
+        // one call to render word
+        ren.word(g.pi);
     }
 }
 // bitmap
@@ -134,6 +136,11 @@ var ren = {
     "test": function(c0) {
         c0.con.fillStyle = rgba.css(rgba.rc());
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "word": function(s0) {
+        // input string
+        // if layout doesnt exist, create it
+
     }
 }
 // normal distribution
