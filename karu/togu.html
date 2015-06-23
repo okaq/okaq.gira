@@ -98,6 +98,18 @@ var bmp = {
 var lay = {
     "init": function() {
         lay.a = [1920,1080,0,0];
+    },
+    "word": function(s0) {
+        var r0 = [];
+        // 32x32 bits per roboto font char
+        var p0 = 6; // pixel size
+        var m0 = 2; // margin size
+        var b0 = (p0 + 2 * m0) >>> 0; // block size
+        var w0 = (b0 * 32) >>> 0; // char size
+        for (var i = 0; i < s0.length; i++) {
+
+        }
+        return r0;
     }
 }
 // scene
@@ -140,7 +152,9 @@ var ren = {
     "word": function(s0) {
         // input string
         // if layout doesnt exist, create it
-
+        if (!lay[s0]) {
+            lay[s0] = lay.word(s0);
+        }
     }
 }
 // normal distribution
