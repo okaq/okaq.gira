@@ -26,7 +26,7 @@ var g = {
         var now = window.performance.now();
 
         // const
-        g.pi = unic.rand(16, 97, 123);
+        g.pi = unic.rand(6, 97, 123);
         console.log(g.pi);
 
         // subsystems
@@ -179,6 +179,39 @@ var ren = {
             sce[s0] = sce.list(lay[s0]);
             sce.add(sce[s0]);
         }
+        // decode bmp font
+        // if (!bmp[s0]) {
+        //     bmp[s0] = bmp.dec(s0);
+        // }
+        // use bmp.r decoded set
+
+        for (var i = 0; i < s0.length; i++) {
+            var k0 = "robo_" + s0[i];
+            ren.letter(sce[s0][i], bmp.r[k0]);
+        }
+    },
+    "letter": function(c0, d0) {
+        // render char data in scene canvas
+        var rgb0 = rgba.css(rgba.rc());
+        var rgb1 = rgba.css(rgba.rc());
+        // bkgd
+        ren.test(c0);
+        // data fill with margin
+        for (var i = 0; i < d0.length; i++) {
+            // block, margin, pixel = 10,2,6
+            var x0 = i % 32;
+            var y0 = (i / 32) >>> 0;
+            var x1 = ((x0 * 10) + 2) >>> 0;
+            var y1 = ((y0 * 10) + 2) >>> 0;
+            if (d0[i] == 0) {
+                c0.con.fillStyle = rgb0;
+            } else {
+                c0.con.fillStyle = rgb1;
+            }
+            c0.con.fillRect(x1,y1,6,6);
+        }
+        // six chars at 10 pixels per block = 1920
+        // readability requires high contrast values
     }
 }
 // normal distribution
