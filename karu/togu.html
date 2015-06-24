@@ -107,7 +107,9 @@ var lay = {
         var b0 = (p0 + 2 * m0) >>> 0; // block size
         var w0 = (b0 * 32) >>> 0; // char size
         for (var i = 0; i < s0.length; i++) {
-
+            var x0 = (i * w0) >>> 0;
+            var y0 = 0;
+            r0[i] = [w0,w0,x0,y0];
         }
         return r0;
     }
@@ -117,6 +119,23 @@ var sce = {
     "init": function() {
         sce.a = dom.canvas(lay.a);
         dom.add(sce.a);
+    },
+    "list": function(lay0) {
+        var c0 = [];
+        for (var i = 0; i < lay0.length; i++) {
+            c0[i] = dom.canvas(lay0[i]);
+        }
+        return c0;
+    },
+    "add": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            dom.add(c0[i]);
+        }
+    },
+    "remove": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            dom.remove(c0[i]);
+        }
     }
 }
 // dom
@@ -154,6 +173,11 @@ var ren = {
         // if layout doesnt exist, create it
         if (!lay[s0]) {
             lay[s0] = lay.word(s0);
+        }
+        // check scene creation
+        if (!sce[s0]) {
+            sce[s0] = sce.list(lay[s0]);
+            sce.add(sce[s0]);
         }
     }
 }
