@@ -38,13 +38,34 @@ var n = {
     "click": function(e) {
         console.log(e);
         ren.test(sce.b);
+        ren.block();
     }
 }
 // scene
 var sce = {
     "init": function() {
-        sce.b = dom.canvas([1920,1080,0,0]);
+        sce.a = [1920,1080,0,0];
+        sce.b = dom.canvas(sce.a);
         dom.add(sce.b);
+        // block graph
+        sce.g = {};
+        sce.g.bx = 60;
+        sce.g.by = 60;
+        sce.g.nx = (sce.a[0] / sce.g.bx) >>> 0;
+        sce.g.ny = (sce.a[1] / sce.g.by) >>> 0;
+        sce.g.a = [];
+        sce.g.b = [];
+        for (var y = 0; y < sce.g.ny; y++) {
+            for (var x = 0; x < sce.g.nx; x++) {
+                var i0 = ((y * sce.g.nx) + x) >>> 0;
+                var x0 = (x * sce.g.bx) >>> 0;
+                var y0 = (y * sce.g.by) >>> 0;
+                sce.g.a[i0] = [sce.g.bx, sce.g.by, x0, y0];
+                sce.g.b[i0] = dom.canvas(sce.g.a[i0]);
+                dom.add(sce.g.b[i0]);
+            }
+        }
+        console.log(sce.g);
     }
 }
 // dom
@@ -76,6 +97,20 @@ var ren = {
     "test": function(c0) {
         c0.con.fillStyle = rgba.rand();
         c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
+    },
+    "block": function() {
+        for (var i = 0; i < sce.g.b.length; i++) {
+            var m0 = (sce.g.bx / 8) >>> 0;
+            var c0 = sce.g.b[i];
+            for (var j = 1; j < 4; j++) {
+                var x0 = (j * m0) >>> 0;
+                var y0 = x0;
+                var w0 = (c0.can.width - (2 * x0)) >>> 0;
+                var h0 = w0;
+                c0.con.fillStyle = rgba.rand();
+                c0.con.fillRect(x0, y0, w0, h0);
+            }
+        }
     }
 }
 // colors
