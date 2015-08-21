@@ -39,6 +39,7 @@ var n = {
         console.log(e);
         ren.test(sce.b);
         ren.block();
+        window.removeEventListener("click", n.click);
     }
 }
 // scene
@@ -55,6 +56,13 @@ var sce = {
         sce.g.ny = (sce.a[1] / sce.g.by) >>> 0;
         sce.g.a = [];
         sce.g.b = [];
+        sce.g.click = function(e) {
+            console.log(e);
+            console.log(e.target.dataset.x);
+            var i0 = parseInt(e.target.dataset.x, 10);
+            var nn0 = sce.nn(i0);
+            console.log(i0, nn0);
+        }
         for (var y = 0; y < sce.g.ny; y++) {
             for (var x = 0; x < sce.g.nx; x++) {
                 var i0 = ((y * sce.g.nx) + x) >>> 0;
@@ -63,9 +71,42 @@ var sce = {
                 sce.g.a[i0] = [sce.g.bx, sce.g.by, x0, y0];
                 sce.g.b[i0] = dom.canvas(sce.g.a[i0]);
                 dom.add(sce.g.b[i0]);
+                sce.g.b[i0].can.dataset.x = i0;
+                sce.g.b[i0].can.addEventListener("click", sce.g.click, false);
             }
         }
+        /*
+        sce.g.click = function(e) {
+            console.log(e);
+            console.log(e.target.dataset.x);
+            var i0 = parseInt(e.target.dataset.x, 10);
+            var nn0 = sce.nn(i0);
+            console.log(i0, nn0);
+            }
+            */
         console.log(sce.g);
+    },
+    "nn": function(i0) {
+        // get nearest neighbors in graph
+        // special case edge and corners
+        var r0 = [null, null, null, null];
+        // top
+        if (i0 > sce.g.nx) {
+            r0[0] = i0 - sce.g.nx;
+        }
+        // left
+        if ((i0 % sce.g.nx) > 0) {
+            r0[1] = i0 - 1;
+        }
+        // right
+        if ((i0 % sce.g.nx) < (sce.g.nx - 1)) {
+            r0[2] = i0 + 1;
+        }
+        // bottom
+        if (i0 < (sce.g.nx * (sce.g.ny - 1))) {
+            r0[3] = i0 + sce.g.nx;
+        }
+        return r0;
     }
 }
 // dom
