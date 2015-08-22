@@ -62,6 +62,8 @@ var sce = {
             var i0 = parseInt(e.target.dataset.x, 10);
             var nn0 = sce.nn(i0);
             console.log(i0, nn0);
+            ren.black(nn0);
+            ren.black([i0]);
         }
         for (var y = 0; y < sce.g.ny; y++) {
             for (var x = 0; x < sce.g.nx; x++) {
@@ -151,6 +153,16 @@ var ren = {
                 c0.con.fillStyle = rgba.rand();
                 c0.con.fillRect(x0, y0, w0, h0);
             }
+        }
+    },
+    "black": function(n0) {
+        for (var i = 0; i < n0.length; i++) {
+            if (n0[i] == null) {
+                continue;
+            }
+            var c0 = sce.g.b[n0[i]];
+            c0.con.fillStyle = rgba.css([0,0,0,1.0]);
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
         }
     }
 }
