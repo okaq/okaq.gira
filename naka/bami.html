@@ -28,6 +28,9 @@ var n = {
         n.subs = [dom,sce];
         n.subs.forEach(function(el){el.init();});
 
+        // state
+        n.s = 0;
+
         window.addEventListener("click", n.click, false);
 
         // stats
@@ -64,6 +67,11 @@ var sce = {
             console.log(i0, nn0);
             ren.black(nn0);
             ren.black([i0]);
+            // dedicated click handler
+            // at each click push neighbor array on stack
+            // initiate timer
+            // at each tick increment members in outward position
+            // color gradients with time
         }
         for (var y = 0; y < sce.g.ny; y++) {
             for (var x = 0; x < sce.g.nx; x++) {
