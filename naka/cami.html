@@ -41,6 +41,7 @@ var n = {
     "click": function(e) {
         console.log(e);
         ren.test(sce.b);
+        ren.data(sce.g.c);
         window.removeEventListener("click", n.click);
     }
 }
@@ -63,11 +64,22 @@ var sce = {
         sce.g.my = 60;
         sce.g.b = []; // layout
         sce.g.c = []; // canvas
+        sce.g.d = []; // rgba data
+        sce.g.click = function(e) {
+            console.log(e);
+            console.log(e.target.dataset.x);
+        }
         for (var y = 0; y < sce.g.ny; y++) {
             for (var x = 0; x < sce.g.nx; x++) {
                 var i0 = ((y * sce.g.nx) + x) >>> 0;
                 var x0 = ((x * sce.g.px) + sce.g.mx) >>> 0;
                 var y0 = ((y * sce.g.px) + sce.g.my) >>> 0;
+                sce.g.b[i0] = [sce.g.px,sce.g.px,x0,y0];
+                sce.g.c[i0] = dom.canvas(sce.g.b[i0]);
+                dom.add(sce.g.c[i0]);
+                sce.g.c[i0].can.dataset.x = i0;
+                sce.g.c[i0].can.addEventListener("click", sce.g.click, false);
+                sce.g.d[i0] = rgba.rb();
             }
         }
     }
@@ -101,6 +113,13 @@ var ren = {
     "test": function(c0) {
         c0.con.fillStyle = rgba.rand();
         c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
+    },
+    "data": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i];
+            c1.con.fillStyle = rgba.mono(sce.g.d[i]);
+            c1.con.fillRect(4,4,c1.can.width-8,c1.can.height-8);
+        }
     }
 }
 // colors
@@ -133,6 +152,9 @@ var rgba = {
     },
     "rand": function() {
         return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
     }
 }
 
