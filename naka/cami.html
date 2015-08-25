@@ -50,6 +50,26 @@ var sce = {
         sce.a = [1920,1080,0,0];
         sce.b = dom.canvas(sce.a);
         dom.add(sce.b);
+
+        sce.graph();
+    },
+    "graph": function() {
+        // block graph
+        sce.g = {};
+        sce.g.px = 32; // size
+        sce.g.nx = 60; // count
+        sce.g.ny = 30;
+        sce.g.mx = 0; // margin
+        sce.g.my = 60;
+        sce.g.b = []; // layout
+        sce.g.c = []; // canvas
+        for (var y = 0; y < sce.g.ny; y++) {
+            for (var x = 0; x < sce.g.nx; x++) {
+                var i0 = ((y * sce.g.nx) + x) >>> 0;
+                var x0 = ((x * sce.g.px) + sce.g.mx) >>> 0;
+                var y0 = ((y * sce.g.px) + sce.g.my) >>> 0;
+            }
+        }
     }
 }
 // dom
