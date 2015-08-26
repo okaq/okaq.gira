@@ -43,6 +43,19 @@ var n = {
         ren.test(sce.b);
         ren.data(sce.g.c);
         window.removeEventListener("click", n.click);
+
+        // begin tick
+        n.id = window.setInterval(n.step, 1000);
+    },
+    "step": function() {
+        if (!n.tick) {
+            n.tick = 0;
+        }
+        if (n.tick >= 8) {
+            window.clearInterval(n.id);
+        }
+        n.tick++;
+        console.log(n.tick);
     }
 }
 // scene
@@ -68,6 +81,7 @@ var sce = {
         sce.g.click = function(e) {
             console.log(e);
             console.log(e.target.dataset.x);
+            // global
         }
         for (var y = 0; y < sce.g.ny; y++) {
             for (var x = 0; x < sce.g.nx; x++) {
