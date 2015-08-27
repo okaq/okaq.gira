@@ -30,6 +30,9 @@ var n = {
 
         // state
         n.s = 0;
+        n.a = {}; // selection
+        n.a.b = 0; // chosen index
+        n.a.d = []; // stack
 
         window.addEventListener("click", n.click, false);
 
@@ -50,12 +53,20 @@ var n = {
     "step": function() {
         if (!n.tick) {
             n.tick = 0;
+            n.a.b = (Math.random() * sce.g.c.length) >>> 0;
         }
         if (n.tick >= 8) {
             window.clearInterval(n.id);
         }
         n.tick++;
-        console.log(n.tick);
+        // n.a = (Math.random() * sce.g.c.length) >>> 0;
+        console.log(n.tick, n.a);
+        // first tick
+        // select random
+        // push neighbors on stack
+        // subsequent tick
+        // expand outward
+        // until off edge
     }
 }
 // scene
@@ -96,6 +107,31 @@ var sce = {
                 sce.g.d[i0] = rgba.rb();
             }
         }
+    },
+    "nn": function(i0) {
+        // return nearest neighbors
+        var r0 = [null,null,null,null];
+        // top
+        if (i0 > sce.g.nx) {
+            r0[0] = i0 - sce.g.nx;
+        }
+        // left
+        if ((i0 % sce.g.nx) == 0) {
+            r0[1] = i0 - 1;
+        }
+        // right
+        if ((i0 % sce.g.nx) > (sce.g.nx - 1)) {
+            r0[2] = i0 + 1;
+        }
+        // bottom
+        if (i0 < (sce.g.nx * (sce.g.ny - 1))) {
+            r0[3] = i0 + sce.g.nx;
+        }
+        return r0;
+    },
+    "adv": function(a0) {
+        // advance each member in ordinal direction
+        // if off grid set to null
     }
 }
 // dom
