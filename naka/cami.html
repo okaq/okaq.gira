@@ -84,6 +84,7 @@ var sce = {
         sce.g.px = 32; // size
         sce.g.nx = 60; // count
         sce.g.ny = 30;
+        sce.g.nt = (sce.g.nx * sce.g.ny) >>> 0;
         sce.g.mx = 0; // margin
         sce.g.my = 60;
         sce.g.b = []; // layout
@@ -129,9 +130,32 @@ var sce = {
         }
         return r0;
     },
-    "adv": function(a0) {
+    "adv": function(d0) {
         // advance each member in ordinal direction
         // if off grid set to null
+        // top
+        d0[0] = d0[0] - sce.g.nx;
+        if (d0[0] < 0) {
+            d0[0] = null;
+        }
+        // left
+        if ((d0[1] % sce.g.nx) == 0) {
+            d0[1] = null;
+        } else {
+            d0[1] = d0[1] - 1;
+        }
+        // right
+        if ((d0[2] % sce.g.nx) == (sce.g.nx - 1)) {
+            d0[2] = null;
+        } else {
+            d0[2] = d0[2] + 1;
+        }
+        // bottom
+        d0[3] = d0[3] + sce.g.nx;
+        if (d0[3] > sce.g.nt) {
+            d0[3] = null;
+        }
+
     }
 }
 // dom
