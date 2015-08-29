@@ -54,6 +54,12 @@ var n = {
         if (!n.tick) {
             n.tick = 0;
             n.a.b = (Math.random() * sce.g.c.length) >>> 0;
+            var nn0 = sce.nn(n.a.b);
+            n.a.d.push(nn0);
+            ren.black(n.a.b);
+            nn0.forEach(function(el){ren.black(el);});
+            // set sce.g.d value to black
+            // re-render entire data set
         }
         if (n.tick >= 8) {
             window.clearInterval(n.id);
@@ -139,6 +145,7 @@ var sce = {
             d0[0] = null;
         }
         // left
+        // refactor, test first
         if ((d0[1] % sce.g.nx) == 0) {
             d0[1] = null;
         } else {
@@ -194,6 +201,14 @@ var ren = {
             c1.con.fillStyle = rgba.mono(sce.g.d[i]);
             c1.con.fillRect(4,4,c1.can.width-8,c1.can.height-8);
         }
+    },
+    "black": function(i0) {
+        if (i0 == null) {
+            return;
+        }
+        c0 = sce.g.c[i0].con;
+        c0.con.fillStyle = rgba.css([0,0,0,1.0]);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     }
 }
 // colors
