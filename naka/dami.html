@@ -32,6 +32,7 @@ var n = {
         // test
         ren.blank(sce.b);
         ren.test(sce.d);
+        ren.graph();
 
         window.addEventListener("click", n.click, false);
 
@@ -53,6 +54,35 @@ var sce = {
         sce.c = [1920,960,0,60];
         sce.d = dom.canvas(sce.c);
         dom.add(sce.d);
+
+        // scene graph init
+        sce.graph();
+    },
+    "graph": function() {
+        sce.g = {};
+        sce.g.px = 32; // block size
+        sce.g.py = 32;
+        sce.g.nx = 60; // block count
+        sce.g.ny = 30;
+        sce.g.nt = (sce.g.nx * sce.g.ny) >>> 0;
+        sce.g.mx = 0; // outer margin
+        sce.g.my = 60;
+        sce.g.b = []; // layout
+        sce.g.c = []; // canvas
+        sce.g.d = []; // monochrome color data
+        for (var y = 0; y < sce.g.ny; y++) {
+            for (var x = 0; x < sce.g.nx; x++) {
+                var x0 = ((x * sce.g.px) + sce.g.mx) >>> 0;
+                var y0 = ((y * sce.g.py) + sce.g.my) >>> 0;
+                var i0 = ((y * sce.g.nx) + x) >>> 0;
+                sce.g.b[i0] = [sce.g.px,sce.g.py,x0,y0];
+                sce.g.c[i0] = dom.canvas(sce.g.b[i0]);
+                sce.g.c[i0].can.dataset.x = i0;
+                // add click handler
+                dom.add(sce.g.c[i0]);
+                sce.g.d[i0] = rgba.rb();
+            }
+        }
     }
 }
 // dom
@@ -88,6 +118,13 @@ var ren = {
     "test": function(c0) {
         c0.con.fillStyle = rgba.grey();
         c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
+    },
+    "graph": function() {
+        for (var i = 0; i < sce.g.nt; i++) {
+            var c0 = sce.g.c[i];
+            c0.con.fillStyle = rgba.mono(sce.g.d[i]);
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
     }
 }
 // colors
