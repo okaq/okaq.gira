@@ -43,6 +43,20 @@ var n = {
     },
     "click": function(e) {
         console.log(e);
+        // console.log(n.id);
+
+        if (!n.id) {
+            n.id = window.setInterval(sce.shuf, 1000);
+            // every set increments integer
+        } else {
+            window.clearInterval(n.id);
+            n.id = null
+        }
+    },
+    "draw": function() {
+        ren.blank(sce.b);
+        ren.test(sce.d);
+        ren.graph();
     }
 }
 // scene
@@ -83,6 +97,13 @@ var sce = {
                 sce.g.d[i0] = rgba.rb();
             }
         }
+    },
+    "shuf": function() {
+        // randomize graph data
+        for (var i = 0; i < sce.g.nt; i++) {
+            sce.g.d[i] = rgba.rb();
+        }
+        n.draw();
     }
 }
 // dom
