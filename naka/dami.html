@@ -36,6 +36,9 @@ var n = {
 
         window.addEventListener("click", n.click, false);
 
+        // start
+        n.start();
+
         // stats
         var done = window.performance.now();
         var total = done - now;
@@ -57,6 +60,9 @@ var n = {
         ren.blank(sce.b);
         ren.test(sce.d);
         ren.graph();
+    },
+    "start": function() {
+        sce.pick();
     }
 }
 // scene
@@ -104,6 +110,13 @@ var sce = {
             sce.g.d[i] = rgba.rb();
         }
         n.draw();
+    },
+    "pick": function() {
+        sce.p = {}; // selection
+        sce.p.a = (Math.random() * sce.g.nt) >>> 0;
+        sce.p.b = [0,0,0,0]; // velocity
+        sce.p.c = [0,0,0,0]; // color
+        console.log("pick: " + sce.p.a);
     }
 }
 // dom
