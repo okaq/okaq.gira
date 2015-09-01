@@ -63,6 +63,9 @@ var n = {
     },
     "start": function() {
         sce.pick();
+        // loop advance particles
+        // check edge collision
+        // extinguish old, seed new
     }
 }
 // scene
@@ -114,9 +117,19 @@ var sce = {
     "pick": function() {
         sce.p = {}; // selection
         sce.p.a = (Math.random() * sce.g.nt) >>> 0;
-        sce.p.b = [0,0,0,0]; // velocity
-        sce.p.c = [0,0,0,0]; // color
+        sce.p.b = [1,1,1,1]; // velocity
+        sce.p.c = [1,1,1,1]; // color
+        sce.p.d = 0; // step count
+        sce.p.e = 8; // max steps
+        sce.p.f = sce.g.d[sce.p.a]; // start color
         console.log("pick: " + sce.p.a);
+        sce.p.nn = []; // neighbors stack
+    },
+    "nn": function() {
+        // get neighbors
+    },
+    "step": function() {
+        // advance step one tick
     }
 }
 // dom
