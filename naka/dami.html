@@ -66,6 +66,7 @@ var n = {
         // loop advance particles
         // check edge collision
         // extinguish old, seed new
+        ren.black();
     }
 }
 // scene
@@ -124,6 +125,7 @@ var sce = {
         sce.p.f = sce.g.d[sce.p.a]; // start color
         console.log("pick: " + sce.p.a);
         sce.p.nn = []; // neighbors stack
+        sce.p.nn.push(sce.nn(sce.p.a));
     },
     "nn": function(i0) {
         // get neighbors
@@ -193,6 +195,18 @@ var ren = {
             var c0 = sce.g.c[i];
             c0.con.fillStyle = rgba.mono(sce.g.d[i]);
             c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
+    },
+    "black": function() {
+        var b0 = rgba.css([0,0,0,1.0]);
+        var c0 = sce.g.c[sce.p.a];
+        c0.con.fillStyle = b0;
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        var c1 = sce.p.nn[0];
+        for (var i = 0; i < c1.length; i++) {
+            var c2 = sce.g.c[c1[i]];
+            c2.con.fillStyle = b0;
+            c2.con.fillRect(0,0,c2.can.width,c2.can.height);
         }
     }
 }
