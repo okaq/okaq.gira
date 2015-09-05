@@ -9,6 +9,6 @@ import (
 
 func init() {
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        http.ServeFile(w, r, "dami.html")
+        http.ServeFile(w, r, "eami.html")
     })
 }
