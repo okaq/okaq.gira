@@ -67,6 +67,14 @@ var n = {
         // check edge collision
         // extinguish old, seed new
         ren.black();
+        n.io = window.setInterval(n.step, 1000);
+    },
+    "step": function() {
+        var a0 = sce.p.nn[sce.p.nn.length-1];
+        var d0 = sce.adv(a0);
+        // all null check, restart selection
+        sce.p.nn.push(d0);
+        ren.next();
     }
 }
 // scene
@@ -253,6 +261,18 @@ var ren = {
             c2.con.fillStyle = b0;
             c2.con.fillRect(0,0,c2.can.width,c2.can.height);
         }
+    },
+    "next": function() {
+        var c1 = sce.p.nn[sce.p.nn.length-1];
+        for (var i = 0; i < c1.length; i++) {
+            if (c1[i] == null) {
+                continue;
+            }
+            var c2 = sce.g.c[c1[i]];
+            c2.con.fillStyle = rgba.css(rgba.rc());
+            c2.con.fillRect(0,0,c2.can.width,c2.can.height);
+        }
+
     }
 }
 // colors
