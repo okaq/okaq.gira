@@ -29,10 +29,13 @@ var n = {
         n.subs.forEach(function(el){el.init();});
 
         // test
-        ren.blank(sce.b);
-        ren.test(sce.d);
+        ren.blank(sce.bkgd.b);
+        ren.test(sce.pane.b);
 
         window.addEventListener("click", n.click, false);
+
+        // start
+        // scene generation and loop management
 
         // stats
         var done = window.performance.now();
@@ -41,6 +44,12 @@ var n = {
     },
     "click": function(e) {
         console.log(e);
+    }
+}
+// graph
+var g = {
+    "load": function() {
+        // call scene grid creation
     }
 }
 // scene
@@ -53,6 +62,34 @@ var sce = {
         sce.d = dom.canvas(sce.c);
         dom.add(sce.d);
         // break out scene creation methods
+        sce.bkgd = sce.rect([1920,1080,0,0]);
+        sce.pane = sce.rect([1920,960,0,60]);
+    },
+    "rect": function(r0) {
+        var r1 = {};
+        r1.a = r0.slice(0);
+        r1.b = dom.canvas(r1.a);
+        dom.add(r1.b);
+        return r1;
+    },
+    "grid": function(x0, y0, w0, h0, nx, ny) {
+        var r0 = {};
+        r0.x0 = x0;
+        r0.y0 = y0;
+        r0.w0 = w0;
+        r0.h0 = h0;
+        r0.nx = nx;
+        r0.ny = ny;
+        r0.nt = (r0.nx * r0.ny) >>> 0;
+        for (var y1 = 0; y1 < ny; y1++) {
+            for (var x1 = 0; x1 < nx; x1++) {
+                var x2 = 0;
+                var y2 = 0;
+            }
+        }
+        r0.a = [];
+        r0.b = [];
+        return r0;
     }
 }
 // dom
