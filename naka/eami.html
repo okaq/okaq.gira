@@ -49,6 +49,24 @@ var n = {
     "start": function() {
         g.load();
         ren.grid();
+        n.tick = 0;
+        // selection
+        n.s = (Math.random() * g.a.nt) >>> 0;
+
+        n.ib = window.setInterval(n.step, 1000);
+    },
+    "step": function() {
+        n.tick = n.tick + 1;
+        console.log("tick: " + n.tick);
+
+        // selection
+        // n.s = (Math.random() * g.a.nt) >>> 0;
+        // fill selection
+        ren.rand(g.a.g.c[n.s]);
+
+        if (n.tick == 8) {
+            window.clearInterval(n.ib);
+        }
     }
 }
 // graph
@@ -149,6 +167,10 @@ var ren = {
     },
     "test": function(c0) {
         c0.con.fillStyle = rgba.grey();
+        c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
+    },
+    "rand": function(c0) {
+        c0.con.fillStyle = rgba.rand();
         c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
     },
     "grid": function() {
