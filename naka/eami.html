@@ -154,6 +154,9 @@ var ren = {
     "grid": function() {
         // render graph data
         for (var i = 0; i < g.a.g.c.length; i++) {
+            var c0 = g.a.g.c[i];
+            c0.con.fillStyle = rgba.mono(g.a.d[i]);
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
         }
     }
 }
