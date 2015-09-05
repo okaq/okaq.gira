@@ -29,13 +29,14 @@ var n = {
         n.subs.forEach(function(el){el.init();});
 
         // test
-        ren.blank(sce.bkgd.b);
-        ren.test(sce.pane.b);
+        ren.blank(sce.bkgd.c);
+        ren.test(sce.pane.c);
 
         window.addEventListener("click", n.click, false);
 
         // start
         // scene generation and loop management
+        n.id = window.setTimeout(n.start, 1000);
 
         // stats
         var done = window.performance.now();
@@ -44,12 +45,31 @@ var n = {
     },
     "click": function(e) {
         console.log(e);
+    },
+    "start": function() {
+        g.load();
+        ren.grid();
     }
 }
 // graph
 var g = {
     "load": function() {
         // call scene grid creation
+        g.a = {};
+        // grid dimensions
+        g.a.x0 = 0;
+        g.a.y0 = 60;
+        g.a.w0 = 32;
+        g.a.h0 = 32;
+        g.a.nx = 60;
+        g.a.ny = 30;
+        g.a.nt = (g.a.nx * g.a.ny) >>> 0;
+        // refactor grid method to take class
+        g.a.g = sce.grid(g.a.x0, g.a.y0, g.a.w0, g.a.h0, g.a.nx, g.a.ny);
+        // g.a.g.a is rect layout area
+        // g.a.g.c is canvas object list
+        g.a.d = rgba.rba(g.a.nt); // color data
+        console.log(g.a);
     }
 }
 // scene
@@ -68,8 +88,8 @@ var sce = {
     "rect": function(r0) {
         var r1 = {};
         r1.a = r0.slice(0);
-        r1.b = dom.canvas(r1.a);
-        dom.add(r1.b);
+        r1.c = dom.canvas(r1.a);
+        dom.add(r1.c);
         return r1;
     },
     "grid": function(x0, y0, w0, h0, nx, ny) {
@@ -81,14 +101,19 @@ var sce = {
         r0.nx = nx;
         r0.ny = ny;
         r0.nt = (r0.nx * r0.ny) >>> 0;
+        r0.a = []; // layout
+        r0.c = []; // canvas
         for (var y1 = 0; y1 < ny; y1++) {
             for (var x1 = 0; x1 < nx; x1++) {
-                var x2 = 0;
-                var y2 = 0;
+                var i0 = ((y1 * nx) + x1) >>> 0;
+                var x2 = ((w0 * x1) + x0) >>> 0;
+                var y2 = ((h0 * y1) + y0) >>> 0;
+                var r1 = [w0,h0,x2,y2];
+                var r2 = sce.rect(r1);
+                r0.a[i0] = r2.a;
+                r0.c[i0] = r2.c;
             }
         }
-        r0.a = [];
-        r0.b = [];
         return r0;
     }
 }
@@ -125,6 +150,11 @@ var ren = {
     "test": function(c0) {
         c0.con.fillStyle = rgba.grey();
         c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
+    },
+    "grid": function() {
+        // render graph data
+        for (var i = 0; i < g.a.g.c.length; i++) {
+        }
     }
 }
 // colors
