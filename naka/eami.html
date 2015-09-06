@@ -48,6 +48,7 @@ var n = {
     },
     "start": function() {
         g.load();
+        vert.load();
         ren.grid();
         n.tick = 0;
         // selection
@@ -69,6 +70,22 @@ var n = {
         }
     }
 }
+// vertex
+var vert = {
+    "load": function() {
+        vert.x = []; // vertex list
+    },
+    "seed": function() {
+        vert.v = {}; // new vertex
+        vert.v.id = 0; // index into scene graph
+        vert.v.s = []; // advancement stack
+        // check for all null members
+        // last item in stack should be all null
+        // selection methods
+        // add / remove timing
+        // may be more than one
+    }
+}
 // graph
 var g = {
     "load": function() {
@@ -88,6 +105,7 @@ var g = {
         // g.a.g.c is canvas object list
         g.a.d = rgba.rba(g.a.nt); // color data
         console.log(g.a);
+        // neighbor and advance routines
     }
 }
 // scene
