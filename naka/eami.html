@@ -65,6 +65,7 @@ var n = {
         // fill selection
         // ren.rand(g.a.g.c[n.s]);
         ren.rand(g.a.g.c[vert.x[0].id]);
+        vert.x[0].s[0].forEach(function(el){ren.rand(g.a.g.c[el]);});
 
         if (n.tick == 8) {
             window.clearInterval(n.ib);
@@ -89,10 +90,66 @@ var vert = {
         var v = {};
         v.id = vert.pick();
         v.s = [];
+        v.s[0] = vert.nn(v.id);
         vert.x.push(v);
     },
     "pick": function() {
         return (Math.random() * g.a.nt) >>> 0;
+    },
+    "nn": function(i0) {
+        // return nearest neighbors
+        var r0 = [null,null,null,null];
+        // top
+        if (i0 > g.a.nx) {
+            r0[0] = i0 - g.a.nx;
+        }
+        // left
+        if ((i0 % g.a.nx) > 0) {
+            r0[1] = i0 - 1;
+        }
+        // right
+        if ((i0 % g.a.nx) <= (g.a.nx - 1)) {
+            r0[2] = i0 + 1;
+        }
+        // bottom
+        if (i0 < (g.a.nx * (g.a.ny - 1))) {
+            r0[3] = i0 + g.a.nx;
+        }
+        return r0;
+    },
+    "adv": function(a0) {
+        // advance each member in ordinal direction
+        // if off grid set to null
+        var d0 = a0.slice(0);
+        // top
+        if (d0[0] != null) {
+            d0[0] = d0[0] - g.a.nx;
+            if (d0[0] < 0) {
+                d0[0] = null;
+            }
+        }
+        // left
+        if (d0[1] != null) {
+            d0[1] = d0[1] - 1;
+            if (d0[1] % g.a.nx == (g.a.nx - 1)) {
+                d0[1] = null;
+            }
+        }
+        // right
+        if (d0[2] != null) {
+            d0[2] = d0[2] + 1;
+            if ((d0[2] % g.a.nx) == 0) {
+                d0[2] = null;
+            }
+        }
+        // bottom
+        if (d0[3] != null) {
+            d0[3] = d0[3] + g.a.nx;
+            if (d0[3] > g.a.nt) {
+                d0[3] = null;
+            }
+        }
+        return d0;
     }
 }
 // graph
