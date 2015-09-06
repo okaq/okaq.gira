@@ -52,7 +52,7 @@ var n = {
         ren.grid();
         n.tick = 0;
         // selection
-        n.s = (Math.random() * g.a.nt) >>> 0;
+        // n.s = (Math.random() * g.a.nt) >>> 0;
 
         n.ib = window.setInterval(n.step, 1000);
     },
@@ -63,7 +63,8 @@ var n = {
         // selection
         // n.s = (Math.random() * g.a.nt) >>> 0;
         // fill selection
-        ren.rand(g.a.g.c[n.s]);
+        // ren.rand(g.a.g.c[n.s]);
+        ren.rand(g.a.g.c[vert.x[0].id]);
 
         if (n.tick == 8) {
             window.clearInterval(n.ib);
@@ -74,16 +75,24 @@ var n = {
 var vert = {
     "load": function() {
         vert.x = []; // vertex list
+        vert.seed();
     },
     "seed": function() {
-        vert.v = {}; // new vertex
-        vert.v.id = 0; // index into scene graph
-        vert.v.s = []; // advancement stack
+        // vert.v = {}; // new vertex
+        // vert.v.id = 0; // index into scene graph
+        // vert.v.s = []; // advancement stack
         // check for all null members
         // last item in stack should be all null
         // selection methods
         // add / remove timing
         // may be more than one
+        var v = {};
+        v.id = vert.pick();
+        v.s = [];
+        vert.x.push(v);
+    },
+    "pick": function() {
+        return (Math.random() * g.a.nt) >>> 0;
     }
 }
 // graph
