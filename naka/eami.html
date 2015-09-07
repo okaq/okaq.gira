@@ -65,7 +65,10 @@ var n = {
         // fill selection
         // ren.rand(g.a.g.c[n.s]);
         ren.rand(g.a.g.c[vert.x[0].id]);
-        vert.x[0].s[0].forEach(function(el){ren.rand(g.a.g.c[el]);});
+        var s0 = vert.x[0].s[vert.x[0].t];
+        s0.forEach(function(el){ren.rand(g.a.g.c[el]);});
+        vert.x[0].t = vert.x[0].t + 1;
+        vert.x[0].s[vert.x[0].t] = vert.adv(s0);
 
         if (n.tick == 8) {
             window.clearInterval(n.ib);
@@ -90,8 +93,11 @@ var vert = {
         var v = {};
         v.id = vert.pick();
         v.s = [];
-        v.s[0] = vert.nn(v.id);
+        v.t = 0; // advancement ticker
+        v.s[v.t] = vert.nn(v.id);
         vert.x.push(v);
+        // nb. remove hard coded dependencies
+        // expose and encapsulate data
     },
     "pick": function() {
         return (Math.random() * g.a.nt) >>> 0;
@@ -254,6 +260,10 @@ var ren = {
         c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
     },
     "rand": function(c0) {
+        // test c0 is null
+        if (c0 == null) {
+            return;
+        }
         c0.con.fillStyle = rgba.rand();
         c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
     },
