@@ -75,6 +75,8 @@ var n = {
         // reverse and keep track via isForward bool
         vert.add();
         vert.draw();
+        vert.front();
+        vert.step();
 
         if (n.tick == 8) {
             window.clearInterval(n.ib);
@@ -178,6 +180,26 @@ var vert = {
             var x0 = vert.x[i];
             var i0 = x0.id;
             ren.rand(g.a.g.c[i0]);
+        }
+    },
+    "front": function() {
+        // render frontier
+        for (var i = 0; i < vert.x.length; i++) {
+            var x0 = vert.x[i];
+            var a0 = x0.s[x0.t];
+            a0.forEach(function(el){ren.rand(g.a.g.c[el]);});
+        }
+    },
+    "step": function() {
+        // advance all verts
+        for (var i = 0; i < vert.x.length; i++) {
+            var x0 = vert.x[i];
+            var a0 = x0.s[x0.t];
+            var a1 = vert.adv(a0);
+            // check null
+            x0.t = x0.t + 1;
+            x0.s.push(a1);
+            
         }
     }
 }
