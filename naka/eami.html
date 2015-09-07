@@ -64,11 +64,17 @@ var n = {
         // n.s = (Math.random() * g.a.nt) >>> 0;
         // fill selection
         // ren.rand(g.a.g.c[n.s]);
-        ren.rand(g.a.g.c[vert.x[0].id]);
-        var s0 = vert.x[0].s[vert.x[0].t];
-        s0.forEach(function(el){ren.rand(g.a.g.c[el]);});
-        vert.x[0].t = vert.x[0].t + 1;
-        vert.x[0].s[vert.x[0].t] = vert.adv(s0);
+        // ren.rand(g.a.g.c[vert.x[0].id]);
+        // var s0 = vert.x[0].s[vert.x[0].t];
+        // s0.forEach(function(el){ren.rand(g.a.g.c[el]);});
+        // vert.x[0].t = vert.x[0].t + 1;
+        // vert.x[0].s[vert.x[0].t] = vert.adv(s0);
+        // call vert render all
+        // advance all
+        // check null after advance
+        // reverse and keep track via isForward bool
+        vert.add();
+        vert.draw();
 
         if (n.tick == 8) {
             window.clearInterval(n.ib);
@@ -156,6 +162,23 @@ var vert = {
             }
         }
         return d0;
+    },
+    "add": function() {
+        // flip coin, threshold then add another vert
+        var f0 = Math.random();
+        if (f0 >= 0.4) {
+            vert.seed();
+        }
+    },
+    "draw": function() {
+        // render all verts
+        // render index
+        // render tail of adv stack
+        for (var i = 0; i < vert.x.length; i++) {
+            var x0 = vert.x[i];
+            var i0 = x0.id;
+            ren.rand(g.a.g.c[i0]);
+        }
     }
 }
 // graph
