@@ -100,6 +100,7 @@ var vert = {
         // may be more than one
         var v = {};
         v.id = vert.pick();
+        v.m = g.a.d[v.id];
         v.s = [];
         v.t = 0; // advancement ticker
         v.s[v.t] = vert.nn(v.id);
@@ -181,7 +182,8 @@ var vert = {
         for (var i = 0; i < vert.x.length; i++) {
             var x0 = vert.x[i];
             var i0 = x0.id;
-            ren.rand(g.a.g.c[i0]);
+            // ren.rand(g.a.g.c[i0]);
+            ren.mono(g.a.g.c[i0], x0.m);
         }
     },
     "front": function() {
@@ -189,7 +191,17 @@ var vert = {
         for (var i = 0; i < vert.x.length; i++) {
             var x0 = vert.x[i];
             var a0 = x0.s[x0.t];
-            a0.forEach(function(el){ren.rand(g.a.g.c[el]);});
+            var m0 = x0.m;
+            // a0.forEach(function(el){ren.rand(g.a.g.c[el]);});
+            for (var i = 0; i < a0.length; i++) {
+                // redundant null check
+                if (a0[i] == null) {
+                    continue;
+                }
+                var i0 = a0[i];
+                var c0 = g.a.g.c[i0];
+                ren.mono(c0, m0);
+            }
         }
     },
     "step": function() {
@@ -203,6 +215,8 @@ var vert = {
             if (vert.over(a1)) {
                 d0.push(i);
             }
+            // push monochrome
+            vert.diff(a1, x0.m);
             x0.t = x0.t + 1;
             x0.s.push(a1);
         }
@@ -227,6 +241,17 @@ var vert = {
             }
         }
         return true;
+    },
+    "diff": function(a0, m0) {
+        // diffuse color into neighbors
+        for (var i = 0; i < a0.length; i++) {
+            if (a0[i] == null) {
+                continue;
+            }
+            var i0 = a0[i];
+            var x0 = vert.x[i0];
+            x0.m = m0;
+        }
     }
 }
 // graph
@@ -345,6 +370,11 @@ var ren = {
             c0.con.fillStyle = rgba.mono(g.a.d[i]);
             c0.con.fillRect(0,0,c0.can.width,c0.can.height);
         }
+    },
+    "mono": function(c0, m0) {
+        // render monochrome rgba in canvas
+        c0.con.fillStyle = rgba.mono(m0);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     }
 }
 // colors
