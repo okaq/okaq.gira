@@ -78,7 +78,7 @@ var n = {
         vert.front();
         vert.step();
 
-        if (n.tick == 8) {
+        if (n.tick == 60) {
             window.clearInterval(n.ib);
         }
     }
@@ -104,6 +104,8 @@ var vert = {
         v.t = 0; // advancement ticker
         v.s[v.t] = vert.nn(v.id);
         vert.x.push(v);
+        // smaple original monochrome upon init
+
         // nb. remove hard coded dependencies
         // expose and encapsulate data
     },
@@ -191,16 +193,40 @@ var vert = {
         }
     },
     "step": function() {
+        var d0 = []; // mark for deletion
         // advance all verts
         for (var i = 0; i < vert.x.length; i++) {
             var x0 = vert.x[i];
             var a0 = x0.s[x0.t];
             var a1 = vert.adv(a0);
             // check null
+            if (vert.over(a1)) {
+                d0.push(i);
+            }
             x0.t = x0.t + 1;
             x0.s.push(a1);
-            
         }
+        // remove all-null verts
+        for (var i = 0; i < d0.length; i++) {
+            var i0 = d0[i];
+            vert.x[i0] = null;
+        }
+        var x0 = [];
+        for (var i = 0; i < vert.x.length; i++) {
+            if (vert.x[i] != null) {
+                x0.push(vert.x[i]);
+            }
+        }
+        vert.x = x0;
+    },
+    "over": function(a0) {
+        // check null
+        for (var i = 0; i < a0.length; i++) {
+            if (a0[i] != null) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 // graph
