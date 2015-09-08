@@ -78,7 +78,7 @@ var n = {
         vert.front();
         vert.step();
 
-        if (n.tick == 60) {
+        if (n.tick == 300) {
             window.clearInterval(n.ib);
         }
     }
@@ -171,7 +171,7 @@ var vert = {
     "add": function() {
         // flip coin, threshold then add another vert
         var f0 = Math.random();
-        if (f0 >= 0.4) {
+        if (f0 >= 0.25) {
             vert.seed();
         }
     },
@@ -179,6 +179,7 @@ var vert = {
         // render all verts
         // render index
         // render tail of adv stack
+        // efficient drawing - only one call per cell
         for (var i = 0; i < vert.x.length; i++) {
             var x0 = vert.x[i];
             var i0 = x0.id;
@@ -193,13 +194,13 @@ var vert = {
             var a0 = x0.s[x0.t];
             var m0 = x0.m;
             // a0.forEach(function(el){ren.rand(g.a.g.c[el]);});
-            for (var i = 0; i < a0.length; i++) {
+            for (var j = 0; j < a0.length; j++) {
                 // redundant null check
-                if (a0[i] == null) {
+                if (a0[j] == null) {
                     continue;
                 }
-                var i0 = a0[i];
-                var c0 = g.a.g.c[i0];
+                var j0 = a0[j];
+                var c0 = g.a.g.c[j0];
                 ren.mono(c0, m0);
             }
         }
@@ -249,12 +250,15 @@ var vert = {
                 continue;
             }
             var i0 = a0[i];
-            var x0 = vert.x[i0];
+            // var x0 = vert.x[i0];
             // vert.x is vert list
             // need to diffuse into global color channel
             // mark for redraw, redraw all?
-            console.log(i, i0, a0, m0, x0); // undefined
-            x0.m = m0;
+            // console.log(i, i0, a0, m0, x0); // undefined
+            // x0.m = m0;
+            // var c0 = g.a.d[i0];
+            // console.log(c0);
+            g.a.d[i0] = m0;
         }
     }
 }
@@ -377,6 +381,9 @@ var ren = {
     },
     "mono": function(c0, m0) {
         // render monochrome rgba in canvas
+        if (c0 == null) {
+            return;
+        }
         c0.con.fillStyle = rgba.mono(m0);
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     }
