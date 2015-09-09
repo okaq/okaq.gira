@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head id="zeta">
+        <title>okaq</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
+        <meta name="source" content="https://github.com/okaq/okaq.gira" />
+        <meta name="creator" content="AQ<aq@okaq.com>" />
+        <meta name="date" content="2015-09-06" />
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMUlEQVR4nOzNQREAIAwDwQyDfxfopCaa356A2/vy0+xU7wAAAAAAAAAAAGCxCQAA//+WmQHnDprosgAAAABJRU5ErkJggg==" />
+        <style type="text/css">
+            html,body{width:1920px;height:1080px;margin:0px;border:0px;padding:0px;background-color:rgba(255,255,255,1.0);}
+        </style>
+        <script type="text/javascript">
+            // ok
+        console.log("okaq gira naka fami dendrite monochrome frontiers!");
+        // async
+        (function() {
+         window.addEventListener("load",function(e){n.init(e);},false);
+         })();
+// naka
+var n = {
+    "init": function(e) {
+        console.log(e);
+        var now = window.performance.now();
+        
+        // subsystems
+        n.subs = [dom,sce];
+        n.subs.forEach(function(el){el.init();});
+
+        // test
+        ren.blank(sce.bkgd.c);
+        ren.test(sce.pane.c);
+
+        // start
+        n.id = window.setTimeout(n.start, 1000);
+
+        // stats
+        var done = window.performance.now();
+        var total = done - now;
+        console.log("total running time " + total + "ms");
+    },
+    "start": function() {
+        g.load();
+        vert.load();
+        ren.grid();
+        n.tick = 0;
+
+        n.ib = window.setInterval(n.step, 1000);
+    },
+    "step": function() {
+        n.tick = n.tick + 1;
+        console.log("tick: " + n.tick);
+
+        vert.add();
+        vert.draw();
+        vert.front();
+        vert.step();
+
+        if (n.tick == 300) {
+            window.clearInterval(n.ib);
+        }
+    }
+}
+// vertex
+var vert = {
+    "load": function() {
+        vert.x = []; // vertex list
+        vert.seed();
+    },
+    "seed": function() {
+        var v = {};
+        v.id = vert.pick();
+        v.m = g.a.d[v.id];
+        v.s = [];
+        v.t = 0; // advancement ticker
+        v.s[v.t] = vert.nn(v.id);
+        vert.x.push(v);
+    },
+    "pick": function() {
+        return (Math.random() * g.a.nt) >>> 0;
+    },
+    "nn": function(i0) {
+        // return nearest neighbors
+        var r0 = [null,null,null,null];
+        // top
+        if (i0 > g.a.nx) {
+            r0[0] = i0 - g.a.nx;
+        }
+        // left
+        if ((i0 % g.a.nx) > 0) {
+            r0[1] = i0 - 1;
+        }
+        // right
+        if ((i0 % g.a.nx) <= (g.a.nx - 1)) {
+            r0[2] = i0 + 1;
+        }
+        // bottom
+        if (i0 < (g.a.nx * (g.a.ny - 1))) {
+            r0[3] = i0 + g.a.nx;
+        }
+        return r0;
+    },
+    "adv": function(a0) {
+        // advance each member in ordinal direction
+        // if off grid set to null
+        var d0 = a0.slice(0);
+        // top
+        if (d0[0] != null) {
+            d0[0] = d0[0] - g.a.nx;
+            if (d0[0] < 0) {
+                d0[0] = null;
+            }
+        }
+        // left
+        if (d0[1] != null) {
+            d0[1] = d0[1] - 1;
+            if (d0[1] % g.a.nx == (g.a.nx - 1)) {
+                d0[1] = null;
+            }
+        }
+        // right
+        if (d0[2] != null) {
+            d0[2] = d0[2] + 1;
+            if ((d0[2] % g.a.nx) == 0) {
+                d0[2] = null;
+            }
+        }
+        // bottom
+        if (d0[3] != null) {
+            d0[3] = d0[3] + g.a.nx;
+            if (d0[3] > g.a.nt) {
+                d0[3] = null;
+            }
+        }
+        return d0;
+    },
+    "add": function() {
+        // flip coin, threshold then add another vert
+        var f0 = Math.random();
+        if (f0 >= 0.25) {
+            vert.seed();
+        }
+    },
+    "draw": function() {
+        // render verts
+        for (var i = 0; i < vert.x.length; i++) {
+            var x0 = vert.x[i];
+            var i0 = x0.id;
+            ren.mono(g.a.g.c[i0], x0.m);
+        }
+    },
+    "front": function() {
+        // render frontier
+        for (var i = 0; i < vert.x.length; i++) {
+            var x0 = vert.x[i];
+            var a0 = x0.s[x0.t];
+            var m0 = x0.m;
+            for (var j = 0; j < a0.length; j++) {
+                if (a0[j] == null) {
+                    continue;
+                }
+                var j0 = a0[j];
+                var c0 = g.a.g.c[j0];
+                ren.mono(c0, m0);
+            }
+        }
+    },
+    "step": function() {
+        var d0 = []; // mark for deletion
+        // advance all verts
+        for (var i = 0; i < vert.x.length; i++) {
+            var x0 = vert.x[i];
+            var a0 = x0.s[x0.t];
+            var a1 = vert.adv(a0);
+            // check null
+            if (vert.over(a1)) {
+                d0.push(i);
+            }
+            // push monochrome
+            vert.diff(a1, x0.m);
+            x0.t = x0.t + 1;
+            x0.s.push(a1);
+        }
+        // remove all-null verts
+        for (var i = 0; i < d0.length; i++) {
+            var i0 = d0[i];
+            vert.x[i0] = null;
+        }
+        var x0 = [];
+        for (var i = 0; i < vert.x.length; i++) {
+            if (vert.x[i] != null) {
+                x0.push(vert.x[i]);
+            }
+        }
+        vert.x = x0;
+    },
+    "over": function(a0) {
+        // check null
+        for (var i = 0; i < a0.length; i++) {
+            if (a0[i] != null) {
+                return false;
+            }
+        }
+        return true;
+    },
+    "diff": function(a0, m0) {
+        // diffuse color into neighbors
+        for (var i = 0; i < a0.length; i++) {
+            if (a0[i] == null) {
+                continue;
+            }
+            var i0 = a0[i];
+            g.a.d[i0] = m0;
+        }
+    }
+}
+// graph
+var g = {
+    "load": function() {
+        g.a = {};
+        // grid dimensions
+        g.a.x0 = 0;
+        g.a.y0 = 60;
+        g.a.w0 = 32;
+        g.a.h0 = 32;
+        g.a.nx = 60;
+        g.a.ny = 30;
+        g.a.nt = (g.a.nx * g.a.ny) >>> 0;
+        g.a.g = sce.grid(g.a.x0, g.a.y0, g.a.w0, g.a.h0, g.a.nx, g.a.ny);
+        g.a.d = rgba.rba(g.a.nt); // color data
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.a = [1920,1080,0,0];
+        sce.b = dom.canvas(sce.a);
+        dom.add(sce.b);
+        sce.c = [1920,960,0,60];
+        sce.d = dom.canvas(sce.c);
+        dom.add(sce.d);
+        sce.bkgd = sce.rect([1920,1080,0,0]);
+        sce.pane = sce.rect([1920,960,0,60]);
+    },
+    "rect": function(r0) {
+        var r1 = {};
+        r1.a = r0.slice(0);
+        r1.c = dom.canvas(r1.a);
+        dom.add(r1.c);
+        return r1;
+    },
+    "grid": function(x0, y0, w0, h0, nx, ny) {
+        var r0 = {};
+        r0.x0 = x0;
+        r0.y0 = y0;
+        r0.w0 = w0;
+        r0.h0 = h0;
+        r0.nx = nx;
+        r0.ny = ny;
+        r0.nt = (r0.nx * r0.ny) >>> 0;
+        r0.a = []; // layout
+        r0.c = []; // canvas
+        for (var y1 = 0; y1 < ny; y1++) {
+            for (var x1 = 0; x1 < nx; x1++) {
+                var i0 = ((y1 * nx) + x1) >>> 0;
+                var x2 = ((w0 * x1) + x0) >>> 0;
+                var y2 = ((h0 * y1) + y0) >>> 0;
+                var r1 = [w0,h0,x2,y2];
+                var r2 = sce.rect(r1);
+                r0.a[i0] = r2.a;
+                r0.c[i0] = r2.c;
+            }
+        }
+        return r0;
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "blank": function(c0) {
+        c0.con.fillStyle = rgba.css([255,255,255,1.0]);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "test": function(c0) {
+        c0.con.fillStyle = rgba.grey();
+        c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
+    },
+    "rand": function(c0) {
+        if (c0 == null) {
+            return;
+        }
+        c0.con.fillStyle = rgba.rand();
+        c0.con.fillRect(0, 0, c0.can.width, c0.can.height);
+    },
+    "grid": function() {
+        // render graph data
+        for (var i = 0; i < g.a.g.c.length; i++) {
+            var c0 = g.a.g.c[i];
+            c0.con.fillStyle = rgba.mono(g.a.d[i]);
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
+    },
+    "mono": function(c0, m0) {
+        // render monochrome rgba in canvas
+        if (c0 == null) {
+            return;
+        }
+        c0.con.fillStyle = rgba.mono(m0);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "grey": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
+    }
+}
+
+         </script>
+    </head>
+    <body id="alpha">
+    </body>
+</html>
+
+
