@@ -14,6 +14,22 @@
         <script type="text/javascript">
             // ok
         console.log("okaq gira pasu basu!");
+        // async
+        (function(){
+         window.addEventListener("load",function(e){p.init(e);},false);
+         })();
+// pasu
+var p = {
+    "init": function(e) {
+        console.log(e);
+        var now = window.performance.now();
+
+        // stats
+        var done = window.performance.now();
+        var total = done - now;
+        console.log("total load time: " + total + "ms.");
+    }
+}
         </script>
     </head>
     <body id="alpha">
