@@ -64,6 +64,16 @@ func ZasuHandler(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, "basu.html")
 }
 
+func AasuHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r)
+    w.Write([]byte("ok aasu"))
+}
+
+func BasuHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r)
+    w.Write([]byte("ok basu"))
+}
+
 func main() {
     fmt.Println("starting btc scalp web app!")
     Data()
@@ -72,5 +82,7 @@ func main() {
        //  http.ServeFile(w, r, "basu.html")
     // })
     http.HandleFunc("/", ZasuHandler)
+    http.HandleFunc("/a", AasuHandler)
+    http.HandleFunc("/b", BasuHandler)
     http.ListenAndServe(":8008", nil)
 }
