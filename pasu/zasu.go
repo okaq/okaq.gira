@@ -17,8 +17,10 @@ var (
     B int // size of data
     D []string // initial string data
     T map[string]string // hash table
+    U map[string][]byte // byte wise hash table
     H hash.Hash // sha256 hash func
-    J []byte // json encoding
+    J []byte // string json encoding
+    K []byte // byte json encoding
 )
 
 func Data() {
@@ -33,12 +35,14 @@ func Data() {
 
 func Table() {
     T = make(map[string]string)
+    U = make(map[string][]byte)
     for i := 0; i < B; i++ {
         H.Reset()
         b0 := []byte(D[i])
         H.Write(b0)
         b1 := H.Sum(nil)
         T[D[i]] = string(b1)
+        U[D[i]] = b1
     }
     fmt.Println(T)
     // json strings valid UTF-8
@@ -48,6 +52,11 @@ func Table() {
         fmt.Println(err)
     }
     fmt.Println(string(J))
+    K, err = json.Marshal(U)
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Println(U)
 }
 
 func ZasuHandler(w http.ResponseWriter, r *http.Request) {
