@@ -7,16 +7,18 @@ package main
 
 import (
     "crypto/sha256"
+    "encoding/json"
     "fmt"
     "hash"
     "net/http"
 )
 
 var (
-    B int
-    D []string
-    T map[string]string
-    H hash.Hash
+    B int // size of data
+    D []string // initial string data
+    T map[string]string // hash table
+    H hash.Hash // sha256 hash func
+    J []byte // json encoding
 )
 
 func Data() {
@@ -39,6 +41,13 @@ func Table() {
         T[D[i]] = string(b1)
     }
     fmt.Println(T)
+    // json strings valid UTF-8
+    var err error
+    J, err = json.Marshal(T)
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Println(string(J))
 }
 
 func ZasuHandler(w http.ResponseWriter, r *http.Request) {
