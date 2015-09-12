@@ -66,12 +66,14 @@ func ZasuHandler(w http.ResponseWriter, r *http.Request) {
 
 func AasuHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
-    w.Write([]byte("ok aasu"))
+    // w.Write([]byte("ok aasu"))
+    w.Write(J)
 }
 
 func BasuHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
-    w.Write([]byte("ok basu"))
+    // w.Write([]byte("ok basu"))
+    w.Write(K)
 }
 
 func main() {

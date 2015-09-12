@@ -48,16 +48,27 @@ var x = {
     "open": function(x0) {
         if (x0 == "2") {
             x.c.open("GET", "/a", true);
-            x.c.responseType = "text";
+            x.c.responseType = "json";
+            x.c.onload = x.load;
         } else {
             x.c.open("GET", "/b", true);
-            x.c.responseType = "text";
+            x.c.responseType = "json";
+            x.c.onload = x.load2;
         }
-        x.c.onload = x.load;
+        // x.c.onload = x.load;
         x.c.send();
     },
     "load": function(e) {
         console.log(e);
+    },
+    "load2": function(e) {
+        console.log(e);
+        var s0 = e.target.response["bloody man"];
+        console.log(s0);
+        var s1 = window.atob(s0);
+        console.log(s1);
+        var s2 = decodeURIComponent(escape(window.atob(s0)));
+        console.log(s2);
     }
 }
 // scene
