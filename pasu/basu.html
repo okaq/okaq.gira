@@ -25,7 +25,7 @@ var p = {
         var now = window.performance.now();
 
         // subsystems
-        var subs = [dom,sce];
+        var subs = [dom,sce,x];
         subs.forEach(function(el){el.init();});
 
         // test
@@ -43,6 +43,21 @@ var x = {
     "init": function() {
         // get hash digest from server
         // decode on client
+        x.c = new XMLHttpRequest(); // connection
+    },
+    "open": function(x0) {
+        if (x0 == "2") {
+            x.c.open("GET", "/a", true);
+            x.c.responseType = "text";
+        } else {
+            x.c.open("GET", "/b", true);
+            x.c.responseType = "text";
+        }
+        x.c.onload = x.load;
+        x.c.send();
+    },
+    "load": function(e) {
+        console.log(e);
     }
 }
 // scene
@@ -84,6 +99,8 @@ var sce = {
         console.log(e);
         console.log(e.target.dataset.x);
         // switch control to xhr sender
+        var x0 = e.target.dataset.x;
+        x.open(x0);
     }
 }
 // dom
