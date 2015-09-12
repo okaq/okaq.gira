@@ -29,7 +29,8 @@ var p = {
         subs.forEach(function(el){el.init();});
 
         // test
-        ren.test(sce.b);
+        // ren.test(sce.b);
+        ren.draw(sce.b, sce.d);
 
         // stats
         var done = window.performance.now();
@@ -58,7 +59,15 @@ var sce = {
         sce.a[2] = [300,300,300,380]; // string button
         sce.a[3] = [300,300,680,380]; // byte button
         sce.b = sce.gen(sce.a); // canvas list
+
+        // handlers
+        sce.b[2].can.dataset.x = "2";
+        sce.b[2].can.addEventListener("click", sce.click, false);
+        sce.b[3].can.dataset.x = "3";
+        sce.b[3].can.addEventListener("click", sce.click, false);
+
         // color data
+        sce.d = rgba.rba(sce.a.length);
     },
     "gen": function(r0) {
         // input list of rects
@@ -70,6 +79,11 @@ var sce = {
             c0.push(c1);
         }
         return c0;
+    },
+    "click": function(e) {
+        console.log(e);
+        console.log(e.target.dataset.x);
+        // switch control to xhr sender
     }
 }
 // dom
@@ -104,6 +118,13 @@ var ren = {
             c1.con.fillStyle = rgba.rand();
             c1.con.fillRect(0,0,c1.can.width,c1.can.height);
         }
+    },
+    "draw": function(c0, d0) {
+         for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i];
+            c1.con.fillStyle = rgba.mono(d0[i]);
+            c1.con.fillRect(0,0,c1.can.width,c1.can.height);
+        }
     }
 }
 // colors
@@ -136,6 +157,9 @@ var rgba = {
     },
     "rand": function() {
         return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
     }
 }
         </script>
