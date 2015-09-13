@@ -25,7 +25,7 @@ var p = {
         var now = window.performance.now();
 
         // subsystems
-        var subs = [dom,sce];
+        var subs = [dom,sce,bmp];
         subs.forEach(function(el){el.init();});
 
         // test
@@ -35,6 +35,43 @@ var p = {
         var done = window.performance.now();
         var total = done - now;
         console.log("total load time: " + total + "ms.");
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        // data
+        bmp.d = {}; // type array
+        bmp.e = {}; // bitstring
+        bmp.f = {}; // bit array
+        // decode all chars
+        bmp.dec();
+    },
+    "dec": function() {
+        for (var k in oxy) {
+            var s0 = oxy[k];
+            var s1 = k[4];
+            var b0 = base64DecToArr(s0);
+            bmp.d[s1] = b0;
+            bmp.f[s1] = bmp.exp(b0);
+            bmp.e[s1] = bmp.f[s1].join("");
+        }
+        console.log(bmp.d, bmp.e, bmp.f);
+    },
+    "exp": function(b0) {
+        // expansion of uint8array
+        // to string of bits
+        var r0 = [];
+        for (var i = 0; i < b0.length; i++) {
+            var b1 = b0[i];
+            var s0 = binStr(b1);
+            for (var j = 0; j < 8; j++) {
+                var s1 = s0.charAt(j);
+                var n0 = parseInt(s1, 10);
+                r0.push(n0);
+            }
+        }
+        return r0;
     }
 }
 // scene
