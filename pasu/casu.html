@@ -30,6 +30,11 @@ var p = {
 
         // test
         ren.test(sce.b);
+        ren.test(sce.d);
+        // create grid
+        ren.grid();
+        // render string at posXY
+        p.title = "btc scalp hunt";
 
         // stats
         var done = window.performance.now();
@@ -82,6 +87,33 @@ var sce = {
         dom.add(sce.b);
         // draw 32x32 grid
         // import oxy bmp font
+        sce.grid();
+    },
+    "grid": function() {
+        sce.px = 32; // bmp size
+        sce.py = 32;
+        sce.nx = 60; // count
+        sce.ny = 30;
+        sce.nt = (sce.nx * sce.ny) >>> 0;
+        // field
+        sce.c = [1920,960,0,80];
+        sce.d = dom.canvas(sce.c);
+        dom.add(sce.d);
+        // grid
+        sce.g = {};
+        sce.g.a = []; // rect list
+        sce.g.b = []; // canvas list
+        sce.g.c = []; // mono list
+        for (var i = 0; i < sce.nt; i++) {
+            var x0 = i % sce.nx;
+            var y0 = (i / sce.nx) >>> 0;
+            var x1 = (x0 * sce.px) >>> 0;
+            var y1 = (y0 * sce.py) >>> 0;
+            sce.g.a[i] = [sce.px,sce.py,x1,y1+80];
+            sce.g.b[i] = dom.canvas(sce.g.a[i]);
+            dom.add(sce.g.b[i]);
+            sce.g.c[i] = rgba.rb();
+        }
     }
 }
 // dom
@@ -113,6 +145,15 @@ var ren = {
     "test": function(c0) {
         c0.con.fillStyle = rgba.rmon();
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "grid": function() {
+        // render monochrome data in grid canvas
+        for (var i = 0; i < sce.nt; i++) {
+            var c0 = sce.g.b[i];
+            var d0 = sce.g.c[i];
+            c0.con.fillStyle = rgba.mono(d0);
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
     }
 }
 // colors
