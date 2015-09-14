@@ -34,7 +34,11 @@ var p = {
         // create grid
         ren.grid();
         // render string at posXY
+        // index i0 auto wrap
+        // check i0 + string length < sce.nt
         p.title = "btc scalp hunt";
+        var i0 = (Math.random() * sce.nt) >>> 0;
+        ren.txt(p.title, i0);
 
         // stats
         var done = window.performance.now();
@@ -153,6 +157,34 @@ var ren = {
             var d0 = sce.g.c[i];
             c0.con.fillStyle = rgba.mono(d0);
             c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
+    },
+    "txt": function(s0, i0) {
+        // check
+        if ((s0.length + i0) > sce.nt) {
+            console.log("string runoff err");
+            return;
+        }
+        for (var i = 0; i < s0.length; i++) {
+            var s1 = s0[i];
+            var b0 = bmp.f[s1];
+            if (b0 == null) {
+                // console.log("skipping: " + s1);
+                continue;
+            }
+            // console.log(s1, b0);
+            var i1 = i0 + i;
+            var c0 = sce.g.b[i1];
+            for (var j = 0; j < b0.length; j++) {
+                var x0 = j % 32;
+                var y0 = (j / 32) >>> 0;
+                if (b0[j] == 0) {
+                    c0.con.fillStyle = rgba.css([0,0,0,1.0]);
+                } else {
+                    c0.con.fillStyle = rgba.css([255,255,255,1.0]);
+                }
+                c0.con.fillRect(x0,y0,1,1);
+            }
         }
     }
 }
