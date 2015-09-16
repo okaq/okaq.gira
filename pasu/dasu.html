@@ -46,6 +46,16 @@ var p = {
         sce.grid();
         ren.test(sce.d);
         ren.map(sce.g.b, sce.g.c);
+        p.tick = 0;
+        p.id = window.setInterval(p.swap, 1000);
+    },
+    "swap": function() {
+        // switch one mono with nearest neighbor, render
+        p.tick = p.tick + 1;
+        if (p.tick >= 8) {
+            window.clearInterval(p.id);
+        }
+        console.log("tick: " + p.tick);
     }
 }
 // scene
