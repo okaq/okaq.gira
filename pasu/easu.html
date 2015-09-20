@@ -25,13 +25,42 @@ var p = {
         var now = window.performance.now();
 
         // subs
-        p.subs = [dom];
+        p.subs = [dom,sce];
         p.subs.forEach(function(el){el.init();});
+
+        // test
+        ren.test(sce.b);
+
+        // begin
+        p.id = window.setTimeout(p.begin, 1000);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total load time: " + total + "ms.");
+    },
+    "begin": function(e) {
+        console.log(e);
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.a = [1920,1080,0,0];
+        sce.b = dom.canvas(sce.a);
+        dom.add(sce.b);
+
+        // scene list
+        sce.s = [];
+        // index
+        sce.t = 0;
+    },
+    "jump": function(i0) {
+        // check to see if scene exists
+        // otherwise return to scene zero
+
+        // increment index and start loop
+        // click grid container to begin
     }
 }
 // dom
