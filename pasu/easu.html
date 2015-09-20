@@ -39,8 +39,10 @@ var p = {
         var total = done - now;
         console.log("total load time: " + total + "ms.");
     },
-    "begin": function(e) {
-        console.log(e);
+    "begin": function() {
+        console.log("starting...");
+        sce.grid();
+        ren.map(sce.g.b, sce.g.c);
     }
 }
 // scene
@@ -61,6 +63,32 @@ var sce = {
 
         // increment index and start loop
         // click grid container to begin
+    },
+    "grid": function() {
+        sce.px = 32; // canvas size
+        sce.py = 32;
+        sce.nx = 60; // count
+        sce.ny = 30;
+        sce.nt = (sce.nx * sce.ny) >>> 0;
+        // field
+        sce.c = [1920,960,0,80];
+        sce.d = dom.canvas(sce.c);
+        dom.add(sce.d);
+        // grid
+        sce.g = {};
+        sce.g.a = []; // rect list
+        sce.g.b = []; // canvas list
+        sce.g.c = []; // mono list
+        for (var i = 0; i < sce.nt; i++) {
+            var x0 = i % sce.nx;
+            var y0 = (i / sce.nx) >>> 0;
+            var x1 = (x0 * sce.px) >>> 0;
+            var y1 = (y0 * sce.py) >>> 0;
+            sce.g.a[i] = [sce.px,sce.py,x1,y1+80];
+            sce.g.b[i] = dom.canvas(sce.g.a[i]);
+            dom.add(sce.g.b[i]);
+            sce.g.c[i] = rgba.rb();
+        }
     }
 }
 // dom
@@ -92,6 +120,14 @@ var ren = {
     "test": function(c0) {
         c0.con.fillStyle = rgba.rmon();
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "map": function(c0, d0) {
+        for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i];
+            var d1 = d0[i];
+            c1.con.fillStyle = rgba.mono(d1);
+            c1.con.fillRect(0,0,c1.can.width,c1.can.height);
+        }
     }
 }
 // colors
