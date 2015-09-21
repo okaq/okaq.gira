@@ -41,6 +41,7 @@ var p = {
     },
     "begin": function() {
         console.log("starting...");
+        sce.data();
         sce.grid();
         ren.map(sce.g.b, sce.g.c);
         // add oxy bmp font
@@ -49,6 +50,8 @@ var p = {
         p.title = "btc scalp hunt";
         var i0 = (Math.random() * sce.nt) >>> 0;
         ren.txt(p.title, i0);
+        // jump into scene one, frame one
+        // begin tick clock until next jump
     }
 }
 // scene
@@ -57,7 +60,15 @@ var sce = {
         sce.a = [1920,1080,0,0];
         sce.b = dom.canvas(sce.a);
         dom.add(sce.b);
-
+    },
+    "data": function() {
+        // create scene list and anim data
+        
+        // frames data
+        var f0 = [];
+        f0[0] = {}; // draw text at pos
+        f0[1] = {};
+        f0[2] = {};
         // scene list
         sce.s = [];
         // index
