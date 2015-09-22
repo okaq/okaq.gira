@@ -32,7 +32,7 @@ var p = {
         ren.test(sce.b);
 
         // begin
-        p.id = window.setTimeout(p.begin, 1000);
+        window.setTimeout(p.begin, 1000);
 
         // stats
         var done = window.performance.now();
@@ -52,6 +52,8 @@ var p = {
         ren.txt(p.title, i0);
         // jump into scene one, frame one
         // begin tick clock until next jump
+        // p.id = window.setInterval();
+        // get frame count form scene and cycle
     }
 }
 // scene
@@ -63,6 +65,10 @@ var sce = {
     },
     "data": function() {
         // create scene list and anim data
+        // frames list
+        // frames object - metadata (count, dur)
+        // - per frame list
+        // frame - description (layout, canvas, bmps, text, rgba)
         
         // frames data
         var f0 = [];
