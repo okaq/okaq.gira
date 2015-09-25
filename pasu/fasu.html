@@ -33,6 +33,23 @@ var p = {
         console.log("total load time: " + total + "ms.");
     }
 }
+// scene
+var sce = {
+    "init": function() {
+        // global scene list
+        sce.a = [];
+        // scene index
+        sce.b = 0;
+    },
+    "rig": function() { 
+        // add new layout
+        sce.a[sce.b] = sce.rand();
+        sce.b = sce.b + 1;
+    },
+    "rand": function() {
+        // add scene with anim frames
+    }
+}
 // dom
 var dom = {
     "init": function() {
@@ -55,6 +72,45 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "rmon": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
     }
 }
 
