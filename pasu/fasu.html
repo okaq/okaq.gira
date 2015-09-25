@@ -53,11 +53,23 @@ var sce = {
         s0.f = [];
         // frame count
         s0.c = (Math.random() * 8) >>> 0;
-        // each frame a painting
+        // frame maker
+        var w2 = (1920 / 2) >>> 0;
+        var w4 = (1920 / 4) >>> 0;
+        var h2 = (1080 / 2) >>> 0;
+        var h4 = (1080 / 4) >>> 0;
+        // frame color
+        s0.b = rgba.rc();
+        // perturb color : pert(x0) : add/sub gauss(x0) to each channel
         for (var i = 0; i < s0.c; i++) {
             s0.f[i] = {};
-            s0.f[i].r = [0,0,0,0]; // layout
+            var x0 = (Math.random() * w2) >>> 0;
+            var w0 = (Math.random() * w4) >>> 0;
+            var y0 = (Math.random() * h2) >>> 0;
+            var h0 = (Math.random() * h4) >>> 0;
+            s0.f[i].r = [w0,h0,x0,y0]; // layout
             s0.f[i].c = dom.add(s0.f[i].r); // canvas
+            // s0.f[i].b = rgba.rc();
         }
         return s0;
     },
@@ -90,6 +102,44 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// normal distribution
+var gauss = {
+    "rand": function() {
+        // Math.random has uniform distribution over [0.0,1.0)
+        // gauss rand returns normally distributed values given mean
+        // return interval: [-n,n]
+        gauss.stdev = 1.0;
+        gauss.mean = 0.0;
+        var r0 = 0.0;
+        gauss.n0 = 3;
+        for (var i = 0; i < gauss.n0; i++) {
+            r0 += gauss.comp();
+        }
+        var r1 = (r0 * gauss.stdev) + gauss.mean;
+        return r1;
+    },
+    "comp": function() {
+        // normal distribution approximated
+        // by summing three uniform components
+        // with mean of zero
+        return ((Math.random() * 2.0) - 1.0);
+    },
+    "randn": function() {
+        // rand normalized to [0,1]
+        var g0 = gauss.rand();
+        var n1 = (gauss.n0 * 2) >>> 0;
+        var g1 = (g0 + gauss.n0) / n1;
+        return g1;
+    },
+    "randa": function(n0) {
+        // return array of normalized randn's
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            r0[i] = gauss.randn();
+        }
+        return r0;
     }
 }
 // colors
