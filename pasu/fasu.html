@@ -48,6 +48,24 @@ var sce = {
     },
     "rand": function() {
         // add scene with anim frames
+        var s0 = {};
+        // frame list
+        s0.f = [];
+        // frame count
+        s0.c = (Math.random() * 8) >>> 0;
+        // each frame a painting
+        for (var i = 0; i < s0.c; i++) {
+            s0.f[i] = {};
+            s0.f[i].r = [0,0,0,0]; // layout
+            s0.f[i].c = dom.add(s0.f[i].r); // canvas
+        }
+        return s0;
+    },
+    "step": function() {
+        // per frame add / remove canvas
+    },
+    "change": function() {
+        // per scene change add / remove canvas
     }
 }
 // dom
