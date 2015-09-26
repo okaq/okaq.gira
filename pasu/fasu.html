@@ -26,9 +26,10 @@ var p = {
 
         // subsystems
         p.subs = [dom,sce];
+        p.subs.forEach(function(el){el.init();});
 
         // start
-        window.setInterval(p.start, 1000);
+        window.setTimeout(p.start, 1000);
 
         // stats
         var done = window.performance.now();
@@ -37,6 +38,8 @@ var p = {
     },
     "start": function() {
         sce.rig();
+        sce.tick = 0; // ticker
+        sce.max = 0; // max frames in scene
         // get frames 
         // start ticker
         // render each frame
@@ -78,7 +81,8 @@ var sce = {
             var y0 = (Math.random() * h2) >>> 0;
             var h0 = (Math.random() * h4) >>> 0;
             s0.f[i].r = [w0,h0,x0,y0]; // layout
-            s0.f[i].c = dom.add(s0.f[i].r); // canvas
+            s0.f[i].c = dom.canvas(s0.f[i].r); // canvas
+            dom.add(s0.f[i].c);
             // s0.f[i].b = rgba.rc();
         }
         return s0;
