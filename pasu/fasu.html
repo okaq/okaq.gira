@@ -37,9 +37,13 @@ var p = {
         console.log("total load time: " + total + "ms.");
     },
     "start": function() {
-        sce.rig();
-        sce.tick = 0; // ticker
-        sce.max = 0; // max frames in scene
+        for (var i = 0; i < 4; i++) {
+            sce.rig();
+        }
+        p.index = (Math.random() * sce.a.length) >>> 0;
+        p.tick = 0; // ticker
+        p.max = sce.a[p.index].c; // max frames in scene
+        console.log(p);
         // get frames 
         // start ticker
         // render each frame
