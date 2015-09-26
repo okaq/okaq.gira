@@ -25,12 +25,22 @@ var p = {
         var now = window.performance.now();
 
         // subsystems
-        p.subs = [dom];
+        p.subs = [dom,sce];
+
+        // start
+        window.setInterval(p.start, 1000);
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total load time: " + total + "ms.");
+    },
+    "start": function() {
+        sce.rig();
+        // get frames 
+        // start ticker
+        // render each frame
+        // then decide on next scene
     }
 }
 // scene
