@@ -44,10 +44,19 @@ var p = {
         p.tick = 0; // ticker
         p.max = sce.a[p.index].c; // max frames in scene
         console.log(p);
+        p.id = window.setInterval(p.loop, 1000);
         // get frames 
         // start ticker
         // render each frame
         // then decide on next scene
+    },
+    "loop": function() {
+        p.tick = p.tick + 1;
+        console.log("loop ticker: " + p.tick);
+        if (p.tick > p.max) {
+            console.log("max frames achieved");
+            window.clearInterval(p.id);
+        }
     }
 }
 // scene
