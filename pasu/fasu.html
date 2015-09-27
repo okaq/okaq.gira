@@ -40,7 +40,7 @@ var p = {
         for (var i = 0; i < 4; i++) {
             sce.rig();
         }
-        p.index = (Math.random() * sce.a.length) >>> 0;
+        p.index = 0; // (Math.random() * sce.a.length) >>> 0;
         p.tick = 0; // ticker
         p.max = sce.a[p.index].c; // max frames in scene
         console.log(p);
@@ -51,9 +51,12 @@ var p = {
         // then decide on next scene
     },
     "loop": function() {
+        // jump to new scene, add remove previous
+        // render scene at p.index, frame at p.tick
+        ren.field(p.index, p.tick);
         p.tick = p.tick + 1;
         console.log("loop ticker: " + p.tick);
-        if (p.tick > p.max) {
+        if (p.tick >= p.max) {
             console.log("max frames achieved");
             window.clearInterval(p.id);
         }
@@ -90,9 +93,9 @@ var sce = {
         for (var i = 0; i < s0.c; i++) {
             s0.f[i] = {};
             var x0 = (Math.random() * w2) >>> 0;
-            var w0 = (Math.random() * w4) >>> 0;
+            var w0 = (Math.random() * w4 + w4) >>> 0;
             var y0 = (Math.random() * h2) >>> 0;
-            var h0 = (Math.random() * h4) >>> 0;
+            var h0 = (Math.random() * h4 + h4) >>> 0;
             s0.f[i].r = [w0,h0,x0,y0]; // layout
             s0.f[i].c = dom.canvas(s0.f[i].r); // canvas
             dom.add(s0.f[i].c);
@@ -129,6 +132,19 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "field": function(s0, i0) {
+        // render scene s0, frame i0
+        var c0 = sce.a[s0].f[i0];
+        var c1 = c0.c;
+        var c2 = sce.a[s0].b;
+        console.log(s0,i0,c0,c1,c2);
+        var rgb0 = rgba.css(c2);
+        c1.con.fillStyle = rgb0;
+        c1.con.fillRect(0,0,c1.can.width,c1.can.height);
     }
 }
 // normal distribution
