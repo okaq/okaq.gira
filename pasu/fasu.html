@@ -43,6 +43,7 @@ var p = {
         p.index = 0; // (Math.random() * sce.a.length) >>> 0;
         p.tick = 0; // ticker
         p.max = sce.a[p.index].c; // max frames in scene
+        p.drawn = false;
         console.log(p);
         p.id = window.setInterval(p.loop, 1000);
         // get frames 
@@ -53,7 +54,11 @@ var p = {
     "loop": function() {
         // jump to new scene, add remove previous
         // render scene at p.index, frame at p.tick
+        if (p.drawn = true) {
+            // remove canvas at p.index - 1
+        }
         ren.field(p.index, p.tick);
+        p.drawn = true;
         p.tick = p.tick + 1;
         console.log("loop ticker: " + p.tick);
         if (p.tick >= p.max) {
@@ -65,6 +70,7 @@ var p = {
             } else {
                 p.tick = 0;
                 p.max = sce.a[p.index].c;
+                p.drawn = false;
                 console.log(p);
                 p.id = window.setInterval(p.loop, 1000);
                 // add / del canvas
@@ -93,7 +99,7 @@ var sce = {
         // frame list
         s0.f = [];
         // frame count
-        s0.c = (Math.random() * 8) >>> 0;
+        s0.c = ((Math.random() * 7) + 1) >>> 0;
         // frame maker
         var w2 = (1920 / 2) >>> 0;
         var w4 = (1920 / 4) >>> 0;
