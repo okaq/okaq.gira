@@ -59,6 +59,18 @@ var p = {
         if (p.tick >= p.max) {
             console.log("max frames achieved");
             window.clearInterval(p.id);
+            p.index = p.index + 1;
+            if (p.index >= sce.a.length) {
+                console.log("full loop complete");
+            } else {
+                p.tick = 0;
+                p.max = sce.a[p.index].c;
+                console.log(p);
+                p.id = window.setInterval(p.loop, 1000);
+                // add / del canvas
+            }
+            // cycle p.index to next
+            // reset tick loop
         }
     }
 }
