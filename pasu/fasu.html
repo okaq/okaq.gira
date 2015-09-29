@@ -50,6 +50,13 @@ var p = {
         // start ticker
         // render each frame
         // then decide on next scene
+
+        // keep track of all frames
+        // current scene index, frame index
+        // transition scene index, frame index
+        // max frames in scene, percent done
+        // so that upon change
+        // canvas objects can be add / rem from page
     },
     "loop": function() {
         // jump to new scene, add remove previous
@@ -124,7 +131,7 @@ var sce = {
     "step": function() {
         // per frame add / remove canvas
     },
-    "change": function() {
+    "change": function(i0) {
         // per scene change add / remove canvas
     }
 }
