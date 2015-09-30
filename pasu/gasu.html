@@ -25,13 +25,23 @@ var p = {
         var now = window.performance.now();
 
         // subsystems
-        p.subs = [dom];
+        p.subs = [dom,sce];
         p.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total load time: " + total + "ms.");
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.a = []; // scene list
+        sce.a[0] = {}; // scene object
+        sce.a[0].r = []; // rect list
+        sce.a[0].c = []; // canvas list
+        sce.a[0].f = []; // frame list
     }
 }
 // dom
