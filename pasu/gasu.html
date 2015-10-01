@@ -38,8 +38,8 @@ var p = {
     },
     "start": function() {
         // manage add new, remove previous canvas from page
-        sce.add(sce.a[0].c);
-        ren.test();
+        // sce.add(sce.a[0].c);
+        // ren.test();
     }
 }
 // scene
@@ -51,9 +51,10 @@ var sce = {
         sce.a[0].r[0] = [1920,1080,0,0];
         sce.a[0].r[1] = [1920,960,0,80];
         sce.a[0].c = sce.canv(sce.a[0].r); // canvas list
-        sce.a[0].f = []; // frame list
+        sce.a[0].f = sce.rand(sce.a[0].c); // frame list
         // frame can be single monochrome value
         // or rgba color quad
+        console.log(sce);
     },
     "canv": function(r0) {
         // input scene object rect list
@@ -63,6 +64,20 @@ var sce = {
             c0[i] = dom.canvas(r0[i]);
         }
         return c0;
+    },
+    "rand": function(c0) {
+        // for each canvas object input
+        // a random frame sequence
+        var f0 = [];
+        for (var i = 0; i < c0.length; i++) {
+            var f1 = [];
+            var c1 = (Math.random() * 8) >>> 0; // frame count
+            for (var j = 0; j < c1; j++) {
+                f1[j] = rgba.rb();
+            }
+            f0.push(f1);
+        }
+        return f0;
     }
 }
 // dom
@@ -89,6 +104,46 @@ var dom = {
         dom.alpha.removeChild(c0.can);
     }
 }
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "rmon": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
+    }
+}
+
 
         </script>
     </head>
