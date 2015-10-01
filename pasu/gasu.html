@@ -40,6 +40,19 @@ var p = {
         // manage add new, remove previous canvas from page
         // sce.add(sce.a[0].c);
         // ren.test();
+        // manage loop render dynamics
+        // pasu class handles master tick loop
+        // scene step handles frame count and render
+        p.tick = 0;
+        p.id = window.setInterval(p.loop, 1000);
+    },
+    "loop": function() {
+        console.log("pasu tick: " + p.tick);
+        p.tick = p.tick + 1;
+        if (p.tick == 8) {
+            console.log("pasu loop done");
+            window.clearInterval(p.id);
+        }
     }
 }
 // scene
