@@ -40,8 +40,15 @@ var sce = {
         sce.a = []; // scene list
         sce.a[0] = {}; // scene object
         sce.a[0].r = []; // rect list
-        sce.a[0].c = []; // canvas list
+        sce.a[0].r[0] = [1920,1080,0,0];
+        sce.a[0].r[1] = [1920,960,0,80];
+        sce.a[0].c = sce.canv(sce.a[0]); // canvas list
         sce.a[0].f = []; // frame list
+    },
+    "canv": function() {
+        // input scene object rect list
+        // output canvas object list
+
     }
 }
 // dom
