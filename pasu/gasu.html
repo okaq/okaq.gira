@@ -44,6 +44,8 @@ var p = {
         // pasu class handles master tick loop
         // scene step handles frame count and render
         p.tick = 0;
+        p.max = sce.max();
+        console.log("pasu max: " + p.max);
         p.id = window.setInterval(p.loop, 1000);
     },
     "loop": function() {
@@ -91,6 +93,17 @@ var sce = {
             f0.push(f1);
         }
         return f0;
+    },
+    "max": function() {
+        // return max frame count
+        var m0 = 0;
+        for (var i = 0; i < sce.a[0].f.length; i++) {
+            var m1 = sce.a[0].f[i].length;
+            if (m1 > m0) {
+                m0 = m1;
+            }
+        }
+        return m0;
     }
 }
 // dom
