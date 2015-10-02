@@ -54,7 +54,9 @@ var p = {
         if (p.tick == 8) {
             console.log("pasu loop done");
             window.clearInterval(p.id);
+            return;
         }
+        sce.step();
     }
 }
 // scene
@@ -77,6 +79,7 @@ var sce = {
         var c0 = [];
         for (var i = 0; i < r0.length; i++) {
             c0[i] = dom.canvas(r0[i]);
+            dom.add(c0[i]);
         }
         return c0;
     },
@@ -104,6 +107,15 @@ var sce = {
             }
         }
         return m0;
+    },
+    "step": function() {
+        // for each canvas
+        // t0 % frames.length
+        // render mono in canvas rect
+        for (var i = 0; i < sce.a[0].c.length; i++) {
+            var i0 = p.tick % sce.a[0].f.length;
+            ren.mon(sce.a[0].c[i], sce.a[0].f[i][i0]);
+        }
     }
 }
 // dom
@@ -128,6 +140,13 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "mon": function(c0, f0) {
+        c0.con.fillStyle = rgba.mono(f0);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     }
 }
 // colors
