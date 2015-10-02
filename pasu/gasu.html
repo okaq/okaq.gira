@@ -63,6 +63,7 @@ var p = {
 var sce = {
     "init": function() {
         sce.a = []; // scene list
+        // intro scene
         sce.a[0] = {}; // scene object
         sce.a[0].r = []; // rect list
         sce.a[0].r[0] = [1920,1080,0,0];
@@ -71,7 +72,18 @@ var sce = {
         sce.a[0].f = sce.rand(sce.a[0].c); // frame list
         // frame can be single monochrome value
         // or rgba color quad
+        // game scene
+        sce.a[1] = {};
+        sce.a[1].r = sce.quad(sce.a[0].r[1]);
         console.log(sce);
+    },
+    "quad": function(r0) {
+        // split rect into even quads
+        var r1 = [];
+        var w2 = (r0[0] / 2) >>> 0;
+        var h2 = (r0[1] / 2) >>> 0;
+
+        return r1;
     },
     "canv": function(r0) {
         // input scene object rect list
