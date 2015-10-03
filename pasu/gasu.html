@@ -57,6 +57,9 @@ var p = {
             return;
         }
         sce.step();
+        // sce jump from prev to next
+        // remove prev canvas objects, add next
+        // if either is null continue
     }
 }
 // scene
@@ -75,6 +78,7 @@ var sce = {
         // game scene
         sce.a[1] = {};
         sce.a[1].r = sce.quad(sce.a[0].r[1]);
+        sce.a[1].c = sce.canv(sce.a[1].r);
         console.log(sce);
     },
     "quad": function(r0) {
@@ -82,7 +86,14 @@ var sce = {
         var r1 = [];
         var w2 = (r0[0] / 2) >>> 0;
         var h2 = (r0[1] / 2) >>> 0;
-
+        var x0 = 0 + r0[2];
+        var y0 = 0 + r0[3];
+        var x1 = x0 + w2;
+        var y1 = y0 + h2;
+        r1[0] = [w2,h2,x0,y0];
+        r1[1] = [w2,h2,x1,y0];
+        r1[2] = [w2,h2,x0,y1];
+        r1[3] = [w2,h2,x1,y1];
         return r1;
     },
     "canv": function(r0) {
@@ -91,7 +102,7 @@ var sce = {
         var c0 = [];
         for (var i = 0; i < r0.length; i++) {
             c0[i] = dom.canvas(r0[i]);
-            dom.add(c0[i]);
+            // dom.add(c0[i]);
         }
         return c0;
     },
