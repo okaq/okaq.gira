@@ -83,9 +83,13 @@ var sce = {
         sce.a[1].r = sce.quad(sce.a[0].r[1]);
         sce.a[1].c = sce.canv(sce.a[1].r);
         sce.a[1].f = sce.rand(sce.a[1].c);
-        console.log(sce);
+        console.log(sce.a);
         // accumulator
         sce.b = [];
+        sce.b[0] = []; // max list
+        sce.b[0][0] = sce.maxa(sce.a[0].f);
+        sce.b[0][1] = sce.maxa(sce.a[1].f);
+        console.log(sce.b);
     },
     "quad": function(r0) {
         // split rect into even quads
@@ -131,6 +135,17 @@ var sce = {
         var m0 = 0;
         for (var i = 0; i < sce.a[0].f.length; i++) {
             var m1 = sce.a[0].f[i].length;
+            if (m1 > m0) {
+                m0 = m1;
+            }
+        }
+        return m0;
+    },
+    "maxa": function(f0) {
+        // return max frame count, abstract parameter
+        var m0 = 0;
+        for (var i = 0; i < f0.length; i++) {
+            var m1 = f0[i].length;
             if (m1 > m0) {
                 m0 = m1;
             }
