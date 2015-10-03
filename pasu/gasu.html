@@ -60,6 +60,9 @@ var p = {
         // sce jump from prev to next
         // remove prev canvas objects, add next
         // if either is null continue
+
+        // sce.step returns an object [msg,percentDone]
+        // pasu clock only starts, stops, ticks
     }
 }
 // scene
@@ -79,7 +82,10 @@ var sce = {
         sce.a[1] = {};
         sce.a[1].r = sce.quad(sce.a[0].r[1]);
         sce.a[1].c = sce.canv(sce.a[1].r);
+        sce.a[1].f = sce.rand(sce.a[1].c);
         console.log(sce);
+        // accumulator
+        sce.b = [];
     },
     "quad": function(r0) {
         // split rect into even quads
