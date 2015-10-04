@@ -24,6 +24,10 @@ var p = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        p.subs = [dom,lay,sce,bmp];
+        p.subs.forEach(function(el){el.init();});
+
         // start
         window.setTimeout(p.start, 1000);
 
@@ -34,6 +38,50 @@ var p = {
     },
     "start": function() {
         console.log("starting local loop");
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        // per frame data generation
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // handles function defined complex layout
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        // defines scene jumps
+        // add remove canvas
+        // anim stats
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
     }
 }
 
