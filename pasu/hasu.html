@@ -50,6 +50,10 @@ var bmp = {
 var lay = {
     "init": function() {
         // handles function defined complex layout
+        lay.w = 1920;
+        lay.h = 1080;
+        lay.tri();
+        lay.button();
     },
     "tri": function() {
         // 5x5 triangle for top instructions
@@ -78,6 +82,8 @@ var lay = {
     },
     "button": function() {
         // big square button for start
+        var s0 = 256;
+        lay.big = [s0,s0,lay.w-s0,lay.h-s0];
     }
 }
 // scene
