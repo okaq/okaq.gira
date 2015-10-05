@@ -53,6 +53,16 @@ var lay = {
     },
     "tri": function() {
         // 5x5 triangle for top instructions
+        // triangle bitmap
+        lay.mat = [
+            1,1,1,1,1,
+            1,1,1,1,0,
+            1,1,1,0,0,
+            1,1,0,0,0,
+            1,0,0,0,0
+                ];
+        // fill with patterns
+        // overlay text in separate canvas blocks with shading
     },
     "button": function() {
         // big square button for start
@@ -64,6 +74,9 @@ var sce = {
         // defines scene jumps
         // add remove canvas
         // anim stats
+    },
+    "gen": function() {
+        // from layout structure
     }
 }
 // dom
