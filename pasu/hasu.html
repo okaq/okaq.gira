@@ -61,6 +61,18 @@ var lay = {
             1,1,0,0,0,
             1,0,0,0,0
                 ];
+        lay.cw = 64; // cell width
+        lay.ch = 64;
+        lay.mx = 0; // page margin
+        lay.my = 0;
+        lay.tris = [];
+        for (var i = 0; i < lay.mat.length; i++) {
+            var x0 = i % 5;
+            var y0 = (i / 5) >>> 0;
+            var x1 = (lay.cw * x0) >>> 0;
+            var y1 = (lay.ch * y0) >>> 0;
+            lay.tris[i] = [lay.cw,ay.ch,x1,y1];
+        }
         // fill with patterns
         // overlay text in separate canvas blocks with shading
     },
