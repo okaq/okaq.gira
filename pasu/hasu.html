@@ -87,7 +87,7 @@ var lay = {
     "button": function() {
         // big square button for start
         var s0 = 256;
-        lay.big = [s0,s0,lay.w-s0,lay.h-s0];
+        lay.big = [[s0,s0,lay.w-s0,lay.h-s0]];
     }
 }
 // scene
@@ -96,6 +96,18 @@ var sce = {
         // defines scene jumps
         // add remove canvas
         // anim stats
+
+        // scene collection
+        // format lists of rects
+        sce.b = [lay.big,lay.tris];
+        sce.c = ["big", "tris"]; // names
+        sce.a = {};
+        for (var i = 0; i < sce.b.length; i++) {
+            
+        }
+        // single logical index for each scene
+        // e.g. sce_0_1_0 for big button
+        // [scene,group,canvas]
     },
     "gen": function() {
         // from layout structure
