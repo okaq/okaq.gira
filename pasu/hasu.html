@@ -75,7 +75,11 @@ var lay = {
             var y0 = (i / 5) >>> 0;
             var x1 = (lay.cw * x0) >>> 0;
             var y1 = (lay.ch * y0) >>> 0;
-            lay.tris[i] = [lay.cw,ay.ch,x1,y1];
+            if (lay.mat[i] == 1) {
+                lay.tris[i] = [lay.cw,lay.ch,x1,y1];
+            } else {
+                lay.tris[i] = null;
+            }
         }
         // fill with patterns
         // overlay text in separate canvas blocks with shading
