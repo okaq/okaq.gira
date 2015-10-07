@@ -38,6 +38,9 @@ var p = {
     },
     "start": function() {
         console.log("starting local loop");
+        sce.morph("big");
+        sce.morph("big");
+        // sce.morph("tris");
     }
 }
 // bitmap
@@ -151,9 +154,14 @@ var sce = {
         var i0 = sce.d.indexOf(k0);
         if (i0 < 0) {
             // add
+            console.log("canvas group: " + k0 + " not on page: " + i0 + " adding now");
+            sce.d.push(k0);
         } else {
             // remove
+            console.log("canvas group: " + k0 + " found at index: " + i0 + " removing now");
+            sce.d.splice(i0, 1);
         }
+        console.log(sce.d);
     }
 }
 // dom
