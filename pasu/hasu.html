@@ -47,6 +47,14 @@ var bmp = {
         // render tris art upon load
         // 1fps anim for big button
         // overlay info txt on triangles
+        bmp.a = {};
+        for (var k in sce.a) {
+            bmp.a[k] = [];
+            for (var i = 0; i < sce.a[k].c.length; i++) {
+                bmp.a[k][i] = rgba.rb();
+            }
+        }
+        console.log(bmp.a);
     }
 }
 // layout
@@ -111,6 +119,7 @@ var sce = {
             sce.a[n0] = {};
             sce.a[n0].c = sce.canvas(r0);
         }
+        console.log(sce.a)
         // single logical index for each scene
         // e.g. sce_0_1_0 for big button
         // [scene,group,canvas]
@@ -123,6 +132,10 @@ var sce = {
     "canvas": function(r0) {
         var c0 = [];
         for (var i = 0; i < r0.length; i++) {
+            // console.log(r0, r0[i]);
+            if (r0[i] == null) {
+                continue;
+            }
             c0[i] = dom.canvas(r0[i]);
         }
         return c0;
@@ -152,6 +165,46 @@ var dom = {
         dom.alpha.removeChild(c0.can);
     }
 }
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "rmon": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
+    }
+}
+
 
         </script>
     </head>
