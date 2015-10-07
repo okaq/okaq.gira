@@ -119,7 +119,9 @@ var sce = {
             sce.a[n0] = {};
             sce.a[n0].c = sce.canvas(r0);
         }
-        console.log(sce.a)
+        // console.log(sce.a);
+        sce.d = []; // list of keys currently added to page
+
         // single logical index for each scene
         // e.g. sce_0_1_0 for big button
         // [scene,group,canvas]
@@ -136,9 +138,22 @@ var sce = {
             if (r0[i] == null) {
                 continue;
             }
-            c0[i] = dom.canvas(r0[i]);
+            // c0[i] = dom.canvas(r0[i]);
+            c0.push(dom.canvas(r0[i]));
         }
+        // console.log(r0.length, c0.length);
         return c0;
+    },
+    "morph": function(k0) {
+        // toggle all canvas objects in key
+        // add / remove from page
+        // sce.d = []; // list of keys currently added to page
+        var i0 = sce.d.indexOf(k0);
+        if (i0 < 0) {
+            // add
+        } else {
+            // remove
+        }
     }
 }
 // dom
