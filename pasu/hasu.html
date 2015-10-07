@@ -162,6 +162,24 @@ var sce = {
             sce.d.splice(i0, 1);
         }
         console.log(sce.d);
+        // model has changed so update view ;)
+        sce.place();
+    },
+    "place": function() {
+        // remove all alpha child nodes
+        // add only nodes in sce.d
+        // only way to ensure valid changes?
+        for (var i = 0; i < sce.d.length; i++) {
+            var k0 = sce.d[i];
+            var c0 = sce.a[k0].c;
+            console.log(c0.length);
+            for (var j = 0; j < c0.length; j++) {
+                dom.add(c0[j]);
+            }
+        }
+        // child nodes
+        var n0 = dom.alpha.children;
+        console.log(n0);
     }
 }
 // dom
