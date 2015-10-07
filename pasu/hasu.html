@@ -103,14 +103,26 @@ var sce = {
         sce.c = ["big", "tris"]; // names
         sce.a = {};
         for (var i = 0; i < sce.b.length; i++) {
-            
+            var n0 = sce.c[i];
+            var r0 = sce.b[i];
+            sce.a[n0] = {};
+            sce.a[n0].c = sce.canvas(r0);
         }
         // single logical index for each scene
         // e.g. sce_0_1_0 for big button
         // [scene,group,canvas]
+        // assign scene and group from layout
+        // use layout instructions to generate individual canvases
     },
     "gen": function() {
         // from layout structure
+    },
+    "canvas": function(r0) {
+        var c0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            c0[i] = dom.canvas(r0[i]);
+        }
+        return c0;
     }
 }
 // dom
