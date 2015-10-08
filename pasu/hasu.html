@@ -39,8 +39,9 @@ var p = {
     "start": function() {
         console.log("starting local loop");
         sce.morph("big");
-        sce.morph("big");
-        // sce.morph("tris");
+        // sce.morph("big");
+        sce.morph("tris");
+        sce.ren("big");
     }
 }
 // bitmap
@@ -180,6 +181,12 @@ var sce = {
         // child nodes
         var n0 = dom.alpha.children;
         console.log(n0);
+    },
+    "ren": function(k0) {
+        // render bmp data in canvas object at key
+        var c0 = sce.a[k0].c[0];
+        var m0 = bmp.a[k0][0];
+        ren.mono(c0, m0);
     }
 }
 // dom
@@ -204,6 +211,13 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "mono": function(c0, m0) {
+        c0.con.fillStyle = rgba.mono(m0);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     }
 }
 // colors
