@@ -42,6 +42,10 @@ var p = {
         // sce.morph("big");
         sce.morph("tris");
         sce.ren("big");
+        sce.ren("tris");
+        // layout config maps to rect list
+        // canvas objects generate scenes from rect list
+        // node manager handles jumps and maps bmps to canvas
     }
 }
 // bitmap
@@ -184,9 +188,14 @@ var sce = {
     },
     "ren": function(k0) {
         // render bmp data in canvas object at key
-        var c0 = sce.a[k0].c[0];
-        var m0 = bmp.a[k0][0];
-        ren.mono(c0, m0);
+        // var c0 = sce.a[k0].c[0];
+        // var m0 = bmp.a[k0][0];
+        // ren.mono(c0, m0);
+        for (var i = 0; i < sce.a[k0].c.length; i++) {
+            var c1 = sce.a[k0].c[i];
+            var m1 = bmp.a[k0][i];
+            ren.mono(c1, m1);
+        }
     }
 }
 // dom
