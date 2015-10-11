@@ -24,6 +24,10 @@ var p = {
         console.log(e);
         var now = window.performance.now();
 
+        // subsystems
+        p.subs = [dom,lay];
+        p.subs.forEach(function(el){el.init();});
+
         // start
         // window.setTimeout(p.start, 1000);
         window.requestAnimationFrame(p.start);
@@ -46,6 +50,7 @@ var lay = {
         // layout config, instructions
         // map to grid, button generator function
         // grid object to load into generator
+        
         lay.a = {}; // layout config for top left grid
         lay.a.w = 128;
         lay.a.h = 128;
@@ -55,16 +60,60 @@ var lay = {
             1,1,1,1,1,
             1,1,1,1,1,
             1,1,1,1,1]; // bitmap
+
         lay.b = {}; // config for bottom right button
         lay.b.w = 512;
         lay.b.h = 512;
         lay.b.g = [lay.w-lay.b.w,lay.h-lay.b.h,lay.b.w,lay.b.h,1,1];
+
+        // generate
+        lay.a.r = lay.grido(lay.a.g);
+        lay.b.r = lay.grido(lay.b.g);
+        console.log(lay);
     },
     "grid": function(x0, y0, w0, h0, nx, ny) {
         // even rect layout defined by parameters
+        var g0 = [];
+        for (var y = 0; y < ny; y++) {
+            for (var x = 0; x < nx; x++) {
+                var i0 = ((y * nx) + x) >>> 0;
+                var x1 = ((w0 * x) + x0) >>> 0;
+                var y1 = ((h0 * y) + y0) >>> 0;
+                g0[i] = [w0,h0,x1,y1];
+            }
+        }
+        return g0;
+    },
+    "grido": function(g0) {
+        // input grid object
+        return lay.grid(g0[0],g0[1],g0[2],g0[3],g0[4],g0[5]);
     },
     "mat": function(m0) {
         // grid defined by bitmap
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
     }
 }
 </script>
