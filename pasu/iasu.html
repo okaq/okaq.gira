@@ -40,8 +40,25 @@ var p = {
 // layout
 var lay = {
     "init": function() {
+        // layout globals
+        lay.w = 1920;
+        lay.h = 1080;
         // layout config, instructions
         // map to grid, button generator function
+        // grid object to load into generator
+        lay.a = {}; // layout config for top left grid
+        lay.a.w = 128;
+        lay.a.h = 128;
+        lay.a.g = [0,0,5*lay.a.w,5*lay.a.h,5,5]; // grid parameters
+        lay.a.b = [1,1,1,1,1,
+            1,1,1,1,1,
+            1,1,1,1,1,
+            1,1,1,1,1,
+            1,1,1,1,1]; // bitmap
+        lay.b = {}; // config for bottom right button
+        lay.b.w = 512;
+        lay.b.h = 512;
+        lay.b.g = [lay.w-lay.b.w,lay.h-lay.b.h,lay.b.w,lay.b.h,1,1];
     },
     "grid": function(x0, y0, w0, h0, nx, ny) {
         // even rect layout defined by parameters
