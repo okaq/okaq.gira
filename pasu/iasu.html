@@ -56,10 +56,10 @@ var lay = {
         lay.a.h = 128;
         lay.a.g = [0,0,5*lay.a.w,5*lay.a.h,5,5]; // grid parameters
         lay.a.b = [1,1,1,1,1,
-            1,1,1,1,1,
-            1,1,1,1,1,
-            1,1,1,1,1,
-            1,1,1,1,1]; // bitmap
+            1,1,1,1,0,
+            1,1,1,0,0,
+            1,1,0,0,0,
+            1,0,0,0,0]; // bitmap
 
         lay.b = {}; // config for bottom right button
         lay.b.w = 512;
@@ -67,7 +67,7 @@ var lay = {
         lay.b.g = [lay.w-lay.b.w,lay.h-lay.b.h,lay.b.w,lay.b.h,1,1];
 
         // generate
-        lay.a.r = lay.grido(lay.a.g);
+        lay.a.r = lay.mat(lay.a.g,lay.a.b);
         lay.b.r = lay.grido(lay.b.g);
         console.log(lay);
     },
@@ -79,7 +79,7 @@ var lay = {
                 var i0 = ((y * nx) + x) >>> 0;
                 var x1 = ((w0 * x) + x0) >>> 0;
                 var y1 = ((h0 * y) + y0) >>> 0;
-                g0[i] = [w0,h0,x1,y1];
+                g0[i0] = [w0,h0,x1,y1];
             }
         }
         return g0;
@@ -88,8 +88,24 @@ var lay = {
         // input grid object
         return lay.grid(g0[0],g0[1],g0[2],g0[3],g0[4],g0[5]);
     },
-    "mat": function(m0) {
+    "mat": function(g0, m0) {
         // grid defined by bitmap
+        if (m0.length != (g0[4] * g0[5])) {
+            conosle.log("mismatch in bitmap and grid sizes!");
+            return;
+        }
+        var r0 = [];
+        for (var i = 0; i < m0.length; i++) {
+            if (m0[i] == 0) {
+                continue;
+            }
+            var x0 = i % g0[4];
+            var y0 = (i / g0[5]) >>> 0;
+            var x1 = ((g0[2] * x0) + g0[0]) >>> 0;
+            var y1 = ((g0[3] * y0) + g0[1]) >>> 0;
+            r0.push([g0[2], g0[3], x1, y1]);
+        }
+        return r0;
     }
 }
 // dom
