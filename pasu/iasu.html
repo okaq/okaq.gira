@@ -25,7 +25,7 @@ var p = {
         var now = window.performance.now();
 
         // subsystems
-        p.subs = [dom,lay];
+        p.subs = [dom,lay,sce];
         p.subs.forEach(function(el){el.init();});
 
         // start
@@ -39,6 +39,22 @@ var p = {
     },
     "start": function() {
         console.log("start the game asap");
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        // explicit designation for canvas objects
+        sce.names = [];
+        sce.names[0] = ["intro","start"];
+        sce.names[1] = ["net"];
+        sce.names[2] = ["board"];
+        sce.names[3] = ["stats"];
+        // mapping scene names to layout config grids
+    },
+    "grid": function(r0) {
+        var c0 = [];
+        return c0;
     }
 }
 // layout
