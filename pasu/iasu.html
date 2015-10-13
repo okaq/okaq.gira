@@ -54,6 +54,10 @@ var sce = {
     },
     "grid": function(r0) {
         var c0 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var c1 = dom.canvas(r0[i]);
+            c0.push(c1);
+        }
         return c0;
     }
 }
