@@ -25,7 +25,7 @@ var p = {
         var now = window.performance.now();
 
         // subsystems
-        p.subs = [bmp,dom];
+        p.subs = [bmp,dom,lay,sce];
         p.subs.forEach(function(el){el.init();});
 
         // start
@@ -38,6 +38,34 @@ var p = {
     },
     "start": function() {
         console.log("start the game asap");
+        p.motd = "hello pasu jasu";
+        p.text(p.motd);
+    },
+    "text": function(s0) {
+        // layout handles positioning
+        lay.text(s0);
+        // scene handles scene creation and dom management
+        sce.gen();
+        ren.scene();
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.a = 0; // scene index
+        sce.b = []; // scene list
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // page dims
+        lay.w = 1920;
+        lay.h = 1080;
+    },
+    "text": function(s0) {
+        // determine from current scene
+        // where available spce exists
     }
 }
 // bitmap
