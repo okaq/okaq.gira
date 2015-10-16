@@ -54,6 +54,7 @@ var sce = {
     "init": function() {
         sce.a = 0; // scene index
         sce.b = []; // scene list
+        // requires indicies into scene->group->canvas->frame
     }
 }
 // layout
@@ -62,10 +63,20 @@ var lay = {
         // page dims
         lay.w = 1920;
         lay.h = 1080;
+        // text positioning
+        lay.p = 0;
+        lay.pd = 100;
     },
     "text": function(s0) {
         // determine from current scene
-        // where available spce exists
+        // where available space exists
+        // for version one, values are hard coded
+        if (lay.p >= lay.h) {
+            console.log("out of space!");
+            return;
+        }
+
+        lay.p = lay.p + lay.dp;
     }
 }
 // bitmap
