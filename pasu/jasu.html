@@ -46,7 +46,7 @@ var p = {
         lay.text(s0);
         // scene handles scene creation and dom management
         sce.gen();
-        ren.text();
+        ren.text(p.motd,sce.text);
     }
 }
 // scene
@@ -58,6 +58,11 @@ var sce = {
     },
     "gen": function() {
         // generate and add current layout
+        sce.text = [];
+        for (var i = 0; i < lay.text.length; i++) {
+            sce.text[i] = dom.canvas(lay.text[i]);
+            dom.add(sce.text[i]);
+        }
     }
 }
 // layout
@@ -79,10 +84,14 @@ var lay = {
             return;
         }
         lay.text = [];
+        lay.bx = 96; // block size
+        lay.px = 3; // pixel size
         // functional addition of layout, canvii to scenes
         // determine if space is available (intersections)
         for (var i = 0; i < s0.length; i++) {
             // fixed size 96x96, 3px per block
+            var x0 = (i * lay.bx) >>> 0;
+            lay.text[i] = [lay.bx,lay.bx,x0,lay.p];
         }
         lay.p = lay.p + lay.dp;
     }
@@ -92,6 +101,11 @@ var ren = {
     "text": function(s0, c0) {
         // render text using bmp font
         // to input canvas list
+        for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i];
+            c1.con.fillStyle = rgba.rand();
+            c1.con.fillRect(0,0,c1.can.width,c1.can.height);
+        }
 
         // want full instructions in scene object
         // so we can make one call to ren.current()
