@@ -46,6 +46,7 @@ var p = {
         lay.text(s0);
         // scene handles scene creation and dom management
         sce.gen();
+        ren.test(sce.text);
         ren.text(p.motd,sce.text);
     }
 }
@@ -101,6 +102,34 @@ var ren = {
     "text": function(s0, c0) {
         // render text using bmp font
         // to input canvas list
+        for (var i = 0; i < c0.length; i++) {
+            // bkgd
+            var c1 = c0[i];
+            c1.con.fillStyle = rgba.rand();
+            c1.con.fillRect(0,0,c1.can.width,c1.can.height);
+            // text
+            var s1 = s0[i];
+            var bmp0 = bmp.a[s1];
+            // console.log("bmp0: " + bmp0);
+            if (bmp0 == undefined) {
+                continue;
+            }
+            c1.con.fillStyle = rgba.rand();
+            // glyph
+            for (var j = 0; j < bmp0.length; j++) {
+                if (bmp0[j] == 0) {
+                    continue;
+                }
+                var x0 = j % 32;
+                var y0 = (j / 32) >>> 0;
+                var x1 = (x0 * lay.px) >>> 0;
+                var y1 = (y0 * lay.px) >>> 0;
+                c1.con.fillRect(x1,y1,lay.px,lay.px);
+            }
+        }
+    },
+    "test": function(c0) {
+        // rand rgba in canvas list
         for (var i = 0; i < c0.length; i++) {
             var c1 = c0[i];
             c1.con.fillStyle = rgba.rand();
