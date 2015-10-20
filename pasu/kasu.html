@@ -25,7 +25,7 @@ var p = {
         var now = window.performance.now();
 
         // subsystems
-        p.subs = [];
+        p.subs = [lay];
         p.subs.forEach(function(el){el.init();});
 
         // start
@@ -40,7 +40,22 @@ var p = {
         console.log("start the game asap");
     }
 }
-
+// layout
+var lay = {
+    "init": function() {
+        // doc dims
+        lay.w = 1920;
+        lay.h = 1080;
+        // common divisors
+        lay.divs = [1,2,3,4,5,6,8,10,12,15,20,24,30,40,60,120];
+        // intro block size
+        lay.px = 20;
+        lay.nx = (lay.w / lay.px) >>> 0;
+        lay.ny = (lay.h / lay.px) >>> 0;
+        lay.nt = (lay.nx * lay.ny) >>> 0;
+        console.log("layout intro params: " + lay.nx + " " + lay.ny + " " + lay.nt);
+    }
+}
 </script>
     </head>
     <body id="alpha">
