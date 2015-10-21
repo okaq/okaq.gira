@@ -25,7 +25,7 @@ var p = {
         var now = window.performance.now();
 
         // subsystems
-        p.subs = [lay];
+        p.subs = [dom,lay,sce];
         p.subs.forEach(function(el){el.init();});
 
         // start
@@ -40,6 +40,17 @@ var p = {
         console.log("start the game asap");
     }
 }
+// scene
+var sce = {
+    "init": function() {
+        sce.g = [];
+        for (var i = 0; i < lay.g.length; i++) {
+            sce.g[i] = dom.canvas(lay.g[i]);
+            dom.add(sce.g[i]);
+        }
+        console.log(sce.g.length);
+    }
+}
 // layout
 var lay = {
     "init": function() {
@@ -50,12 +61,84 @@ var lay = {
         lay.divs = [1,2,3,4,5,6,8,10,12,15,20,24,30,40,60,120];
         // intro block size
         lay.px = 20;
+        lay.py = 20;
         lay.nx = (lay.w / lay.px) >>> 0;
         lay.ny = (lay.h / lay.px) >>> 0;
         lay.nt = (lay.nx * lay.ny) >>> 0;
         console.log("layout intro params: " + lay.nx + " " + lay.ny + " " + lay.nt);
+        // make grid
+        lay.g = [];
+        for (var i = 0; i < lay.nt; i++) {
+            var x0 = i % lay.nx;
+            var y0 = (i / lay.nx) >>> 0;
+            lay.g[i] = [lay.px,lay.py,x0,y0];
+        }
     }
 }
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "rmon": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
+    }
+}
+
 </script>
     </head>
     <body id="alpha">
