@@ -38,6 +38,7 @@ var p = {
     },
     "start": function() {
         console.log("start the game asap");
+        ren.test(sce.g);
     }
 }
 // scene
@@ -71,7 +72,9 @@ var lay = {
         for (var i = 0; i < lay.nt; i++) {
             var x0 = i % lay.nx;
             var y0 = (i / lay.nx) >>> 0;
-            lay.g[i] = [lay.px,lay.py,x0,y0];
+            var x1 = (x0 * lay.px) >>> 0;
+            var y1 = (y0 * lay.py) >>> 0;
+            lay.g[i] = [lay.px,lay.py,x1,y1];
         }
     }
 }
@@ -97,6 +100,15 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "test": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            c0[i].con.fillStyle = rgba.rand();
+            c0[i].con.fillRect(0,0,c0[i].can.width,c0[i].can.height);
+        }
     }
 }
 // colors
