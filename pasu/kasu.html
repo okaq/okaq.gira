@@ -40,6 +40,25 @@ var p = {
         console.log("start the game asap");
         ren.test(sce.g);
         ren.data();
+        p.ticks = 8;
+        p.loop();
+    },
+    "loop": function() {
+        // looper
+        p.clock = (Math.random() * 8000) >>> 0;
+        window.setTimeout(p.shuf, p.clock);
+    },
+    "shuf": function() {
+        console.log("shuffling bmp data");
+        p.ticks = p.ticks - 1;
+        if (p.ticks <= 0) {
+            console.log("done anim");
+            return;
+        } else {
+            // bmp.shuf();
+            console.log(p.ticks + " re-arrangements left to go");
+            window.setTimeout(p.loop,10);
+        }
     }
 }
 // bitmap
