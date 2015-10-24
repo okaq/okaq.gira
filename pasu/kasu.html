@@ -69,6 +69,16 @@ var bmp = {
             bmp.g[i] = rgba.rb();
         }
         console.log(bmp.g);
+    },
+    "shuf": function() {
+        // pick random data function from master list
+        // apply to data
+        for (var i = 0; i < bmp.g.length; i++) {
+            var x0 = i % lay.nx;
+            var y0 = (i / lay.nx) >>> 0;
+            var px = (x0 / lay.nx); // percent width
+            var py = (y0 / lay.ny); // percent height
+        }
     }
 }
 // scene
