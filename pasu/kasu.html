@@ -56,7 +56,8 @@ var p = {
             return;
         } else {
             // bmp.shuf();
-            bmp.rgrad(bmp.g);
+            // bmp.rgrad(bmp.g);
+            bmp.plasma(bmp.g);
             ren.data();
             console.log(p.ticks + " re-arrangements left to go");
             window.setTimeout(p.loop,10);
@@ -100,6 +101,35 @@ var bmp = {
             var dy0 = Math.abs(dy);
             var m0 = (((dx0 + dy0) / 2) * 255) >>> 0;
             bmp0[i] = 255 - m0;
+        }
+    },
+    "noise": function(bmp0) {
+        // lerp noise
+    },
+    "plasma": function(bmp0) {
+        // sum sine wave plasma
+        var rx = Math.random();
+        var ry = Math.random();
+        for (var i = 0; i < bmp0.length; i++) {
+            var x0 = i % lay.nx;
+            var y0 = (i / lay.nx) >>> 0;
+            var px = (x0 / lay.nx); // percent width
+            var py = (y0 / lay.ny); // percent height
+            var n0 = ((Math.random() * 4) + 4) >>> 0;
+            bmp0[i] = 0;
+            var dx = (px - rx); // width diff
+            var dy = (py - ry); // height diff
+            var dx0 = Math.sin(dx * 1 * Math.PI);
+            var dy0 = Math.sin(dy * 1.25 * Math.PI);
+            var dx1 = Math.sin(dx * 1.75 * Math.PI);
+            var dy1 = Math.sin(dy * 2.15 * Math.PI);
+            var dx2 = Math.sin(dx * 2.5 * Math.PI);
+            var dy2 = Math.sin(dy * 2.75 * Math.PI);
+            var dx3 = Math.sin(dx * 0.5 * Math.PI);
+            var dy3 = Math.sin(dy * 0.25 * Math.PI);
+            // bmp0[i] = (((dx0 + dy0 + 2) / 4) * 255) >>> 0;
+            m0 = (((dx0 + dy0 + dx1 + dy1 + dx2 + dy2 + dx3 + dy3 + 8) / 16) * 255) >>> 0;
+            bmp0[i] = bmp0[i] + m0;
         }
     }
 }
