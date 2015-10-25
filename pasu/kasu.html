@@ -57,7 +57,8 @@ var p = {
         } else {
             // bmp.shuf();
             // bmp.rgrad(bmp.g);
-            bmp.plasma(bmp.g);
+            // bmp.plasma(bmp.g);
+            bmp.noise(bmp.g);
             ren.data();
             console.log(p.ticks + " re-arrangements left to go");
             window.setTimeout(p.loop,10);
@@ -105,6 +106,11 @@ var bmp = {
     },
     "noise": function(bmp0) {
         // lerp noise
+        for (var i = 0; i < bmp0.length; i++) {
+            // clear
+            // bmp0[i] = 255;
+            var rx = gauss.r();
+        }
     },
     "plasma": function(bmp0) {
         // sum sine wave plasma
@@ -131,6 +137,20 @@ var bmp = {
             m0 = (((dx0 + dy0 + dx1 + dy1 + dx2 + dy2 + dx3 + dy3 + 8) / 16) * 255) >>> 0;
             bmp0[i] = bmp0[i] + m0;
         }
+    }
+}
+// gaussian dist
+var gauss = {
+    "rand": function() {
+        // return normal distributed random value in range [0,1]
+        var a0 = 0;
+        var a1 = 2;
+        var a2 = (a1 * 2) >>> 0;
+        for (var i = 0; i < a2; i++) {
+            a0 = a0 + Math.random();
+        }
+        a0 = a0 / a2;
+        return a0;
     }
 }
 // scene
