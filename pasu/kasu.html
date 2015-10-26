@@ -128,6 +128,31 @@ var bmp = {
             // clear
             bmp0[i] = 255;
         }
+        // for now factors are hard coded
+        // since we don't want to waste time doing the math
+        // loop over i< num, if num % i == 0, its an integral divisor
+
+        // whole range divisors
+        var dx = [1,2,3,4,6,8,12,16,24,32,48,96];
+        var dy = [1,2,3,6,9,18,27,54];
+        // sub range divisors
+        var dx0 = [2,3,4,6,8,12,16,24];
+        var dy0 = [2,3,6,9,18,27];
+        // rand index into sub divs
+        var idx = (Math.random() * dx0.length) >>> 0;
+        var idy = (Math.random() * dy0.length) >>> 0;
+        // noise texture stack
+        var t0 = [];
+        // num noise textures
+        var nt = 8;
+        // init to zero
+        for (var i = 0; i < nt; i++) {
+            t0[i] = [];
+            for (var j = 0; j < bmp0.length; j++) {
+                t0[i][j] = 0;
+            }
+        }
+
         // add together random amplitudes and frequencies
         // set amplitude = sub range of monchrome value [0-255]
         // set frequency = power of two square sub divide nx*ny image
@@ -138,7 +163,7 @@ var bmp = {
         // set amp, freq
         // generate random points
         // interpolate to 20 pixel blocks using cubic function
-        // add and average each frame to get output
+        // add and average each frame to get output (sum vs avg)
         // final optional smoothing average filter
     },
     "reax": function() {
