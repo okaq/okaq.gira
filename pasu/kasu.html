@@ -139,8 +139,8 @@ var bmp = {
         var dx0 = [2,3,4,6,8,12,16,24];
         var dy0 = [2,3,6,9,18,27];
         // rand index into sub divs
-        var idx = (Math.random() * dx0.length) >>> 0;
-        var idy = (Math.random() * dy0.length) >>> 0;
+        // var idx = (Math.random() * dx0.length) >>> 0;
+        // var idy = (Math.random() * dy0.length) >>> 0;
         // noise texture stack
         var t0 = [];
         // num noise textures
@@ -150,6 +150,24 @@ var bmp = {
             t0[i] = [];
             for (var j = 0; j < bmp0.length; j++) {
                 t0[i][j] = 0;
+            }
+        }
+        // tex gen
+        for (var i = 0; i < nt; i++) {
+            // rand index into sub divs
+            var idx = (Math.random() * dx0.length) >>> 0;
+            var idy = (Math.random() * dy0.length) >>> 0;
+            // num blocks
+            var nx = dx0[idx];
+            var ny = dy0[idy];
+            // block size relative to global block size
+            var sx = (lay.nx / nx) >>> 0;
+            var sy = (lay.ny / ny) >>> 0;
+            // functions to loop over blocks, pixels
+            // input bitmap, rand value, index, sx, sy
+            for (var y0 = 0; y0 < ny; y0++) {
+                for (var x0 = 0; x0 < nx; x0++) {
+                }
             }
         }
 
