@@ -163,10 +163,25 @@ var bmp = {
             // block size relative to global block size
             var sx = (lay.nx / nx) >>> 0;
             var sy = (lay.ny / ny) >>> 0;
+            // pixel size
+            var px = (lay.px * sx) >>> 0;
+            var py = (lay.py * sy) >>> 0;
             // functions to loop over blocks, pixels
             // input bitmap, rand value, index, sx, sy
             for (var y0 = 0; y0 < ny; y0++) {
                 for (var x0 = 0; x0 < nx; x0++) {
+                    // tex block index
+                    var i0 = ((y0 * nx) + x0) >>> 0;
+                    // index into bmp
+                    // var y1 = (y0 * py) >>> 0;
+                    // var x1 = (x0 * px) >>> 0;
+                    // global block index
+                    var x1 = (x0 * sx) >>> 0;
+                    var y1 = (y0 * sy) >>> 0;
+                    var i1 = (y1 * lay.nx) + x1) >>> 0;
+                    // rand mono byte
+                    var b0 = rgba.rb();
+                    // set block in t0[i] to color
                 }
             }
         }
