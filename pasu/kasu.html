@@ -163,6 +163,7 @@ var bmp = {
             // block size relative to global block size
             var sx = (lay.nx / nx) >>> 0;
             var sy = (lay.ny / ny) >>> 0;
+            var st = (sx * sy) >>> 0;
             // pixel size
             var px = (lay.px * sx) >>> 0;
             var py = (lay.py * sy) >>> 0;
@@ -181,7 +182,16 @@ var bmp = {
                     var i1 = (y1 * lay.nx) + x1) >>> 0;
                     // rand mono byte
                     var b0 = rgba.rb();
+                    // rand amplitude defined range
+                    var b1 = rgba.rb();
+                    var b2 = rgba.rb();
+                    var b3 = Math.abs(b1 - b2); // range
+                    var b4 = (Math.random() * b3) >>> 0; // amp
                     // set block in t0[i] to color
+                    for (var j = 0; j < st; j++) {
+                        var x2 = j % sx;
+                        var y2 = (j / sx) >>> 0;
+                    }
                 }
             }
         }
