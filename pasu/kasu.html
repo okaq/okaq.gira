@@ -58,7 +58,8 @@ var p = {
             // bmp.shuf();
             // bmp.rgrad(bmp.g);
             // bmp.plasma(bmp.g);
-            bmp.noise(bmp.g);
+            // bmp.noise(bmp.g);
+            bmp.lerp(bmp.g);
             ren.data();
             console.log(p.ticks + " re-arrangements left to go");
             window.setTimeout(p.loop,10);
@@ -144,7 +145,7 @@ var bmp = {
         // noise texture stack
         var t0 = [];
         // num noise textures
-        var nt = 8;
+        var nt = 1;
         // init to zero
         for (var i = 0; i < nt; i++) {
             t0[i] = [];
@@ -179,7 +180,7 @@ var bmp = {
                     // global block index
                     var x1 = (x0 * sx) >>> 0;
                     var y1 = (y0 * sy) >>> 0;
-                    var i1 = (y1 * lay.nx) + x1) >>> 0;
+                    var i1 = ((y1 * lay.nx) + x1) >>> 0;
                     // rand mono byte
                     var b0 = rgba.rb();
                     // rand amplitude defined range
@@ -187,14 +188,21 @@ var bmp = {
                     var b2 = rgba.rb();
                     var b3 = Math.abs(b1 - b2); // range
                     var b4 = (Math.random() * b3) >>> 0; // amp
+                    b4 = (b1 > b2) ? (b4 + b2) : (b4 + b1);
                     // set block in t0[i] to color
                     for (var j = 0; j < st; j++) {
                         var x2 = j % sx;
                         var y2 = (j / sx) >>> 0;
+                        var i2 = (i1 + x2 + (y2 * lay.nx)) >>> 0;
+                        t0[i][i2] = b4;
                     }
                 }
             }
         }
+
+        // set
+        bmp.g = t0[0].slice(0);
+        console.log(bmp0,bmp.g);
 
         // add together random amplitudes and frequencies
         // set amplitude = sub range of monchrome value [0-255]
