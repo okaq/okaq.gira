@@ -54,7 +54,9 @@ var p = {
         if (p.ticks <= 0) {
             console.log("done anim");
             // inter last noise texture
-            bmp.bicubic(bmp.g);
+            bmp.median(bmp.g);
+            // bmp.bicubic(bmp.g);
+            ren.data();
             return;
         } else {
             // bmp.shuf();
@@ -252,6 +254,38 @@ var bmp = {
     },
     "median": function(bmp0) {
         // median 3x3 kernel filter
+        var nx = (96 / 3) >>> 0;
+        var ny = (54 / 3) >>> 0;
+        var f0 = [];
+        for (var i = lay.nx+1; i < lay.nt-lay.nx-1; i++) {
+            // construct the kernel
+            var k0 = [];
+            k0[0] = bmp0[i-lay.nx-1];
+            k0[1] = bmp0[i-lay.nx];
+            k0[2] = bmp0[i-lay.nx+1];
+            k0[3] = bmp0[i-1];
+            k0[4] = bmp0[i];
+            k0[5] = bmp0[i+1];
+            k0[6] = bmp0[i+lay.nx-1];
+            k0[7] = bmp0[i+lay.nx];
+            k0[8] = bmp0[i+lay.nx+1];
+            // sum
+            var k1 = 0;
+            var k2 = 0;
+            for (var j = 0; j < k0.length; j++) {
+                if (k0[j] == undefined) {
+                    continue;
+                }
+                k1 = k1 + 1;
+                k2 = k2 + k0[j];
+            }
+            // avg
+            var k3 = k2 / k1;
+            f0[i] = k3;
+        }
+        bmp.g = f0.slice(0);
+        // attractive but incorrect
+        // edge effects are wrapped
     },
     "gaussian": function(bmp0) {
         // weighted gaussian blur kernel
