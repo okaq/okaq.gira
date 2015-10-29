@@ -53,6 +53,8 @@ var p = {
         p.ticks = p.ticks - 1;
         if (p.ticks <= 0) {
             console.log("done anim");
+            // inter last noise texture
+            bmp.bicubic(bmp.g);
             return;
         } else {
             // bmp.shuf();
@@ -215,6 +217,18 @@ var bmp = {
         for (var i = 0; i < bmp0.length; i++) {
             t2[i] = (t1[i] / nt) >>> 0;
         }
+
+        /*
+        // bicubic interpolation
+        var t3 = [];
+        for (var i = 0; i < bmp0.length; i++) {
+            // blocks of 16, nx = 6, ny = 3
+            // outer loop over x,y inner over 4x4 kernel
+
+        }
+        // 100ms per pixel, break out bicubic to sep function
+        */
+
         // set
         // bmp.g = t0[0].slice(0);
         bmp.g = t2.slice(0);
@@ -235,6 +249,8 @@ var bmp = {
         // interpolate to 20 pixel blocks using cubic function
         // add and average each frame to get output (sum vs avg)
         // final optional smoothing average filter
+    },
+    "bicubic": function(bmp0) {
     },
     "reax": function() {
         // reaction diffusion second moment large kernel
