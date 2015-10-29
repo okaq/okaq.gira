@@ -250,7 +250,21 @@ var bmp = {
         // add and average each frame to get output (sum vs avg)
         // final optional smoothing average filter
     },
+    "median": function(bmp0) {
+        // median 3x3 kernel filter
+    },
+    "gaussian": function(bmp0) {
+        // weighted gaussian blur kernel
+    },
+    "conv": function(bmp0, a0) {
+        // apply square kernel convolution to bitmap
+        // assume infinite tiled image
+    },
     "bicubic": function(bmp0) {
+        // bicubic interpolation using 4x4 kernel
+        // since our pixel blocks are large, it is fast
+        // performing bicerp on HD image takes ~1s
+        // even using approx and speedup at O(n)
     },
     "reax": function() {
         // reaction diffusion second moment large kernel
