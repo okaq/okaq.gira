@@ -286,6 +286,10 @@ var bmp = {
         bmp.g = f0.slice(0);
         // attractive but incorrect
         // edge effects are wrapped
+
+        // our noise texture genration is rectilinearly biased
+        // a better bet may be to use voronoi noise textures
+        // with frequency equal to the number to poisson distributed points
     },
     "gaussian": function(bmp0) {
         // weighted gaussian blur kernel
