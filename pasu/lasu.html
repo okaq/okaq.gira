@@ -138,7 +138,22 @@ var lay = {
     "deco": function() {
         // decorative embellishments from center
         lay.d = [];
+        // top
         lay.d[0] = [lay.c[2],lay.c[3],0,0];
+        lay.d[1] = [lay.c[0]/2,lay.c[3],lay.c[2],0];
+        lay.d[2] = [lay.c[0]/2,lay.c[3],lay.c[2]+lay.c[0]/2,0];
+        lay.d[3] = [lay.c[2],lay.c[3],lay.c[2]+lay.c[0],0];
+        // left
+        lay.d[4] = [lay.c[2],lay.c[1]/2,0,lay.c[3]];
+        lay.d[5] = [lay.c[2],lay.c[1]/2,0,lay.c[3]+lay.c[1]/2];
+        // right
+        lay.d[6] = [lay.c[2],lay.c[1]/2,lay.c[0]+lay.c[2],lay.c[3]];
+        lay.d[7] = [lay.c[2],lay.c[1]/2,lay.c[0]+lay.c[2],lay.c[3]+lay.c[1]/2];
+        // bottom
+        lay.d[8] = [lay.c[2],lay.c[3],0,lay.c[1]+lay.c[3]];
+        lay.d[9] = [lay.c[0]/2,lay.c[3],lay.c[2],lay.c[1]+lay.c[3]];
+        lay.d[10] = [lay.c[0]/2,lay.c[3],lay.c[2]+lay.c[0]/2,lay.c[1]+lay.c[3]];
+        lay.d[11] = [lay.c[2],lay.c[3],lay.c[2]+lay.c[0],lay.c[1]+lay.c[3]];
     }
 }
 // dom
