@@ -58,8 +58,15 @@ var p = {
         lay.deco();
         sce.deco();
         ren.testc(sce.d);
+        p.id = window.setTimeout(p.offset, 1000);
         // method to take return value of layout function
         // generate new canvas list, remove previous, add new
+    },
+    "offset": function() {
+        // replace layout with rand offset version
+        // rem / add to scene
+        lay.offset();
+        sce.regen();
     }
 }
 // bitmap
@@ -154,6 +161,24 @@ var lay = {
         lay.d[9] = [lay.c[0]/2,lay.c[3],lay.c[2],lay.c[1]+lay.c[3]];
         lay.d[10] = [lay.c[0]/2,lay.c[3],lay.c[2]+lay.c[0]/2,lay.c[1]+lay.c[3]];
         lay.d[11] = [lay.c[2],lay.c[3],lay.c[2]+lay.c[0],lay.c[1]+lay.c[3]];
+    },
+    "offset": function() {
+        // define master layout list for scene generation
+        // can employ spread operators / literals to construct
+        // preferable to push apply concat hacks of yore
+        lay.f = [lay.c];
+        for (var i = 0; i < lay.d.length; i++) {
+            lay.f.push(lay.d[i]);
+        }
+        lay.g = [];
+        for (var i = 0; i < lay.f.length; i++) {
+            lay.g[i] = lay.walk(lay.f[i]);
+        }
+    },
+    "walk": function(r0) {
+        // perturb input rect and return new
+        var r1 = [];
+        return r1;
     }
 }
 // dom
