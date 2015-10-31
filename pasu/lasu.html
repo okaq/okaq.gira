@@ -55,6 +55,9 @@ var p = {
         lay.center();
         sce.center();
         ren.test(sce.c);
+        lay.deco();
+        sce.deco();
+        ren.testc(sce.d);
         // method to take return value of layout function
         // generate new canvas list, remove previous, add new
     }
@@ -90,6 +93,13 @@ var sce = {
         }
         sce.c = dom.canvas(lay.c);
         dom.add(sce.c);
+    },
+    "deco": function() {
+        sce.d = [];
+        for (var i = 0; i < lay.d.length; i++) {
+            sce.d[i] = dom.canvas(lay.d[i]);
+            dom.add(sce.d[i]);
+        }
     }
 }
 // layout
@@ -124,6 +134,11 @@ var lay = {
         var x0 = ((lay.w - w0) / 2) >>> 0;
         var y0 = ((lay.h - h0) / 2) >>> 0;
         lay.c = [w0,h0,x0,y0];
+    },
+    "deco": function() {
+        // decorative embellishments from center
+        lay.d = [];
+        lay.d[0] = [lay.c[2],lay.c[3],0,0];
     }
 }
 // dom
@@ -156,6 +171,12 @@ var ren = {
         // rand rgba test single canvas
         c0.con.fillStyle = rgba.rand();
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "testc": function(c0) {
+        // test for each list input member
+        for (var i = 0; i < c0.length; i++) {
+            ren.test(c0[i]);
+        }
     },
     "data": function() {
         // bitmap mono data in scene grid
