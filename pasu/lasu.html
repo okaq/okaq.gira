@@ -39,8 +39,24 @@ var p = {
     "start": function() {
         console.log("start the game asap");
         ren.data();
+        p.id = window.setTimeout(p.intro, 1000);
         // generate a few rand square bmps
         // layout in sparse fashion accordingly
+        // segment page into available quadrants
+        // leave center field open for bmp font text
+        // click center to begin
+        // distribute deco bmps in diverse quads
+
+        // center random rect
+        // at approx one half total page area
+        // with corner, midpoints as sector delineators
+    },
+    "intro": function() {
+        lay.center();
+        sce.center();
+        ren.test(sce.c);
+        // method to take return value of layout function
+        // generate new canvas list, remove previous, add new
     }
 }
 // bitmap
@@ -67,6 +83,13 @@ var sce = {
             dom.add(sce.g[i]);
         }
         console.log(sce.g.length);
+    },
+    "center": function() {
+        for (var i = 0; i < sce.g.length; i++) {
+            dom.remove(sce.g[i]);
+        }
+        sce.c = dom.canvas(lay.c);
+        dom.add(sce.c);
     }
 }
 // layout
@@ -93,6 +116,14 @@ var lay = {
             var y1 = (y0 * lay.py) >>> 0;
             lay.g[i] = [lay.px,lay.py,x1,y1];
         }
+    },
+    "center": function() {
+        // exact half area centered canvas
+        var h0 = 764;
+        var w0 = 1358;
+        var x0 = ((lay.w - w0) / 2) >>> 0;
+        var y0 = ((lay.h - h0) / 2) >>> 0;
+        lay.c = [w0,h0,x0,y0];
     }
 }
 // dom
@@ -121,6 +152,11 @@ var dom = {
 }
 // render
 var ren = {
+    "test": function(c0) {
+        // rand rgba test single canvas
+        c0.con.fillStyle = rgba.rand();
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
     "data": function() {
         // bitmap mono data in scene grid
         for (var i = 0; i < sce.g.length; i++) {
