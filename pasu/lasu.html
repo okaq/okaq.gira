@@ -67,6 +67,8 @@ var p = {
         // rem / add to scene
         lay.offset();
         sce.regen();
+        // ren.scene();
+        ren.testc(sce.h);
     }
 }
 // bitmap
@@ -106,6 +108,20 @@ var sce = {
         for (var i = 0; i < lay.d.length; i++) {
             sce.d[i] = dom.canvas(lay.d[i]);
             dom.add(sce.d[i]);
+        }
+    },
+    "regen": function() {
+        // clear dom and add layout rects as canvas
+        // break scene class into scene jump manager
+        // and scene page manager determining what is visible
+        dom.remove(sce.c);
+        for (var i = 0; i < sce.d.length; i++) {
+            dom.remove(sce.d[i]);
+        }
+        sce.h = [];
+        for (var i = 0; i < lay.h.length; i++) {
+            sce.h[i] = dom.canvas(lay.h[i]);
+            dom.add(sce.h[i]);
         }
     }
 }
@@ -170,14 +186,25 @@ var lay = {
         for (var i = 0; i < lay.d.length; i++) {
             lay.f.push(lay.d[i]);
         }
-        lay.g = [];
+        lay.h = [];
         for (var i = 0; i < lay.f.length; i++) {
-            lay.g[i] = lay.walk(lay.f[i]);
+            lay.h[i] = lay.walk(lay.f[i]);
         }
+        console.log(lay.h.length);
     },
     "walk": function(r0) {
         // perturb input rect and return new
         var r1 = [];
+        // shrink by 12.5 to 33 percent
+        var d0 = (0.333 - 0.125); // range
+        var f0 = (Math.random() * d0) + 0.15; // shrinkage
+        // new width and height
+        var w1 = (r0[0] - (r0[0] * f0)) >>> 0;
+        var h1 = (r0[1] - (r0[1] * f0)) >>> 0;
+        // new center
+        var x1 = (r0[2] + ((r0[0] * f0) / 2)) >>> 0;
+        var y1 = (r0[3] + ((r0[1] * f0) / 2)) >>> 0;
+        r1 = [w1,h1,x1,y1];
         return r1;
     }
 }
@@ -225,6 +252,9 @@ var ren = {
             sce.g[i].con.fillStyle = rgba0;
             sce.g[i].con.fillRect(0,0,sce.g[i].can.width,sce.g[i].can.height);
         }
+    },
+    "scene": function() {
+        // render all data in current scene
     }
 }
 // colors
