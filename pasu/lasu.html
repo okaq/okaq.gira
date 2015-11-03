@@ -59,6 +59,7 @@ var p = {
         sce.deco();
         ren.testc(sce.d);
         p.id = window.setTimeout(p.offset, 1000);
+        // p.id = window.setTimeout(p.square, 1000);
         // method to take return value of layout function
         // generate new canvas list, remove previous, add new
     },
@@ -69,6 +70,17 @@ var p = {
         sce.regen();
         // ren.scene();
         ren.testc(sce.h);
+        p.id = window.setTimeout(p.square, 1000);
+    },
+    "square": function() {
+        lay.square();
+        // take 8% off lesser dimension
+        // center vertical and horizontal
+        sce.square();
+        ren.testc(sce.j);
+        // really pleasing and ordered
+        // tesselate space with random golden rects
+        // create centered square in each rect
     }
 }
 // bitmap
@@ -122,6 +134,16 @@ var sce = {
         for (var i = 0; i < lay.h.length; i++) {
             sce.h[i] = dom.canvas(lay.h[i]);
             dom.add(sce.h[i]);
+        }
+    },
+    "square": function() {
+        for (var i = 0; i < sce.h.length; i++) {
+            dom.remove(sce.h[i]);
+        }
+        sce.j = [];
+        for (var i = 0; i < lay.j.length; i++) {
+            sce.j[i] = dom.canvas(lay.j[i]);
+            dom.add(sce.j[i]);
         }
     }
 }
@@ -204,8 +226,33 @@ var lay = {
         // new center
         var x1 = (r0[2] + ((r0[0] * f0) / 2)) >>> 0;
         var y1 = (r0[3] + ((r0[1] * f0) / 2)) >>> 0;
+        // perturb a bit from center
+        var dx = ((Math.random() - 0.5) * ((r0[0] * f0) / 2));
+        var dy = ((Math.random() - 0.5) * ((r0[1] * f0) / 2));
+        x1 = (x1 + dx) >>> 0;
+        y1 = (y1 + dy) >>> 0;
         r1 = [w1,h1,x1,y1];
         return r1;
+    },
+    "square": function() {
+        lay.j = [];
+        for (var i = 0; i < lay.f.length; i++) {
+            var r0 = lay.f[i];
+            var w0 = r0[0];
+            var h0 = r0[1];
+            var w1 = 0;
+            var h1 = 0;
+            if (w0 < h0) {
+                w1 = (0.84 * w0) >>> 0;
+                h1 = w1;
+            } else {
+                h1 = (0.84 * h0) >>> 0;
+                w1 = h1;
+            }
+            var x1 = (r0[2] + (Math.abs(w0 - w1) / 2)) >>> 0;
+            var y1 = (r0[3] + (Math.abs(h0 - h1) / 2)) >>> 0;
+            lay.j[i] = [w1,h1,x1,y1];
+        }
     }
 }
 // dom
