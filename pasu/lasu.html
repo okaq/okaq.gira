@@ -81,6 +81,15 @@ var p = {
         // really pleasing and ordered
         // tesselate space with random golden rects
         // create centered square in each rect
+        
+        // add click event handler
+        sce.j[0].can.addEventListener("click", p.click, false);
+        sce.j[0].can.dataset.x = "center_0";
+    },
+    "click": function(e) {
+        console.log(e);
+        var d0 = e.target.dataset.x;
+        console.log("clicked: " + d0);
     }
 }
 // bitmap
