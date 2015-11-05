@@ -85,6 +85,14 @@ var p = {
         // really pleasing and ordered
         // tesselate space with random golden rects
         // create centered square in each rect
+
+        p.id = window.setTimeout(p.curve, 1000);
+    },
+    "curve": function() {
+        // center rect with corner and rand edge displacements
+        // bmp data per outer deco canvas object
+        // generate and render math curves
+        lay.curve()
         
         // add click event handler
         sce.j[0].can.addEventListener("click", p.click, false);
@@ -269,6 +277,18 @@ var lay = {
             var y1 = (r0[3] + (Math.abs(h0 - h1) / 2)) >>> 0;
             lay.j[i] = [w1,h1,x1,y1];
         }
+    },
+    "curve": function() {
+        lay.k = [];
+        // random center rect
+        var r0 = ((Math.random() * 0.20) + 0.30) >>> 0; // ratio
+        var w0 = (lay.w * r0) >>> 0;
+        var h0 = (lay.h * r0) >>> 0;
+        var x0 = ((lay.w - w0) / 2) >>> 0;
+        var y0 = ((lay.h - h0) / 2) >>> 0;
+        lay.k[0] = [w0,h0,x0,y0];
+        // maintain corners
+        // random displacements around edges
     }
 }
 // dom
