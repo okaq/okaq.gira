@@ -92,7 +92,9 @@ var p = {
         // center rect with corner and rand edge displacements
         // bmp data per outer deco canvas object
         // generate and render math curves
-        lay.curve()
+        lay.curve();
+        sce.curve();
+        ren.testc(sce.k);
         
         // add click event handler
         sce.j[0].can.addEventListener("click", p.click, false);
@@ -168,6 +170,16 @@ var sce = {
         for (var i = 0; i < lay.j.length; i++) {
             sce.j[i] = dom.canvas(lay.j[i]);
             dom.add(sce.j[i]);
+        }
+    },
+    "curve": function() {
+        for (var i = 0; i < sce.j.length; i++) {
+            dom.remove(sce.j[i]);
+        }
+        sce.k = [];
+        for (var i = 0; i < lay.k.length; i++) {
+            sce.k[i] = dom.canvas(lay.k[i]);
+            dom.add(sce.k[i]);
         }
     }
 }
@@ -281,13 +293,17 @@ var lay = {
     "curve": function() {
         lay.k = [];
         // random center rect
-        var r0 = ((Math.random() * 0.20) + 0.30) >>> 0; // ratio
-        var w0 = (lay.w * r0) >>> 0;
-        var h0 = (lay.h * r0) >>> 0;
-        var x0 = ((lay.w - w0) / 2) >>> 0;
-        var y0 = ((lay.h - h0) / 2) >>> 0;
+        var r0 = ((Math.random() * 0.20) + 0.40); // ratio
+        var w0 = (1920 * r0) >>> 0;
+        var h0 = (1080 * r0) >>> 0;
+        var x0 = ((1920 - w0) / 2) >>> 0;
+        var y0 = ((1080 - h0) / 2) >>> 0;
         lay.k[0] = [w0,h0,x0,y0];
         // maintain corners
+        lay.k[1] = [x0,y0,0,0];
+        lay.k[2] = [x0,y0,x0+w0,0];
+        lay.k[3] = [x0,y0,0,y0+h0];
+        lay.k[4] = [x0,y0,x0+w0,y0+h0];
         // random displacements around edges
     }
 }
