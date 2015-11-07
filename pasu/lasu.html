@@ -318,6 +318,24 @@ var lay = {
         var w2 = (((Math.random() * 0.5) + 0.25) * w0) >>> 0;
         lay.k[11] = [w2,y0,x0,y0+h0];
         lay.k[12] = [w0-w2,y0,x0+w2,y0+h0];
+        // center square in each displace rect
+        for (var i = 1; i < lay.k.length; i++) {
+            var r0 = [];
+            var r1 = lay.k[i];
+            // aspect
+            if (r1[0] > r1[1]) {
+                r0[1] = (((Math.random() * 0.20) + 0.70) * r1[1]) >>> 0;
+                r0[0] = r0[1];
+                r0[3] = (r1[3] + ((r1[1] - r0[1]) / 2)) >>> 0;
+                r0[2] = (r1[2] + ((r1[0] - r0[0]) / 2)) >>> 0;
+            } else {
+                r0[0] = (((Math.random() * 0.20) + 0.70) * r1[0]) >>> 0;
+                r0[1] = r0[0];
+                r0[3] = (r1[3] + ((r1[1] - r0[1]) / 2)) >>> 0;
+                r0[2] = (r1[2] + ((r1[0] - r0[0]) / 2)) >>> 0;
+            }
+            lay.k[i] = r0.slice(0);
+        }
     }
 }
 // dom
