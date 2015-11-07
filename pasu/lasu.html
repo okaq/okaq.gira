@@ -95,6 +95,8 @@ var p = {
         lay.curve();
         sce.curve();
         ren.testc(sce.k);
+
+        bmp.lay(lay.k);
         
         // add click event handler
         sce.j[0].can.addEventListener("click", p.click, false);
@@ -122,6 +124,17 @@ var bmp = {
         // define a math function
         // line, wave, circle
         // and interpolate it to two dimensions
+    },
+    "lay": function(a0) {
+        bmp.k = [];
+        // bitmap data objects from layout list
+        for (var i = 1; i < a0.length; i++) {
+            var s0 = (a0[0] * a0[1]) >>> 0;
+            bmp.k[i] = [];
+            for (var j = 0; j < s0; j++) {
+                bmp.k[i][j] = rgba.rb();
+            }
+        }
     }
 }
 // scene
