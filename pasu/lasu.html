@@ -305,6 +305,19 @@ var lay = {
         lay.k[3] = [x0,y0,0,y0+h0];
         lay.k[4] = [x0,y0,x0+w0,y0+h0];
         // random displacements around edges
+        // top, left, right, bottom
+        var w1 = (((Math.random() * 0.50) + 0.25) * w0) >>> 0;
+        lay.k[5] = [w1,y0,x0,0];
+        lay.k[6] = [w0-w1,y0,x0+w1,0];
+        var h1 = (((Math.random() * 0.50) + 0.25) * h0) >>> 0;
+        lay.k[7] = [x0,h1,0,y0];
+        lay.k[8] = [x0,h0-h1,0,y0+h1];
+        var h2 = (((Math.random() * 0.50) + 0.25) * h0) >>> 0;
+        lay.k[9] = [x0,h2,x0+w0,y0];
+        lay.k[10] = [x0,h0-h2,x0+w0,y0+h2];
+        var w2 = (((Math.random() * 0.5) + 0.25) * w0) >>> 0;
+        lay.k[11] = [w2,y0,x0,y0+h0];
+        lay.k[12] = [w0-w2,y0,x0+w2,y0+h0];
     }
 }
 // dom
