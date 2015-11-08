@@ -97,6 +97,8 @@ var p = {
         ren.testc(sce.k);
 
         bmp.lay(lay.k);
+        // console.log(bmp.k);
+        ren.bmp(bmp.k, sce.k);
         
         // add click event handler
         sce.j[0].can.addEventListener("click", p.click, false);
@@ -130,9 +132,9 @@ var bmp = {
         bmp.k = [];
         // bitmap data objects from layout list
         for (var i = 1; i < a0.length; i++) {
-            var s0 = (a0[0] * a0[1]) >>> 0;
+            var s0 = (a0[i][0] * a0[i][1]) >>> 0;
             bmp.k[i] = {};
-            bmp.k[i].s = a0[0];
+            bmp.k[i].s = a0[i][0];
             bmp.k[i].d = [];
             for (var j = 0; j < s0; j++) {
                 // bmp.k[i].s = a0[0];
@@ -403,6 +405,21 @@ var ren = {
     },
     "scene": function() {
         // render all data in current scene
+    },
+    "bmp": function(bmp0, sce0) {
+        // console.log(bmp0);
+        // render bitmap data in scene list
+        for (var i = 1; i < sce0.length; i++) {
+            var c0 = sce0[i];
+            var b0 = bmp0[i];
+            // console.log(c0,b0);
+            for (var j = 0; j < b0.d.length; j++) {
+                var x0 = j % b0.s;
+                var y0 = (j / b0.s) >>> 0;
+                c0.con.fillStyle = rgba.mono(b0.d[j]);
+                c0.con.fillRect(x0,y0,1,1);
+            }
+        }
     }
 }
 // colors
