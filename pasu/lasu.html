@@ -126,13 +126,18 @@ var bmp = {
         // and interpolate it to two dimensions
     },
     "lay": function(a0) {
+        // bitmap objects will nedd to contain stride, data
         bmp.k = [];
         // bitmap data objects from layout list
         for (var i = 1; i < a0.length; i++) {
             var s0 = (a0[0] * a0[1]) >>> 0;
-            bmp.k[i] = [];
+            bmp.k[i] = {};
+            bmp.k[i].s = a0[0];
+            bmp.k[i].d = [];
             for (var j = 0; j < s0; j++) {
-                bmp.k[i][j] = rgba.rb();
+                // bmp.k[i].s = a0[0];
+                // bmp.k[i].d = [];
+                bmp.k[i].d[j] = rgba.rb();
             }
         }
     }
