@@ -64,6 +64,16 @@ var p = {
         console.log(e);
         window.clearInterval(p.id);
         console.log("click cleared after iteration " + p.tick);
+        // generate a player id and timestamp
+        if (!p.pid) {
+            p.player();
+        }
+        console.log(p.pid);
+    },
+    "player": function() {
+        p.pid = {};
+        p.pid.time = Date.now();
+        p.pid.id = (Math.random() * Number.MAX_SAFE_INTEGER) >>> 0;
     }
 }
 // bitmap
