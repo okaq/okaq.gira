@@ -39,6 +39,25 @@ var p = {
     "start": function() {
         console.log("time for fun now");
         ren.bmp(bmp.a, sce.a);
+        p.tick = 0;
+        p.max = (Math.random() * 512) >>> 0;
+        console.log("Running for " + p.max + " squaring cycles...");
+        p.id = window.setInterval(p.square, 1000);
+    },
+    "square": function() {
+        p.tick++;
+        if (p.tick >= p.max) {
+            console.log("Done with squares for now.");
+            window.clearInterval(p.id);
+        }
+        // new bitmap
+        var b0 = rgba.rb();
+        // new square
+        var s0 = lay.square();
+        var c0 = dom.canvas(s0);
+        c0.can.style.zIndex = p.tick.toString();
+        dom.add(c0);
+        ren.bmp(b0, c0);
     }
 }
 // bitmap
@@ -60,6 +79,15 @@ var lay = {
         lay.w = 1920;
         lay.h = 1080;
         lay.a = [lay.w,lay.h,0,0];
+    },
+    "square": function() {
+        var s0 = (Math.random() * 10) >>> 0;
+        var s1 = Math.pow(2, s0);
+        var mx = ((lay.w - s1) / 2) >>> 0;
+        var my = ((lay.h - s1) / 2) >>> 0;
+        var r0 = [s1,s1,mx,my];
+
+        return r0;
     }
 }
 // dom
@@ -89,7 +117,7 @@ var dom = {
 // render
 var ren = {
     "bmp": function(bmp0, sce0) {
-        sce0.con.fillStyle = rgba.mono(bmp.a);
+        sce0.con.fillStyle = rgba.mono(bmp0);
         sce0.con.fillRect(0,0,sce0.can.width,sce0.can.height);
     }
 }
