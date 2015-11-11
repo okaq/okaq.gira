@@ -43,6 +43,7 @@ var p = {
         p.max = (Math.random() * 512) >>> 0;
         console.log("Running for " + p.max + " squaring cycles...");
         p.id = window.setInterval(p.square, 1000);
+        window.addEventListener("click", p.click, false);
     },
     "square": function() {
         p.tick++;
@@ -58,6 +59,11 @@ var p = {
         c0.can.style.zIndex = p.tick.toString();
         dom.add(c0);
         ren.bmp(b0, c0);
+    },
+    "click": function(e) {
+        console.log(e);
+        window.clearInterval(p.id);
+        console.log("click cleared after iteration " + p.tick);
     }
 }
 // bitmap
