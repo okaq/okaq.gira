@@ -69,6 +69,8 @@ var p = {
             p.player();
         }
         console.log(p.pid);
+        window.removeEventListener("click");
+
     },
     "player": function() {
         p.pid = {};
@@ -79,6 +81,13 @@ var p = {
         // negotiate peerjs token on client
         // collect net ids from client peerjs 
         // assign network and visualize
+        // server atomic cache operations (set,map,check+replace)
+        
+        // simple pool incrementor scheme
+        // key is incrementor, value is {net id token, player id, stats} object
+        // increment key and write new value on each request to /pool method
+        // keep index incrementor and add on each call
+        // pool is read at last 10 or so player keys
     }
 }
 // bitmap
