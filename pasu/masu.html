@@ -70,12 +70,14 @@ var p = {
         }
         console.log(p.pid);
         window.removeEventListener("click");
+        xhr.init();
 
     },
     "player": function() {
         p.pid = {};
         p.pid.time = Date.now();
         p.pid.id = (Math.random() * Number.MAX_SAFE_INTEGER) >>> 0;
+        p.qid = JSON.stringify(p.pid);
         // send to server as channel token
         // create json server pool
         // negotiate peerjs token on client
@@ -88,6 +90,18 @@ var p = {
         // increment key and write new value on each request to /pool method
         // keep index incrementor and add on each call
         // pool is read at last 10 or so player keys
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.a = new XMLHttpRequest();
+        xhr.a.open("POST", "http://localhost:8008/a", true);
+        xhr.a.addEventListener("load", xhr.load, false);
+        xhr.a.send(p.qid);
+    },
+    "load": function(e) {
+        console.log(e);
     }
 }
 // bitmap
