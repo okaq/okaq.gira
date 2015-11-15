@@ -64,6 +64,14 @@ func UsoaHandler(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte("ok xhr!"))
 }
 
+func SoauHandler(w http.ResponseWriter, r *http.Request) {
+    // write qid to cache
+}
+
+func AusoHandler(w http.ResponseWriter, r *http.Request) {
+    // read quid list and write to response
+}
+
 func State() {
     // comm channels
     R = make(chan *Ro)
@@ -79,8 +87,8 @@ func State() {
     go func() {
         for {
             select {
-                case r := <-Ro:
-                case w := <-Wo:
+                case r := <-R:
+                case w := <-W:
             }
         }
     }
@@ -95,6 +103,8 @@ func main() {
     fmt.Println("assigning web handlers")
     http.HandleFunc("/", OasuHandler)
     http.HandleFunc("/a", UsoaHandler)
+    http.HandleFunc("/b", SoauHandler)
+    http.HandleFunc("/c", AusoHandler)
     fmt.Println("web server running...")
     http.ListenAndServe(":8008", nil)
 }
