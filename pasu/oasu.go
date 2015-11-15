@@ -11,14 +11,35 @@ import (
     "net/http"
 )
 
+var {
+    R chan *Ro
+    W chan *Wo
+    Q []*Qid
+}
+
 type Qid struct {
     Time int
     Id int
 }
 
+// read op
+type Ro struct {
+    i int
+    r chan *Qid
+}
+
+// write op
+type Wo struct {
+    i int
+    Q *Qid
+    r chan bool
+}
+
 func OasuHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
     http.ServeFile(w,r,"masu.html")
+    // stateful goroutine pattern
+    // to cache reads and writes of player ids
 }
 
 func UsoaHandler(w http.ResponseWriter, r *http.Request) {
@@ -45,8 +66,12 @@ func UsoaHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
     fmt.Println("web server on okaq gira pasu oasu masu")
+    fmt.Println("starting state")
+    State()
+    fmt.Println("assigning web handlers")
     http.HandleFunc("/", OasuHandler)
     http.HandleFunc("/a", UsoaHandler)
+    fmt.Println("web server running...")
     http.ListenAndServe(":8008", nil)
 }
 
