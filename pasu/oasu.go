@@ -64,6 +64,30 @@ func UsoaHandler(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte("ok xhr!"))
 }
 
+func State() {
+    // comm channels
+    R = make(chan *Ro)
+    W = make(chan *Wo)
+    // central state
+    Q = make([]*Qid, 1)
+    // ready player zero
+    Q[0] = new(Qid)
+    Q[0].Time = 0
+    Q[0].Id = 0
+    // launch goroutines
+    // selector
+    go func() {
+        for {
+            select {
+                case r := <-Ro:
+                case w := <-Wo:
+            }
+        }
+    }
+    // reader - stats request handler
+    // writer - player id post handler
+}
+
 func main() {
     fmt.Println("web server on okaq gira pasu oasu masu")
     fmt.Println("starting state")
