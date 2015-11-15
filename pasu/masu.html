@@ -99,6 +99,13 @@ var xhr = {
         xhr.a.open("POST", "http://localhost:8008/a", true);
         xhr.a.addEventListener("load", xhr.load, false);
         xhr.a.send(p.qid);
+
+        // qid writer
+        xhr.b = new XMLHttpRequest();
+        xhr.b.open("POST", "http://localhost:8008/b", true);
+        // qid reader
+        xhr.c = new XMLHttpRequest();
+        xhr.c.open("GET", "http://localhost:8008/c", true);
     },
     "load": function(e) {
         console.log(e);
