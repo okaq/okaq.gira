@@ -103,9 +103,11 @@ var xhr = {
         // qid writer
         xhr.b = new XMLHttpRequest();
         xhr.b.open("POST", "http://localhost:8008/b", true);
+        xhr.b.addEventListener("load", xhr.load, false);
         // qid reader
         xhr.c = new XMLHttpRequest();
         xhr.c.open("GET", "http://localhost:8008/c", true);
+        xhr.c.addEventListener("load", xhr.load, false);
     },
     "load": function(e) {
         console.log(e);

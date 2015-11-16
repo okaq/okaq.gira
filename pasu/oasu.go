@@ -11,11 +11,11 @@ import (
     "net/http"
 )
 
-var {
+var (
     R chan *Ro
     W chan *Wo
     Q []*Qid
-}
+)
 
 type Qid struct {
     Time int
@@ -24,13 +24,13 @@ type Qid struct {
 
 // read op
 type Ro struct {
-    i int
-    r chan *Qid
+    // i int
+    r chan []*Qid
 }
 
 // write op
 type Wo struct {
-    i int
+    // i int
     Q *Qid
     r chan bool
 }
@@ -66,6 +66,15 @@ func UsoaHandler(w http.ResponseWriter, r *http.Request) {
 
 func SoauHandler(w http.ResponseWriter, r *http.Request) {
     // write qid to cache
+    b0, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        fmt.Println(err)
+    }
+    var q0 Qid
+    err = json.Unmarshal(b0, &q0)
+    if err != nil {
+        fmt.Println(err)
+    }
 }
 
 func AusoHandler(w http.ResponseWriter, r *http.Request) {
@@ -90,7 +99,7 @@ func State() {
                 case r := <-R:
                 case w := <-W:
             }
-        }
+        }()
     }
     // reader - stats request handler
     // writer - player id post handler
