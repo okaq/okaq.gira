@@ -75,10 +75,13 @@ func SoauHandler(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         fmt.Println(err)
     }
+    fmt.Println(q0)
+    w.Write(b0)
 }
 
 func AusoHandler(w http.ResponseWriter, r *http.Request) {
     // read quid list and write to response
+    w.Write([]byte("ok auso!"))
 }
 
 func State() {
@@ -97,10 +100,12 @@ func State() {
         for {
             select {
                 case r := <-R:
+                fmt.Println(r)
                 case w := <-W:
+                fmt.Println(w)
             }
-        }()
-    }
+        }
+    }()
     // reader - stats request handler
     // writer - player id post handler
 }
