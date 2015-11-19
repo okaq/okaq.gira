@@ -81,12 +81,29 @@ func SoauHandler(w http.ResponseWriter, r *http.Request) {
         Q: &q0,
         r: make(chan bool)}
     W <- w0
+    <-w0.r
     w.Write(b0)
 }
 
 func AusoHandler(w http.ResponseWriter, r *http.Request) {
     // read quid list and write to response
-    w.Write([]byte("ok auso!"))
+    // w.Write([]byte("ok auso!"))
+    // send new reader on global chan
+    r0 := &Ro{
+        r: make(chan []*Qid)}
+    R <- r0
+    q0 := <-r0.r
+    fmt.Println(q0)
+    fmt.Println((len(q0)))
+    q1 := make([]Qid, len(q0))
+    for i := 0; i < len(q0); i++ {
+        q1[i] = *q0[i]
+    }
+    b0, err := json.Marshal(q1)
+    if err != nil {
+        fmt.Println(err)
+    }
+    w.Write(b0)
 }
 
 func State() {
@@ -106,8 +123,14 @@ func State() {
             select {
                 case r := <-R:
                 fmt.Println(r)
+                q0 := make([]*Qid, len(Q))
+                copy(q0, Q)
+                r.r <- q0
                 case w := <-W:
                 fmt.Println(w)
+                Q = append(Q, w.Q)
+                fmt.Println(Q)
+                w.r <- true
             }
         }
     }()

@@ -113,6 +113,7 @@ var xhr = {
         xhr.c = new XMLHttpRequest();
         xhr.c.open("GET", "http://localhost:8008/c", true);
         xhr.c.addEventListener("load", xhr.read, false);
+        xhr.c.send();
     },
     "read": function(e) {
         console.log(e);
