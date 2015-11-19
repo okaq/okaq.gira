@@ -112,7 +112,10 @@ var xhr = {
         // qid reader
         xhr.c = new XMLHttpRequest();
         xhr.c.open("GET", "http://localhost:8008/c", true);
-        xhr.c.addEventListener("load", xhr.load, false);
+        xhr.c.addEventListener("load", xhr.read, false);
+    },
+    "read": function(e) {
+        console.log(e);
     },
     "load": function(e) {
         console.log(e);

@@ -76,6 +76,11 @@ func SoauHandler(w http.ResponseWriter, r *http.Request) {
         fmt.Println(err)
     }
     fmt.Println(q0)
+    // send new Writer on global chan
+    w0 := &Wo{
+        Q: &q0,
+        r: make(chan bool)}
+    W <- w0
     w.Write(b0)
 }
 
