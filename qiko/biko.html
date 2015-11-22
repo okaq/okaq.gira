@@ -28,6 +28,9 @@ var q = {
         q.subs = [dom,lay,sce,bmp];
         q.subs.forEach(function(el){el.init();});
 
+        // state
+        q.state = 0;
+
         // start
         window.requestAnimationFrame(q.start);
 
@@ -39,6 +42,10 @@ var q = {
     "start": function() {
         console.log("bit on the w");
         ren.bmp(bmp.a, sce.a); 
+        // expose a button that can jump state
+    },
+    "jump": function(i0) {
+        q.state = i0;
     }
 }
 // bitmap
