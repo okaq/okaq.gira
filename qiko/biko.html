@@ -55,6 +55,21 @@ var q = {
 var xhr = {
     "init": function() {
         xhr.urls = ["http://localhost:8008/a"];
+    },
+    "ping": function() {
+        // get server time stamp
+    },
+    "pil": function(e) {
+        // ping handler
+        console.log(e);
+    },
+    "pong": function() {
+        // generate timestamp, id and post to server
+    },
+    "pol": function(e) {
+        // pong handler
+        // recieve hash and add to local store
+        console.log(e);
     }
 }
 // bitmap
