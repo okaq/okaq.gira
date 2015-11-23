@@ -25,7 +25,7 @@ var q = {
         var now = window.performance.now();
 
         // subsystems
-        q.subs = [dom,lay,sce,bmp];
+        q.subs = [dom,lay,sce,bmp,xhr];
         q.subs.forEach(function(el){el.init();});
 
         // state
@@ -43,9 +43,18 @@ var q = {
         console.log("bit on the w");
         ren.bmp(bmp.a, sce.a); 
         // expose a button that can jump state
+        // visual net conn xhr process
+        // init, send, recieve, repeat
+        // render qid mono bitmap
     },
     "jump": function(i0) {
         q.state = i0;
+    }
+}
+// xhr
+var xhr = {
+    "init": function() {
+        xhr.urls = ["http://localhost:8008/a"];
     }
 }
 // bitmap
@@ -59,6 +68,8 @@ var sce = {
     "init": function() {
         sce.a = dom.canvas(lay.a);
         dom.add(sce.a);
+    },
+    "add": function() {
     }
 }
 // layout
