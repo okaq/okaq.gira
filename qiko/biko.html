@@ -68,6 +68,14 @@ var xhr = {
     "pil": function(e) {
         // ping handler
         console.log(e);
+        // parse json response
+        var s0 = e.target.response;
+        j0 = JSON.parse(s0);
+        console.log(j0);
+        q.qid.Time = j0.Time;
+        q.qid.Perf = window.performance.now() >>> 0;
+        q.qid.Id = (Math.random() * Number.MAX_SAFE_INTEGER) >>> 0;
+        console.log(q.qid);
     },
     "pong": function() {
         // generate timestamp, id and post to server
