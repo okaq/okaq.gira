@@ -46,6 +46,7 @@ var q = {
         // visual net conn xhr process
         // init, send, recieve, repeat
         // render qid mono bitmap
+        xhr.ping();
     },
     "jump": function(i0) {
         q.state = i0;
@@ -58,6 +59,10 @@ var xhr = {
     },
     "ping": function() {
         // get server time stamp
+        xhr.a = new XMLHttpRequest();
+        xhr.a.open("GET", xhr.urls[0], true);
+        xhr.a.addEventListener("load", xhr.pil, false);
+        xhr.a.send();
     },
     "pil": function(e) {
         // ping handler
