@@ -56,7 +56,7 @@ var q = {
 // xhr
 var xhr = {
     "init": function() {
-        xhr.urls = ["http://localhost:8008/a"];
+        xhr.urls = ["http://localhost:8008/a","http://localhost:8008/b"];
     },
     "ping": function() {
         // get server time stamp
@@ -76,9 +76,14 @@ var xhr = {
         q.qid.Perf = window.performance.now() >>> 0;
         q.qid.Id = (Math.random() * Number.MAX_SAFE_INTEGER) >>> 0;
         console.log(q.qid);
+        xhr.pong();
     },
     "pong": function() {
         // generate timestamp, id and post to server
+        xhr.b = new XMLHttpRequest();
+        xhr.b.open("POST", xhr.urls[1], true);
+        xhr.b.addEventListener("load", xhr.pol, false);
+        xhr.b.send(q.qid);
     },
     "pol": function(e) {
         // pong handler
