@@ -75,6 +75,9 @@ var xhr = {
         q.qid.Time = j0.Time;
         q.qid.Perf = window.performance.now() >>> 0;
         q.qid.Id = (Math.random() * Number.MAX_SAFE_INTEGER) >>> 0;
+        q.qid.Perf = q.qid.Perf.toString(10);
+        q.qid.Id = q.qid.Id.toString(10);
+        q.qid.Hash = "sha1";
         console.log(q.qid);
         xhr.pong();
     },
@@ -83,7 +86,7 @@ var xhr = {
         xhr.b = new XMLHttpRequest();
         xhr.b.open("POST", xhr.urls[1], true);
         xhr.b.addEventListener("load", xhr.pol, false);
-        xhr.b.send(q.qid);
+        xhr.b.send(JSON.stringify(q.qid));
     },
     "pol": function(e) {
         // pong handler
