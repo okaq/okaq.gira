@@ -14,7 +14,7 @@ type Qid struct {
     Time string
     Perf string
     Id string
-    Hash string
+    Hash [sha1.Size]byte
 }
 
 func YikoHandler(w http.ResponseWriter, r *http.Request) {
@@ -52,13 +52,14 @@ func PongHandler(w http.ResponseWriter, r *http.Request) {
         fmt.Println(err)
     }
     // fmt.Println(q0)
-    h0 := sha1.New()
-    h1 := h0.Sum(b0)
+    // h0 := sha1.New()
+    h1 := sha1.Sum(b0)
     // fmt.Printf("%x", h1)
     // fmt.Println(string(h1))
-    q0.Hash = string(h1)
-    fmt.Println(q0)
-    w.Write(h1)
+    // q0.Hash = string(h1)
+    q0.Hash = h1
+    fmt.Printf("Qid: Time: %s. Id: %s. Perf: %s. Hash: %x\n", q0.Time, q0.Id, q0.Perf, q0.Hash)
+    w.Write(q0.Hash[:])
 }
 
 func main() {
