@@ -10,6 +10,20 @@ import (
     "time"
 )
 
+const (
+    // total players
+    LIMIT = 128
+    // random player sample
+    SAMP = 8
+)
+
+var (
+    // player cache
+    Q [LIMIT]*Qid
+    // chans to send new player to cache
+    // read a random sample
+)
+
 type Qid struct {
     Time string
     Perf string
