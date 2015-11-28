@@ -22,6 +22,8 @@ var (
     Q [LIMIT]*Qid
     // chans to send new player to cache
     // read a random sample
+    W chan *Qid
+    Index int
 )
 
 type Qid struct {
@@ -76,7 +78,26 @@ func PongHandler(w http.ResponseWriter, r *http.Request) {
     w.Write(q0.Hash[:])
 }
 
+func State() {
+    W = make(chan *Qid)
+    Index = 0
+    go Cache()
+    q0 := Qid{Time:"0",Id:"0",Perf:"0"}
+    W <- &q0
+}
+
+func Cache() {
+    for {
+        select {
+            case w := <-W:
+            fmt.Println(w)
+        }
+    }
+}
+
 func main() {
+    fmt.Println("creating state")
+    State()
     fmt.Println("starting web server")
     http.HandleFunc("/", YikoHandler)
     http.HandleFunc("/a", PingHandler)
