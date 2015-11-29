@@ -78,6 +78,10 @@ func PongHandler(w http.ResponseWriter, r *http.Request) {
     w.Write(q0.Hash[:])
 }
 
+func QingHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r)
+}
+
 func State() {
     W = make(chan *Qid)
     Index = 0
@@ -91,6 +95,13 @@ func Cache() {
         select {
             case w := <-W:
             fmt.Println(w)
+            case r := <-R:
+            fmt.Println(r)
+            // reader contains a chan 
+            // which blocks while awaiting sample
+            // fill sampling slice with [1..LIMT]
+            // remove indicies with
+            // a = append(a[:i],a[i+1:])
         }
     }
 }
@@ -102,5 +113,6 @@ func main() {
     http.HandleFunc("/", YikoHandler)
     http.HandleFunc("/a", PingHandler)
     http.HandleFunc("/b", PongHandler)
+    http.HandleFunc("/c", QingHandler)
     http.ListenAndServe(":8008", nil)
 }
