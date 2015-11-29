@@ -23,6 +23,7 @@ var (
     // chans to send new player to cache
     // read a random sample
     W chan *Qid
+    R chan [SAMP]*Qid
     Index int
 )
 
@@ -84,6 +85,7 @@ func QingHandler(w http.ResponseWriter, r *http.Request) {
 
 func State() {
     W = make(chan *Qid)
+    R = make(chan [SAMP]*Qid)
     Index = 0
     go Cache()
     q0 := Qid{Time:"0",Id:"0",Perf:"0"}
