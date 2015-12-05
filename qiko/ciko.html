@@ -46,6 +46,12 @@ var sce = {
             sce.a[i] = dom.canvas(lay.a[i]);
             dom.add(sce.a[i]);
         }
+        sce.b = [];
+        sce.b[0] = [];
+        for (var i = 0; i < lay.b[0].length; i++) {
+            sce.b[0][i] = dom.canvas(lay.b[0][i]);
+            dom.add(sce.b[0][i]);
+        }
     }
 }
 // layout
@@ -70,6 +76,9 @@ var lay = {
         lay.a[0] = [256,128,1664,0];
         // net conn region (index 1)
         lay.a[1] = [256,256,1664,128];
+        // sub regions (positioned absolutely via page)
+        lay.b = [];
+        lay.b[0] = [[64,64,1728,16],[64,64,1824,16]]; // xhr send recieve indicators
     }
 }
 // dom
@@ -103,6 +112,10 @@ var ren = {
         for (var i = 0; i < sce.a.length; i++) {
             sce.a[i].con.fillStyle = rgba.rmon();
             sce.a[i].con.fillRect(0,0,sce.a[i].can.width,sce.a[i].can.height);
+        }
+        for (var i = 0; i < sce.b[0].length; i++) {
+            sce.b[0][i].con.fillStyle = rgba.rmon();
+            sce.b[0][i].con.fillRect(0,0,sce.b[0][i].can.width,sce.b[0][i].can.height);
         }
     }
 }
