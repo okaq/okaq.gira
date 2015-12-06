@@ -47,10 +47,13 @@ var sce = {
             dom.add(sce.a[i]);
         }
         sce.b = [];
-        sce.b[0] = [];
-        for (var i = 0; i < lay.b[0].length; i++) {
-            sce.b[0][i] = dom.canvas(lay.b[0][i]);
-            dom.add(sce.b[0][i]);
+        // sce.b[0] = [];
+        for (var i = 0; i < lay.b.length; i++) {
+            sce.b[i] = [];
+            for (var j = 0; j < lay.b[i].length; j++) {
+                sce.b[i][j] = dom.canvas(lay.b[i][j]);
+                dom.add(sce.b[i][j]);
+            }
         }
     }
 }
@@ -76,9 +79,14 @@ var lay = {
         lay.a[0] = [256,128,1664,0];
         // net conn region (index 1)
         lay.a[1] = [256,256,1664,128];
+        // invader motd
+        lay.a[2] = [512,512,0,0];
         // sub regions (positioned absolutely via page)
         lay.b = [];
         lay.b[0] = [[64,64,1728,16],[64,64,1824,16]]; // xhr send recieve indicators
+        lay.b[1] = [[32,32,1696,160],[32,32,1696,224],[32,32,1696,286]]; // webrtc net conn: list, ping, channel established
+        lay.b[2] = [[128,128,192,64],[128,128,192,320]]; // invader and hd resolution motd
+        // grand page border white space margin
     }
 }
 // dom
@@ -113,9 +121,11 @@ var ren = {
             sce.a[i].con.fillStyle = rgba.rmon();
             sce.a[i].con.fillRect(0,0,sce.a[i].can.width,sce.a[i].can.height);
         }
-        for (var i = 0; i < sce.b[0].length; i++) {
-            sce.b[0][i].con.fillStyle = rgba.rmon();
-            sce.b[0][i].con.fillRect(0,0,sce.b[0][i].can.width,sce.b[0][i].can.height);
+        for (var i = 0; i < sce.b.length; i++) {
+            for (var j = 0; j < sce.b[i].length; j++) {
+                sce.b[i][j].con.fillStyle = rgba.rmon();
+                sce.b[i][j].con.fillRect(0,0,sce.b[i][j].can.width,sce.b[i][j].can.height);
+            }
         }
     }
 }
