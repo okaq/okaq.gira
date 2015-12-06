@@ -81,12 +81,22 @@ var lay = {
         lay.a[1] = [256,256,1664,128];
         // invader motd
         lay.a[2] = [512,512,0,0];
+        // ads bitstarter
+        lay.a[3] = [512,512,0,512];
+
         // sub regions (positioned absolutely via page)
         lay.b = [];
         lay.b[0] = [[64,64,1728,16],[64,64,1824,16]]; // xhr send recieve indicators
         lay.b[1] = [[32,32,1696,160],[32,32,1696,224],[32,32,1696,286]]; // webrtc net conn: list, ping, channel established
         lay.b[2] = [[128,128,192,64],[128,128,192,320]]; // invader and hd resolution motd
+        lay.b[3] = [[512,32,0,512],[384,384,64,576]]; // ads bitstarter
+
         // grand page border white space margin
+
+        // layout grid entire page
+        // 32x32 pixels
+        // 1920 / 32 = 60
+        // 30 * 32 = 960, 120 remainder, 60px top/bot margin
     }
 }
 // dom
