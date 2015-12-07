@@ -30,12 +30,49 @@ var f = {
         f.subs.forEach(function(el){el.init();});
 
         // render
-        ren.reg();
+        // ren.reg();
+
+        // sys chck
+        f.tick = 0;
+        f.id = window.setInterval(f.sys, 1000);
 
         // stats
         var done = window.performance.now();
         var total = done - f.start;
         console.log("total load time: " + total + "ms.");
+    },
+    "sys": function() {
+        f.tick = f.tick + 1;
+        var t0 = window.performance.now();
+        if (f.tick == 1) {
+            g.rand();
+            ren.data(g.data, sce.c);
+        }
+        if (f.tick == 2) {
+            ren.clear(sce.c);
+            // g.grad();
+        }
+        var t1 = window.performance.now();
+        var t2 = t1 - t0;
+        console.log("bmp gen and render time: " + t2);
+        if (f.tick == 5) {
+            window.clearInterval(f.id);
+            console.log("done after tick: " + f.tick);
+        }
+    }
+}
+// grid
+var g = {
+    "rand": function() {
+        // maintain a discrete bitmap array 
+        // apart from grid scene canvas objects
+        // otherwise all data contained in dataset strings
+        g.data = [];
+        for (var i = 0; i < sce.c.length; i++) {
+            g.data[i] = rgba.rb();
+        }
+    },
+    "grad": function() {
     }
 }
 // scene
@@ -44,7 +81,7 @@ var sce = {
         sce.a = [];
         for (var i = 0; i < lay.a.length; i++) {
             sce.a[i] = dom.canvas(lay.a[i]);
-            dom.add(sce.a[i]);
+            // dom.add(sce.a[i]);
         }
         sce.b = [];
         // sce.b[0] = [];
@@ -52,8 +89,13 @@ var sce = {
             sce.b[i] = [];
             for (var j = 0; j < lay.b[i].length; j++) {
                 sce.b[i][j] = dom.canvas(lay.b[i][j]);
-                dom.add(sce.b[i][j]);
+                // dom.add(sce.b[i][j]);
             }
+        }
+        sce.c = [];
+        for (var i = 0; i < lay.c.length; i++) {
+            sce.c[i] = dom.canvas(lay.c[i]);
+            dom.add(sce.c[i]);
         }
     }
 }
@@ -97,6 +139,17 @@ var lay = {
         // 32x32 pixels
         // 1920 / 32 = 60
         // 30 * 32 = 960, 120 remainder, 60px top/bot margin
+        // mem chck test ok
+        // random mono fill, big gradient, sub random linear radial gradient, random json bitmap
+        // decode base64 json bitmap screen - string view binary data - split timing for performance 
+        lay.c = [];
+        for (var i = 0; i < 1800; i++) {
+            var x0 = i % 60;
+            var y0 = (i / 60) >>> 0;
+            var x1 = (x0 * 32) >>> 0;
+            var y1 = ((y0 * 32) + 60)>>> 0;
+            lay.c[i] = [32,32,x1,y1];
+        }
     }
 }
 // dom
@@ -136,6 +189,18 @@ var ren = {
                 sce.b[i][j].con.fillStyle = rgba.rmon();
                 sce.b[i][j].con.fillRect(0,0,sce.b[i][j].can.width,sce.b[i][j].can.height);
             }
+        }
+    },
+    "data": function(d0, s0) {
+        for (var i = 0; i < s0.length; i++) {
+            s0[i].con.fillStyle = rgba.mono(d0[i]);
+            s0[i].con.fillRect(0,0,s0[i].can.width,s0[i].can.height);
+        }
+    },
+    "clear": function(s0) {
+        for (var i = 0; i < s0.length; i++) {
+            s0[i].con.fillStyle = rgba.mono(255);
+            s0[i].con.fillRect(0,0,s0[i].can.width,s0[i].can.height);
         }
     }
 }
