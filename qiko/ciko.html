@@ -50,7 +50,12 @@ var f = {
         }
         if (f.tick == 2) {
             ren.clear(sce.c);
-            // g.grad();
+            g.grad();
+            ren.data(g.data, sce.c);
+        }
+        if (f.tick == 3) {
+            ren.clear(sce.c);
+            // g.rad();
         }
         var t1 = window.performance.now();
         var t2 = t1 - t0;
@@ -73,6 +78,14 @@ var g = {
         }
     },
     "grad": function() {
+        g.data = [];
+        for (var i = 0; i < sce.c.length; i++) {
+            g.data[i] = ((i / 1800) * 255) >>> 0;
+        }
+    },
+    "rad": function() {
+        // random grid wide radial gradient
+        // distince from center, radius1, radius2
     }
 }
 // scene
