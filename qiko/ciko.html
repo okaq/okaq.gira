@@ -59,10 +59,13 @@ var f = {
             ren.data(g.data, sce.c);
         }
         if (f.tick == 4) {
-            // rand bmp char
-            for (var i = 0; i < 36; i++) {
-                console.log(bmp.pick());
-            }
+            // rand bmp char test ok
+            // for (var i = 0; i < 36; i++) {
+            //     console.log(bmp.pick());
+            // }
+            ren.clear(sce.c);
+            g.bmp();
+            ren.bmp(g.data, sce.c);
         }
         var t1 = window.performance.now();
         var t2 = t1 - t0;
@@ -115,6 +118,12 @@ var g = {
             var ry = Math.abs(dy - r0);
             var rn = (rx + ry) / mx;
             g.data[i] = (rn * 255) >>> 0;
+        }
+    },
+    "bmp": function() {
+        g.data = [];
+        for (var i = 0; i < sce.c.length; i++) {
+            g.data[i] = bmp.pick();
         }
     }
 }
@@ -244,6 +253,30 @@ var ren = {
         for (var i = 0; i < s0.length; i++) {
             s0[i].con.fillStyle = rgba.mono(255);
             s0[i].con.fillRect(0,0,s0[i].can.width,s0[i].can.height);
+        }
+    },
+    "bmp": function(d0, s0) {
+        var c0 = rgba.mono(0);
+        for (var i = 0; i < s0.length; i++) {
+            var f0 = Math.random();
+            // flip for black or white bkgd
+            // white ~0.2s, black ~0.8s (noticable pause)
+            var d1 = bmp.a[d0[i]];
+            for (var j = 0; j < d1.length; j++) {
+                var x0 = j % 32;
+                var y0 = (j / 32) >>> 0;
+                if (f0 > 0.5) {
+                    if (d1[j] == 1) {
+                        s0[i].con.fillStyle = c0;
+                        s0[i].con.fillRect(x0,y0,1,1);
+                    }
+                } else {
+                     if (d1[j] == 0) {
+                        s0[i].con.fillStyle = c0;
+                        s0[i].con.fillRect(x0,y0,1,1);
+                     }
+                }
+            }
         }
     }
 }
