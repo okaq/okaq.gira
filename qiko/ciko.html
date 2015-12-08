@@ -88,6 +88,8 @@ var g = {
         // random grid wide radial gradient
         // distince from center, radius1, radius2
         g.data = [];
+        var mx = 45;
+        var r0 = (Math.random() * mx) >>> 0;
         for (var i = 0; i < sce.c.length; i++) {
             // abs coord
             var x0 = i % 60;
@@ -96,13 +98,17 @@ var g = {
             var dx = (x0 >= 30) ? (x0 - 30) : (30 - x0);
             var dy = (y0 >= 15) ? (y0 - 15) : (15 - y0);
             // max dist
-            var mx = 45;
+            // var mx = 45;
             // norm dist
             var nd = (dx + dy) / mx;
             // centered radial gradient
             // g.data[i] = (nd * 255) >>> 0;
             // rand radial grad
-            var r0 = (Math.random() * mx) >>> 0;
+            // var r0 = (Math.random() * mx) >>> 0;
+            var rx = Math.abs(dx - r0);
+            var ry = Math.abs(dy - r0);
+            var rn = (rx + ry) / mx;
+            g.data[i] = (rn * 255) >>> 0;
         }
     }
 }
