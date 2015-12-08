@@ -60,6 +60,9 @@ var f = {
         }
         if (f.tick == 4) {
             // rand bmp char
+            for (var i = 0; i < 36; i++) {
+                console.log(bmp.pick());
+            }
         }
         var t1 = window.performance.now();
         var t2 = t1 - t0;
@@ -316,6 +319,17 @@ var bmp = {
             }
         }
         return r0;
+    },
+    "pick": function() {
+        if (bmp.c == null || bmp.c.length == 0) {
+            bmp.c = [];
+            for (var k in bmp.a) {
+                bmp.c.push(k);
+            }
+        }
+        var i0 = (Math.random() * bmp.c.length) >>> 0;
+        var r0 = bmp.c.splice(i0, 1);
+        return r0[0];
     }
 }
 // oxy
