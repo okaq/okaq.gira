@@ -170,6 +170,29 @@ var g = {
         var coord = function(i0) {
             return [i0%60,(i0/60)>>>0];
         }
+        // plasma recursion
+        // init data sub array
+        var d0 = [];
+        for (var i = 0; i < t0; i++) {
+            d0[i] = 255;
+        }
+        // seed 4 corners
+        d0[0] = rgba.rb();
+        d0[w0-1] = rgba.rb();
+        d0[t0-w0] = rgba.rb();
+        d0[t0-1] = rgba.rb();
+        // repaint in main array
+        for (var i = 0; i < d0.length; i++) {
+            // local coords
+            var x0 = i % w0;
+            var y0 = (i / w0) >>> 0;
+            // mapped coords
+            var x1 = (x0 + mx) >>> 0;
+            var y1 = (y0 + my) >>> 0;
+            // main index
+            var i0 = ((y1 * 60) + x1) >>> 0;
+            g.data[i0] = d0[i];
+        }
     }
 }
 // scene
