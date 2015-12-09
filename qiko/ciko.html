@@ -66,6 +66,8 @@ var f = {
             ren.clear(sce.c);
             g.bmp();
             ren.bmp(g.data, sce.c);
+            // bmp to canvas grid
+            // median displace plasma
         }
         var t1 = window.performance.now();
         var t2 = t1 - t0;
@@ -73,7 +75,15 @@ var f = {
         if (f.tick == 5) {
             window.clearInterval(f.id);
             console.log("done after tick: " + f.tick);
+            window.setTimeout(f.title, 1000);
         }
+    },
+    "title": function() {
+        ren.clear(sce.c);
+        // render bmp at grid coord
+        var bmp0 = bmp.a["x"];
+        var xy0 = [16,1];
+        ren.grid(bmp0, xy0);
     }
 }
 // grid
@@ -278,6 +288,29 @@ var ren = {
                 }
             }
         }
+    },
+    "grid": function(b0, x0) {
+        // hard coded values
+        // bitmap is 32x32 = 1024
+        // grid is 60x30 = 1800
+        // render bitarray at x0 = [x,y]
+        var i0 = ((x0[1] * 60) + x0[0]) >>> 0;
+        // rows
+        var r0 = (30 - x0[1]) >>> 0;
+        // cols 
+        var c0 = (60 - x0[0]) >>> 0;
+        // ignore horizontal overflow
+        var n0 = (32 * r0) >>> 0;
+        for (var i = 0; i < n0; i++) {
+            var x1 = i % 32;
+            var y1 = (i / 32) >>> 0;
+            var i1 = (i0 + x1 + (y1 * 60)) >>> 0;
+            if (b0[i] == 1) {
+                sce.c[i1].con.fillStyle = rgba.mono(0);
+                sce.c[i1].con.fillRect(0,0,sce.c[i1].can.width,sce.c[i1].can.height);
+            }
+        }
+        // lower and top margin makes it ok to crop
     }
 }
 // colors
