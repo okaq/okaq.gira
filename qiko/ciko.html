@@ -69,13 +69,19 @@ var f = {
             // bmp to canvas grid
             // median displace plasma
         }
+        if (f.tick == 5) {
+            f.title();
+        }
+        if (f.tick == 6) {
+            f.plasma();
+        }
         var t1 = window.performance.now();
         var t2 = t1 - t0;
         console.log("bmp gen and render time: " + t2);
-        if (f.tick == 5) {
+        if (f.tick == 7) {
             window.clearInterval(f.id);
             console.log("done after tick: " + f.tick);
-            window.setTimeout(f.title, 1000);
+            // window.setTimeout(f.title, 1000);
         }
     },
     "title": function() {
@@ -84,6 +90,12 @@ var f = {
         var bmp0 = bmp.a["x"];
         var xy0 = [16,1];
         ren.grid(bmp0, xy0);
+    },
+    "plasma": function() {
+        // a fast plasma check
+        ren.clear(sce.c);
+        g.plasma();
+        ren.data(g.data, sce.c);
     }
 }
 // grid
@@ -135,6 +147,15 @@ var g = {
         for (var i = 0; i < sce.c.length; i++) {
             g.data[i] = bmp.pick();
         }
+    },
+    "plasma": function() {
+        // fast midpoint displacement plasma
+        g.data = [];
+        // bkgd lite grey
+        for (var i = 0; i < sce.c.length; i++) {
+            g.data[i] = 224;
+        }
+
     }
 }
 // scene
@@ -275,7 +296,7 @@ var ren = {
             for (var j = 0; j < d1.length; j++) {
                 var x0 = j % 32;
                 var y0 = (j / 32) >>> 0;
-                if (f0 > 0.5) {
+                if (f0 > 0) {
                     if (d1[j] == 1) {
                         s0[i].con.fillStyle = c0;
                         s0[i].con.fillRect(x0,y0,1,1);
