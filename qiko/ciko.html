@@ -155,7 +155,21 @@ var g = {
         for (var i = 0; i < sce.c.length; i++) {
             g.data[i] = 224;
         }
-
+        // plasma dims
+        var w0 = 16;
+        var h0 = 16;
+        var t0 = (w0 * h0) >>> 0;
+        // center margin
+        var mx = ((60 - w0) / 2) >>> 0;
+        var my = ((30 - h0) / 2) >>> 0;
+        // index helpers
+        var ind = function(x0, y0) {
+            // return index into grid array
+            return ((y0*60)+x0)>>>0;
+        }
+        var coord = function(i0) {
+            return [i0%60,(i0/60)>>>0];
+        }
     }
 }
 // scene
