@@ -74,6 +74,7 @@ var f = {
         }
         if (f.tick == 6) {
             f.plasma();
+            // next tick rotate data array
         }
         var t1 = window.performance.now();
         var t2 = t1 - t0;
@@ -171,6 +172,17 @@ var g = {
             return [i0%60,(i0/60)>>>0];
         }
         // plasma recursion
+        // point color vector
+        var p0 = function() {
+            p0.x = 0; // position
+            p0.y = 0;
+            p0.c = 0; // monochrome
+        }
+        var r0 = function(p1,p2,p3,p4) {
+            // recursive function
+            // input 4 corners
+            // output 12 displacements
+        }
         // init data sub array
         var d0 = [];
         for (var i = 0; i < t0; i++) {
