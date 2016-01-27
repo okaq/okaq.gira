@@ -26,13 +26,45 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom];
+        q.subs = [dom,sce,bmp];
         q.subs.forEach(function(el){el.init();});
+
+        // start
+        q.id = window.setTimeout(q.start, 1000);
 
         // stats
         var done = window.performance.now();
         var total = done - q.start;
         console.log("total load time: " + total + "ms.");
+    },
+    "start": function() {
+        ren.clear();
+        ren.scene();
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.greet = [];
+        bmp.greet[0] = 255;
+        bmp.greet[1] = 0;
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        // graph
+        sce.graph = [];
+        // index
+        sce.index = 0;
+        // create greet screen and assign to index zero
+        sce.greet = [];
+        sce.greet[0] = [1920,1080,0,0];
+        sce.greet[1] = [256,256,0,0];
+        sce.graph[0] = sce.greet;
+        // name based indexing
+        // sce.greet and bmp.greet share state, data
+        // indexes hold current pointers to what is displayed
     }
 }
 // dom
@@ -59,6 +91,53 @@ var dom = {
         dom.alpha.removeChild(c0.can);
     }
 }
+// render
+var ren = {
+    "clear": function() {
+    },
+    "scene": function() {
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "rmon": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
+    }
+}
+
 </script>
     </head>
     <body id="alpha">
