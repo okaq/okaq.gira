@@ -57,14 +57,22 @@ var lay = {
         lay.db.bkgd = [1920,1080,0,0];
         // generate sce.db from layouts
         // scene manager pops dom 
+        // manage systems for net conns, bmp dec
     }
 }
 // bitmap
 var bmp = {
     "init": function() {
-        bmp.greet = [];
-        bmp.greet[0] = 255;
-        bmp.greet[1] = 0;
+        // bmp.greet = [];
+        // bmp.greet[0] = 255;
+        // bmp.greet[1] = 0;
+        // data
+        bmp.db = {};
+        bmp.pop();
+    },
+    "pop": function() {
+        // populate from scene data
+
     }
 }
 // scene
@@ -75,14 +83,20 @@ var sce = {
         // index
         sce.index = 0;
         // create greet screen and assign to index zero
-        sce.greet = [];
-        sce.greet[0] = [1920,1080,0,0]; // canvas create and add
-        sce.greet[1] = [256,256,0,0];
-        sce.graph[0] = sce.greet;
+        // sce.greet = [];
+        // sce.greet[0] = [1920,1080,0,0]; // canvas create and add
+        // sce.greet[1] = [256,256,0,0];
+        // sce.graph[0] = sce.greet;
         // name based indexing
         // sce.greet and bmp.greet share state, data
         // indexes hold current pointers to what is displayed
-
+        
+        // data
+        sce.db = {};
+        sce.pop();
+    },
+    "pop": function() {
+        // populate from layout data
     }
 }
 // dom
