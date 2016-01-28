@@ -42,6 +42,23 @@ var q = {
         ren.scene();
     }
 }
+// names
+var nam = {
+    "init": function() {
+        // master key list
+        // can also include desc
+        nam.db = ["bkgd","best","greet"];
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.db = {};
+        lay.db.bkgd = [1920,1080,0,0];
+        // generate sce.db from layouts
+        // scene manager pops dom 
+    }
+}
 // bitmap
 var bmp = {
     "init": function() {
@@ -59,12 +76,13 @@ var sce = {
         sce.index = 0;
         // create greet screen and assign to index zero
         sce.greet = [];
-        sce.greet[0] = [1920,1080,0,0];
+        sce.greet[0] = [1920,1080,0,0]; // canvas create and add
         sce.greet[1] = [256,256,0,0];
         sce.graph[0] = sce.greet;
         // name based indexing
         // sce.greet and bmp.greet share state, data
         // indexes hold current pointers to what is displayed
+
     }
 }
 // dom
