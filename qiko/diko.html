@@ -55,9 +55,13 @@ var lay = {
     "init": function() {
         lay.db = {};
         lay.db.bkgd = [1920,1080,0,0];
+        lay.db.best = [256,256,0,0];
+        lay.db.greet = [512,512,512,512];
         // generate sce.db from layouts
         // scene manager pops dom 
         // manage systems for net conns, bmp dec
+        // central watcher to handle click actions
+
     }
 }
 // bitmap
@@ -94,6 +98,10 @@ var sce = {
         // data
         sce.db = {};
         sce.pop();
+
+        // separate graph and jump tables
+        // sce.graph.load = list of renderables and states
+        // sce.jump.load = possible changes
     },
     "pop": function() {
         // populate from layout data
