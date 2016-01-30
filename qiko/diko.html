@@ -118,13 +118,24 @@ var sce = {
     },
     "add": function(k0) {
         // add single name
+        dom.add(sce.db[k0]);
+        // tally current dom list
     },
     "adds": function(s0) {
         // add all names in set
+        for (var i = 0; i < s0.length; i++) {
+            var k0 = s0[i];
+            sce.add(k0);
+        }
     },
     "rem": function(k0) {
+        dom.remove(sce.db[k0]);
     },
     "rems": function(s0) {
+        for (var i = 0; i < s0.length; i++) {
+            var k0 = s0[i];
+            sce.rem(k0);
+        }
     }
 }
 // dom
