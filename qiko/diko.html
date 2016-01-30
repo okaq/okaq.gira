@@ -26,7 +26,7 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom,sce,bmp];
+        q.subs = [dom,lay,sce,bmp];
         q.subs.forEach(function(el){el.init();});
 
         // start
@@ -40,6 +40,7 @@ var q = {
     "start": function() {
         ren.clear();
         ren.scene();
+        // cycle second full fill render check
     }
 }
 // names
@@ -61,7 +62,6 @@ var lay = {
         // scene manager pops dom 
         // manage systems for net conns, bmp dec
         // central watcher to handle click actions
-
     }
 }
 // bitmap
@@ -76,16 +76,20 @@ var bmp = {
     },
     "pop": function() {
         // populate from scene data
-
+        for (var k in sce.db) {
+            bmp.db[k] = rgba.rb();
+        }
     }
 }
 // scene
 var sce = {
     "init": function() {
         // graph
-        sce.graph = [];
+        // sce.graph = [];
+        sce.graph = {};
         // index
-        sce.index = 0;
+        // sce.index = 0;
+        sce.index = null;
         // create greet screen and assign to index zero
         // sce.greet = [];
         // sce.greet[0] = [1920,1080,0,0]; // canvas create and add
@@ -102,9 +106,25 @@ var sce = {
         // separate graph and jump tables
         // sce.graph.load = list of renderables and states
         // sce.jump.load = possible changes
+
+        // greeting scene
+        sce.graph["on"] = ["bkgd","best","greet"];
     },
     "pop": function() {
         // populate from layout data
+        for (var k in lay.db) {
+            sce.db[k] = dom.canvas(lay.db[k]);
+        }
+    },
+    "add": function(k0) {
+        // add single name
+    },
+    "adds": function(s0) {
+        // add all names in set
+    },
+    "rem": function(k0) {
+    },
+    "rems": function(s0) {
     }
 }
 // dom
