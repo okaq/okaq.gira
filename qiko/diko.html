@@ -48,6 +48,14 @@ var q = {
     "cycle": function() {
         q.tick = q.tick + 1;
         console.log("cycle " + q.tick);
+        // render each scene
+        var s0 = "off";
+        if ((q.tick % 2) == 0) {
+            s0 = "on"
+        }
+        sce.change(s0);
+        ren.clear();
+        ren.scene();
         if (q.tick >= 8) {
             console.log("all done cycling!");
             window.clearInterval(q.cid);
@@ -193,8 +201,21 @@ var dom = {
 // render
 var ren = {
     "clear": function() {
+        for (var i = 0; i < sce.graph[sce.index].length; i++) {
+            var k0 = sce.graph[sce.index][i];
+            var c0 = sce.db[k0];
+            c0.con.fillStyle = rgba.css([255,255,255,1.0]);
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
     },
     "scene": function() {
+        for (var i = 0; i < sce.graph[sce.index].length; i++) {
+            var k0 = sce.graph[sce.index][i];
+            var c0 = sce.db[k0];
+            var b0 = bmp.db[k0];
+            c0.con.fillStyle = rgba.mono(b0);
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
     }
 }
 // colors
