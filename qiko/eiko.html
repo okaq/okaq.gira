@@ -26,13 +26,43 @@ var a = {
         a.start = window.performance.now();
 
         // subsystems
-        a.subs = [dom,lay];
+        a.subs = [dom,lay,sce,bmp];
         a.subs.forEach(function(el){el.init();});
+
+        // start
+        a.id = window.setTimeout(a.soup, 1000);
 
         // stats
         var done = window.performance.now();
         var total = done - a.start;
         console.log("total load time: " + total + "ms.");
+    },
+    "soup": function() {
+        ren.clear(sce.a);
+        ren.clear(sce.b);
+        ren.clear(sce.c);
+        ren.mono(sce.a, bmp.a);
+        ren.mono(sce.c, bmp.c);
+        ren.rgba(sce.b, bmp.b);
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.a = 32;
+        bmp.c = 236;
+        bmp.b = [220,160,220,1.0];
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.a = dom.canvas(lay.a);
+        dom.add(sce.a);
+        sce.b = dom.canvas(lay.b);
+        dom.add(sce.b);
+        sce.c = dom.canvas(lay.c);
+        dom.add(sce.c);
     }
 }
 // layout
@@ -42,10 +72,13 @@ var lay = {
         lay.h = 1080;
         lay.w1 = (lay.w * 0.62) >>> 0;
         lay.w2 = (lay.w - lay.w1) >>> 0;
+        lay.m = 8;
+        lay.w3 = (lay.w1 - (2 * lay.m)) >>> 0;
+        lay.w4 = (lay.w2 - (2 * lay.m)) >>> 0;
 
         lay.a = [lay.w,lay.h,0,0];
-        lay.b = [lay.w1,lay.h,0,0];
-        lay.c = [lay.w2,lay.h,lay.w,0];
+        lay.b = [lay.w3,lay.h,lay.m,0];
+        lay.c = [lay.w4,lay.h,lay.w1+lay.m,0];
     }
 }
 // dom
@@ -72,6 +105,61 @@ var dom = {
         dom.alpha.removeChild(c0.can);
     }
 }
+// render
+var ren = {
+    "clear": function(c0) {
+        c0.con.fillStyle = rgba.mono(255);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "mono": function(c0, m0) {
+        c0.con.fillStyle = rgba.mono(m0);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "rgba": function(c0, rgba0) {
+        c0.con.fillStyle = rgba.css(rgba0);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "rmon": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
+    }
+}
+
 
 </script>
     </head>
