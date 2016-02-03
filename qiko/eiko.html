@@ -26,7 +26,7 @@ var a = {
         a.start = window.performance.now();
 
         // subsystems
-        a.subs = [dom,lay,sce,bmp];
+        a.subs = [dom,lay,sce,bmp,dec];
         a.subs.forEach(function(el){el.init();});
 
         // start
@@ -44,6 +44,8 @@ var a = {
         ren.mono(sce.a, bmp.a);
         ren.mono(sce.c, bmp.c);
         ren.rgba(sce.b, bmp.b);
+
+        a.logo = ["o","k","a","q"];
     }
 }
 // bitmap
@@ -159,6 +161,99 @@ var rgba = {
         return rgba.mono(c0);
     }
 }
+// decoder
+var dec = {
+    "init": function() {
+        // decode oxy bitmap font
+        dec.a = {};
+        var x0 = 0;
+        for (var k in oxy) {
+            x0++;
+            var s0 = oxy[k];
+            var s1 = k[4];
+            var b0 = base64DecToArr(s0);
+            dec.a[s1] = dec.exp(b0);
+        }
+        console.log("bmp oxy font decoded: " + x0 + " chars");
+        // 4 needful chars instead of entire 36 char set
+        // save 40ms, 10kB
+    },
+    "exp": function(b0) {
+        // expansion of uint8array
+        // to string of bits
+        var r0 = [];
+        for (var i = 0; i < b0.length; i++) {
+            var b1 = b0[i];
+            var s0 = binStr(b1);
+            for (var j = 0; j < 8; j++) {
+                var s1 = s0.charAt(j);
+                var n0 = parseInt(s1, 10);
+                r0.push(n0);
+            }
+        }
+        return r0;
+    }
+}
+// oxy
+var oxy = {
+      oxy_a:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAA8AAAAPgAAAD4AAAA2AAAAdgAAAHcAAABnAAAA4wAAAOOAAADjgAAA/4AAAf+AAAHBwAABgcAAA4DAAAOA4AADgOAAAwBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      oxy_k:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcDgAAHBwAABw8AAAcOAAAHHAAABzgAAAd4AAAHcAAAB+AAAAfwAAAH8AAABzgAAAccAAAHHAAABw4AAAcPAAAHBwAABwOAAAcDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      oxy_o:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4AAAD/AAAA44AAAcHAAAHBwAABgcAAA4DAAAOAwAADgOAAA4DgAAOA4AADgMAAA4HAAAGBwAABwcAAAcOAAADngAAAfwAAAD4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      oxy_q:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH4AAAD/AAAB54AAAcOAAAOBgAADgcAAA4HAAAOBwAADgcAAA4HAAAOBwAADgcAAA4HAAAOBwAADg4AAAcOAAAHnAAAA/wAAAD4AAAAOAAAABwAAAAOAAAADwAAAAYAAAAAAA=",
+};
+// string view
+/*\
+  |*|
+  |*|  Base64 / binary data / UTF-8 strings utilities
+  |*|
+  |*|  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Base64_encoding_and_decoding
+  |*|
+  \*/
+
+/* Array of bytes to base64 string decoding */
+
+function b64ToUint6 (nChr) {
+     return nChr > 64 && nChr < 91 ?
+         nChr - 65
+         : nChr > 96 && nChr < 123 ?
+         nChr - 71
+         : nChr > 47 && nChr < 58 ?
+         nChr + 4
+         : nChr === 43 ?
+         62
+         : nChr === 47 ?
+         63
+         :
+         0;
+}
+
+function base64DecToArr (sBase64, nBlocksSize) {
+     var sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length,
+         nOutLen = nBlocksSize ? Math.ceil((nInLen * 3 + 1 >> 2) / nBlocksSize) * nBlocksSize : nInLen * 3 + 1 >> 2, 
+         taBytes = new Uint8Array(nOutLen);
+
+     for (var nMod3, nMod4, nUint24 = 0, nOutIdx = 0, nInIdx = 0; nInIdx < nInLen; nInIdx++) {
+         nMod4 = nInIdx & 3;
+         nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 18 - 6 * nMod4;
+         if (nMod4 === 3 || nInLen - nInIdx === 1) {
+                 for (nMod3 = 0; nMod3 < 3 && nOutIdx < nOutLen; nMod3++, nOutIdx++) {
+                         taBytes[nOutIdx] = nUint24 >>> (16 >>> nMod3 & 24) & 255;
+                 }
+                 nUint24 = 0;
+         }
+     }
+     return taBytes;
+}
+// bitwise ops
+// https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators
+var binStr = function(nMask) {
+         // nMask must be between 0 and 255
+         for (var nFlag = 0, nShifted = nMask, sMask = ""; nFlag < 32;
+             nFlag++, sMask += String(nShifted >>> 31), nShifted <<= 1);
+         return sMask.slice(24);
+}
+
+
 
 
 </script>
