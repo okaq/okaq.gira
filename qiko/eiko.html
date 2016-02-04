@@ -46,6 +46,19 @@ var a = {
         ren.rgba(sce.b, bmp.b);
 
         a.logo = ["o","k","a","q"];
+        console.log(dec.a);
+        // oxy_a, 32x32 bitarray
+        // sce.b width = 1174
+        // 1174 / 4 = 293
+        // 293 / 32 = 9
+        // each 32x32 block is 8x8 pixels
+        // char width = 256 px
+        for (var i = 0; i < a.logo.length; i++) {
+            var p0 = 8;
+            var x0 = (i * 256) >>> 0;
+            var y0 = 0;
+            var r0 = [256,256,x0,y0];
+        }
     }
 }
 // bitmap
