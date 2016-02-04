@@ -58,6 +58,9 @@ var a = {
             var x0 = (i * 256) >>> 0;
             var y0 = 0;
             var r0 = [256,256,x0,y0];
+            // print char at rect
+            var s0 = "oxy_" + a.logo[i];
+            ren.bmp(sce.b, r0, dec.a[s0]);
         }
     }
 }
@@ -133,6 +136,10 @@ var ren = {
     "rgba": function(c0, rgba0) {
         c0.con.fillStyle = rgba.css(rgba0);
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "bmp": function(c0, r0, bmp0) {
+        c0.con.fillStyle = rgba.rand();
+        c0.con.fillRect(r0[2],r0[3],r0[0],r0[1]);
     }
 }
 // colors
