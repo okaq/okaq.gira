@@ -55,12 +55,14 @@ var a = {
         // char width = 256 px
         for (var i = 0; i < a.logo.length; i++) {
             var p0 = 8;
-            var x0 = (i * 256) >>> 0;
+            var x0 = (i * 288) >>> 0;
             var y0 = 0;
-            var r0 = [256,256,x0,y0];
+            var r0 = [256,512,x0,y0];
             // print char at rect
             var s0 = "oxy_" + a.logo[i];
             ren.bmp(sce.b, r0, dec.a[s0]);
+            // double tall lettering
+            // each block height is two 8x8 pixels
         }
     }
 }
@@ -140,6 +142,8 @@ var ren = {
     "bmp": function(c0, r0, bmp0) {
         c0.con.fillStyle = rgba.rand();
         c0.con.fillRect(r0[2],r0[3],r0[0],r0[1]);
+    },
+    "block": function() {
     }
 }
 // colors
