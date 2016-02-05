@@ -65,6 +65,19 @@ var a = {
             // each block height is two 8x8 pixels
             ren.block(sce.b, r0, dec.a[a.logo[i]]);
         }
+
+        // pixel manipulation plasma
+        a.img = sce.c.con.getImageData(0, 0, sce.c.can.width, sce.c.can.height);
+        console.log(a.img);
+        for (var i = 0; i < a.img.data.length; i=i+4) {
+            // random greyscale
+            var f0 = rgba.rb();
+            a.img.data[i+0] = f0;
+            a.img.data[i+1] = f0;
+            a.img.data[i+2] = f0;
+            a.img.data[i+3] = 255;
+        }
+        sce.c.con.putImageData(a.img, 0, 0);
     }
 }
 // bitmap
