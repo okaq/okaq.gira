@@ -63,12 +63,13 @@ var a = {
             // ren.bmp(sce.b, r0, dec.a[s0]);
             // double tall lettering
             // each block height is two 8x8 pixels
-            ren.block(sce.b, r0, dec.a[a.logo[i]]);
+            // ren.block(sce.b, r0, dec.a[a.logo[i]]);
         }
 
         // pixel manipulation plasma
         a.img = sce.c.con.getImageData(0, 0, sce.c.can.width, sce.c.can.height);
-        console.log(a.img);
+        // console.log(a.img);
+        /*
         for (var i = 0; i < a.img.data.length; i=i+4) {
             // random greyscale
             var f0 = rgba.rb();
@@ -76,6 +77,26 @@ var a = {
             a.img.data[i+1] = f0;
             a.img.data[i+2] = f0;
             a.img.data[i+3] = 255;
+        }
+        */
+        var xm = sce.c.can.width;
+        var ym = sce.c.can.height;
+        var dm = Math.sqrt(xm*xm + ym*ym) >>> 0;
+        // console.log(xm, ym ,dm);
+        for (var y = 0; y < ym; y++) {
+            for (var x = 0; x < xm; x++) {
+                var y0 = (y * xm) >>> 0;
+                var i0 = (y0 + x) >>> 0; // bitmap index
+                var i1 = (i0 * 4) >>> 0; // img data index
+                // radial grad
+                var d0 = Math.sqrt(x*x + y*y) >>> 0;
+                var d1 = (d0 / dm);
+                var c0 = (d1 * 255) >>> 0;
+                a.img.data[i1+0] = c0;
+                a.img.data[i1+1] = c0;
+                a.img.data[i1+2] = c0;
+                a.img.data[i1+3] = 255;
+            }
         }
         sce.c.con.putImageData(a.img, 0, 0);
     }
