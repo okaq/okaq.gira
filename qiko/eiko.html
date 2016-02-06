@@ -94,7 +94,11 @@ var a = {
                 // var c0 = (d1 * 255) >>> 0;
                 // sine origin centered
                 var d2 = Math.sin(d1 * Math.PI * 2);
-                var c0 = (Math.abs(d2) * 255) >>> 0;
+                // var c0 = (Math.abs(d2) * 255) >>> 0;
+                // sine waves origin and bottom
+                var d3 = 1.0 - d1;
+                var d4 = d2 + Math.sin(d2 * Math.PI * 2);
+                var c0 = (Math.abs(d4) * 128) >>> 0;
                 a.img.data[i1+0] = c0;
                 a.img.data[i1+1] = c0;
                 a.img.data[i1+2] = c0;
