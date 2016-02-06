@@ -30,7 +30,7 @@ var a = {
         a.subs.forEach(function(el){el.init();});
 
         // start
-        a.id = window.setTimeout(a.soup, 1000);
+        a.id = window.setTimeout(a.soup, 100);
 
         // stats
         var done = window.performance.now();
@@ -63,7 +63,7 @@ var a = {
             // ren.bmp(sce.b, r0, dec.a[s0]);
             // double tall lettering
             // each block height is two 8x8 pixels
-            // ren.block(sce.b, r0, dec.a[a.logo[i]]);
+            ren.block(sce.b, r0, dec.a[a.logo[i]]);
         }
 
         // pixel manipulation plasma
@@ -91,11 +91,16 @@ var a = {
                 // radial grad
                 var d0 = Math.sqrt(x*x + y*y) >>> 0;
                 var d1 = (d0 / dm);
-                var c0 = (d1 * 255) >>> 0;
+                // var c0 = (d1 * 255) >>> 0;
+                // sine origin centered
+                var d2 = Math.sin(d1 * Math.PI * 2);
+                var c0 = (Math.abs(d2) * 255) >>> 0;
                 a.img.data[i1+0] = c0;
                 a.img.data[i1+1] = c0;
                 a.img.data[i1+2] = c0;
                 a.img.data[i1+3] = 255;
+                // wave emanation points
+                // top and bottom corners, center
             }
         }
         sce.c.con.putImageData(a.img, 0, 0);
@@ -185,7 +190,7 @@ var ren = {
             if (bmp0[i] == 0) {
                 continue;
             } else {
-                c0.con.fillStyle = rgba.rand();
+                c0.con.fillStyle = rgba.css([255,255,255,1.0]); // rgba.rand();
             }
             var x0 = i % 32;
             var y0 = (i / 32) >>> 0;
