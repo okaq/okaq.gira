@@ -69,6 +69,9 @@ var a = {
         // pixel manipulation plasma
         a.img = sce.c.con.getImageData(0, 0, sce.c.can.width, sce.c.can.height);
         // console.log(a.img);
+        a.nuts();
+    },
+    "plasmon": function() {
         /*
         for (var i = 0; i < a.img.data.length; i=i+4) {
             // random greyscale
@@ -123,6 +126,15 @@ var a = {
         }
         console.log("max_d8: " + max_d8);
         sce.c.con.putImageData(a.img, 0, 0);
+    },
+    "nuts": function() {
+        // randomize three parameters
+        // origin location
+        // frequency
+        // number of waves
+        // remap greyscale values by an offset 
+        // [0-255] -> [0.0,1.0] -> [0.50,0.49]
+        // additive averaging passes on the image data
     }
 }
 // bitmap
