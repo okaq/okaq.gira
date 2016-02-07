@@ -139,11 +139,11 @@ var a = {
         // additive averaging passes on the image data
         var xm = sce.c.can.width;
         var ym = sce.c.can.height;
-        // var f0 = (Math.random() * 8); // number of waves
-        var f0 = 2;
+        var f0 = (2 + (Math.random() * 2)) >>> 0; // number of waves
+        // var f0 = 2;
         for (var i = 0; i < f0; i++) {
             // frequency
-            var f1 = ((Math.random() * 4) + 2) >>> 0;
+            var f1 = (2 + Math.random() * 2) >>> 0;
             // random origin
             var x0 = (Math.random() * xm) >>> 0;
             var y0 = (Math.random() * ym) >>> 0;
@@ -158,13 +158,25 @@ var a = {
         var y1 = (y0 / ym);
         var d2 = Math.sqrt(x0*x0 + y0*y0);
         var c1 = 256 / f0;
+        var c2 = c1 / 2;
+        var f2 = Math.random();
         for (var y = 0; y < ym; y++) {
             for (var x = 0; x < xm; x++) {
                 var dx = (x - x0);
                 var dy = (y - y0);
                 var d0 = Math.sqrt(dx*dx + dy*dy);
                 var d1 = Math.sin(d0/d2 * Math.PI * f1);
-                var c0 = (Math.abs(d1) * c1) >>> 0;
+                // var f2 = Math.random();
+                var c0 = 0;
+                if (f2 >= 0.5) {
+                    // stark jumps
+                    c0 = (Math.abs(d1) * c1) >>> 0;
+                } else {
+                    // smoothed plasma
+                    c0 = (d1 * c1);
+                    c0 = (c0 / 2);
+                    c0 = (c0 + c2) >>> 0;
+                }
                 // index
                 var i0 = (y * xm) >>> 0;
                 var i1 = (i0 + x) >>> 0;
@@ -186,7 +198,8 @@ var bmp = {
     "init": function() {
         bmp.a = 32;
         bmp.c = 236;
-        bmp.b = [220,160,220,1.0];
+        // bmp.b = [220,160,220,1.0];
+        bmp.b = [235,100,225,1.0];
     }
 }
 // scene
