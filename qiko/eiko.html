@@ -70,6 +70,7 @@ var a = {
         a.img = sce.c.con.getImageData(0, 0, sce.c.can.width, sce.c.can.height);
         // console.log(a.img);
         a.nuts();
+        sce.c.con.putImageData(a.img, 0, 0);
     },
     "plasmon": function() {
         /*
@@ -135,6 +136,43 @@ var a = {
         // remap greyscale values by an offset 
         // [0-255] -> [0.0,1.0] -> [0.50,0.49]
         // additive averaging passes on the image data
+        var xm = sce.c.can.width;
+        var ym = sce.c.can.height;
+        // var f0 = (Math.random() * 8); // number of waves
+        var f0 = 1;
+        for (var i = 0; i < f0; i++) {
+            // frequency
+            var f1 = ((Math.random() * 4) + 2) >>> 0;
+            // random origin
+            var x0 = (Math.random() * xm) >>> 0;
+            var y0 = (Math.random() * ym) >>> 0;
+            // console.log(i,x0,y0,f1);
+            a.wave(f0, f1, x0, y0);
+        }
+    },
+    "wave": function(f0,f1,x0,y0) {
+        var xm = sce.c.can.width;
+        var ym = sce.c.can.height;
+        var x1 = (x0 / xm);
+        var y1 = (y0 / ym);
+        var d2 = Math.sqrt(x0*x0 + y0*y0);
+        for (var y = 0; y < ym; y++) {
+            for (var x = 0; x < xm; x++) {
+                var dx = (x - x0);
+                var dy = (y - y0);
+                var d0 = Math.sqrt(dx*dx + dy*dy);
+                var d1 = Math.sin(d0/d2 * Math.PI * 2);
+                var c0 = (Math.abs(d1) * 255) >>> 0;
+                // index
+                var i0 = (y * xm) >>> 0;
+                var i1 = (i0 + x) >>> 0;
+                var i2 = (i1 * 4) >>> 0;
+                a.img.data[i2+0] = c0;
+                a.img.data[i2+1] = c0;
+                a.img.data[i2+2] = c0;
+                a.img.data[i2+3] = 255;
+            }
+        }
     }
 }
 // bitmap
