@@ -30,7 +30,8 @@ var a = {
         a.subs.forEach(function(el){el.init();});
 
         // start
-        a.id = window.setTimeout(a.soup, 100);
+        // a.id = window.setTimeout(a.soup, 100);
+        a.soup();
 
         // stats
         var done = window.performance.now();
@@ -55,7 +56,7 @@ var a = {
         // char width = 256 px
         for (var i = 0; i < a.logo.length; i++) {
             var p0 = 8;
-            var x0 = (i * 288) >>> 0;
+            var x0 = (i * 210) >>> 0;
             var y0 = 256; // 284 perfect margin
             var r0 = [256,512,x0,y0];
             // print char at rect
@@ -278,11 +279,11 @@ var ren = {
             if (bmp0[i] == 0) {
                 continue;
             } else {
-                c0.con.fillStyle = rgba.css([255,255,255,1.0]); // rgba.rand();
+                c0.con.fillStyle = rgba.css([195,70,185,1.0]); // rgba.rand();
             }
             var x0 = i % 32;
             var y0 = (i / 32) >>> 0;
-            var x1 = ((x0 * 8) + r0[2]) >>> 0;
+            var x1 = ((x0 * 16) + r0[2]) >>> 0;
             var y1 = ((y0 * 16) + r0[3]) >>> 0;
             c0.con.fillRect(x1,y1,8,16);
         }
