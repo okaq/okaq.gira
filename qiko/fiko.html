@@ -43,7 +43,24 @@ var q = {
         // register with server
         // get peer mesh net
         // visualize peer connections
+
+        // peer circle 
+        // add / remove on state change
+        // show connections as lines
+
         ren.test();
+        q.id = q.quad();
+    },
+    "quad": function() {
+        // for demo purposes
+        // a unique id is just four rand bytes
+        var r0 = new ArrayBuffer(4);
+        var r1 = new Uint8Array(r0);
+        for (var i = 0; i < 4; i++) {
+            r1[i] = rgba.rb();
+        }
+        console.log(r0, r1);
+        return r1;
     }
 }
 // bitmap
