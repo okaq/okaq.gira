@@ -1,2 +1,164 @@
 <!DOCTYPE html>
-okaq gira qiko fiko live!
+<html lang="en">
+    <head id="zeta">
+        <title>okaq</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=1920,height=1080,initial-scale=1" />
+        <meta name="source" content="https://github.com/okaq" />
+        <meta name="creator" content="AQ<aq@okaq.com>" />
+        <meta name="date" content="2016-02-10" />
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAMklEQVR4nGKRNH/IQEvARFPTRy0YtWDUglELRi0YtWDUglELRi0YtWDUAioCQAAAAP//JGYBdI4ZOy8AAAAASUVORK5CYII=" />
+        <style type="text/css">
+            html,body{width:1920px;height:1080px;margin:0px;padding:0px;border:0px;background-color:rgba(255,255,255,1.0);}
+        </style>
+        <script type="text/javascript">
+            // ok
+        console.log("okaq gira qiko uiko remote viewing peer mesh net test!");
+        // async
+        (function(){
+         window.addEventListener("load",function(e){q.init(e);},false);
+     })();
+// qiko
+var q = {
+    "init": function(e) {
+        console.log(e);
+        // start time
+        q.start = window.performance.now();
+
+        // subsystems
+        q.subs = [dom,lay,sce,bmp];
+        q.subs.forEach(function(el){el.init();});
+
+        // start
+        q.peer();
+
+        // stats
+        var done = window.performance.now();
+        var total = done - q.start;
+        console.log("total load time: " + total + "ms.");
+    },
+    "peer": function() {
+        // render test
+        // generate peer id 
+        // register with server
+        // get peer mesh net
+        // visualize peer connections
+        ren.test();
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.db = {};
+        for (var k in sce.db) {
+            bmp.db[k] = rgba.rb();
+        }
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.db = {};
+        for (var k in lay.db) {
+            sce.db[k] = dom.canvas(lay.db[k]);
+            dom.add(sce.db[k]);
+        }
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // layout db
+        // named entity convention
+        // one canvas per scene is "chosen one"
+        // that can enact a jump to a new scene
+        lay.db = {};
+        lay.db["bkgd"] = [1920,1080,0,0];
+        lay.db["pinch"] = [512,512,0,0];
+        lay.db["greet"] = [1408,568,512,512];
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "test": function() {
+        for (var k in sce.db) {
+            var c0 = sce.db[k];
+            var b0 = bmp.db[k];
+            c0.con.fillStyle = rgba.mono(b0);
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        }
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "rmon": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
+    }
+}
+
+</script>
+    </head>
+    <body id="alpha">
+    </body>
+</html>
+
+
+
+
