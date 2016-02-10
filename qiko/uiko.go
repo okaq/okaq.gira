@@ -19,6 +19,12 @@ func UikoHandler(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, FIKO)
 }
 
+func QidHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r)
+    w.Write([]byte("ok qid"))
+}
+
+
 func main() {
     fmt.Println("okaq gir qikko uiko web server started on localhost:8008")
     // launch goroutine to handle cache
@@ -28,5 +34,6 @@ func main() {
     // dedicated type for Cache and Receiver
     // json send and request via fetch
     http.HandleFunc("/", UikoHandler)
+    http.HandleFunc("/qid", QidHandler)
     http.ListenAndServe(":8008", nil)
 }

@@ -50,6 +50,7 @@ var q = {
 
         ren.test();
         q.id = q.quad();
+        net.qid();
     },
     "quad": function() {
         // for demo purposes
@@ -61,6 +62,37 @@ var q = {
         }
         console.log(r0, r1);
         return r1;
+    }
+}
+// xhr
+var net = {
+    "qid": function() {
+        // send id to server
+        // send as string json data
+        // or binary typed array
+        // json data
+        var d0 = JSON.stringify(q.id);
+        // headers
+        var h0 = {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        };
+        var opts = {
+            "method": "POST",
+            "headers": h0,
+            "body": d0
+        };
+        window.fetch("/qid", opts).then(net.res).catch(net.err);
+    },
+    "res": function(response) {
+        console.log(response);
+        response.text().then(net.print).catch(net.error);
+    },
+    "print": function(text) {
+        console.log("this is the response: " + text);
+    },
+    "err": function(msg) {
+        console.log(msg);
     }
 }
 // bitmap
