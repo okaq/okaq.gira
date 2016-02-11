@@ -72,6 +72,7 @@ var net = {
         // or binary typed array
         // json data
         var d0 = JSON.stringify(q.id);
+        console.log(d0);
         // headers
         var h0 = {
             "Accept": "application/json",
@@ -83,6 +84,9 @@ var net = {
             "body": d0
         };
         window.fetch("/qid", opts).then(net.res).catch(net.err);
+    },
+    "bid": function() {
+        // binary post user id to server cache
     },
     "res": function(response) {
         console.log(response);

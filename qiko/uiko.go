@@ -1,6 +1,7 @@
 package main
 
 import (
+    "encoding/json"
     "fmt"
     "net/http"
 )
@@ -21,7 +22,17 @@ func UikoHandler(w http.ResponseWriter, r *http.Request) {
 
 func QidHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
-    w.Write([]byte("ok qid"))
+    // w.Write([]byte("ok qid"))
+    // decode and display json body
+    var b0 map[string]byte
+    dec := json.NewDecoder(r.Body)
+    err := dec.Decode(&b0)
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Println(b0)
+    s0 := fmt.Sprintf("qid: rec %d bytes", len(b0))
+    w.Write([]byte(s0))
 }
 
 
