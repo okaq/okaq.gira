@@ -50,7 +50,8 @@ var q = {
 
         ren.test();
         q.id = q.quad();
-        net.qid();
+        // net.qid();
+        net.bid();
     },
     "quad": function() {
         // for demo purposes
@@ -87,6 +88,16 @@ var net = {
     },
     "bid": function() {
         // binary post user id to server cache
+        // headers
+        var h0 = {
+            "Content-Type": "application/octet-stream"
+        };
+        var opts = {
+            "method": "POST",
+            "headers": h0,
+            "body": q.id
+        };
+        window.fetch("/bid", opts).then(net.res).catch(net.err);
     },
     "res": function(response) {
         console.log(response);
