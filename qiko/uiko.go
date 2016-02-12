@@ -12,9 +12,13 @@ const (
 )
 
 var (
-    Cache []string
-    Rec chan string
+    // Cache []string
+    // Rec chan string
+    Cache []Qid
+    Rec chan Qid
 )
+
+type Qid []byte
 
 func UikoHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
@@ -52,14 +56,28 @@ func BidHandler(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte(s0))
 }
 
+func Catch() {
+    // set up global chan and cache
+    Cache = []Qid{}
+    Rec = make(chan Qid)
+    go func() {
+        fmt.Println(Cache)
+        fmt.Println(Rec)
+    }()
+}
+
 func main() {
     fmt.Println("okaq gir qikko uiko web server started on localhost:8008")
     // launch goroutine to handle cache
     // receive on requests to append to cache
     // request handler sends on global chan
-    
+    Catch()
     // dedicated type for Cache and Receiver
     // json send and request via fetch
+    
+    // each request handled adds
+    // type binary id to list
+    // list index order determines first in
     http.HandleFunc("/", UikoHandler)
     http.HandleFunc("/qid", QidHandler)
     http.HandleFunc("/bid", BidHandler)
