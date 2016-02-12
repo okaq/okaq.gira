@@ -16,6 +16,7 @@ var (
     // Rec chan string
     Cache []Qid
     Rec chan Qid
+    Sen chan []byte
 )
 
 type Qid []byte
@@ -52,6 +53,8 @@ func BidHandler(w http.ResponseWriter, r *http.Request) {
         fmt.Println(err)
     }
     fmt.Println(b0)
+    // pitch bytes on chan
+    Sen <-b0
     s0 := fmt.Sprintf("bid: rec %d bytes", len(b0))
     w.Write([]byte(s0))
 }
@@ -61,8 +64,25 @@ func Catch() {
     Cache = []Qid{}
     Rec = make(chan Qid)
     go func() {
-        fmt.Println(Cache)
-        fmt.Println(Rec)
+        // fmt.Println(Cache)
+        // fmt.Println(Rec)
+        for {
+            q0 := <-Rec
+            Cache = append(Cache, q0)
+            fmt.Println(Cache)
+        }
+    }()
+}
+
+func Pitch() {
+    // recieve bytes and convert to Qid
+    Sen = make(chan []byte)
+    go func() {
+        for {
+            b0 := <-Sen
+            q0 := Qid(b0)
+            Rec <-q0
+        }
     }()
 }
 
@@ -74,7 +94,7 @@ func main() {
     Catch()
     // dedicated type for Cache and Receiver
     // json send and request via fetch
-    
+    Pitch()
     // each request handled adds
     // type binary id to list
     // list index order determines first in
