@@ -90,6 +90,7 @@ var net = {
         // binary post user id to server cache
         // headers
         var h0 = {
+            "Accept": "application/json",
             "Content-Type": "application/octet-stream"
         };
         var opts = {
@@ -101,7 +102,22 @@ var net = {
     },
     "res": function(response) {
         console.log(response);
-        response.text().then(net.print).catch(net.error);
+        // response.text().then(net.print).catch(net.error);
+        response.json().then(net.json).catch(net.error);
+    },
+    "json": function(j0) {
+        console.log(j0);
+        for (var i = 0; i < j0.length; i++) {
+            var j1 = window.atob(j0[i]);
+            console.log("decoded qid " + i + ": " + j1);
+            for (var j2 = 0; j2 < j1.length; j2++) {
+                console.log(j1.charCodeAt(j2));
+            }
+        }
+        // golang json encodes []byte as base64 string
+        // which requires decoding in js client
+        // clean, fast data format is js number
+        // encodes to float64 in golang
     },
     "print": function(text) {
         console.log("this is the response: " + text);

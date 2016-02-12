@@ -17,6 +17,7 @@ var (
     Cache []Qid
     Rec chan Qid
     Sen chan []byte
+    Dat chan []byte
 )
 
 type Qid []byte
@@ -55,14 +56,21 @@ func BidHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Println(b0)
     // pitch bytes on chan
     Sen <-b0
-    s0 := fmt.Sprintf("bid: rec %d bytes", len(b0))
-    w.Write([]byte(s0))
+    // each write cascades a sequential read
+    // which is sent to the client
+    // wait here for the cache to finish writing
+    j0 := <-Dat
+    fmt.Println(string(j0))
+    // s0 := fmt.Sprintf("bid: rec %d bytes", len(b0))
+    // w.Write([]byte(s0))
+    w.Write(j0)
 }
 
 func Catch() {
     // set up global chan and cache
     Cache = []Qid{}
     Rec = make(chan Qid)
+    Dat = make(chan []byte)
     go func() {
         // fmt.Println(Cache)
         // fmt.Println(Rec)
@@ -70,6 +78,13 @@ func Catch() {
             q0 := <-Rec
             Cache = append(Cache, q0)
             fmt.Println(Cache)
+            // send json string
+            j0, err := json.Marshal(Cache)
+            if err != nil {
+                fmt.Println(err)
+            }
+            fmt.Println(j0)
+            Dat <-j0
         }
     }()
 }
