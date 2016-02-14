@@ -13,7 +13,7 @@
         </style>
         <script type="text/javascript">
             // ok
-        console.log("okaq gira qiko itiko remote viewing peer nat!");
+        console.log("okaq gira qiko tiko remote viewing peer nat!");
         // async
         (function(){
          window.addEventListener("load",function(e){q.init(e);},false);
@@ -26,13 +26,20 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom];
+        q.subs = [dom,lay];
         q.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         var total = done - q.start;
         console.log("total load time: " + total + "ms.");
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // generator that takes data set as input
+        // outputs layout, scene and jump states
     }
 }
 // dom
