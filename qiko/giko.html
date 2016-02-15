@@ -54,6 +54,16 @@ var lay = {
         };
         lay.pc = new window.webkitRTCPeerConnection(lay.ice);
         console.log(lay.pc);
+        lay.dc = lay.pc.createDataChannel("ok_okaq_gira_qiko_giko");
+        lay.dc.onopen = lay.open;
+        lay.dc.onclose = lay.close;
+        console.log(lay.dc);
+    },
+    "open": function(e) {
+        console.log(e);
+    },
+    "close": function(e) {
+        console.log(e);
     }
 }
 // dom
