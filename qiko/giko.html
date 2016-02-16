@@ -11,6 +11,7 @@
         <style type="text/css">
             html,body{width:1920px;height:1080px;margin:0px;padding:0px;border:0px;background-color:rgba(255,255,255,1.0);}
         </style>
+        <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
         <script type="text/javascript">
             // ok
         console.log("okaq gira qiko tiko remote viewing peer nat!");
@@ -26,13 +27,30 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom,lay];
+        q.subs = [dom,lay,peer];
         q.subs.forEach(function(el){el.init();});
 
         // stats
         var done = window.performance.now();
         var total = done - q.start;
         console.log("total load time: " + total + "ms.");
+    }
+}
+// peerjs
+var peer = {
+    "init": function() {
+        // config
+        peer.c = {
+            "key": "wrcrx9bkcwlpiudi",
+            "debug": 3
+        };
+        // peer object
+        peer.a = new Peer(peer.c);
+        console.log(peer.a);
+        // init xhr conn to peerjs cloud
+        // open websocket for signalling metadata
+        // peer.min.js size = 12.0kB
+        // total net init time ~1s
     }
 }
 // layout
@@ -58,6 +76,8 @@ var lay = {
         lay.dc.onopen = lay.open;
         lay.dc.onclose = lay.close;
         console.log(lay.dc);
+        // use peerjs
+        // visualize the home lan network
     },
     "open": function(e) {
         console.log(e);
