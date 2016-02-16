@@ -51,6 +51,17 @@ var peer = {
         // open websocket for signalling metadata
         // peer.min.js size = 12.0kB
         // total net init time ~1s
+        
+        // events
+        peer.a.on("open", peer.open);
+    },
+    "open": function(id) {
+        peer.id = id;
+        console.log("Peer id: " + id);
+
+        // peer connection
+        // peer.d = peer.a.connect("remotePeerId");
+        // peer.a.on("connection", function(conn){});
     }
 }
 // layout
