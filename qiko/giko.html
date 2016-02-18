@@ -62,6 +62,33 @@ var peer = {
         // peer connection
         // peer.d = peer.a.connect("remotePeerId");
         // peer.a.on("connection", function(conn){});
+
+        // fetch request post peer id to server
+        xhr.peer();
+    }
+}
+// fetch
+var xhr = {
+    "peer": function() {
+        // when complete signal state change
+        // headers
+        var h0 = {
+            "Accept": "text/plain",
+            "Content-Type": "text/plain"
+        };
+        var opts = {
+            "method": "POST",
+            "headers": h0,
+            "body": peer.id
+        };
+        window.fetch("/pids", opts).then(xhr.res).catch(xhr.err);
+    },
+    "res": function(response) {
+        console.log(response);
+        response.text().then(xhr.str).catch(xhr.err);
+    },
+    "str": function(s0) {
+        console.log("pids response string: " + s0);
     }
 }
 // layout

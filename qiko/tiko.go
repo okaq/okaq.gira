@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt"
+    "io/ioutil"
     "net/http"
 )
 
@@ -23,6 +24,17 @@ func TikoHandler(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, GIKO)
 }
 
+func PidsHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r)
+    b0, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        fmt.Println(err)
+    }
+    s0 := string(b0)
+    Pec <-s0
+    w.Write([]byte("ok pids"))
+}
+
 func PidsCache() {
     Pids = []string{}
     Pec = make(chan string)
@@ -39,6 +51,7 @@ func main() {
     fmt.Println("okaq gira qiko web server on localhost:8008")
     PidsCache()
     http.HandleFunc("/", TikoHandler)
+    http.HandleFunc("/pids", PidsHandler)
     http.ListenAndServe(":8008", nil)
 }
 // peerid cache handler
