@@ -36,6 +36,25 @@ var q = {
         console.log("total load time: " + total + "ms.");
     }
 }
+// scene
+var sce = {
+    "init": function() {
+        // canvas objects
+        sce.a = {};
+        sce.a["full"] = dom.canvas([1920,1080,0,0]);
+        sce.a["start"] = sce.grid([1,20,32,32]);
+        // type def for text grid
+        // scene graph
+        sce.b = {};
+        sce.b["intro"] = [sce.a["full"],sce.a["start"]];
+        // add / remove jump manager
+        // bmp and func animation system
+        // ux event handler assign
+    },
+    "grid": function(r0) {
+        // input nx, ny, w0, h0
+    }
+}
 // peerjs
 var peer = {
     "init": function() {
