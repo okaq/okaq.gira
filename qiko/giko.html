@@ -42,8 +42,9 @@ var sce = {
         // canvas objects
         sce.a = {};
         sce.a["full"] = dom.canvas([1920,1080,0,0]);
-        sce.a["start"] = sce.grid([1,20,32,32]);
+        sce.a["start"] = sce.grid([1,20,32,32,512,512]);
         // type def for text grid
+        // Array.isArray() == true check during render
         // scene graph
         sce.b = {};
         sce.b["intro"] = [sce.a["full"],sce.a["start"]];
@@ -52,7 +53,25 @@ var sce = {
         // ux event handler assign
     },
     "grid": function(r0) {
-        // input nx, ny, w0, h0
+        // input nx, ny, w0, h0, x0, y0
+        // return grid of canvas objects as list
+        var c0 = [];
+        for (var y = 0; y < r0[1]; y++) {
+            for (var x = 0; x < r0[0]; x++) {
+                var r1 = [];
+                r1[0] = r0[2];
+                r1[1] = r0[3];
+                var x0 = (x * r1[0]) >>> 0;
+                var x1 = (x0 + r0[4]) >>> 0;
+                var y0 = (y * r1[1]) >>> 0;
+                var y1 = (y0 + r0[5]) >>> 0;
+                r1[2] = x1;
+                r1[3] = y1;
+                var c1 = dom.canvas(r1);
+                c0.push(c1);
+            }
+        }
+        return c0;
     }
 }
 // peerjs
