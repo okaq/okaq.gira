@@ -70,11 +70,26 @@ var sce = {
     },
     "slip": function() {
         // add all current scene objects to dom
+        for (var i = 0; i < sce.c.length; i++) {
+            var k0 = sce.c[i];
+            var c0 = sce.a[k0];
+            if (Array.isArray(c0)) {
+                c0.forEach(function(el){dom.add(el);});
+            } else {
+                dom.add(c0);
+            }
+        }
     },
     "slide": function() {
         // remove scene in current list from the dom
         for (var i = 0; i < sce.c.length; i++) {
             var k0 = sce.c[i];
+            var c0 = sce.a[k0];
+            if (Array.isArray(c0)) {
+                c0.forEach(function(el){dom.remove(el);});
+            } else {
+                dom.remove(c0);
+            }
         }
     },
     "grid": function(r0) {
