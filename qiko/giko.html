@@ -49,8 +49,33 @@ var sce = {
         sce.b = {};
         sce.b["intro"] = [sce.a["full"],sce.a["start"]];
         // add / remove jump manager
+        // current list of canvas keys
+        sce.c = [];
+        // current scene key
+        sce.d = null;
         // bmp and func animation system
         // ux event handler assign
+    },
+    "jump": function(s0) {
+        // input key into scene graph
+        // remove current list from dom
+        // remove all from current list
+        // add all input key scenes into current list
+        // add all current list entries to the dom
+        if (sce.c.length > 0) {
+            sce.slide();
+        }
+
+        // finer grain controls obtained by diffing keys
+    },
+    "slip": function() {
+        // add all current scene objects to dom
+    },
+    "slide": function() {
+        // remove scene in current list from the dom
+        for (var i = 0; i < sce.c.length; i++) {
+            var k0 = sce.c[i];
+        }
     },
     "grid": function(r0) {
         // input nx, ny, w0, h0, x0, y0
