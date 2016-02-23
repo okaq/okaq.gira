@@ -27,13 +27,19 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom,bmp,lay,peer];
+        q.subs = [dom,bmp,lay,peer,sce];
         q.subs.forEach(function(el){el.init();});
+
+        // start
+        q.begin();
 
         // stats
         var done = window.performance.now();
         var total = done - q.start;
         console.log("total load time: " + total + "ms.");
+    },
+    "begin": function() {
+        sce.jump("intro");
     }
 }
 // scene
@@ -47,7 +53,9 @@ var sce = {
         // Array.isArray() == true check during render
         // scene graph
         sce.b = {};
-        sce.b["intro"] = [sce.a["full"],sce.a["start"]];
+        // sce.b["intro"] = [sce.a["full"],sce.a["start"]];
+        sce.b["empty"] = [];
+        sce.b["intro"] = ["full","start"];
         // add / remove jump manager
         // current list of canvas keys
         sce.c = [];
@@ -65,7 +73,15 @@ var sce = {
         if (sce.c.length > 0) {
             sce.slide();
         }
-
+        sce.c = [];
+        for (var i = 0; i < sce.b[s0].length; i++) {
+            var k0 = sce.b[s0][i];
+            sce.c[i] = k0;
+        }
+        sce.d = s0;
+        if (sce.c.length > 0) {
+            sce.slip();
+        }
         // finer grain controls obtained by diffing keys
     },
     "slip": function() {
