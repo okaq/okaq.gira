@@ -48,7 +48,10 @@ var sce = {
         // canvas objects
         sce.a = {};
         sce.a["full"] = dom.canvas([1920,1080,0,0]);
-        sce.a["start"] = sce.grid([1,20,32,32,512,512]);
+        sce.a["greet"] = sce.grid([1,20,32,32,512,512]);
+        sce.a["button"] = dom.canvas([256,256,128,700]);
+        // assign dataset-key as name key
+        // generate indiviual keys for every cavas - start_2
         // type def for text grid
         // Array.isArray() == true check during render
         // scene graph
@@ -63,6 +66,9 @@ var sce = {
         sce.d = null;
         // bmp and func animation system
         // ux event handler assign
+        sce.e = {};
+        sce.e["button"] = sce.click;
+        // add and remove event handlers on jump
     },
     "jump": function(s0) {
         // input key into scene graph
@@ -128,6 +134,9 @@ var sce = {
             }
         }
         return c0;
+    },
+    "click": function(e) {
+        console.log(e);
     }
 }
 // peerjs
