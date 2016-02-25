@@ -27,7 +27,7 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom,bmp,lay,peer,sce];
+        q.subs = [dom,bmp,lay,peer,sce,key];
         q.subs.forEach(function(el){el.init();});
 
         // start
@@ -40,6 +40,30 @@ var q = {
     },
     "begin": function() {
         sce.jump("intro");
+    }
+}
+// keys
+var key = {
+    "init": function() {
+        // master canvas key list
+        key.a = [];
+        // scene key list
+        key.b = [];
+
+        // test
+        var g0 = key.grid("yomo", 2, 3);
+        console.log(g0);
+    },
+    "grid": function(n0, ny, nx) {
+        var r0 = [];
+        for (var y = 0; y < ny; y++) {
+            for (var x = 0; x < nx; x++) {
+                var n1 = [n0,y,x];
+                var n2 = n1.join("_");
+                r0.push(n2);
+            }
+        }
+        return r0;
     }
 }
 // scene
@@ -69,6 +93,11 @@ var sce = {
         sce.e = {};
         sce.e["button"] = sce.click;
         // add and remove event handlers on jump
+
+        // separate out all concerns
+        // only animate user interactive elements
+        // decor elements are static bmps
+        // single key for every canvas
     },
     "jump": function(s0) {
         // input key into scene graph
