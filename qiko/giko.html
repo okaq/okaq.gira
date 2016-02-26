@@ -27,7 +27,8 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom,bmp,lay,peer,sce,key];
+        // q.subs = [dom,bmp,lay,peer,sce,key];
+        q.suba = [dom,bmp,lay,canv,sce];
         q.subs.forEach(function(el){el.init();});
 
         // start
@@ -66,8 +67,32 @@ var key = {
         return r0;
     }
 }
+// layout
+var lay = {
+    "init": function() {
+        // add and generate a layout
+        // {name, rect} or {name, [rectList]}
+    },
+    "grid": function(r0, nx, ny) {
+        // r0 is the outer container bounding rect
+        // nx, ny count grid steps
+    }
+}
+// canvas
+var canv = {
+    "init": function() {
+        // key db of canvas objects
+        // generated from layout data
+    }
+}
 // scene
 var sce = {
+    "init": function() {
+        // scene graph config
+    }
+}
+// scene2
+var sce2 = {
     "init": function() {
         // canvas objects
         sce.a = {};
