@@ -26,14 +26,42 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom];
+        q.subs = [dom,key,net,db];
         q.subs.forEach(function(el){el.init();});
-
 
         // stats
         var done = window.performance.now();
         var total = done - q.start;
         console.log("total load time: " + total + "ms.");
+    }
+}
+// data
+var db = {
+    "init": function() {
+        // holds state of running app
+        // immutable diffs for history
+        db.a = {};
+        // peer net graph
+        db.b = {};
+    }
+}
+// xhr
+var net = {
+    "init": function() {
+        // using fetch api for requests
+        // json body round trip
+        // eventual binary encoding
+    }
+}
+// keys
+var key = {
+    "init": function() {
+        // list of layout keys
+        key.a = [];
+        // list of scene keys
+        key.b = [];
+        // list of event keys
+        key.c = [];
     }
 }
 // dom
