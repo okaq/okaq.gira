@@ -26,17 +26,50 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom,key,net,db];
+        // q.subs = [dom,key,net,db];
+        q.subs = [dom,sce];
         q.subs.forEach(function(el){el.init();});
+
+        // begin
+        q.cone();
 
         // stats
         var done = window.performance.now();
         var total = done - q.start;
         console.log("total load time: " + total + "ms.");
+    },
+    "cone": function() {
+        ren.bkgd();
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        // single full screen canvas
+        // divide space into equal squares
+        // one random point per square
+        // connect each with nearest neighbor
+
+        // scene object
+        sce.a = {};
+        // layout rect
+        sce.a.r = [1920,1080,0,0];
+        // canvas object
+        sce.a.c = dom.canvas(sce.a.r);
+        dom.add(sce.a.c);
+        // bmp data
+        sce.a.b = 32;
     }
 }
 // algebra
 var math = {
+    "vec": function() {
+        // static library, returns but does not hold data
+        // vector is just fixed size array
+        // can be optimized using value typed arrays
+        var v0 = [];
+        return v0;
+    }
 }
 // events
 var evt = {
@@ -92,6 +125,13 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "bkgd": function() {
+        sce.a.c.con.fillStyle = rgba.mono(sce.a.b);
+        sce.a.c.con.fillRect(0,0,sce.a.c.can.width,sce.a.c.can.height);
     }
 }
 // colors
