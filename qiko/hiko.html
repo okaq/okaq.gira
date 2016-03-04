@@ -55,11 +55,14 @@ var cell = {
         cell.nt = (cell.nx * cell.ny) >>> 0;
         // cell data
         cell.a = [];
+        // neighbor index
+        cell.b = []; 
         console.log(cell);
         // draw points
         // compute nearest neighbor
         // draw nearest edges
         cell.divide();
+        cell.near();
     },
     "divide": function() {
         for (var y = 0 ; y < cell.ny; y++) {
@@ -77,6 +80,51 @@ var cell = {
                 cell.a[i0].py = (y0 + y1) >>> 0;
             }
         }
+    },
+    "near": function() {
+        for (var i = 0; i < cell.nx; i++) {
+            // get neighbor cells based on index
+            var nn0 = cell.adj(i);
+            console.log(i, nn0.length);
+        }
+    },
+    "adj": function(i0) {
+        var r0 = [];
+        r0[0] = i0 - cell.nx - 1;
+        r0[1] = i0 - cell.nx;
+        r0[2] = i0 - cell.nx + 1;
+        r0[3] = i0 - 1;
+        r0[4] = i0 + 1;
+        r0[5] = i0 + cell.nx - 1;
+        r0[6] = i0 + cell.nx;
+        r0[7] = i0 + cell.nx + 1;
+        if (i0 < cell.nx) {
+            r0[0] = null;
+            r0[1] = null;
+            r0[2] = null;
+        }
+        if (i0 > (cell.nt - cell.nx)) {
+            r0[5] = null;
+            r0[6] = null;
+            r0[7] = null;
+        }
+        if (i0 % cell.nx == 0) {
+            r0[3] = null;
+        }
+        if (i0 & (cell.nx - 1) == 0) {
+            r0[4] = null;
+        }
+        var r1 = cell.trim(r0);
+        return r1;
+    },
+    "trim": function(r0) {
+        var r1 = [];
+        for (var i = 0; i < r0.length; i++) {
+            if (r0[i] != null) {
+                r1.push(r0[i]);
+            }
+        }
+        return r1;
     }
 }
 // scene
