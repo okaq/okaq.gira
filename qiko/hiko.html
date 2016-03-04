@@ -52,9 +52,30 @@ var cell = {
         cell.nx = (1920 / cell.w) >>> 0;
         cell.ny = (1080 / cell.h) >>> 0;
         cell.nt = (cell.nx * cell.ny) >>> 0;
+        // cell data
         cell.a = [];
         console.log(cell);
-
+        // draw points
+        // compute nearest neighbor
+        // draw nearest edges
+        cell.divide();
+    },
+    "divide": function() {
+        for (var y = 0 ; y < cell.ny; y++) {
+            for (var x = 0; x < cell.nx; x++) {
+                var i0 = ((y * cell.nx) + x) >>> 0;
+                cell.a[i0] = {};
+                var x0 = (x * cell.w) >>> 0;
+                cell.a[i0].x = x0;
+                var y0 = (y * cell.h) >>> 0;
+                cell.a[i0].y = y0;
+                // random offset
+                var x1 = (Math.random() * cell.w) >>> 0;
+                var y1 = (Math.random() * cell.h) >>> 0;
+                cell.a[i0].px = (x0 + x1) >>> 0;
+                cell.a[i0].py = (y0 + y1) >>> 0;
+            }
+        }
     }
 }
 // scene
