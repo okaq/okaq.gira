@@ -27,7 +27,7 @@ var q = {
 
         // subsystems
         // q.subs = [dom,key,net,db];
-        q.subs = [dom,sce];
+        q.subs = [dom,sce,cell];
         q.subs.forEach(function(el){el.init();});
 
         // begin
@@ -40,6 +40,21 @@ var q = {
     },
     "cone": function() {
         ren.bkgd();
+    }
+}
+// cells 
+var cell = {
+    "init": function() {
+        // spatial index grid
+        // nearest neighbor index
+        cell.w = 30;
+        cell.h = 30;
+        cell.nx = (1920 / cell.w) >>> 0;
+        cell.ny = (1080 / cell.h) >>> 0;
+        cell.nt = (cell.nx * cell.ny) >>> 0;
+        cell.a = [];
+        console.log(cell);
+
     }
 }
 // scene
