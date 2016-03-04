@@ -40,6 +40,7 @@ var q = {
     },
     "cone": function() {
         ren.bkgd();
+        ren.node();
     }
 }
 // cells 
@@ -168,6 +169,12 @@ var ren = {
     "bkgd": function() {
         sce.a.c.con.fillStyle = rgba.mono(sce.a.b);
         sce.a.c.con.fillRect(0,0,sce.a.c.can.width,sce.a.c.can.height);
+    },
+    "node": function() {
+        sce.a.c.con.fillStyle = rgba.css([0,100,0,1.0]);
+        for (var i = 0; i < cell.nt; i++) {
+            sce.a.c.con.fillRect(cell.a[i].px,cell.a[i].py,4,4);
+        }
     }
 }
 // colors
