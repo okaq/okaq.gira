@@ -82,10 +82,31 @@ var cell = {
         }
     },
     "near": function() {
-        for (var i = 0; i < cell.nx; i++) {
+        for (var i = 0; i < cell.nt; i++) {
             // get neighbor cells based on index
             var nn0 = cell.adj(i);
-            console.log(i, nn0.length);
+            // console.log(i, nn0.length, nn0);
+            // abstract out following into its own function
+            var m0 = 1000; // current min distance
+            var i0 = null; // index of cell
+            var px0 = cell.a[i].px;
+            var py0 = cell.a[i].py;
+            for (var j = 0; j < nn0.length; j++) {
+                var i1 = nn0[j];
+                var px1 = cell.a[i1].px;
+                var py1 = cell.a[i1].py;
+                // euclidean dist func
+                var dx0 = Math.abs(px0 - px1);
+                var dx1 = (dx0 * dx0);
+                var dy0 = Math.abs(py0 - py1);
+                var dy1 = (dy0 * dy0);
+                var d0 = Math.sqrt(dx1 + dy1);
+                if (d0 < m0) {
+                    m0 = d0;
+                    i0 = i1;
+                }
+            }
+            cell.b[i] = i0;
         }
     },
     "adj": function(i0) {
@@ -109,10 +130,14 @@ var cell = {
             r0[7] = null;
         }
         if (i0 % cell.nx == 0) {
+            r0[0] = null;
             r0[3] = null;
+            r0[5] = null;
         }
-        if (i0 & (cell.nx - 1) == 0) {
+        if ((i0 > 0) && (i0 % (cell.nx - 1) == 0)) {
+            r0[2] = null;
             r0[4] = null;
+            r0[7] = null;
         }
         var r1 = cell.trim(r0);
         return r1;
