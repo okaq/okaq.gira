@@ -41,6 +41,7 @@ var q = {
     "cone": function() {
         ren.bkgd();
         ren.node();
+        ren.edge();
     }
 }
 // cells 
@@ -93,6 +94,11 @@ var cell = {
             var py0 = cell.a[i].py;
             for (var j = 0; j < nn0.length; j++) {
                 var i1 = nn0[j];
+                if (i1 >= cell.a.length) {
+                    // bottom left, right corner correction
+                    // console.log(i, j, i1, nn0);
+                    continue;
+                }
                 var px1 = cell.a[i1].px;
                 var py1 = cell.a[i1].py;
                 // euclidean dist func
@@ -248,6 +254,23 @@ var ren = {
         for (var i = 0; i < cell.nt; i++) {
             sce.a.c.con.fillRect(cell.a[i].px,cell.a[i].py,4,4);
         }
+    },
+    "edge": function() {
+        // one path to rule them all
+        sce.a.c.con.strokeStyle = rgba.css([0,148,0,1.0]);
+        sce.a.c.con.lineWidth = 1.0;
+        sce.a.c.con.lineCap = "round";
+        sce.a.c.con.beginPath();
+        for (var i = 0; i < cell.nt; i++) {
+            var px0 = cell.a[i].px;
+            var py0 = cell.a[i].py;
+            var i0 = cell.b[i];
+            var px1 = cell.a[i0].px;
+            var py1 = cell.a[i0].py;
+            sce.a.c.con.moveTo(px0+2,py0+2);
+            sce.a.c.con.lineTo(px1+2,py1+2);
+        }
+        sce.a.c.con.stroke();
     }
 }
 // colors
