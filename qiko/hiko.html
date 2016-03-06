@@ -42,6 +42,24 @@ var q = {
         ren.bkgd();
         ren.node();
         ren.edge();
+        // apply matrix transforms 1fps to all points
+        // at each tick, pick a new random point as origin
+        // loop over each sell point
+        // origin to point forms a vector
+        // expand each point in direction of vector X%
+        window.setTimeout(q.loop, 2500);
+    },
+    "loop": function() {
+        q.tick = 0;
+        q.id = window.setInterval(q.tock, 1000);
+    },
+    "tock": function() {
+        q.tick = q.tick + 1;
+        console.log("tick count: " + q.tick);
+        if (q.tick >= 16) {
+            console.log("end achieved! stopping down...");
+            window.clearInterval(q.id);
+        }
     }
 }
 // cells 
