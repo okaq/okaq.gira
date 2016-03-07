@@ -32,6 +32,7 @@ var q = {
 
         // begin
         q.cone();
+        q.begin();
 
         // stats
         var done = window.performance.now();
@@ -40,8 +41,13 @@ var q = {
     },
     "cone": function() {
         ren.bkgd();
+        if (q.px) {
+            ren.origin();
+        }
         ren.node();
         ren.edge();
+    },
+    "begin": function() {
         // apply matrix transforms 1fps to all points
         // at each tick, pick a new random point as origin
         // loop over each sell point
@@ -51,11 +57,34 @@ var q = {
     },
     "loop": function() {
         q.tick = 0;
+        q.px = (Math.random() * 1920) >>> 0;
+        q.py = (Math.random() * 1080) >>> 0;
         q.id = window.setInterval(q.tock, 1000);
     },
     "tock": function() {
+        // adv tick
         q.tick = q.tick + 1;
         console.log("tick count: " + q.tick);
+
+        // update
+        // var px = (Math.random() * 1920) >>> 0;
+        // var py = (Math.random() * 1080) >>> 0;
+        for (var i = 0; i < cell.a.length; i++) {
+            var dx = (cell.a[i].px - q.px);
+            var dy = (cell.a[i].py- q.py);
+            var m0 = dy/dx;
+            // fixed scale
+            var rx = (dx * 0.01);
+            // scale prop to dist
+            var ry = rx * m0;
+            cell.a[i].px += rx;
+            cell.a[i].py += ry;
+        }
+
+        // render
+        q.cone();
+
+        // break loop
         if (q.tick >= 16) {
             console.log("end achieved! stopping down...");
             window.clearInterval(q.id);
@@ -266,6 +295,10 @@ var ren = {
     "bkgd": function() {
         sce.a.c.con.fillStyle = rgba.mono(sce.a.b);
         sce.a.c.con.fillRect(0,0,sce.a.c.can.width,sce.a.c.can.height);
+    },
+    "origin": function() {
+        sce.a.c.con.fillStyle = rgba.css([128,64,32,1.0]);
+        sce.a.c.con.fillRect(q.px,q.py,16,16);
     },
     "node": function() {
         sce.a.c.con.fillStyle = rgba.css([0,100,0,1.0]);
