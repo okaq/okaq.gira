@@ -69,9 +69,14 @@ var q = {
         // update
         // var px = (Math.random() * 1920) >>> 0;
         // var py = (Math.random() * 1080) >>> 0;
+        // dist quads
+        var mx1 = q.px;
+        var my1 = q.py;
+        var mx2 = 1920 - q.px;
+        var my2 = 1080 - q.py;
         for (var i = 0; i < cell.a.length; i++) {
             var dx = (cell.a[i].px - q.px);
-            var dy = (cell.a[i].py- q.py);
+            var dy = (cell.a[i].py - q.py);
             var m0 = dy/dx;
             // fixed scale
             var rx = (dx * 0.01);
