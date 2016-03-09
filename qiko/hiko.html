@@ -84,10 +84,12 @@ var q = {
             // scale prop to dist
             var rx = q.px;
             if (dx <= 0) {
-                rx = (dx * (dx / mx2));
+                rx = dx * ((q.px - cell.a[i].px) / (q.px * 10));
             } else {
-                rx = (dx * (dx /mx2));
+                rx = dx * ((cell.a[i].px - q.px) / (mx2 * 10));
             }
+            // x-axis prop dist expansion
+            // no path on final tick
             var ry = rx * m0;
             cell.a[i].px += rx;
             cell.a[i].py += ry;
