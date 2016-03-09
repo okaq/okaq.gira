@@ -54,6 +54,7 @@ var q = {
         // origin to point forms a vector
         // expand each point in direction of vector X%
         window.setTimeout(q.loop, 2500);
+        // then rotate about new rand point
     },
     "loop": function() {
         q.tick = 0;
@@ -79,8 +80,14 @@ var q = {
             var dy = (cell.a[i].py - q.py);
             var m0 = dy/dx;
             // fixed scale
-            var rx = (dx * 0.01);
+            // var rx = (dx * 0.01);
             // scale prop to dist
+            var rx = q.px;
+            if (dx <= 0) {
+                rx = (dx * (dx / mx2));
+            } else {
+                rx = (dx * (dx /mx2));
+            }
             var ry = rx * m0;
             cell.a[i].px += rx;
             cell.a[i].py += ry;
