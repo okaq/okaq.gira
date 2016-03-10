@@ -53,8 +53,11 @@ var q = {
         // loop over each sell point
         // origin to point forms a vector
         // expand each point in direction of vector X%
-        window.setTimeout(q.loop, 2500);
+        
+        // window.setTimeout(q.loop, 2500);
+        
         // then rotate about new rand point
+        window.setTimeout(q.turn, 2500);
     },
     "loop": function() {
         q.tick = 0;
@@ -101,6 +104,25 @@ var q = {
         // break loop
         if (q.tick >= 16) {
             console.log("end achieved! stopping down...");
+            window.clearInterval(q.id);
+            // window.setTimeout(q.turn, 2500);
+        }
+    },
+    "turn": function() {
+        q.tick = 0;
+        q.px = (Math.random() * 1920) >>> 0;
+        q.py = (Math.random() * 1080) >>> 0;
+        q.id = window.setInterval(q.toll, 1000);
+    },
+    "toll": function() {
+        q.tick = q.tick + 1;
+        console.log("tick count: " + q.tick);
+
+        // rotate about a point, theta = 360/16
+
+        // break loop
+        if (q.tick >= 16) {
+            console.log("finished turning...");
             window.clearInterval(q.id);
         }
     }
