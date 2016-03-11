@@ -112,6 +112,11 @@ var q = {
         q.tick = 0;
         q.px = (Math.random() * 1920) >>> 0;
         q.py = (Math.random() * 1080) >>> 0;
+
+        // data sequence
+        q.data = [];
+        q.data[0] = cell.a.slice(0);
+
         q.id = window.setInterval(q.toll, 1000);
     },
     "toll": function() {
@@ -119,6 +124,8 @@ var q = {
         console.log("tick count: " + q.tick);
 
         // rotate about a point, theta = 360/16
+        // immutable data changes per tick
+        console.log(q.data);
 
         // break loop
         if (q.tick >= 16) {
