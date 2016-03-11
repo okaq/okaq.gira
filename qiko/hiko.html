@@ -126,8 +126,18 @@ var q = {
         // rotate about a point, theta = 360/16
         // immutable data changes per tick
         q.data[q.tick] = q.data[q.tick-1].slice(0);
-        console.log(q.data);
+        // console.log(q.data);
         // sec err: fail to clear temp store
+
+        // init rot matrix
+        var theta0 = (q.tick * (360.0/16.0));
+        var cos0 = Math.cos(theta0);
+        var sin0 = Math.sin(theta0);
+        var m0 = [
+            cos0,-1.0*sin0,0,
+            sin0,cos0,0,
+            0,0,1
+        ];
         
         // break loop
         if (q.tick >= 16) {
