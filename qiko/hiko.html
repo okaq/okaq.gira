@@ -141,18 +141,26 @@ var q = {
             0,0,1
         ];
 
+        // push pop translation
+        // on matrix transformation stack
+
         // calculate rotation frame
         for (var i = 0; i < q.data[q.tick].length; i++) {
             var x0 = q.data[q.tick][i].px;
             var y0 = q.data[q.tick][i].py;
+            x0 = x0 - q.px;
+            y0 = y0 - q.py;
             var x1 = (m0[0] * x0) + (m0[1] * y0);
             var y1 = (m0[3] * x0) + (m0[4] * y0);
+            x1 = x1 + q.px;
+            y1 = y1 + q.py;
             q.data[q.tick][i].px = x1;
             q.data[q.tick][i].py = y1;
         }
         
         // render
         ren.bkgd();
+        ren.origin();
         ren.data(q.data[q.tick]);
 
         // break loop
