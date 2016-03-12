@@ -57,7 +57,7 @@ var q = {
         // window.setTimeout(q.loop, 2500);
         
         // then rotate about new rand point
-        window.setTimeout(q.turn, 2500);
+        window.setTimeout(q.tome, 2500);
     },
     "loop": function() {
         q.tick = 0;
@@ -166,6 +166,39 @@ var q = {
         // break loop
         if (q.tick >= 16) {
             console.log("finished turning...");
+            window.clearInterval(q.id);
+        }
+    },
+    "tome": function() {
+        // 3d vertex projection
+        // orthogonal x-y plane
+
+        // function to create line of points
+        // bezier curve of points in 3d
+        // associative add to accumulator array
+
+        // vector def [x,y,z,1]
+        q.tick = 0;
+        q.px = (Math.random() * 1920) >>> 0;
+        q.py = (Math.random() * 1080) >>> 0;
+
+        // data sequence
+        q.data = [];
+        q.data[0] = [];
+
+        q.id = window.setInterval(q.tone, 1000);
+    },
+    "tone": function() {
+        q.tick = q.tick + 1;
+        console.log("tick count: " + q.tick);
+
+        // update
+        q.data[q.tick] = [];
+        console.log(q.data);
+
+        // break loop
+        if (q.tick >= 16) {
+            console.log("all done tone...");
             window.clearInterval(q.id);
         }
     }
