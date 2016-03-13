@@ -185,6 +185,10 @@ var q = {
         // data sequence
         q.data = [];
         q.data[0] = [];
+        q.data[0][0] = [0,0,0,1];
+        q.data[0][1] = [128,128,128,1];
+        var v0 = q.vert(q.data[0][0], q.data[0][1]);
+        console.log(v0);
 
         q.id = window.setInterval(q.tone, 1000);
     },
@@ -193,7 +197,7 @@ var q = {
         console.log("tick count: " + q.tick);
 
         // update
-        q.data[q.tick] = [];
+        q.data[q.tick] = q.data[q.tick-1].slice(0);
         console.log(q.data);
 
         // break loop
@@ -208,13 +212,13 @@ var q = {
         var v3 = [];
         v3[0] = v1;
         v3[99]= v2;
-        var dx = (v1[0] - v2[0]) / 100.0;
-        var dy = (v1[1] - v2[1]) / 100.0;
-        var dz = (v1[2] - v2[2]) / 100.0;
+        var dx = (v2[0] - v1[0]) / 100.0;
+        var dy = (v2[1] - v1[1]) / 100.0;
+        var dz = (v2[2] - v1[2]) / 100.0;
         for (var i = 1; i < 99; i++) {
-            var x0 = v1[0] + (dx * (i / 100));
-            var y0 = v1[1] + (dy * (i / 100));
-            var z0 = v1[2] + (dz * (i / 100));
+            var x0 = v1[0] + (dx * i);
+            var y0 = v1[1] + (dy * i);
+            var z0 = v1[2] + (dz * i);
             v3[i] = [x0,y0,z0,1];
         }
         return v3;
