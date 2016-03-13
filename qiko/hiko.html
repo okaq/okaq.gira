@@ -194,8 +194,18 @@ var q = {
         q.data[0][1] = [640,128,640,1];
         q.data[0][2] = [640,640,640,1];
         q.data[0][3] = [128,640,640,1];
-        var v0 = q.vert(q.data[0][0], q.data[0][1]);
-        console.log(v0);
+        // raw lines accumulator
+        var v0 = [];
+        // front face
+        v0[0] = q.vert(q.data[0][0], q.data[0][1]);
+        v0[1] = q.vert(q.data[0][1], q.data[0][2]);
+        v0[2] = q.vert(q.data[0][2], q.data[0][3]);
+        v0[3] = q.vert(q.data[0][3], q.data[0][0]);
+        // left side
+        // right side
+        // back face
+        q.data[1] = [];
+        console.log(q.data);
 
         q.id = window.setInterval(q.tone, 1000);
     },
