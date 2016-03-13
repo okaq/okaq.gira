@@ -190,10 +190,11 @@ var q = {
         q.data[0][1] = [640,128,128,1];
         q.data[0][2] = [640,640,128,1];
         q.data[0][3] = [128,640,128,1];
-        q.data[0][0] = [128,128,640,1];
-        q.data[0][1] = [640,128,640,1];
-        q.data[0][2] = [640,640,640,1];
-        q.data[0][3] = [128,640,640,1];
+        q.data[0][4] = [128,128,640,1];
+        q.data[0][5] = [640,128,640,1];
+        q.data[0][6] = [640,640,640,1];
+        q.data[0][7] = [128,640,640,1];
+
         // raw lines accumulator
         var v0 = [];
         // front face
@@ -202,8 +203,18 @@ var q = {
         v0[2] = q.vert(q.data[0][2], q.data[0][3]);
         v0[3] = q.vert(q.data[0][3], q.data[0][0]);
         // left side
+        v0[4] = q.vert(q.data[0][0], q.data[0][4]);
+        v0[5] = q.vert(q.data[0][3], q.data[0][7]);
         // right side
+        v0[6] = q.vert(q.data[0][1], q.data[0][5]);
+        v0[7] = q.vert(q.data[0][2], q.data[0][6]);
         // back face
+        v0[8] = q.vert(q.data[0][4], q.data[0][5]);
+        v0[9] = q.vert(q.data[0][5], q.data[0][6]);
+        v0[10] = q.vert(q.data[0][6], q.data[0][7]);
+        v0[11] = q.vert(q.data[0][7], q.data[0][4]);
+ 
+        // vertices accumulator
         q.data[1] = [];
         console.log(q.data);
 
