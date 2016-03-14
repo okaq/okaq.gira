@@ -253,8 +253,39 @@ var q = {
     "morph": function(d0) {
         // d0 is a list of verts
         // of format [x,y,z,1]
+        // separate 3 degrees of freedom
+
         // transform matrix stack
         var m0 = [];
+        // rotation thetas (in rads)
+        var tx = 0.01;
+        var ty = 0.02;
+        var tz = 0.04;
+        var sin0 = Math.sin(tx);
+        var cos0 = Math.cos(tx);
+        // rotation matrices
+        var mx = [
+            1,0,0,
+            0,cos0,-1.0*sin0,
+            0,sin0,cos0,
+        ];
+        var my = [
+            cos0,0,-1.0*sin0,
+            0,1,0,
+            sin0,0,cos0,
+        ];
+        var mz = [
+            cos0,-1.0*sin0,0,
+            sin0,cos0,0,
+            0,0,1
+        ];
+        // center cube at origin
+        var cx = 384;
+        
+        var d1 = [];
+        for (var i = 0; i < d0.length; i++) {
+        }
+        return d1;
     },
     "vert": function(v1, v2) {
         // subdivision of two vertices
