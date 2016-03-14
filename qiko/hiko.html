@@ -234,6 +234,10 @@ var q = {
         // update
         q.data[q.tick] = q.data[q.tick-1].slice(0);
         console.log(q.data);
+        // lets rotate about x, y, z independently
+        // using a matrix transformation stack
+        var d0 = q.morph(q.data[q.tick]);
+        // render transformed data
 
         // render
         ren.bkgd();
@@ -245,6 +249,12 @@ var q = {
             console.log("all done tone...");
             window.clearInterval(q.id);
         }
+    },
+    "morph": function(d0) {
+        // d0 is a list of verts
+        // of format [x,y,z,1]
+        // transform matrix stack
+        var m0 = [];
     },
     "vert": function(v1, v2) {
         // subdivision of two vertices
