@@ -216,7 +216,13 @@ var q = {
  
         // vertices accumulator
         q.data[1] = [];
-        console.log(q.data);
+        for (var i = 0; i < v0.length; i++) {
+            var v1 = v0[i];
+            for (var j = 0; j < v1.length; j++) {
+                q.data[1].push(v0[i][j]);
+            }
+        }
+        // console.log(q.data[1]);
 
         q.id = window.setInterval(q.tone, 1000);
     },
