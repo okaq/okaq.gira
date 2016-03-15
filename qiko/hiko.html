@@ -285,6 +285,7 @@ var q = {
         
         var d1 = [];
         for (var i = 0; i < d0.length; i++) {
+            /*
             var x0 = d0[i][0];
             var y0 = d0[i][1];
             var z0 = d0[i][2];
@@ -295,9 +296,23 @@ var q = {
             var x3 = x2 + cx;
             var y3 = y2 + cx;
             var p0 = [x3,y3,z0,1];
+            */
+            var p0 = d0[i];
+            // translate push
+            var p1 = q.translate(p0, (-1 * cx));
+            // matrix mul
+            var p2 = q.multiply(p1, my);
+            // translate pop
+            var p3 = q.translate(p2, cx);
             d1.push(p0);
         }
         return d1;
+    },
+    "multiply": function(v0, m0) {
+        // vector matrix multiplication
+        var v1 = [];
+        // v1[0] = 
+        return v1;
     },
     "vert": function(v1, v2) {
         // subdivision of two vertices
