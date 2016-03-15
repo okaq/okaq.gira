@@ -304,14 +304,25 @@ var q = {
             var p2 = q.multiply(p1, my);
             // translate pop
             var p3 = q.translate(p2, cx);
-            d1.push(p0);
+            d1.push(p3);
         }
         return d1;
     },
     "multiply": function(v0, m0) {
         // vector matrix multiplication
         var v1 = [];
-        // v1[0] = 
+        v1[0] = (v0[0] + m0[0]) + (v0[1] * m0[1]) + (v0[2] * m0[2]);
+        v1[1] = (v0[0] + m0[3]) + (v0[1] * m0[4]) + (v0[2] * m0[5]);
+        v1[2] = (v0[0] + m0[6]) + (v0[1] * m0[7]) + (v0[2] * m0[8]);
+        v1[3] = 1;
+        return v1;
+    },
+    "translate": function(v0, s0) {
+        // vector plus scalar
+        var v1 = [];
+        v1[0] = v0[0] + s0;
+        v1[1] = v0[1] + s0;
+        v1[2] = v0[2] + s0;
         return v1;
     },
     "vert": function(v1, v2) {
