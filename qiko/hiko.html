@@ -259,7 +259,7 @@ var q = {
         // transform matrix stack
         var m0 = [];
         // rotation thetas (in rads)
-        var tx = Math.random();
+        var tx = 0.10;
         var ty = 0.02;
         var tz = 0.04;
         var sin0 = Math.sin(tx);
@@ -268,12 +268,12 @@ var q = {
         var mx = [
             1,0,0,
             0,cos0,-1.0*sin0,
-            0,sin0,cos0,
+            0,sin0,cos0
         ];
         var my = [
-            cos0,0,-1.0*sin0,
+            cos0,0,sin0,
             0,1,0,
-            sin0,0,cos0,
+            -1.0*sin0,0,cos0
         ];
         var mz = [
             cos0,-1.0*sin0,0,
@@ -302,18 +302,20 @@ var q = {
             var p1 = q.translate(p0, (-1 * cx));
             // matrix mul
             var p2 = q.multiply(p1, my);
+            var p3 = q.multiply(p2, mz);
+            var p4 = q.multiply(p3, mx);
             // translate pop
-            var p3 = q.translate(p2, cx);
-            d1.push(p3);
+            var p5 = q.translate(p4, cx);
+            d1.push(p5);
         }
         return d1;
     },
     "multiply": function(v0, m0) {
         // vector matrix multiplication
         var v1 = [];
-        v1[0] = (v0[0] + m0[0]) + (v0[1] * m0[1]) + (v0[2] * m0[2]);
-        v1[1] = (v0[0] + m0[3]) + (v0[1] * m0[4]) + (v0[2] * m0[5]);
-        v1[2] = (v0[0] + m0[6]) + (v0[1] * m0[7]) + (v0[2] * m0[8]);
+        v1[0] = (v0[0] * m0[0]) + (v0[1] * m0[1]) + (v0[2] * m0[2]);
+        v1[1] = (v0[0] * m0[3]) + (v0[1] * m0[4]) + (v0[2] * m0[5]);
+        v1[2] = (v0[0] * m0[6]) + (v0[1] * m0[7]) + (v0[2] * m0[8]);
         v1[3] = 1;
         return v1;
     },
