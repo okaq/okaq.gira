@@ -259,25 +259,29 @@ var q = {
         // transform matrix stack
         var m0 = [];
         // rotation thetas (in rads)
-        var tx = 0.10;
-        var ty = 0.02;
-        var tz = 0.04;
-        var sin0 = Math.sin(tx);
-        var cos0 = Math.cos(tx);
+        var tx = 0.10 * q.tick;
+        var ty = 0.02 * -1.0 * q.tick;
+        var tz = 0.04 * 2.0 * q.tick;
+        var sinx = Math.sin(tx);
+        var cosx = Math.cos(tx);
+        var siny = Math.sin(ty);
+        var cosy = Math.cos(ty);
+        var sinz = Math.sin(tz);
+        var cosz = Math.cos(tz);
         // rotation matrices
         var mx = [
             1,0,0,
-            0,cos0,-1.0*sin0,
-            0,sin0,cos0
+            0,cosx,-1.0*sinx,
+            0,sinx,cosx
         ];
         var my = [
-            cos0,0,sin0,
+            cosy,0,siny,
             0,1,0,
-            -1.0*sin0,0,cos0
+            -1.0*siny,0,cosy
         ];
         var mz = [
-            cos0,-1.0*sin0,0,
-            sin0,cos0,0,
+            cosz,-1.0*sinz,0,
+            sinz,cosz,0,
             0,0,1
         ];
         // center cube at origin
