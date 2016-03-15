@@ -241,7 +241,8 @@ var q = {
 
         // render
         ren.bkgd();
-        ren.cube(q.data[q.tick]);
+        // ren.cube(q.data[q.tick]);
+        ren.cube(d0);
         // beautiful line draw :-)
 
         // break loop
@@ -258,7 +259,7 @@ var q = {
         // transform matrix stack
         var m0 = [];
         // rotation thetas (in rads)
-        var tx = 0.01;
+        var tx = Math.random();
         var ty = 0.02;
         var tz = 0.04;
         var sin0 = Math.sin(tx);
@@ -284,6 +285,17 @@ var q = {
         
         var d1 = [];
         for (var i = 0; i < d0.length; i++) {
+            var x0 = d0[i][0];
+            var y0 = d0[i][1];
+            var z0 = d0[i][2];
+            var x1 = x0 - cx;
+            var y1 = y0 - cx;
+            var x2 = (x1 * mz[0]) + (y1 * mz[1]);
+            var y2 = (x1 * mz[3]) + (y1 * mz[4]);
+            var x3 = x2 + cx;
+            var y3 = y2 + cx;
+            var p0 = [x3,y3,z0,1];
+            d1.push(p0);
         }
         return d1;
     },
