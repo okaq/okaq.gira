@@ -26,7 +26,7 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom,sce];
+        q.subs = [dom,sce,db];
         q.subs.forEach(function(el){el.init();});
 
         q.begin();
@@ -39,6 +39,27 @@ var q = {
     "begin": function() {
         console.log("begin play...");
         ren.bkgd();
+    }
+}
+// data
+var db = {
+    "init": function() {
+        db.a = {};
+    }
+}
+// generator
+var gen = {
+    "line": function(p0, p1) {
+        // one dimensional line in 3-space
+    },
+    "circle": function(p0, r0) {
+        // two dimensional circle
+    },
+    "cube": function(p0, p1) {
+        // cube from 12 lines
+    },
+    "sphere": function(p0, r0) {
+        // concentric set of circles
     }
 }
 // scene
