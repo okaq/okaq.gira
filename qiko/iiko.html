@@ -50,6 +50,7 @@ var db = {
         db.b = {};
         // name key into group list
         db.b["cube"] = gen.cube([-256,-256,-256],[256,256,256]);
+        console.log(db.b["cube"]);
     }
 }
 // generator
@@ -81,8 +82,27 @@ var gen = {
     "cube": function(p0, p1) {
         // cube from 12 lines
         var r0 = [];
-        // top
-
+        // interpolated vertices
+        p2 = [p0[0], p0[1], p1[2]];
+        p3 = [p0[0], p1[1], p0[2]];
+        p4 = [p1[0], p0[1], p0[2]];
+        p5 = [p0[0], p1[1], p1[2]];
+        p6 = [p1[0], p0[1], p1[2]];
+        p7 = [p1[0], p1[1], p0[2]];
+        // interpolated lines
+        Array.prototype.push.apply(r0, gen.line(p0, p2));
+        Array.prototype.push.apply(r0, gen.line(p0, p3));
+        Array.prototype.push.apply(r0, gen.line(p0, p4));
+        Array.prototype.push.apply(r0, gen.line(p1, p5));
+        Array.prototype.push.apply(r0, gen.line(p1, p6));
+        Array.prototype.push.apply(r0, gen.line(p1, p7));
+        Array.prototype.push.apply(r0, gen.line(p2, p3));
+        Array.prototype.push.apply(r0, gen.line(p3, p4));
+        Array.prototype.push.apply(r0, gen.line(p3, p5));
+        Array.prototype.push.apply(r0, gen.line(p5, p6));
+        Array.prototype.push.apply(r0, gen.line(p6, p7));
+        Array.prototype.push.apply(r0, gen.line(p2, p7));
+        
         return r0;
     },
     "sphere": function(p0, r0) {
