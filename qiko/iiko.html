@@ -44,19 +44,46 @@ var q = {
 // data
 var db = {
     "init": function() {
-        db.a = {};
+        // keys master list
+        db.a = ["cube","sphere"];
+        // vertex data
+        db.b = {};
+        // name key into group list
+        db.b["cube"] = gen.cube([-256,-256,-256],[256,256,256]);
     }
 }
 // generator
 var gen = {
     "line": function(p0, p1) {
         // one dimensional line in 3-space
+        // interpolated vertex count
+        var n0 = 98
+        var r0 = [];
+        r0[0] = p0;
+        r0[n0+1] = p1;
+        // interpolation spacing
+        var d0 = [];
+        for (var i = 0; i < 3; i++) {
+            d0[i] = (p0[i] - p1[i]) / (n0 + 1);
+        }
+        for (var i = 1; i <= n0; i++) {
+            var p1 = [];
+            for (var j = 0; j < 3; j++) {
+                p1[j] = p0[j] + (d0[j] * i);
+            }
+            r0[i] = p1;
+        }
+        return r0;
     },
     "circle": function(p0, r0) {
         // two dimensional circle
     },
     "cube": function(p0, p1) {
         // cube from 12 lines
+        var r0 = [];
+        // top
+
+        return r0;
     },
     "sphere": function(p0, r0) {
         // concentric set of circles
