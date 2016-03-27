@@ -41,11 +41,36 @@ var q = {
         ren.test();
     }
 }
+// bitmap
+var bmp = {
+    "init": function() {
+        // json bitmap data and state
+        bmp.data = [];
+        // rotate flip array data fast methods
+    }
+}
 // scene
 var sce = {
     "init": function() {
         sce.bkgd = dom.canvas([1920,1080,0,0]);
         dom.add(sce.bkgd);
+
+        // grid of blocks with margin
+        sce.grid = {};
+        // count
+        sce.grid.nx = 64;
+        sce.grid.ny = 36;
+        sce.grid.nt = (sce.grid.nx * sce.grid.ny) >>> 0;
+        // size
+        sce.grid.w = 1920;
+        sce.grid.h = 1080;
+        sce.grid.wx = 28;
+        sce.grid.wh = 28;
+        // margin
+        sce.grid.mx = 1;
+        sce.grid.my = 1;
+        // cells
+        sce.grid.a = [];
     }
 }
 // dom
