@@ -124,10 +124,17 @@ var dom = {
 var ren = {
     "test": function() {
         ren.bkgd();
+        ren.grid();
     },
     "bkgd": function() {
         sce.bkgd.con.fillStyle = rgba.rand();
         sce.bkgd.con.fillRect(0,0,sce.bkgd.can.width,sce.bkgd.can.height);
+    },
+    "grid": function() {
+        for (var i = 0; i < sce.grid.nt; i++) {
+            sce.grid.b[i].con.fillStyle = rgba.mono(sce.grid.a[i]);
+            sce.grid.b[i].con.fillRect(0,0,sce.grid.wx,sce.grid.hy);
+        }
     }
 }
 // colors
