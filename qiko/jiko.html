@@ -65,12 +65,35 @@ var sce = {
         sce.grid.w = 1920;
         sce.grid.h = 1080;
         sce.grid.wx = 28;
-        sce.grid.wh = 28;
+        sce.grid.hy = 28;
         // margin
         sce.grid.mx = 1;
         sce.grid.my = 1;
         // cells
-        sce.grid.a = [];
+        sce.grid.a = []; // mono
+        sce.blank(sce.grid);
+        sce.grid.b = []; // canvas
+        sce.gen(sce.grid);
+    },
+    "blank": function(s0) {
+        for (var i = 0; i < s0.nt; i++) {
+            s0.a[i] = 0;
+        }
+    },
+    "gen": function(s0) {
+        for (var i = 0; i < s0.nt; i++) {
+            var r0 = [];
+            r0[0] = sce.grid.wx;
+            r0[1] = sce.grid.hy;
+            var x0 = i % sce.grid.nx;
+            var y0 = (i / sce.grid.nx) >>> 0;
+            var x1 = ((r0[0] + (2 * sce.grid.mx)) * x0) >>> 0;
+            var y1 = ((r0[1] + (2 * sce.grid.my)) * y0) >>> 0;
+            r0[2] = (x1 + sce.grid.mx) >>> 0;
+            r0[3] = (y1 + sce.grid.my) >>> 0;
+            s0.b[i] = dom.canvas(r0);
+            dom.add(s0.b[i]);
+        }
     }
 }
 // dom
