@@ -26,7 +26,7 @@ var q = {
         q.start = window.performance.now();
 
         // subsystems
-        q.subs = [dom,sce,data];
+        q.subs = [dom,sce,data,bmp];
         q.subs.forEach(function(el){el.init();});
 
         q.begin();
@@ -40,6 +40,7 @@ var q = {
         console.log("shall now start the loop");
         ren.test();
         console.log(data.swirl.length);
+        ren.bmp();
     }
 }
 // bitmap
@@ -50,6 +51,9 @@ var bmp = {
         // rotate flip array data fast methods
         // increment immutable frames on each update
         bmp.state = {};
+        // draw bitmap at point in grid
+        bmp.state["swirl"] = {};
+        bmp.state["swirl"].p = [1,1];
     }
 }
 // scene
@@ -137,6 +141,32 @@ var ren = {
         for (var i = 0; i < sce.grid.nt; i++) {
             sce.grid.b[i].con.fillStyle = rgba.mono(sce.grid.a[i]);
             sce.grid.b[i].con.fillRect(0,0,sce.grid.wx,sce.grid.hy);
+        }
+    },
+    "bmp": function() {
+        // cycle over all bitmaps in scene
+        var c0 = rgba.rand();
+        var c1 = rgba.rand();
+        for (var k in bmp.state) {
+            // origin
+            // console.log(k);
+            var p0 = bmp.state[k].p;
+            for (var y = 0; y < 32; y++) {
+                for (var x = 0; x < 32; x++) {
+                    var i0 = (((y + p0[1]) * sce.grid.nx) + (x + p0[0])) >>> 0;
+                    var i1 = ((y * 32) + x) >>> 0;
+                    var bmp0 = data[k][i1];
+                    var c2 = sce.grid.b[i0];
+                    if (bmp0 == 0) {
+                        c2.con.fillStyle = c0;
+                    } else {
+                        c2.con.fillStyle = c1;
+                    }
+                    c2.con.fillRect(0,0,c2.can.width,c2.can.height);
+                }
+            }
+            // render call for each bmp
+            // update grid data, then render entire page
         }
     }
 }
