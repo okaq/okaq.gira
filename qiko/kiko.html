@@ -26,7 +26,7 @@ var a = {
         a.start = window.performance.now();
 
         // subsystems
-        a.subs = [dom];
+        a.subs = [dom,lay,sce,bmp];
         a.subs.forEach(function(el){el.init();});
 
         // start
@@ -39,11 +39,56 @@ var a = {
     },
     "swim": function() {
         console.log("at the open...");
+        console.log("drawing back grounds");
+        ren.bmp(bmp.b, sce.b);
+        ren.bmp(bmp.c, sce.c);
+        // key id encapsulates all data
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // page bkgd
+        lay.b = [1920,1080,0,0];
+        // draw bkgd
+        lay.c = [512,512,704,284];
+        // glyph grid
+        lay.d = [];
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.b = dom.canvas(lay.b);
+        dom.add(sce.b);
+        sce.b.can.dataset.x = "b";
+        sce.b.can.addEventListener("click", sce.click, false);
+
+        sce.c = dom.canvas(lay.c);
+        dom.add(sce.c);
+        sce.c.can.dataset.x = "c";
+        sce.c.can.addEventListener("click", sce.click, false);
+        
+        sce.d = [];
+    },
+    "click": function(e) {
+        console.log("clicked: " + e.target.dataset.x);
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.b = rgba.rc();
+        bmp.c = rgba.rc();
     }
 }
 // render
 var ren = {
     "test": function() {
+    },
+    "bmp": function(b0, c0) {
+        c0.con.fillStyle = rgba.css(b0);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
     }
 }
 // dom
