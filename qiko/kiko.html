@@ -54,6 +54,8 @@ var lay = {
         lay.c = [512,512,704,284];
         // glyph grid
         lay.d = [];
+        // offscreen
+        lay.e = [512,512,0,0];
     }
 }
 // scene
@@ -80,6 +82,15 @@ var bmp = {
     "init": function() {
         bmp.b = rgba.rc();
         bmp.c = rgba.rc();
+    }
+}
+// glyph
+var car = {
+    "init": function() {
+        // unicode font data
+        // base64 data uris
+    },
+    "pick": function() {
     }
 }
 // render
