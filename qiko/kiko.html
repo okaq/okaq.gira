@@ -92,6 +92,21 @@ var comp = {
         // background - color, gradient
         // bitmap positive, negative
         // shape, fill, draw
+
+        // positive colors
+        comp.pc = [rgba.rand()];
+        // negative colors
+        comp.nc = [rgba.rand()];
+
+        // fill type
+        comp.ft = {};
+        comp.ft["rect"] = ren.rect; // pointer to fill function
+        comp.ft["squares"] = ren.squares;
+        // name key can define renderer
+
+        // margins, in pixels
+        comp.pm = 2;
+        comp.nm = 2;
     }
 }
 // bitmap
