@@ -46,6 +46,7 @@ var a = {
         var kk0 = car.pick();
         console.log(kk0, hana2d[kk0].length);
         bmp.dec(kk0);
+        ren.gen();
     }
 }
 // layout
@@ -149,6 +150,24 @@ var ren = {
     "bmp": function(b0, c0) {
         c0.con.fillStyle = rgba.css(b0);
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "gen": function() {
+        // compositional render bitmap data
+        var px = (512 / 64) >>> 0;
+        var mx = 0;
+        sce.c.con.fillStyle = rgba.rand();
+        for (var i = 0; i < bmp.d.e.length; i++) {
+            if (bmp.d.e[i] == 0) {
+                continue;
+            }
+            // 64x64 bit array
+            // 512x512 render pane
+            var x0 = i % 64;
+            var y0 = (i / 64) >>> 0;
+            var x1 = (x0 * px) >>> 0;
+            var y1 = (y0 * px) >>> 0;
+            sce.c.con.fillRect(x1,y1,px,px);
+        }
     }
 }
 // dom
