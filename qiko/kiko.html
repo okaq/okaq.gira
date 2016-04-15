@@ -111,6 +111,20 @@ var comp = {
         comp.bx = 2;
         comp.by = 2;
         // 64x64 bitmap in 512/512 pane
+    },
+    "pos": function() {
+        // begin setting color, style for positive elements
+        // positive: size, shape, fill, margin
+        // color can be defined via a field function
+        comp.p = {};
+        comp.p.c = rgba.rand();
+        comp.p.f = "rect";
+    },
+    "neg": function() {
+        // negative 
+        comp.n = {};
+        comp.n.c = rgba.rand();
+        comp.n.f = "circ";
     }
 }
 // bitmap
@@ -203,6 +217,10 @@ var ren = {
     },
     "comp": function() {
         // render from comp data
+    },
+    "rect": function() {
+    },
+    "circ": function() {
     }
 }
 // dom
