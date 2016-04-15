@@ -107,6 +107,10 @@ var comp = {
         // margins, in pixels
         comp.pm = 2;
         comp.nm = 2;
+        // bloc size
+        comp.bx = 2;
+        comp.by = 2;
+        // 64x64 bitmap in 512/512 pane
     }
 }
 // bitmap
@@ -196,6 +200,9 @@ var ren = {
             var y1 = (y0 * px) >>> 0;
             sce.c.con.fillRect(x1,y1,px,px);
         }
+    },
+    "comp": function() {
+        // render from comp data
     }
 }
 // dom
