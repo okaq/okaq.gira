@@ -26,7 +26,7 @@ var a = {
         a.start = window.performance.now();
 
         // subsystems
-        a.subs = [dom,lay,sce,bmp,car];
+        a.subs = [dom,lay,sce,bmp,car,comp];
         a.subs.forEach(function(el){el.init();});
 
         // start
@@ -46,7 +46,8 @@ var a = {
         var kk0 = car.pick();
         console.log(kk0, hana2d[kk0].length);
         bmp.dec(kk0);
-        ren.gen();
+        // ren.gen();
+        ren.comp();
     }
 }
 // layout
@@ -92,7 +93,8 @@ var comp = {
         // background - color, gradient
         // bitmap positive, negative
         // shape, fill, draw
-
+        
+        /*
         // positive colors
         comp.pc = [rgba.rand()];
         // negative colors
@@ -111,6 +113,9 @@ var comp = {
         comp.bx = 2;
         comp.by = 2;
         // 64x64 bitmap in 512/512 pane
+        */
+        comp.pos();
+        comp.neg();
     },
     "pos": function() {
         // begin setting color, style for positive elements
@@ -119,12 +124,14 @@ var comp = {
         comp.p = {};
         comp.p.c = rgba.rand();
         comp.p.f = "rect";
+        comp.p.w = (512 / 64) >>> 0;
     },
     "neg": function() {
         // negative 
         comp.n = {};
         comp.n.c = rgba.rand();
-        comp.n.f = "circ";
+        comp.n.f = "rect";
+        comp.n.w = (512 / 128) >>> 0;
     }
 }
 // bitmap
@@ -217,8 +224,27 @@ var ren = {
     },
     "comp": function() {
         // render from comp data
+        // loop over every bit in bitmap
+        // determine pos or neg
+        // call approp render func
+        for (var i = 0; i < bmp.d.e.length; i++) {
+            if (bmp.d.e[i] == 0) {
+                // apply render func
+                // passing parameter i, field coord
+                ren.rect(i, comp.n);
+            } else {
+                ren.rect(i, comp.p);
+            }
+        }
     },
-    "rect": function() {
+    "rect": function(i0, c0) {
+        var x0 = i0 % 64;
+        var y0 = (i0 / 64) >>> 0;
+        var x1 = (x0 * 8) >>> 0;
+        var y1 = (y0 * 8) >>> 0;
+        sce.c.con.fillStyle = c0.c;
+        sce.c.con.fillRect(x1,y1,c0.w,c0.w);
+ 
     },
     "circ": function() {
     }
