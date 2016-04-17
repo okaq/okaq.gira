@@ -41,6 +41,29 @@ var a = {
         console.log("open it up...");
     }
 }
+// bounce
+var bon = {
+    "init": function() {
+        // functional state jump graph
+        // states
+        bon.s = {};
+        bon.s["start"] = ["stop"];
+        bon.s["stop"] = [];
+        // current
+        bon.t = "start";
+        // start can only jump to stop
+        // stop is finished and cant jump any where
+    },
+    "jump": function(s0) {
+        // check if possible to jump
+        var c0 = bon.s[bon.t];
+        if (c0.includes(s0)) {
+            bon.t = s0;
+        } else {
+            console.log("state " + s0 + " doens not exist. Remain in current state: " + bon.t);
+        }
+    }
+}
 // dom
 var dom = {
     "init": function() {
