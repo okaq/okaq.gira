@@ -26,7 +26,7 @@ var a = {
         a.start = window.performance.now();
 
         // subsystems
-        a.subs = [dom];
+        a.subs = [dom,lay,sce];
         a.subs.forEach(function(el){el.init();});
 
         // start
@@ -39,6 +39,28 @@ var a = {
     },
     "swim": function() {
         console.log("open it up...");
+        ren.test();
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // individual elements by key
+        lay.a = {};
+        lay.a["full"] = [1920,1080,0,0];
+        lay.a["din"] = [512,512,224,284];
+        lay.a["par"] = [512,512,1184,284];
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        sce.a = {};
+        for (var k in lay.a) {
+            sce.a[k] = dom.canvas(lay.a[k]);
+            dom.add(sce.a[k]);
+            // add rem methods for scene management
+        }
     }
 }
 // bounce
@@ -53,6 +75,11 @@ var bon = {
         bon.t = "start";
         // start can only jump to stop
         // stop is finished and cant jump any where
+
+        // elements
+        bon.e = {};
+        // which dom canvas objects get displayed in a state
+        // link to their current state in an immutable list
     },
     "jump": function(s0) {
         // check if possible to jump
@@ -60,7 +87,7 @@ var bon = {
         if (c0.includes(s0)) {
             bon.t = s0;
         } else {
-            console.log("state " + s0 + " doens not exist. Remain in current state: " + bon.t);
+            console.log("state " + s0 + " does not exist. Remain in current state: " + bon.t);
         }
     }
 }
@@ -86,6 +113,15 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "test": function() {
+        for (var k in sce.a) {
+            sce.a[k].con.fillStyle = rgba.rand();
+            sce.a[k].con.fillRect(0,0,sce.a[k].can.width,sce.a[k].can.height);
+        }
     }
 }
 // colors
