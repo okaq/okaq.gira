@@ -63,8 +63,29 @@ var sce = {
         }
         // event handlers and state
         sce.b = {};
+        for (var k in lay.a) {
+            sce.b[k] = [sce.click];
+        }
+        // state information contained in dataset key
+        // key maps to db property
+        // marshal current state by iterating over scenes, keys
+
+        // scene graph
+        sce.c = {};
+        sce.c["start"] = ["full","din","par"];
+        sce.c["stop"] = ["full"];
+        // current scene
+        sce.d = null;
+        // jump
+        sce.jump("start");
     },
-    "jump": function(s0, s1) {
+    "click": function(e) {
+        console.log(e);
+    },
+    "jump": function(s0) {
+        console.log("starting scene: " + s0);
+        // add rem dom canvas objects
+        // add ren click handlers
     }
 }
 // bounce
