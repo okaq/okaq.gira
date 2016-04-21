@@ -85,6 +85,15 @@ var sce = {
     "jump": function(s0) {
         console.log("starting scene: " + s0);
         // add rem dom canvas objects
+        var s1 = sce.c[sce.d];
+        for (var i = 0; i < s1.length; i++) {
+            dom.remove(sce.a[s1[i]]);
+        }
+        sce.d = s0;
+        var s2 = sce.c[sce.d];
+        for (var i = 0; i < s2.length; i++) {
+            dom.add(sce.a[s2[i]]);
+        }
         // add ren click handlers
     }
 }
