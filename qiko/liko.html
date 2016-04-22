@@ -39,7 +39,8 @@ var a = {
     },
     "swim": function() {
         console.log("open it up...");
-        ren.test();
+        // ren.test();
+        ren.scene();
     }
 }
 // layout
@@ -58,7 +59,7 @@ var sce = {
         sce.a = {};
         for (var k in lay.a) {
             sce.a[k] = dom.canvas(lay.a[k]);
-            dom.add(sce.a[k]);
+            // dom.add(sce.a[k]);
             // add rem methods for scene management
         }
         // event handlers and state
@@ -83,17 +84,23 @@ var sce = {
         console.log(e);
     },
     "jump": function(s0) {
-        console.log("starting scene: " + s0);
+        console.log("jumping to scene: " + s0 + ", from scene: " + sce.d);
         // add rem dom canvas objects
         var s1 = sce.c[sce.d];
-        for (var i = 0; i < s1.length; i++) {
-            dom.remove(sce.a[s1[i]]);
+        if (s1 == null) {
+            console.log("empty scene, nothing to remove");
+            // return;
+        } else {
+            for (var i = 0; i < s1.length; i++) {
+                dom.remove(sce.a[s1[i]]);
+            }
         }
         sce.d = s0;
         var s2 = sce.c[sce.d];
         for (var i = 0; i < s2.length; i++) {
             dom.add(sce.a[s2[i]]);
         }
+        console.log("jump complete, new current scene: " + sce.d);
         // add ren click handlers
     }
 }
@@ -155,6 +162,17 @@ var ren = {
         for (var k in sce.a) {
             sce.a[k].con.fillStyle = rgba.rand();
             sce.a[k].con.fillRect(0,0,sce.a[k].can.width,sce.a[k].can.height);
+        }
+    },
+    "scene": function() {
+        // rand render current scene
+        var s0 = sce.c[sce.d];
+        // console.log(s0);
+        for (var i = 0; i < s0.length; i++) {
+            var c0 = sce.a[s0[i]];
+            // console.log(s0[i], c0);
+            c0.con.fillStyle = rgba.rand();
+            c0.con.fillRect(0,0,c0.can.width,c0.can.height);
         }
     }
 }
