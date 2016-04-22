@@ -60,12 +60,13 @@ var sce = {
         for (var k in lay.a) {
             sce.a[k] = dom.canvas(lay.a[k]);
             // dom.add(sce.a[k]);
+            sce.a[k].can.dataset.x = k;
             // add rem methods for scene management
         }
         // event handlers and state
         sce.b = {};
         for (var k in lay.a) {
-            sce.b[k] = [sce.click];
+            sce.b[k] = sce.click;
         }
         // state information contained in dataset key
         // key maps to db property
@@ -99,6 +100,7 @@ var sce = {
         var s2 = sce.c[sce.d];
         for (var i = 0; i < s2.length; i++) {
             dom.add(sce.a[s2[i]]);
+            sce.a[s2[i]].can.addEventListener("click", sce.b[s2[i]], false);
         }
         console.log("jump complete, new current scene: " + sce.d);
         // add ren click handlers
