@@ -68,6 +68,7 @@ var sce = {
         for (var k in lay.a) {
             sce.b[k] = sce.click;
         }
+        sce.b["din"] = sce.adv;
         // state information contained in dataset key
         // key maps to db property
         // marshal current state by iterating over scenes, keys
@@ -83,6 +84,12 @@ var sce = {
     },
     "click": function(e) {
         console.log(e);
+    },
+    "adv": function(e) {
+        // advance the scene click handler
+        console.log(e);
+        sce.jump("stop");
+        ren.scene();
     },
     "jump": function(s0) {
         console.log("jumping to scene: " + s0 + ", from scene: " + sce.d);
