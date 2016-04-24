@@ -40,6 +40,7 @@ var a = {
     "swim": function() {
         console.log("open it up...");
         // ren.test();
+        sce.jump("intro");
         ren.scene();
     }
 }
@@ -51,6 +52,11 @@ var lay = {
         lay.a["full"] = [1920,1080,0,0];
         lay.a["din"] = [512,512,224,284];
         lay.a["par"] = [512,512,1184,284];
+        // layout for entire media record pipeline
+        lay.a["play"] = [];
+        lay.a["stop"] = [];
+        lay.a["rec"] = [];
+        lay.a["save"] = [];
     }
 }
 // scene
@@ -75,12 +81,13 @@ var sce = {
 
         // scene graph
         sce.c = {};
+        sce.c["intro"] = ["full","din"];
         sce.c["start"] = ["full","din","par"];
         sce.c["stop"] = ["full"];
         // current scene
         sce.d = null;
         // jump
-        sce.jump("start");
+        // sce.jump("start");
     },
     "click": function(e) {
         console.log(e);
