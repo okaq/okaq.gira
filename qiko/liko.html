@@ -53,10 +53,23 @@ var lay = {
         lay.a["din"] = [512,512,224,284];
         lay.a["par"] = [512,512,1184,284];
         // layout for entire media record pipeline
+        lay.a["nav"] = [];
+        lay.a["exp"] = [];
+        // navi and ux panes divide layout
+        // space into logical interation domains
+        // ux pane is interactive
+        // navi pane dynamically visualizes data
+        // golden ratio phi = 1.618
+        // 1 / phi = 0.618
+        // width div = 1920 / phi = 1187
+        // height div = 1080 / phi = 667
         lay.a["play"] = [];
         lay.a["stop"] = [];
         lay.a["rec"] = [];
         lay.a["save"] = [];
+        lay.a["state"] = [];
+        lay.a["visual"] = [];
+        lay.a["stats"] = [];
     }
 }
 // scene
