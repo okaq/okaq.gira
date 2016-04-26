@@ -53,8 +53,8 @@ var lay = {
         lay.a["din"] = [512,512,224,284];
         lay.a["par"] = [512,512,1184,284];
         // layout for entire media record pipeline
-        lay.a["nav"] = [];
-        lay.a["exp"] = [];
+        lay.a["nav"] = [733,1080,0,0];
+        lay.a["exp"] = [1187,1080,733,0];
         // navi and ux panes divide layout
         // space into logical interation domains
         // ux pane is interactive
@@ -96,7 +96,7 @@ var sce = {
         sce.c = {};
         sce.c["intro"] = ["full","din"];
         sce.c["start"] = ["full","din","par"];
-        sce.c["stop"] = ["full"];
+        sce.c["stop"] = ["full","nav","exp"];
         // current scene
         sce.d = null;
         // jump
