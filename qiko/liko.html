@@ -101,6 +101,16 @@ var sce = {
         sce.d = null;
         // jump
         // sce.jump("start");
+
+        // state graph for each scene
+        // click or other event handlers update graph
+        // state graphs map to render handler which clear and draw data
+
+        // state graph
+        sce.e = {};
+        // current scene
+        sce.f = null;
+
     },
     "click": function(e) {
         console.log(e);
