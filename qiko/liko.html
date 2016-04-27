@@ -106,8 +106,18 @@ var sce = {
         // click or other event handlers update graph
         // state graphs map to render handler which clear and draw data
 
+        // logical per element state or per scene?
+
         // state graph
         sce.e = {};
+        for (var k in sce.c) {
+            sce.e[k] = [];
+            for (var i = 0; i < sce.c[k].length; i++) {
+                sce.e[k][i] = 0;
+                // states enum
+                // 0: new 1: on 2: pause 3: off
+            }
+        }
         // current scene
         sce.f = null;
 
