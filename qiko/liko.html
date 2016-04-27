@@ -42,6 +42,13 @@ var a = {
         // ren.test();
         sce.jump("intro");
         ren.scene();
+        gum.grab();
+    }
+}
+// user media
+var gum = {
+    "grab": function() {
+        // init getUserMedia
     }
 }
 // layout
@@ -120,7 +127,13 @@ var sce = {
         }
         // current scene
         sce.f = null;
-
+        
+        // render graph
+        // map state enum to render function
+        sce.g = {};
+        for (var k in sce.c) {
+            sce.g[k] = ren.test;
+        }
     },
     "click": function(e) {
         console.log(e);
