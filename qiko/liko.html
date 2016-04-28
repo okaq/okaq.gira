@@ -137,6 +137,14 @@ var sce = {
     },
     "click": function(e) {
         console.log(e);
+        if (e.target.dataset.x == "nav") {
+            // start record
+            console.log("starting to record audio stream");
+        }
+        if (e.target.dataset.x == "exp") {
+            // stop, process audio data blob
+            console.log("saving audio file");
+        }
     },
     "adv": function(e) {
         // advance the scene click handler
