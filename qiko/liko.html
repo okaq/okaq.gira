@@ -43,10 +43,23 @@ var a = {
         sce.jump("intro");
         ren.scene();
         gum.grab();
+    },
+    "rec": function() {
+        // init gum
+        gum.init();
     }
 }
 // user media
 var gum = {
+    "init": function() {
+        console.log(navigator);
+        // gum shim
+        navigator.getUserMedia = (navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia);
+        console.log(navigator.getUserMedia);
+    },
     "grab": function() {
         // init getUserMedia
     }
@@ -140,6 +153,7 @@ var sce = {
         if (e.target.dataset.x == "nav") {
             // start record
             console.log("starting to record audio stream");
+            gum.init();
         }
         if (e.target.dataset.x == "exp") {
             // stop, process audio data blob
