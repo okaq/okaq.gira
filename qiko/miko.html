@@ -39,16 +39,34 @@ var a = {
     },
     "swim": function() {
         console.log("start draw routine...");
+        ren.bkgd();
+        path.gen();
+    }
+}
+// paths
+var path = {
+    "gen": function() {
+        // path defined by start and end point (x0,y0)
     }
 }
 // layout
 var lay = {
     "init": function() {
+        lay.b = [1920,1080,0,0];
     }
 }
 // scene
 var sce = {
     "init": function() {
+        sce.b = dom.canvas(lay.b);
+        dom.add(sce.b);
+    }
+}
+// render
+var ren = {
+    "bkgd": function() {
+        sce.b.con.fillStyle = rgba.css([0,0,0,1.0]);
+        sce.b.con.fillRect(0,0,sce.b.can.width,sce.b.can.height);
     }
 }
 // dom
