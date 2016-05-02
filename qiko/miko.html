@@ -41,12 +41,36 @@ var a = {
         console.log("start draw routine...");
         ren.bkgd();
         path.gen();
+        ren.path();
     }
 }
 // paths
 var path = {
     "gen": function() {
-        // path defined by start and end point (x0,y0)
+        // path defined by start and end points (x0,y0)
+        // define moveTo and lineTo paths in renderer
+        // number
+        path.n = 100;
+        // bounds
+        path.h = 10;
+        // thick
+        path.w = 2;
+        // margin
+        path.m = 4;
+        // data
+        path.d = [];
+        for (var i = 0; i < path.n; i++) {
+            var x0 = 0;
+            var y0 = (i * (1080 / path.n)) >>> 0;
+            var x1 = 1920;
+            var y1 = (i * (1080 / path.n) >>> 0) + path.h;
+            var p0 = [x0,y0];
+            var p1 = [x1,y1];
+            // path.d.push(p0);
+            // path.d.push(p1);
+            // tuple of points
+            path.d.push([p0,p1]);
+        }
     }
 }
 // layout
@@ -67,6 +91,20 @@ var ren = {
     "bkgd": function() {
         sce.b.con.fillStyle = rgba.css([0,0,0,1.0]);
         sce.b.con.fillRect(0,0,sce.b.can.width,sce.b.can.height);
+    },
+    "path": function() {
+        sce.b.con.strokeStyle = rgba.css([255,255,255,1.0]);
+        sce.b.con.lineWidth = 1;
+        sce.b.con.beginPath();
+        for (var i = 0; i < path.n; i++) {
+            var p0 = path.d[i];
+            var p1 = p0[0];
+            var p2 = p0[1];
+            sce.b.con.moveTo(p1[0], p1[1]);
+            sce.b.con.lineTo(p2[0], p2[1]);
+            // console.log(i, p0, p1, p2);
+        }
+        sce.b.con.stroke();
     }
 }
 // dom
