@@ -71,6 +71,13 @@ var path = {
             // tuple of points
             path.d.push([p0,p1]);
         }
+        // transform stack
+        path.t = [];
+        // rand translate and rotate
+        path.t[0] = [];
+        path.t[0][0] = (1920 * Math.random()) >>> 0;
+        path.t[0][1] = (1080 * Math.random()) >>> 0;
+        path.t[1] = (Math.random() * Math.PI * 2);
     }
 }
 // layout
