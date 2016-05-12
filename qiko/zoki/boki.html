@@ -49,8 +49,12 @@ var sce = {
     "init": function() {
         sce.a = dom.canvas(lay.a);
         dom.add(sce.a);
+
+        sce.conc();
     },
     "add": function() {
+    },
+    "conc": function() {
     }
 }
 // layout
@@ -59,6 +63,16 @@ var lay = {
         lay.w = 1920;
         lay.h = 1080;
         lay.a = [lay.w,lay.h,0,0];
+
+        lay.conc();
+    },
+    "conc": function() {
+        // concentric squares at a given depth
+        lay.b = [];
+        var w0 = 1024;
+        var mw = 0;
+        var my = 0;
+        // deterministic loop
     }
 }
 // dom
