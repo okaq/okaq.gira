@@ -42,6 +42,7 @@ var z = {
     "start": function() {
         console.log("bit on the w");
         ren.test(sce.a);
+        ren.testa(sce.b);
     }
 }
  // scene
@@ -55,6 +56,11 @@ var sce = {
     "add": function() {
     },
     "conc": function() {
+        sce.b = [];
+        for (var i = 0; i < lay.b.length; i++) {
+            sce.b[i] = dom.canvas(lay.b[i]);
+            dom.add(sce.b[i]);
+        }
     }
 }
 // layout
@@ -70,9 +76,19 @@ var lay = {
         // concentric squares at a given depth
         lay.b = [];
         var w0 = 1024;
-        var mw = 0;
-        var my = 0;
+        var mx = ((1920 - 1024) / 2) >>> 0;
+        var my = ((1080 - 1024) / 2) >>> 0;
+        var d0 = 8;
+        var n0 = (1024 / d0) >>> 0;
+        var n1 = (n0 / 2) >>> 0;
         // deterministic loop
+        for (var i = 0; i < n1; i++) {
+            var w1 = (w0 - (i * d0 * 2)) >>> 0;
+            var h1 = w1;
+            var x0 = (mx + (i * d0)) >>> 0;
+            var y0 = (my + (i * d0)) >>> 0;
+            lay.b[i] = [w1,h1,x0,y0];
+        }
     }
 }
 // dom
@@ -104,6 +120,13 @@ var ren = {
     "test": function(c0) {
         c0.con.fillStyle = rgba.rand();
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "testa": function(c0) {
+        for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i];
+            c1.con.fillStyle = rgba.rand();
+            c1.con.fillRect(0,0,c1.can.width,c1.can.height);
+        }
     }
 }
 // colors
