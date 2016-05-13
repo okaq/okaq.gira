@@ -44,6 +44,18 @@ var z = {
         ren.test(sce.a);
         // ren.testa(sce.b);
         ren.data();
+        
+        // loop and shuffle
+        z.tick = 0;
+        z.id = window.setInterval(z.shuf, 1000);
+    },
+    "shuf": function() {
+        console.log("firing tick count: " + z.tick);
+        z.tick = z.tick + 1;
+        if (z.tick == 8) {
+            console.log("done shuffle routine");
+            window.clearInterval(z.id);
+        }
     }
 }
  // scene
