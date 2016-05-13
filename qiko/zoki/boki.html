@@ -42,7 +42,8 @@ var z = {
     "start": function() {
         console.log("bit on the w");
         ren.test(sce.a);
-        ren.testa(sce.b);
+        // ren.testa(sce.b);
+        ren.data();
     }
 }
  // scene
@@ -78,7 +79,7 @@ var lay = {
         var w0 = 1024;
         var mx = ((1920 - 1024) / 2) >>> 0;
         var my = ((1080 - 1024) / 2) >>> 0;
-        var d0 = 8;
+        var d0 = 32;
         var n0 = (1024 / d0) >>> 0;
         var n1 = (n0 / 2) >>> 0;
         // deterministic loop
@@ -88,6 +89,16 @@ var lay = {
             var x0 = (mx + (i * d0)) >>> 0;
             var y0 = (my + (i * d0)) >>> 0;
             lay.b[i] = [w1,h1,x0,y0];
+        }
+        bmp.gen();
+    }
+}
+// bitmap
+var bmp = {
+    "gen": function() {
+        bmp.b = [];
+        for (var i = 0; i < lay.b.length; i++) {
+            bmp.b[i] = rgba.rand();
         }
     }
 }
@@ -125,6 +136,13 @@ var ren = {
         for (var i = 0; i < c0.length; i++) {
             var c1 = c0[i];
             c1.con.fillStyle = rgba.rand();
+            c1.con.fillRect(0,0,c1.can.width,c1.can.height);
+        }
+    },
+    "data": function() {
+         for (var i = 0; i < sce.b.length; i++) {
+            var c1 = sce.b[i];
+            c1.con.fillStyle = bmp.b[i];
             c1.con.fillRect(0,0,c1.can.width,c1.can.height);
         }
     }
