@@ -52,6 +52,8 @@ var z = {
     "shuf": function() {
         console.log("firing tick count: " + z.tick);
         z.tick = z.tick + 1;
+        bmp.shuf();
+        ren.data();
         if (z.tick == 8) {
             console.log("done shuffle routine");
             window.clearInterval(z.id);
@@ -112,6 +114,13 @@ var bmp = {
         for (var i = 0; i < lay.b.length; i++) {
             bmp.b[i] = rgba.rand();
         }
+    },
+    "shuf": function() {
+        var t0 = bmp.b[0];
+        for (var i = 0; i < bmp.b.length - 1; i++) {
+            bmp.b[i] = bmp.b[i+1];
+        }
+        bmp.b[bmp.b.length-1] = t0;
     }
 }
 // dom
