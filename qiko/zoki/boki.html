@@ -111,8 +111,13 @@ var lay = {
 var bmp = {
     "gen": function() {
         bmp.b = [];
+        var b0 = rgba.rand();
+        var b1 = rgba.css([0,0,0,1.0]);
         for (var i = 0; i < lay.b.length; i++) {
-            bmp.b[i] = rgba.rand();
+            // bmp.b[i] = rgba.rand();
+            // var f0 = Math.random();
+            // f0 > 0.5 ? bmp.b[i] = b0 : bmp.b[i] = b1;
+            i % 2 == 0 ? bmp.b[i] = b0 : bmp.b[i] = b1;
         }
     },
     "shuf": function() {
