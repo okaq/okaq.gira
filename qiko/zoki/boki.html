@@ -86,6 +86,10 @@ var lay = {
         lay.a = [lay.w,lay.h,0,0];
 
         lay.conc();
+
+        // delneate a tree of regions
+        // each leaf contains max concentric square system (sce,bmp)
+        // overlay large bmp json font ("being made")
     },
     "conc": function() {
         // concentric squares at a given depth
@@ -110,6 +114,7 @@ var lay = {
 // bitmap
 var bmp = {
     "gen": function() {
+        bmp.a = rgba.rand();
         bmp.b = [];
         var b0 = rgba.rand();
         var b1 = rgba.css([0,0,0,1.0]);
@@ -117,7 +122,7 @@ var bmp = {
             // bmp.b[i] = rgba.rand();
             // var f0 = Math.random();
             // f0 > 0.5 ? bmp.b[i] = b0 : bmp.b[i] = b1;
-            i % 2 == 0 ? bmp.b[i] = b0 : bmp.b[i] = b1;
+            i % 2 == 0 ? bmp.b[i] = b0 : bmp.b[i] = bmp.a;
         }
     },
     "shuf": function() {
@@ -166,6 +171,8 @@ var ren = {
         }
     },
     "data": function() {
+        sce.a.con.fillStyle = bmp.a;
+        sce.a.con.fillRect(0,0,sce.a.can.width,sce.a.can.height);
          for (var i = 0; i < sce.b.length; i++) {
             var c1 = sce.b[i];
             c1.con.fillStyle = bmp.b[i];
