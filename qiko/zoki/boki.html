@@ -66,6 +66,8 @@ var z = {
         // generate layout tree
         lay.tree();
         // collect scene graph
+        sce.tree();
+        ren.testa(sce.t);
         // populate bitmaps
         // start new anim loop for 256 ticks
     }
@@ -85,6 +87,20 @@ var sce = {
         for (var i = 0; i < lay.b.length; i++) {
             sce.b[i] = dom.canvas(lay.b[i]);
             dom.add(sce.b[i]);
+        }
+    },
+    "tree": function() {
+        // remove present
+        for (var i = 0; i < sce.b.length; i++) {
+            dom.remove(sce.b[i]);
+        }
+        sce.t = [];
+        // flatten layout tree
+        sce.t[0] = dom.canvas(lay.t[0]);
+        dom.add(sce.t[0]);
+        for (var i = 0; i < lay.t[1].length; i++) {
+            sce.t[i+1] = dom.canvas(lay.t[1][i]);
+            dom.add(sce.t[i+1]);
         }
     }
 }
@@ -127,14 +143,14 @@ var lay = {
         lay.t[0] = [1920,1080,0,0];
         // lay.t[1] is second ply in tree
         lay.t[1] = [];
-        lay.t[1][0] = [512,512,1061,10];
-        lay.t[1][1] = [512,512,1061,522];
-        lay.t[1][2] = [1016,1016,542,32];
-        lay.t[1][3] = [512,512,15,10];
-        lay.t[1][4] = [512,512,15,522];
+        lay.t[1][0] = [432,432,1472,72];
+        lay.t[1][1] = [432,432,1472,576];
+        lay.t[1][2] = [1016,1016,448,32];
+        lay.t[1][3] = [432,432,8,72];
+        lay.t[1][4] = [432,432,8,576];
         // lets get some margins
         // leaf index
-        lat.v = [];
+        lay.v = [];
         // then divide into 1024x1024 centered pane
         // and two thirds
         // then subdivide thirds
