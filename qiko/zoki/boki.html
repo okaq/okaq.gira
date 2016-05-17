@@ -64,6 +64,7 @@ var z = {
     "being": function() {
         // being made
         // generate layout tree
+        lay.tree();
         // collect scene graph
         // populate bitmaps
         // start new anim loop for 256 ticks
@@ -122,6 +123,18 @@ var lay = {
     },
     "tree": function() {
         // start with the full screen
+        lay.t = [];
+        lay.t[0] = [1920,1080,0,0];
+        // lay.t[1] is second ply in tree
+        lay.t[1] = [];
+        lay.t[1][0] = [512,512,1061,10];
+        lay.t[1][1] = [512,512,1061,522];
+        lay.t[1][2] = [1016,1016,542,32];
+        lay.t[1][3] = [512,512,15,10];
+        lay.t[1][4] = [512,512,15,522];
+        // lets get some margins
+        // leaf index
+        lat.v = [];
         // then divide into 1024x1024 centered pane
         // and two thirds
         // then subdivide thirds
