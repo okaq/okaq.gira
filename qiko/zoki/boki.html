@@ -57,7 +57,16 @@ var z = {
         if (z.tick == 8) {
             console.log("done shuffle routine");
             window.clearInterval(z.id);
+            console.log("start main");
+            z.being();
         }
+    },
+    "being": function() {
+        // being made
+        // generate layout tree
+        // collect scene graph
+        // populate bitmaps
+        // start new anim loop for 256 ticks
     }
 }
  // scene
@@ -90,6 +99,7 @@ var lay = {
         // delneate a tree of regions
         // each leaf contains max concentric square system (sce,bmp)
         // overlay large bmp json font ("being made")
+        // 256 tick rand anim loop
     },
     "conc": function() {
         // concentric squares at a given depth
@@ -109,6 +119,13 @@ var lay = {
             lay.b[i] = [w1,h1,x0,y0];
         }
         bmp.gen();
+    },
+    "tree": function() {
+        // start with the full screen
+        // then divide into 1024x1024 centered pane
+        // and two thirds
+        // then subdivide thirds
+        // for each pane, generate concentric squares
     }
 }
 // bitmap
