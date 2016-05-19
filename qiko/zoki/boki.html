@@ -69,6 +69,7 @@ var z = {
         sce.tree();
         ren.testa(sce.t);
         // populate bitmaps
+        sce.square();
         // start new anim loop for 256 ticks
     }
 }
@@ -102,6 +103,11 @@ var sce = {
             sce.t[i+1] = dom.canvas(lay.t[1][i]);
             dom.add(sce.t[i+1]);
         }
+        // add conc squares
+    },
+    "square": function() {
+        // imput a rect
+        // add concentric squares to scene list
     }
 }
 // layout
