@@ -108,6 +108,13 @@ var sce = {
     "square": function() {
         // imput a rect
         // add concentric squares to scene list
+        sce.v = [];
+        for (var i = 0; i < lay.t[1].length; i++) {
+            sce.v[i] = sce.casc(lay.t[i]);
+        }
+    },
+    "casc": function(r0) {
+        // return cascade of canvases
     }
 }
 // layout
