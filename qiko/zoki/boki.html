@@ -70,6 +70,7 @@ var z = {
         ren.testa(sce.t);
         // populate bitmaps
         sce.square();
+        ren.testb(sce.v);
         // start new anim loop for 256 ticks
     }
 }
@@ -110,11 +111,32 @@ var sce = {
         // add concentric squares to scene list
         sce.v = [];
         for (var i = 0; i < lay.t[1].length; i++) {
-            sce.v[i] = sce.casc(lay.t[i]);
+            var r0 = sce.casc(lay.t[1][i]);
+            var r1 = [];
+            for (var j = 0; j < r0.length; j++) {
+                r1[j] = dom.canvas(r0[j]);
+                dom.add(r1[j]);
+            }
+            sce.v[i] = r1;
+
         }
     },
     "casc": function(r0) {
         // return cascade of canvases
+        var w0 = 8;
+        var w1 = (w0 * 2) >>> 0;
+        // loop until final square <8
+        var n0 = (r0[0] / w0) >>> 0;
+        var n1 = (n0 / 2) >>> 0;
+        var r1 = [];
+        for (var i = 0; i < n1; i++) {
+            var w2 = r0[0] - (i * w1);
+            var h2 = r0[1] - (i * w1);
+            var x2 = r0[2] + (i * w0);
+            var y2 = r0[3] + (i * w0);
+            r1[i] = [w2,h2,x2,y2];
+        }
+        return r1;
     }
 }
 // layout
@@ -227,6 +249,12 @@ var ren = {
             var c1 = c0[i];
             c1.con.fillStyle = rgba.rand();
             c1.con.fillRect(0,0,c1.can.width,c1.can.height);
+        }
+    },
+    "testb": function(s0) {
+        // scene lists
+        for (var i = 0; i < s0.length; i++) {
+            ren.testa(s0[i]);
         }
     },
     "data": function() {
