@@ -71,6 +71,7 @@ var z = {
         // populate bitmaps
         sce.square();
         ren.testb(sce.v);
+        bmp.coll();
         // start new anim loop for 256 ticks
     }
 }
@@ -212,6 +213,22 @@ var bmp = {
             bmp.b[i] = bmp.b[i+1];
         }
         bmp.b[bmp.b.length-1] = t0;
+    },
+    "coll": function() {
+        // bitmap collection now squares with sce.v
+        bmp.v = [];
+        for (var i = 0; i < sce.v.length; i++) {
+            bmp.v[i] = [];
+            var c0 = rgba.rand();
+            var c1 = rgba.rand();
+            for (var j = 0; j < sce.v[i].length; j++) {
+                if (j % 2 == 0) {
+                    bmp.v[i][j] = c0;
+                } else {
+                    bmp.v[i][j] = c1;
+                }
+            }
+        }
     }
 }
 // dom
