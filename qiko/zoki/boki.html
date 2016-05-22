@@ -32,7 +32,10 @@ var z = {
         z.state = 0;
 
         // start
-        window.requestAnimationFrame(z.start);
+        // window.requestAnimationFrame(z.start);
+
+        // being
+        window.requestAnimationFrame(z.being);
 
         // stats
         var done = window.performance.now();
@@ -72,6 +75,7 @@ var z = {
         sce.square();
         ren.testb(sce.v);
         bmp.coll();
+        ren.datab();
         // start new anim loop for 256 ticks
     }
 }
@@ -229,6 +233,9 @@ var bmp = {
                 }
             }
         }
+        // another good progression for concentric bitmap squares
+        // dark to light with fixed hue and saturation
+        // varying only brightness levels from 0.2 -> 0.8
     }
 }
 // dom
@@ -282,6 +289,9 @@ var ren = {
             c1.con.fillStyle = bmp.b[i];
             c1.con.fillRect(0,0,c1.can.width,c1.can.height);
         }
+    },
+    "datab": function() {
+        // everything
     }
 }
 // colors
