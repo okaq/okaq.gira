@@ -75,8 +75,22 @@ var z = {
         sce.square();
         ren.testb(sce.v);
         bmp.coll();
-        ren.datab();
+        // ren.datab();
         // start new anim loop for 256 ticks
+        window.setTimeout(z.lerp, 2000);
+    },
+    "lerp": function() {
+        z.tock = 0;
+        z.zid = window.setInterval(z.adv, 1000);
+    },
+    "adv": function() {
+        if (z.tock >= 16) {
+            console.log("all done");
+            window.clearInterval(z.zid);
+        }
+        console.log("tock clock: " + z.tock);
+        z.tock = z.tock + 1;
+        ren.datab();
     }
 }
  // scene
@@ -292,6 +306,13 @@ var ren = {
     },
     "datab": function() {
         // everything
+        for (var i = 0; i < sce.v.length; i++) {
+            for (var j = 0; j < sce.v[i].length; j++) {
+                var c0 = sce.v[i][j];
+                c0.con.fillStyle = bmp.v[i][j];
+                c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+            }
+        }
     }
 }
 // colors
