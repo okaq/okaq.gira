@@ -91,6 +91,7 @@ var z = {
         console.log("tock clock: " + z.tock);
         z.tock = z.tock + 1;
         ren.datab();
+        bmp.shuf2();
     }
 }
  // scene
@@ -231,6 +232,15 @@ var bmp = {
             bmp.b[i] = bmp.b[i+1];
         }
         bmp.b[bmp.b.length-1] = t0;
+    },
+    "shuf2": function() {
+        for (var i = 0; i < bmp.v.length; i++) {
+            var t0 = bmp.v[i][0];
+            for (var j = 0; j < bmp.v[i].length - 1; j++) {
+                bmp.v[i][j] = bmp.v[i][j+1];
+            }
+            bmp.v[i][bmp.v[i].length-1] = t0;
+        }
     },
     "coll": function() {
         // bitmap collection now squares with sce.v
