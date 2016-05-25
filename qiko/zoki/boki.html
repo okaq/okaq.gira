@@ -105,8 +105,16 @@ var txt = {
         dom.add(txt.s);
         // test
         // txt.s.can.style.zIndex = "8";
-        txt.s.con.fillStyle = "rgba(128,128,128,0.5)";
+        txt.s.con.fillStyle = "rgba(128,128,128,0.01)";
         txt.s.con.fillRect(0,0,txt.s.can.width,txt.s.can.height);
+        // draw text, monospace system
+        txt.t = [];
+        txt.t[0] = "PARTIZAN / WAR";
+        txt.t[1] = "BEING MADE";
+        txt.t[2] = "HAPPENING";
+        txt.t[3] = "UNDER WAY";
+    },
+    "draw": function() {
     }
 }
 // scene
