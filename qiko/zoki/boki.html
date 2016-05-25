@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
 
         // subsystems
-        z.subs = [dom,lay,sce];
+        z.subs = [dom,lay,sce,txt];
         z.subs.forEach(function(el){el.init();});
 
         // state
@@ -101,8 +101,12 @@ var txt = {
         // z-index = 99
         // with scene and render functions apart form rest
         txt.s = dom.canvas([1920,1080,0,0]);
+        txt.s.can.style.zIndex = "8";
         dom.add(txt.s);
         // test
+        // txt.s.can.style.zIndex = "8";
+        txt.s.con.fillStyle = "rgba(128,128,128,0.5)";
+        txt.s.con.fillRect(0,0,txt.s.can.width,txt.s.can.height);
     }
 }
 // scene
