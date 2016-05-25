@@ -94,7 +94,18 @@ var z = {
         bmp.shuf2();
     }
 }
- // scene
+// text
+var txt = {
+    "init": function() {
+        // a dedicated full screen canvas
+        // z-index = 99
+        // with scene and render functions apart form rest
+        txt.s = dom.canvas([1920,1080,0,0]);
+        dom.add(txt.s);
+        // test
+    }
+}
+// scene
 var sce = {
     "init": function() {
         sce.a = dom.canvas(lay.a);
