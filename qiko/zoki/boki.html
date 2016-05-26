@@ -91,6 +91,7 @@ var z = {
         console.log("tock clock: " + z.tock);
         z.tock = z.tock + 1;
         ren.datab();
+        txt.ren();
         bmp.shuf2();
     }
 }
@@ -109,12 +110,23 @@ var txt = {
         txt.s.con.fillRect(0,0,txt.s.can.width,txt.s.can.height);
         // draw text, monospace system
         txt.t = [];
-        txt.t[0] = "PARTIZAN / WAR";
+        txt.t[0] = "WAR / PARTIZAN";
         txt.t[1] = "BEING MADE";
         txt.t[2] = "HAPPENING";
         txt.t[3] = "UNDER WAY";
+        txt.t[4] = "COMING SOON";
+        txt.t[5] = "IMMINENT";
+
+        txt.draw();
     },
     "draw": function() {
+        // context
+        var f0 = ((Math.random() * (txt.t.length - 1)) + 1) >>> 0;
+        txt.v = txt.t[f0];
+        console.log(txt.v);
+    },
+    "ren": function() {
+        // render
     }
 }
 // scene
