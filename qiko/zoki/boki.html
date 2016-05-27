@@ -127,6 +127,11 @@ var txt = {
     },
     "ren": function() {
         // render
+        txt.s.con.font = "198px monospace";
+        txt.s.con.fillStyle = rgba.css([196,32,32,0.5]);
+        txt.s.con.fillText(txt.t[0], 128, 384);
+        txt.s.con.font = "164px monospace";
+        txt.s.con.fillText(txt.v, 198, 576);
     }
 }
 // scene
