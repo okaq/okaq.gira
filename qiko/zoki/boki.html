@@ -35,7 +35,10 @@ var z = {
         // window.requestAnimationFrame(z.start);
 
         // being
-        window.requestAnimationFrame(z.being);
+        // window.requestAnimationFrame(z.being);
+
+        // happen
+        window.requestAnimationFrame(z.happen);
 
         // stats
         var done = window.performance.now();
@@ -93,6 +96,16 @@ var z = {
         ren.datab();
         txt.ren();
         bmp.shuf2();
+        // ifps alternation, 16 loops
+    },
+    "happen": function() {
+        // init all scenes and bitmaps
+        // cycle between rand test, txt
+        lay.tree();
+        sce.tree();
+        ren.testa(sce.t);
+        sce.square();
+        ren.testb(sce.v);
     }
 }
 // text
@@ -129,9 +142,9 @@ var txt = {
         // render
         txt.s.con.font = "198px monospace";
         txt.s.con.fillStyle = rgba.css([196,32,32,0.5]);
-        txt.s.con.fillText(txt.t[0], 128, 384);
+        txt.s.con.fillText(txt.t[0], 128, 448);
         txt.s.con.font = "164px monospace";
-        txt.s.con.fillText(txt.v, 198, 576);
+        txt.s.con.fillText(txt.v, 198, 640);
     }
 }
 // scene
