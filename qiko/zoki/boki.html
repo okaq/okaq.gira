@@ -106,6 +106,16 @@ var z = {
         ren.testa(sce.t);
         sce.square();
         ren.testb(sce.v);
+        // begin anima
+        z.tack = 0;
+        z.fid = window.setInterval(z.wamp, 1000);
+    },
+    "wamp": function() {
+        z.tack = z.tack + 1;
+        if (z.tack == 32) {
+            window.clearInterval(z.fid);
+            console.log("all complete");
+        }
     }
 }
 // text
@@ -129,6 +139,7 @@ var txt = {
         txt.t[3] = "UNDER WAY";
         txt.t[4] = "COMING SOON";
         txt.t[5] = "IMMINENT";
+        txt.t[6] = "GETTING READY";
 
         txt.draw();
     },
