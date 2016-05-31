@@ -106,6 +106,7 @@ var z = {
         ren.testa(sce.t);
         sce.square();
         ren.testb(sce.v);
+        bmp.coll();
         // begin anima
         z.tack = 0;
         z.fid = window.setInterval(z.wamp, 1000);
@@ -118,9 +119,14 @@ var z = {
             return;
         }
         if (z.tack % 2 == 0) {
+            txt.s.con.clearRect(0,0,1920,1080);
             ren.testa(sce.t);
-        } else {
             ren.testb(sce.v);
+        } else {
+            // ren.testb(sce.v);
+            ren.datab();
+            txt.ren();
+            bmp.shuf2();
         }
     }
 }
