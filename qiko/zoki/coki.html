@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [db,lay];
+        z.subs = [db,lay,can];
         z.subs.forEach(function(el){el.init();});
         
         // stats
@@ -53,6 +53,14 @@ var lay = {
     "init": function() {
         lay.bg = [1920,1080,0,0];
         db.insert("bg", lay.bg, db.lay);
+    }
+}
+// canvas objects
+var can = {
+    "init": function() {
+        // create and populate db.can from layout rects
+        // add remove methods for dynamic creation
+        // include dom alpha
     }
 }
 </script>
