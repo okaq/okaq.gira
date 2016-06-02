@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [db];
+        z.subs = [db,lay];
         z.subs.forEach(function(el){el.init();});
         
         // stats
@@ -39,9 +39,22 @@ var db = {
     "init": function() {
         // init db's for layout, scenes, 
         // canvases, events, handlers
+        console.log("db init master key");
+        db.m = {}; // master
+        db.lay = {}; // layout
+    },
+    "insert": function(k0, v0, d0) {
+        // check if db contains d0
+        d0[k0] = v0;
     }
 }
-
+// layout
+var lay = {
+    "init": function() {
+        lay.bg = [1920,1080,0,0];
+        db.insert("bg", lay.bg, db.lay);
+    }
+}
 </script>
     </head>
     <body id="alpha">
