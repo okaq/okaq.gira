@@ -53,6 +53,13 @@ var lay = {
     "init": function() {
         lay.bg = [1920,1080,0,0];
         db.insert("bg", lay.bg, db.lay);
+        // all configuration begins via defined layouts
+
+        // layout functions include
+        // cols: make full page height fixed width cols
+        // rows: full page width fixed height
+        // grid: square NxM grid with margins
+        // word, char: for text formatting
     }
 }
 // canvas objects
