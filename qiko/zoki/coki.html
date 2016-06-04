@@ -60,6 +60,20 @@ var lay = {
         // rows: full page width fixed height
         // grid: square NxM grid with margins
         // word, char: for text formatting
+
+        lay.vault = lay.cols(28);
+    },
+    "cols": function(w0) {
+        // full page fixed given width
+        var n0 = (1920 / w0) >>> 0;
+        var m0 = 2;
+        var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            var x0 = ((2 * m0) + w0) * i) >>> 0;
+            var r1 = [w0, 1080, x0 + m0, 0];
+            r0.push(r1);
+        }
+        return r0;
     }
 }
 // canvas objects
