@@ -27,6 +27,9 @@ var z = {
         // subsystems
         z.subs = [db,lay,can];
         z.subs.forEach(function(el){el.init();});
+
+        // test
+        console.log(db.lay);
         
         // stats
         var done = window.performance.now();
@@ -46,6 +49,12 @@ var db = {
     "insert": function(k0, v0, d0) {
         // check if db contains d0
         d0[k0] = v0;
+    },
+    "inserta": function(s0, a0, d0) {
+        for (var i = 0; i < a0.length; i++) {
+            var k0 = s0 + "_" + i;
+            d0[k0] = a0[i];
+        }
     }
 }
 // layout
@@ -62,6 +71,7 @@ var lay = {
         // word, char: for text formatting
 
         lay.vault = lay.cols(28);
+        db.inserta("vault", lay.vault, db.lay);
 
         // cols are full height
         // bmp, renderer will determine how it appears in page
