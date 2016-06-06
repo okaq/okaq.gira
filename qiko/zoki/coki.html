@@ -72,7 +72,7 @@ var lay = {
         var m0 = 2;
         var r0 = [];
         for (var i = 0; i < n0; i++) {
-            var x0 = ((2 * m0) + w0) * i) >>> 0;
+            var x0 = (((2 * m0) + w0) * i) >>> 0;
             var r1 = [w0, 1080, x0 + m0, 0];
             r0.push(r1);
         }
@@ -80,7 +80,14 @@ var lay = {
     },
     "rows": function(h0) {
         // full page fixed given height
+        var n0 = (1080 / h0) >>> 0;
+        var m0 = 2;
         var r0 = [];
+        for (var i = 0; i < n0; i++) {
+            var y0 = (((2 * m0) * h0) * i) >>> 0;
+            var r1 = [1920, h0, 0, y0 + m0];
+            r0.push(r1);
+        }
         return r0;
     }
 }
