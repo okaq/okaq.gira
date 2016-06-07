@@ -30,11 +30,26 @@ var z = {
 
         // test
         console.log(db.lay);
+        // 1fps loop to test all scenes
+        z.start();
         
         // stats
         var done = window.performance.now();
         var total = done - now;
         console.log("total load time: " + total + "ms.");
+    },
+    "start": function() {
+        console.log("testing one two");
+        // loop
+        z.tick = 0;
+        z.id = window.setInterval(z.loop, 1000);
+    },
+    "loop": function() {
+        z.tick = z.tick + 1;
+        console.log("loop ticker: " + z.tick);
+        if (z.tick == 16) {
+            window.clearInterval(z.id);
+        }
     }
 }
 // data
