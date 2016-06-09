@@ -25,11 +25,11 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [db,lay,bmp,can];
+        z.subs = [db,lay,bmp,dom,can];
         z.subs.forEach(function(el){el.init();});
 
         // test
-        // console.log(db.lay);
+        console.log(db.can);
         // 1fps loop to test all scenes
         // z.start();
         
@@ -61,6 +61,7 @@ var db = {
         db.m = {}; // master
         db.lay = {}; // layout
         db.bmp = {}; // bitmap
+        db.can = {}; // canvas
     },
     "insert": function(k0, v0, d0) {
         // check if db contains d0
@@ -135,6 +136,35 @@ var can = {
         // begin with entire pipeline for single full page rect
         // create layout, specify scene, init canvas, generate id, attach events and handlers
         // scene graph placement and transition managed
+        
+        for (var k0 in db.lay) {
+            var c0 = dom.canvas(db.lay[k0]);
+            db.insert(k0, c0, db.can);
+        }
+    }
+}
+// dom
+var dom = {
+    "init": function() {
+        dom.alpha = document.getElementById("alpha");
+        console.log(dom.alpha);
+    },
+    "canvas": function(r0) {
+        var c0 = {};
+        c0.can = document.createElement("canvas");
+        c0.con = c0.can.getContext("2d");
+        c0.can.width = r0[0];
+        c0.can.height = r0[1];
+        c0.can.style.position = "absolute";
+        c0.can.style.top = r0[3] + "px";
+        c0.can.style.left = r0[2] + "px";
+        return c0;
+    },
+    "add": function(c0) {
+        dom.alpha.appendChild(c0.can);
+    },
+    "remove": function(c0) {
+        dom.alpha.removeChild(c0.can);
     }
 }
 // bitmap
@@ -147,7 +177,7 @@ var bmp = {
             var c0 = rgba.rc();
             db.insert(k0, c0, db.bmp);
         }
-        console.log(db.bmp);
+        // console.log(db.bmp);
     }
 }
 // colors
