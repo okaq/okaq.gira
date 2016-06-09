@@ -25,13 +25,13 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [db,lay,can];
+        z.subs = [db,lay,bmp,can];
         z.subs.forEach(function(el){el.init();});
 
         // test
-        console.log(db.lay);
+        // console.log(db.lay);
         // 1fps loop to test all scenes
-        z.start();
+        // z.start();
         
         // stats
         var done = window.performance.now();
@@ -60,6 +60,7 @@ var db = {
         console.log("db init master key");
         db.m = {}; // master
         db.lay = {}; // layout
+        db.bmp = {}; // bitmap
     },
     "insert": function(k0, v0, d0) {
         // check if db contains d0
@@ -88,7 +89,7 @@ var lay = {
         lay.vault = lay.cols(28);
         db.inserta("vault", lay.vault, db.lay);
 
-        lay.veldt = law.rows(18);
+        lay.veldt = lay.rows(18);
         db.inserta("veldt", lay.veldt, db.lay);
 
         // cols are full height
@@ -136,6 +137,60 @@ var can = {
         // scene graph placement and transition managed
     }
 }
+// bitmap
+var bmp = {
+    "init": function() {
+        // for eack layout key
+        // generate a rand rgba
+        for (var k0 in db.lay) {
+            // console.log(k0);
+            var c0 = rgba.rc();
+            db.insert(k0, c0, db.bmp);
+        }
+        console.log(db.bmp);
+    }
+}
+// colors
+var rgba = {
+    "rc": function() {
+        // return random rgba
+        var c0 = [
+            rgba.rb(),
+            rgba.rb(),
+            rgba.rb(),
+            1.0
+            ];
+        return c0;
+    },
+    "css": function(c0) {
+        // return css string
+        return "rgba(" + c0.join(",") + ")";
+    },
+    "rb": function() {
+        // random byte
+        return (Math.random() * 255) >>> 0;
+    },
+    "rba": function(size0) {
+        // random byte array length of input
+        var r0 = [];
+        for (var i = 0; i < size0; i++) {
+            r0.push(rgba.rb());
+        }
+        return r0;
+    },
+    "rand": function() {
+        return rgba.css(rgba.rc());
+    },
+    "mono": function(c0) {
+        return rgba.css([c0,c0,c0,1.0]);
+    },
+    "rmon": function() {
+        var c0 = rgba.rb();
+        return rgba.mono(c0);
+    }
+}
+
+
 </script>
     </head>
     <body id="alpha">
