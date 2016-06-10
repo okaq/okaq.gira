@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [db,lay,bmp,dom,can];
+        z.subs = [db,lay,bmp,dom,can,sce];
         z.subs.forEach(function(el){el.init();});
 
         // test
@@ -62,6 +62,7 @@ var db = {
         db.lay = {}; // layout
         db.bmp = {}; // bitmap
         db.can = {}; // canvas
+        db.sce = {}; // scene
     },
     "insert": function(k0, v0, d0) {
         // check if db contains d0
@@ -72,6 +73,37 @@ var db = {
             var k0 = s0 + "_" + i;
             d0[k0] = a0[i];
         }
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        // scene creation and index
+        // add / remove from dom state
+        
+        // data a bit different
+        // scene key reolves to a scene list
+        db.sce["intro"] = ["bg"];
+        db.sce["droit"] = []; // all veldts
+        db.sce["gauch"] = []; // all vaults
+        for (var k0 in db.can) {
+            var k1 = k0.substring(0, 5);
+            // console.log(k1);
+            if (k1 == "vault") {
+                db.sce["gauch"].push(k0);
+            }
+            if (k1 == "veldt") {
+                db.sce["droit"].push(k0);
+            }
+        }
+        // console.log(db.sce);
+
+        // scene graph
+        // compostion of db keys
+        sce.g = {};
+        sce.g["intro"] = ["intro"];
+        sce.g["droit"] = ["intro","droit"];
+        sce.g["gauch"] = ["intro","gauch"];
     }
 }
 // layout
