@@ -113,6 +113,18 @@ var sce = {
         // remove all current from dom
         // add all k0 to dom
         // set current to k0
+        
+        sce.remove(sce.c);
+
+        sce.add(k0);
+
+        sce.c = k0;
+
+        // eventually we want to attach events
+        // perhaps separate class for management
+        // add / remove listeners
+        // assign handlers
+        // called every time a key's dom state changes
     },
     "add": function(k0) {
         // two loops, outer for the graph
