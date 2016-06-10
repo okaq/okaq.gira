@@ -104,6 +104,37 @@ var sce = {
         sce.g["intro"] = ["intro"];
         sce.g["droit"] = ["intro","droit"];
         sce.g["gauch"] = ["intro","gauch"];
+
+        // current scene
+        sce.c = null;
+    },
+    "jump": function(k0) {
+        // jump from current scene to k0
+        // remove all current from dom
+        // add all k0 to dom
+        // set current to k0
+    },
+    "add": function(k0) {
+        // two loops, outer for the graph
+        // inner for the data list
+        for (var i = 0; i < sce.g[k0].length; i++) {
+            var k1 = sce.g[k0][i];
+            for (j = 0; j < db.sce[k1].length; j++) {
+                var k2 = db.sce[k1][j];
+                var c0 = db.can[k2];
+                dom.add(c0);
+            }
+        }
+    },
+    "remove": function(k0) {
+        for (var i = 0; i < sce.g[k0].length; i++) {
+            var k1 = sce.g[k0][i];
+            for (j = 0; j < db.sce[k1].length; j++) {
+                var k2 = db.sce[k1][j];
+                var c0 = db.can[k2];
+                dom.remove(c0);
+            }
+        }
     }
 }
 // layout
