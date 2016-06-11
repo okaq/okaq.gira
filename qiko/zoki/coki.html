@@ -46,8 +46,15 @@ var z = {
     },
     "loop": function() {
         z.tick = z.tick + 1;
+
+        // jump
         sce.tock();
+        var k0 = sce.d[sce.tick];
+        sce.jump(k0);
+        ren.scene(k0);
         console.log("loop ticker: " + z.tick + " scene ticker: " + sce.tick + " jumping to scene: " + sce.d[sce.tick]);
+        
+        // clear
         if (z.tick == 16) {
             window.clearInterval(z.id);
             console.log("anim complete");
@@ -124,8 +131,9 @@ var sce = {
         // remove all current from dom
         // add all k0 to dom
         // set current to k0
-        
-        sce.remove(sce.c);
+        if (sce.c) {
+            sce.remove(sce.c);
+        }
 
         sce.add(k0);
 
@@ -272,6 +280,29 @@ var bmp = {
             db.insert(k0, c0, db.bmp);
         }
         // console.log(db.bmp);
+    }
+}
+// render
+var ren = {
+    "scene": function(k0) {
+        var g0 = sce.g[k0];
+        for (var i = 0; i < g0.length; i++) {
+            var k1 = g0[i];
+            var d0 = db.sce[k1];
+            console.log(g0, k0, k1, d0);
+            for (var j = 0; j < d0.length; j++) {
+                var k2 = d0[j];
+                var c0 = db.can[k2];
+                var b0 = db.bmp[k2];
+                ren.bmp(c0, b0);
+            }
+        }
+    },
+    "bmp": function(c0, b0) {
+        // render bmp data in canvas
+        c0.con.fillStyle = rgba.css(b0);
+        c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+        // need to clear canvas on new scene
     }
 }
 // colors
