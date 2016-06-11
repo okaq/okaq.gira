@@ -31,7 +31,7 @@ var z = {
         // test
         console.log(db.can);
         // 1fps loop to test all scenes
-        // z.start();
+        z.start();
         
         // stats
         var done = window.performance.now();
@@ -46,9 +46,11 @@ var z = {
     },
     "loop": function() {
         z.tick = z.tick + 1;
-        console.log("loop ticker: " + z.tick);
+        sce.tock();
+        console.log("loop ticker: " + z.tick + " scene ticker: " + sce.tick + " jumping to scene: " + sce.d[sce.tick]);
         if (z.tick == 16) {
             window.clearInterval(z.id);
+            console.log("anim complete");
         }
     }
 }
@@ -104,9 +106,18 @@ var sce = {
         sce.g["intro"] = ["intro"];
         sce.g["droit"] = ["intro","droit"];
         sce.g["gauch"] = ["intro","gauch"];
+        sce.g["monte"] = ["intro","gauch","droit"];
 
         // current scene
         sce.c = null;
+        // scene list
+        sce.d = [];
+        for (var k0 in sce.g) {
+            sce.d.push(k0);
+        }
+
+        // scene ticker
+        sce.tick = sce.d.length;
     },
     "jump": function(k0) {
         // jump from current scene to k0
@@ -147,6 +158,14 @@ var sce = {
                 dom.remove(c0);
             }
         }
+    },
+    "tock": function() {
+        sce.tick = sce.tick + 1;
+        if (sce.tick >= sce.d.length) {
+            sce.tick = 0;
+        }
+        // sce.c = sce.d[sce.tick];
+        // only jump calls alter current state
     }
 }
 // layout
