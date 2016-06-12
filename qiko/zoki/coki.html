@@ -216,7 +216,7 @@ var lay = {
         var m0 = 2;
         var r0 = [];
         for (var i = 0; i < n0; i++) {
-            var y0 = (((2 * m0) * h0) * i) >>> 0;
+            var y0 = (((2 * m0) + h0) * i) >>> 0;
             var r1 = [1920, h0, 0, y0 + m0];
             r0.push(r1);
         }
@@ -289,7 +289,7 @@ var ren = {
         for (var i = 0; i < g0.length; i++) {
             var k1 = g0[i];
             var d0 = db.sce[k1];
-            console.log(g0, k0, k1, d0);
+            // console.log(g0, k0, k1, d0);
             for (var j = 0; j < d0.length; j++) {
                 var k2 = d0[j];
                 var c0 = db.can[k2];
