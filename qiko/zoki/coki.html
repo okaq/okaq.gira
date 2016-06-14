@@ -242,13 +242,15 @@ var can = {
         
         for (var k0 in db.lay) {
             var c0 = dom.canvas(db.lay[k0]);
+            // dataset id
+            c0.can.dataset.id = k0;
             db.insert(k0, c0, db.can);
         }
     }
 }
 // events
 var evt = {
-    "inti": function() {
+    "init": function() {
         // handler methods
         // add / remove to canvas lists
 
@@ -258,6 +260,13 @@ var evt = {
         // automatic functions
         // for dynamic and procedural generation
         // of layouts, canvas, scene, and play
+
+        for (var k0 in db.can) {
+            var c0 = db.can[k0];
+            c0.can.addEventListener("click", evt.click, false);
+            db.insert(k0, evt.click, db.evt);
+            // note value is function and not string type
+        }
     },
     "click": function(e) {
         console.log(e);
