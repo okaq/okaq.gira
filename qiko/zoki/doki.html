@@ -94,6 +94,15 @@ var lay = {
             // dedicated name class
             // generate unique keys for all objects and events
             // keep key flat lists for easy function mapping
+
+            // gen random rect for invaders
+            // common factor for 5x5 and 7x7 = 350x350 squares
+            var w0 = 350;
+            var h0 = 350;
+            var x0 = (Math.random() * (1920 - w0)) >>> 0;
+            var y0 = (Math.random() * (1080 - h0)) >>> 0;
+            var r0 = [w0,h0,x0,y0];
+            var inv0 = lay.inv(r0);
         }
     },
     "inv": function(r0) {
