@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [dom];
+        z.subs = [dom,db,lay,sce];
         z.subs.forEach(function(el){el.init();});
 
         // test
@@ -50,6 +50,30 @@ var z = {
             console.log("after " + z.tick + " iterations");
             window.clearInterval(z.id);
         }
+    }
+}
+// data
+var db = {
+    "init": function() {
+        db.state = {}; // master state space graph
+        // set state space root node
+        db.state["root"] = [];
+
+        // war / partizan chooser panel
+        // with bitmap text font graphic
+
+
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        // grid of 20x20 pixel squares
+    }
+}
+// scene
+var sce = {
+    "init": function() {
     }
 }
 // dom
