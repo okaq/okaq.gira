@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [dom,db,lay,sce];
+        z.subs = [dom,db,lay,sce,bmp];
         z.subs.forEach(function(el){el.init();});
 
         // test
@@ -43,10 +43,12 @@ var z = {
         z.id = window.setInterval(z.spoke, 1000);
 
         // render
-        // ren.scene(sce.a, bmp.a);
+        ren.scene(sce.a, bmp.a);
     },
     "spoke": function() {
         console.log("tick: " + z.tick);
+        bmp.init();
+        ren.scene(sce.a, bmp.a);
         z.tick = z.tick + 1;
         if (z.tick >= 16) {
             console.log("loop has reached its end.");
@@ -82,7 +84,7 @@ var lay = {
         lay.a = [];
         for (var i = 0; i < lay.nt; i++) {
             var x0 = i % lay.nx;
-            var y0 = (i / lay.ny) >>> 0;
+            var y0 = (i / lay.nx) >>> 0;
             var r0 = [];
             r0[0] = lay.w0;
             r0[1] = lay.h0;
@@ -97,6 +99,12 @@ var lay = {
         // two clickable panes at higher z-index
         // these will act as "invisible buttons"
         // a trend we should enact immediately
+
+        // calling 1x1 pixel draw calls is expensive
+        // 20x20 pixel blocks can be updated and drawn at 1fps
+        // for all 5184 pixels
+        // segment pixel blocks into 4x4 kernals
+        // and assign each a bmp
     }
 }
 // scene
@@ -115,6 +123,17 @@ var bmp = {
         bmp.a = [];
         for (var i = 0; i < lay.a.length; i++) {
             bmp.a[i] = rgba.rb();
+        }
+    }
+}
+// render
+var ren = {
+    "scene": function(s0, b0) {
+        // render bitmap data in scene list
+        for (var i = 0; i < s0.length; i++) {
+            // console.log(i, s0[i], b0[i]);
+            s0[i].con.fillStyle = rgba.mono(b0[i]);
+            s0[i].con.fillRect(0,0,s0[i].can.width,s0[i].can.height);
         }
     }
 }
