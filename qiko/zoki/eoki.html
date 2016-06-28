@@ -41,6 +41,9 @@ var z = {
         // loop
         z.tick = 0;
         z.id = window.setInterval(z.spoke, 1000);
+
+        // render
+        // ren.scene(sce.a, bmp.a);
     },
     "spoke": function() {
         console.log("tick: " + z.tick);
@@ -69,11 +72,50 @@ var db = {
 var lay = {
     "init": function() {
         // grid of 20x20 pixel squares
+        lay.w0 = 20;
+        lay.h0 = 20;
+        lay.nx = (1920 / lay.w0) >>> 0;
+        lay.ny = (1080 / lay.h0) >>> 0;
+        lay.nt = (lay.nx * lay.ny) >>> 0;
+        console.log("grid dims: " + [lay.w0,lay.h0,lay.nx,lay.ny,lay.nt].join(" "));
+
+        lay.a = [];
+        for (var i = 0; i < lay.nt; i++) {
+            var x0 = i % lay.nx;
+            var y0 = (i / lay.ny) >>> 0;
+            var r0 = [];
+            r0[0] = lay.w0;
+            r0[1] = lay.h0;
+            r0[2] = (x0 * lay.w0) >>> 0;
+            r0[3] = (y0 * lay.h0) >>> 0;
+            lay.a[i] = r0;
+        }
+
+        // bmp data for each grid cell
+        // grey scale values in range
+
+        // two clickable panes at higher z-index
+        // these will act as "invisible buttons"
+        // a trend we should enact immediately
     }
 }
 // scene
 var sce = {
     "init": function() {
+        sce.a = [];
+        for (var i = 0; i < lay.a.length; i++) {
+            sce.a[i] = dom.canvas(lay.a[i]);
+            dom.add(sce.a[i]);
+        }
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.a = [];
+        for (var i = 0; i < lay.a.length; i++) {
+            bmp.a[i] = rgba.rb();
+        }
     }
 }
 // dom
