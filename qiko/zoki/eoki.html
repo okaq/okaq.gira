@@ -47,7 +47,8 @@ var z = {
     },
     "spoke": function() {
         console.log("tick: " + z.tick);
-        bmp.init();
+        // bmp.init();
+        bmp.kernel();
         ren.scene(sce.a, bmp.a);
         z.tick = z.tick + 1;
         if (z.tick >= 16) {
@@ -67,7 +68,8 @@ var db = {
         // war / partizan chooser panel
         // with bitmap text font graphic
 
-
+        // groupings of scene elements
+        // that can then be composed into larger scenes
     }
 }
 // layout
@@ -105,6 +107,7 @@ var lay = {
         // for all 5184 pixels
         // segment pixel blocks into 4x4 kernals
         // and assign each a bmp
+
     }
 }
 // scene
@@ -124,6 +127,10 @@ var bmp = {
         for (var i = 0; i < lay.a.length; i++) {
             bmp.a[i] = rgba.rb();
         }
+    },
+    "kernel": function() {
+        // kernel size 4x4
+        console.log(lay.nt / 16);
     }
 }
 // render
