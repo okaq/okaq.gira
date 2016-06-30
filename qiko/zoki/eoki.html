@@ -130,7 +130,19 @@ var bmp = {
     },
     "kernel": function() {
         // kernel size 4x4
-        console.log(lay.nt / 16);
+        // console.log(lay.nt / 16);
+        var w0 = 4;
+        var h0 = 4;
+        var n0 = (w0 * h0) >>> 0;
+        var n1 = (lay.nt / n0) >>> 0;
+        for (var i = 0; i < n1; i++) {
+            // obtain indicies of kernel members at i
+            var k0 = bmp.sub(i, w0, h0);
+        }
+    },
+    "sub": function(i0, w0, h0) {
+        var k0 = [];
+        return k0;
     }
 }
 // render
