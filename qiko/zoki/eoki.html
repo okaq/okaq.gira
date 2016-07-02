@@ -141,13 +141,24 @@ var bmp = {
         // n1 = 324, nt = 312
         for (var i = 0; i < n1; i++) {
             // obtain indicies of kernel members at i
-            console.log(nx, ny, n1, nt, i);
+            // console.log(nx, ny, n1, nt, i);
             var k0 = bmp.sub(i, w0, h0);
+            var x0 = (i % nx) >>> 0;
+            var y0 = (i / nx) >>> 0;
+            var y1 = (y0 * 4) >>> 0;
+            var y2 = (y1 * lay.nx) >>> 0;
+            var x1 = (x0 * 4) >>> 0;
+            var i0 = (y2 + x1) >>> 0;
+            // console.log(x0, y0, i0);
+            var s0 = bmp.sub(i0, w0, h0);
+            var b0 = rgba.rb();
+            for (var j = 0; j < s0.length; j++) {
+                bmp.a[s0[j]] = b0;
+            }
         }
     },
     "sub": function(i0, w0, h0) {
         var k0 = [];
-
         for (var y = 0; y < h0; y++) {
             for (var x = 0; x < w0; x++) {
 
