@@ -159,9 +159,14 @@ var bmp = {
     },
     "sub": function(i0, w0, h0) {
         var k0 = [];
+        var x0 = (i0 % lay.nx) >>> 0;
+        var y0 = (i0 / lay.nx) >>> 0;
         for (var y = 0; y < h0; y++) {
             for (var x = 0; x < w0; x++) {
-
+                var y1 = ((y * lay.nx) + y0) >>> 0;
+                var x1 = (x0 + x) >>> 0;
+                var i1 = (y1 + x1) >>> 0;
+                k0.push(i1);
             }
         }
         return k0;
