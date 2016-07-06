@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [dom];
+        z.subs = [dom,db,sce];
         z.subs.forEach(function(el){el.init();});
 
         // test
@@ -38,6 +38,23 @@ var z = {
     },
     "start": function() {
         console.log("the load has begun!");
+    }
+}
+// data
+var db = {
+    "init": function() {
+        // key value store for all entities
+        db.a = {};
+        // indexed lists for fast lookup
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+        // scene current index
+        sce.a = 0;
+        // scene jump graph
+        sce.b = [];
     }
 }
 // dom
