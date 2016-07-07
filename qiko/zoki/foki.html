@@ -46,6 +46,8 @@ var db = {
         // key value store for all entities
         db.a = {};
         // indexed lists for fast lookup
+        db.b = [];
+        // layout, scene, event
     }
 }
 // scene
@@ -55,6 +57,11 @@ var sce = {
         sce.a = 0;
         // scene jump graph
         sce.b = [];
+    }
+}
+// event
+var ev = {
+    "init": function() {
     }
 }
 // dom
