@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [dom,db,sce];
+        z.subs = [dom,db,sce,lay,bmp];
         z.subs.forEach(function(el){el.init();});
 
         // test
@@ -62,6 +62,30 @@ var sce = {
 // event
 var ev = {
     "init": function() {
+    },
+    "custom": function(k0) {
+        // event name key
+    },
+    "fire": function() {
+        // event trigger and log
+    }
+}
+// layout
+var lay = {
+    "init": function() {
+        lay.w = 1920;
+        lay.h = 1080;
+        
+        lay.a = [lay.w,lay.h,0,0];
+    }
+}
+// bitmap
+var bmp = {
+    "init": function() {
+        bmp.a = bmp.rand();
+    },
+    "rand": function() {
+        return rgba.rb();
     }
 }
 // dom
