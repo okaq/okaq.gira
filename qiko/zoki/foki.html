@@ -91,6 +91,25 @@ var bmp = {
     },
     "rand": function() {
         return rgba.rb();
+    },
+    "fill": function(n0) {
+        var b0 = [];
+        for (var i = 0; i < n0; i++) {
+            b0[i] = bmp.rand();
+        }
+        return b0;
+    },
+    "grad": function(n0) {
+        // linear gradient function
+        var n1 = (Math.sqrt(n0) >>> 0);
+        var m0 = (255 / n1) >>> 0;
+        var b0 = [];
+        for (var i = 0; i < n0; i++) {
+            var y0 = (i / n1) >>> 0;
+            var y1 = (y0 * m0) >>> 0;
+            b0[i] = y1;
+        }
+        return b0;
     }
 }
 // dom
