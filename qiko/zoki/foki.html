@@ -40,6 +40,23 @@ var z = {
         console.log("the load has begun!");
 
         ren.bmp(bmp.a, sce.b[0]);
+
+        // 1fps loop
+        z.tick = 0;
+        z.id = window.setInterval(z.loop, 1000);
+    },
+    "loop": function() {
+        console.log("loop tick: " + z.tick);
+
+        // render
+        bmp.init();
+        ren.bmp(bmp.a, sce.b[0]);
+
+        z.tick = z.tick + 1;
+        if (z.tick >= 16) {
+            console.log("anim done!");
+            window.clearInterval(z.id);
+        }
     }
 }
 // data
