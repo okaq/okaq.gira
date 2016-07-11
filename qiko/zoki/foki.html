@@ -51,6 +51,8 @@ var z = {
         // render
         bmp.init();
         ren.bmp(bmp.a, sce.b[0]);
+        // bitmap data are tightly coupled with render calls
+        // and structure of the render target pane (grid, rect)
 
         z.tick = z.tick + 1;
         if (z.tick >= 16) {
