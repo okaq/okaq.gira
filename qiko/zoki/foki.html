@@ -160,6 +160,22 @@ var ren = {
     "bmp": function(b0, c0) {
         c0.con.fillStyle = rgba.mono(b0);
         c0.con.fillRect(0,0,c0.can.width,c0.can.height);
+    },
+    "block": function(b0, c0) {
+        // bitmap array, rendered as square grid
+        var g0 = rgba.rand();
+        var g1 = rgba.rand();
+        var d0 = b0.length;
+        var d1 = Math.sqrt(d0) >>> 0;
+        var w0 = (c0.can.width / d1) >>> 0;
+        var h0 = (c0.can.height / d1) >>> 0;
+        for (var i = 0; i < d0; i++) {
+            if (b0[i] == 0) {
+                c0.con.fillStyle = g0;
+            } else {
+                c0.con.fillStyle = g1;
+            }
+        }
     }
 }
 // colors
