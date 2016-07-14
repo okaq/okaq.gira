@@ -59,6 +59,11 @@ var z = {
             console.log("anim done!");
             window.clearInterval(z.id);
         }
+
+        // randomize scene graph
+        // build layout rects from page subdivision
+        // randomize bitmap generator per layout rect
+        // user click event to random scene index
     }
 }
 // data
@@ -175,6 +180,8 @@ var ren = {
             } else {
                 c0.con.fillStyle = g1;
             }
+            var x0 = i % d1;
+            var y0 = (i / d1) >>> 0;
         }
     }
 }
