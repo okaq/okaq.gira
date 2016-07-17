@@ -44,6 +44,17 @@ var z = {
         // then populate graph nodes with renderable combos
         // (layout, canvas, bitmap, state)
 
+        z.tick = 0;
+        z.id = window.setInterval(z.loop, 1000);
+
+    },
+    "loop": function() {
+        console.log(i"tick count: " + z.tick);
+        z.tick = z.tick + 1;
+        if (z.tick >= 16) {
+            console.log("anim done!");
+            window.clearInteval(z.id);
+        }
     }
 }
 // events
