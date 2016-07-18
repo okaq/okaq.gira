@@ -51,6 +51,7 @@ var z = {
     "loop": function() {
         console.log(i"tick count: " + z.tick);
         z.tick = z.tick + 1;
+        // event fired
         if (z.tick >= 16) {
             console.log("anim done!");
             window.clearInteval(z.id);
@@ -62,9 +63,24 @@ var evt = {
     "init": function() {
         // leave events as plain functions
         // instead of custom js event types
+
+        // collection
+        evt.c = [evt.one, evt.two, evt.tre];
+    },
+    "rand": function() {
+        // fire a random evt from collection
     },
     "log": function(e) {
         console.log(e);
+    },
+    "one": function() {
+        console.log("this is the premiere");
+    },
+    "two": function() {
+        console.log("deuxieme speaking");
+    },
+    "tre": function() {
+        console.log("three is the magic number");
     }
 }
 // dom
