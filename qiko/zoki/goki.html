@@ -49,12 +49,14 @@ var z = {
 
     },
     "loop": function() {
-        console.log(i"tick count: " + z.tick);
+        console.log("tick count: " + z.tick);
+        // fire rand event
+        evt.rand();
         z.tick = z.tick + 1;
         // event fired
         if (z.tick >= 16) {
             console.log("anim done!");
-            window.clearInteval(z.id);
+            window.clearInterval(z.id);
         }
     }
 }
@@ -69,6 +71,8 @@ var evt = {
     },
     "rand": function() {
         // fire a random evt from collection
+        var i0 = (Math.random() * evt.c.length) >>> 0;
+        evt.c[i0].apply(this);
     },
     "log": function(e) {
         console.log(e);
