@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [dom,evt,lay];
+        z.subs = [dom,evt,lay,sce];
         z.subs.forEach(function(el){el.init();});
 
         // test
@@ -101,6 +101,20 @@ var lay = {
         // gen rand node
         var r0 = [];
         return r0;
+    }
+}
+// scene
+var sce = {
+    "init": function() {
+    },
+    "rect": function(r0) {
+        // generate node from layout rect list
+        var r1 = [];
+        for (var i = 0; i < r0.length; i++) {
+            var s0 = dom.canvas(r0[i]);
+            r1.push(s0);
+        }
+        return r1;
     }
 }
 // dom
