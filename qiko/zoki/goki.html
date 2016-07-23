@@ -97,6 +97,7 @@ var evt = {
         lay.split();
         sce.a[0] = sce.rect(lay.a[0]);
         sce.add(sce.a[0]);
+        // add event handlers, assign unique id key
         ren.rand(sce.a[0]);
     }
 }
@@ -174,8 +175,13 @@ var dom = {
 }
 // render
 var ren = {
-    "rand": function(s0) {
+    "rand": function(c0) {
         // test render scene list
+        for (var i = 0; i < c0.length; i++) {
+            var c1 = c0[i];
+            c1.con.fillStyle = rgba.rand();
+            c1.con.fillRect(0,0,c1.can.width,c1.can.height);
+        }
     }
 }
 // colors
