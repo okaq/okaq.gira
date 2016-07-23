@@ -45,8 +45,8 @@ var z = {
         // (layout, canvas, bitmap, state)
 
         z.tick = 0;
-        z.id = window.setInterval(z.loop, 1000);
-
+        // z.id = window.setInterval(z.loop, 1000);
+        z.start();
     },
     "loop": function() {
         console.log("tick count: " + z.tick);
@@ -58,6 +58,9 @@ var z = {
             console.log("anim done!");
             window.clearInterval(z.id);
         }
+    },
+    "start": function() {
+        evt.start();
     }
 }
 // events
@@ -88,6 +91,13 @@ var evt = {
     },
     "tre": function() {
         console.log("three is the magic number");
+    },
+    "start": function() {
+        // two layout panes to choose game start
+        lay.split();
+        sce.a[0] = sce.rect(lay.a[0]);
+        sce.add(sce.a[0]);
+        ren.rand(sce.a[0]);
     }
 }
 // layout
@@ -104,11 +114,23 @@ var lay = {
         // gen rand node
         var r0 = [];
         return r0;
+    },
+    "split": function(n0) {
+        var h0 = 1080;
+        var w0 = (1920 * 0.62) >>> 0;
+        var w1 = (1920 - w0) >>> 0;
+        var a0 = [w0,h0,0,0];
+        var a1 = [w1,h0,w0,0];
+
+        // add to root
+        lay.a[0] = [a0,a1];
     }
 }
 // scene
 var sce = {
     "init": function() {
+        // scene root list
+        sce.a = [];
     },
     "rect": function(r0) {
         // generate node from layout rect list
@@ -118,6 +140,12 @@ var sce = {
             r1.push(s0);
         }
         return r1;
+    },
+    "add": function(s0) {
+        // add scene list to dom
+        for (var i = 0; i < s0.length; i++) {
+            dom.add(s0[i]);
+        }
     }
 }
 // dom
@@ -142,6 +170,12 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "rand": function(s0) {
+        // test render scene list
     }
 }
 // colors
