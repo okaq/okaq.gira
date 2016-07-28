@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [dom];
+        z.subs = [dom,evt];
         z.subs.forEach(function(el){el.init();});
 
         // test
@@ -37,7 +37,18 @@ var z = {
         console.log("total load time: " + total + "ms.");
     },
     "start": function() {
-        console.log("start and dom init!");
+        // console.log("start and dom init!");
+        // fire start event, show start screen
+    }
+}
+// event
+var evt = {
+    "init": function() {
+        // event fire history
+        evt.a = [];
+    },
+    "start": function() {
+        // generate start screen (layout, scene, handlers)
     }
 }
 // dom
