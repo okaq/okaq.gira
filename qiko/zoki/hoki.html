@@ -39,6 +39,7 @@ var z = {
     "start": function() {
         // console.log("start and dom init!");
         // fire start event, show start screen
+        evt.start();
     }
 }
 // event
@@ -54,6 +55,10 @@ var evt = {
 // layout
 var lay = {
     "init": function() {
+        lay.a = [];
+        lay.a[0] = [1920,1080,0,0];
+        lay.a[1] = [1200,1080,0,0];
+        lay.a[2] = [720,1080,1200,0];
     }
 }
 // scene
