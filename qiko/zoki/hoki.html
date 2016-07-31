@@ -50,6 +50,7 @@ var evt = {
     },
     "start": function() {
         // generate start screen (layout, scene, handlers)
+        ren.scene();
     }
 }
 // layout
@@ -57,18 +58,27 @@ var lay = {
     "init": function() {
         lay.a = [];
         lay.a[0] = [1920,1080,0,0];
-        lay.a[1] = [1200,1080,0,0];
-        lay.a[2] = [720,1080,1200,0];
+        lay.a[1] = [1184,1064,8,8];
+        lay.a[2] = [704,1064,1208,8];
     }
 }
 // scene
 var sce = {
     "init": function() {
+        sce.a = [];
+        for (var i = 0; i < lay.a.length; i++) {
+            sce.a[i] = dom.canvas(lay.a[i]);
+            dom.add(sce.a[i]);
+        }
     }
 }
 // bitmap
 var bmp = {
     "init": function() {
+        bmp.a = [];
+        for (var i = 0; i < sce.a.length; i++) {
+            bmp.a[i] = rgba.rand();
+        }
     }
 }
 // dom
@@ -93,6 +103,15 @@ var dom = {
     },
     "remove": function(c0) {
         dom.alpha.removeChild(c0.can);
+    }
+}
+// render
+var ren = {
+    "scene": function() {
+        for (var i = 0; i < sce.a.length; i++) {
+            sce.a[i].con.fillStyle = bmp.a[i];
+            sce.a[i].con.fillRect(0,0,sce.a[i].can.width,sce.a[i].can.height);
+        }
     }
 }
 // colors
