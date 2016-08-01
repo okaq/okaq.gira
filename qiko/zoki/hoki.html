@@ -25,7 +25,7 @@ var z = {
         var now = window.performance.now();
         
         // subsystems
-        z.subs = [dom,evt,lay,sce,bmp];
+        z.subs = [dom,evt,lay,sce,bmp,tap];
         z.subs.forEach(function(el){el.init();});
 
         // test
@@ -51,6 +51,12 @@ var evt = {
     "start": function() {
         // generate start screen (layout, scene, handlers)
         ren.scene();
+    }
+}
+// user level events
+var tap = {
+    "init": function() {
+        tap.a = [];
     }
 }
 // layout
