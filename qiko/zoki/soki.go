@@ -18,7 +18,12 @@ func SokiHandler(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, INDEX)
 }
 
+func CountHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r)
+}
+
 func main() {
     http.HandleFunc("/", SokiHandler)
+    http.HandleFunc("/c", CountHandler)
     http.ListenAndServe(":8008", nil)
 }
