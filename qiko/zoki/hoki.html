@@ -50,6 +50,7 @@ var evt = {
     },
     "start": function() {
         // generate start screen (layout, scene, handlers)
+        evt.attach(sce.a, tap.click);
         ren.scene();
     }
 }
@@ -61,8 +62,11 @@ var tap = {
     "click": function(e) {
         console.log(e);
     },
-    "attach": function(c0) {
+    "attach": function(c0, e0) {
         // attach handlers to scene list
+        for (var i = 0; i < c0.length; i++) {
+            c0[i].can.addEventListener("click", e0, false);
+        }
     },
     "detach": function(c0) {
         // detach list
