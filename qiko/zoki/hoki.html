@@ -50,7 +50,7 @@ var evt = {
     },
     "start": function() {
         // generate start screen (layout, scene, handlers)
-        evt.attach(sce.a, tap.click);
+        tap.attach(sce.a, tap.click);
         ren.scene();
     }
 }
@@ -93,6 +93,8 @@ var sce = {
             sce.a[i] = dom.canvas(lay.a[i]);
             dom.add(sce.a[i]);
         }
+        sce.a[1].can.dataset.x = "war";
+        sce.a[2].can.dataset.x = "partizan";
     }
 }
 // bitmap
