@@ -3,19 +3,55 @@
 package main
 
 import (
+    "bufio"
     "fmt"
+    "os"
     "net/http"
+    "strconv"
 )
 
 const (
     INDEX = "radio.html"
+    LARGE = "E-large-practice.in"
+    SMALL = "E-small-practice.in"
+    // output files for solution
 )
 
-func HandleFunc(w http.ResponseWriter, r *http.Request) {
+type Island struct {
+    Y float32 // y-coord
+    X float32 // x-coord
+}
+
+func NewIsland() *Island {
+    I := Island{}
+    I.X = 0.0
+    return &I
+}
+
+func Read() {
+    // open files
+    // parse data into Island[]
+    fi, err := os.Open(SMALL)
+    if err != nil {
+        fmt.Println(err)
+    }
+    s := bufio.NewScanner(fi)
+    s.Scan()
+    t, err := strconv.Atoi(s.Text())
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Printf("number of test cases: %d\n", t)
+    // stdin, fmt scan
+}
+
+func RadioHandle(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
 }
 
 func main() {
+    fmt.Println("reading input data")
+    Read()
     fmt.Println("starting web server on localhost:8080")
     http.HandleFunc("/", RadioHandle)
     http.ListenAndServe(":8080", nil)
