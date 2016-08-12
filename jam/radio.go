@@ -43,10 +43,25 @@ func Read() {
     }
     fmt.Printf("number of test cases: %d\n", t)
     // stdin, fmt scan
+    for i := 0; i < t; i++ {
+        s.Scan()
+        s0 := s.Text()
+        fmt.Println(s0)
+        // int float float
+        s.Scan()
+        s1 := s.Text()
+        fmt.Println(s1)
+        // float
+    }
 }
 
 func RadioHandle(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
+}
+
+func TestHandle(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r)
+    // json test data
 }
 
 func main() {
@@ -54,5 +69,6 @@ func main() {
     Read()
     fmt.Println("starting web server on localhost:8080")
     http.HandleFunc("/", RadioHandle)
+    http.HandleFunc("/t", TestHandle)
     http.ListenAndServe(":8080", nil)
 }
