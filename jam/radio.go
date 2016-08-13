@@ -64,6 +64,11 @@ func TestHandle(w http.ResponseWriter, r *http.Request) {
     // json test data
 }
 
+func Integrate() {
+    // pure definite integral numerical simultion
+    // are under the function, accurate to 0.001
+}
+
 func main() {
     fmt.Println("reading input data")
     Read()
