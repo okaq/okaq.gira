@@ -65,8 +65,13 @@ func TestHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 func Integrate() {
-    // pure definite integral numerical simultion
+    // pure definite integral numerical simulation
     // are under the function, accurate to 0.001
+}
+
+func Linear(x0 float32) float32 {
+    // linear slope equals one
+    return x0
 }
 
 func main() {
