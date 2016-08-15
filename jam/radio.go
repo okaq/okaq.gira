@@ -74,6 +74,10 @@ func Linear(x0 float32) float32 {
     return x0
 }
 
+func Square(x0 float32) float32 {
+    return x0 * x0
+}
+
 func main() {
     fmt.Println("reading input data")
     Read()
