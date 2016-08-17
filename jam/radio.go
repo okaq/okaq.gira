@@ -78,10 +78,22 @@ func Square(x0 float32) float32 {
     return x0 * x0
 }
 
+func Sum() {
+    a0 := float32(0.0)
+    for i := 0; i < 1000000; i++ {
+        x0 := float32(i) * 0.000001
+        y0 := Square(x0) * 0.000001
+        a0 = a0 + y0
+    }
+    fmt.Printf("Definite integral = %f\n", a0)
+    // 0.333299, accurate to 4 digits
+}
+
 func main() {
     fmt.Println("reading input data")
     Read()
     fmt.Println("starting web server on localhost:8080")
+    Sum()
     http.HandleFunc("/", RadioHandle)
     http.HandleFunc("/t", TestHandle)
     http.ListenAndServe(":8080", nil)
