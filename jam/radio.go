@@ -62,6 +62,8 @@ func RadioHandle(w http.ResponseWriter, r *http.Request) {
 func TestHandle(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
     // json test data
+    // send Island[] list
+    // client side Island class
 }
 
 func Integrate() {
@@ -83,6 +85,7 @@ func Sum() {
     for i := 0; i < 1000000; i++ {
         x0 := float32(i) * 0.000001
         y0 := Square(x0) * 0.000001
+        // y0 := Linear(x0) * 0.000001
         a0 = a0 + y0
     }
     fmt.Printf("Definite integral = %f\n", a0)
