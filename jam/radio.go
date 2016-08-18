@@ -46,8 +46,13 @@ func Read() {
     for i := 0; i < t; i++ {
         s.Scan()
         s0 := s.Text()
-        fmt.Println(s0)
+        // fmt.Println(s0)
         // int float float
+        var n0 int
+        var x0 float32
+        var y0 float32
+        fmt.Sscanf(s0, "%d %f %f", &n0, &x0, &y0)
+        fmt.Printf("values: n = %d, x = %f, y = %f\n", n0, x0, y0)
         s.Scan()
         s1 := s.Text()
         fmt.Println(s1)
