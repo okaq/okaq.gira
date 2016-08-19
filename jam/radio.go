@@ -8,6 +8,7 @@ import (
     "os"
     "net/http"
     "strconv"
+    "strings"
 )
 
 const (
@@ -55,8 +56,17 @@ func Read() {
         fmt.Printf("values: n = %d, x = %f, y = %f\n", n0, x0, y0)
         s.Scan()
         s1 := s.Text()
-        fmt.Println(s1)
-        // float
+        // fmt.Println(s1)
+        // floats
+        s2 := strings.Split(s1, " ")
+        s3 := make([]float32, n0)
+        for j := 0; j < n0; j++ {
+            s4, err := strconv.ParseFloat(s2[j], 32)
+            if err != nil {
+                fmt.Println(err)}
+            s3[j] = float32(s4)
+        }
+        fmt.Println(s2, s3)
     }
 }
 
