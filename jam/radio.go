@@ -22,6 +22,10 @@ type Island struct {
     Y float32 // y-coord
     X float32 // x-coord
     N int // total
+    A float32 // start
+    B float32 // end
+    C []float32 // islands
+    // solution
 }
 
 func NewIsland() *Island {
