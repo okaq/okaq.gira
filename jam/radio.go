@@ -21,11 +21,14 @@ const (
 type Island struct {
     Y float32 // y-coord
     X float32 // x-coord
+    N int // total
 }
 
 func NewIsland() *Island {
     I := Island{}
     I.X = 0.0
+    I.Y = 0.0
+    I.N = 0
     return &I
 }
 
@@ -67,6 +70,15 @@ func Read() {
             s3[j] = float32(s4)
         }
         fmt.Println(s2, s3)
+        I := NewIsland()
+        fmt.Println(I)
+        // prob def - Island
+        // index i - test case #
+        // boat start coordinates (X,Y)
+        // islands (N, []Y)
+        // grand game list - []Island
+        // test # is index + 1
+        // solution is the path function
     }
 }
 
