@@ -18,6 +18,10 @@ const (
     // output files for solution
 )
 
+var (
+    Islands []Island
+)
+
 type Island struct {
     Y float32 // y-coord
     X float32 // x-coord
@@ -26,6 +30,8 @@ type Island struct {
     B float32 // end
     C []float32 // islands
     // solution
+    S []float32
+    Id int // case id
 }
 
 func NewIsland() *Island {
@@ -75,6 +81,11 @@ func Read() {
         }
         fmt.Println(s2, s3)
         I := NewIsland()
+        I.Id = i + 1
+        I.N = n0
+        I.A = x0
+        I.B = y0
+        I.C = s3
         fmt.Println(I)
         // prob def - Island
         // index i - test case #
