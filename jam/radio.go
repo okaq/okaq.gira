@@ -4,6 +4,7 @@ package main
 
 import (
     "bufio"
+    "encoding/json"
     "fmt"
     "os"
     "net/http"
@@ -121,6 +122,12 @@ func TestHandle(w http.ResponseWriter, r *http.Request) {
     // json test data
     // send Island[] list
     // client side Island class
+    j0, err := json.Marshal(Islands)
+    if err != nil {
+        fmt.Println(err)
+    }
+    // fmt.Println(j0)
+    w.Write(j0)
 }
 
 func Integrate() {
