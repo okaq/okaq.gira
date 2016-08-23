@@ -9,6 +9,7 @@ import (
     "net/http"
     "strconv"
     "strings"
+    "sync"
 )
 
 const (
@@ -19,7 +20,9 @@ const (
 )
 
 var (
-    Islands []Island
+    Islands []*Island
+    WG sync.WaitGroup
+    // use channels instead
 )
 
 type Island struct {
@@ -42,6 +45,11 @@ func NewIsland() *Island {
     return &I
 }
 
+func (I *Island) Solve() {
+    I.S = make([]float32, 100)
+    WG.Done()
+}
+
 func Read() {
     // open files
     // parse data into Island[]
@@ -56,6 +64,7 @@ func Read() {
         fmt.Println(err)
     }
     fmt.Printf("number of test cases: %d\n", t)
+    Islands = make([]*Island, t)
     // stdin, fmt scan
     for i := 0; i < t; i++ {
         s.Scan()
@@ -87,6 +96,9 @@ func Read() {
         I.B = y0
         I.C = s3
         fmt.Println(I)
+        Islands[i] = I
+        WG.Add(1)
+        go Islands[i].Solve()
         // prob def - Island
         // index i - test case #
         // boat start coordinates (X,Y)
@@ -94,6 +106,9 @@ func Read() {
         // grand game list - []Island
         // test # is index + 1
         // solution is the path function
+
+        // go I.Solve()
+        // sync add wait group
     }
 }
 
@@ -139,6 +154,8 @@ func main() {
     Read()
     fmt.Println("starting web server on localhost:8080")
     Sum()
+    WG.Wait()
+    fmt.Println(Islands[0].S)
     http.HandleFunc("/", RadioHandle)
     http.HandleFunc("/t", TestHandle)
     http.ListenAndServe(":8080", nil)
