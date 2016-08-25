@@ -116,7 +116,7 @@ func Read() {
 func RadioHandle(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r)
     // write html5 file to output
-
+    http.ServeFile(w, r, INDEX)
 }
 
 func TestHandle(w http.ResponseWriter, r *http.Request) {
